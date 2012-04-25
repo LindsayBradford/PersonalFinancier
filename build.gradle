@@ -1,0 +1,46 @@
+apply plugin: 'java'
+
+sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
+
+project.group = "blacksmyth.personalfinancier"
+project.version = "0.1"
+jar {
+  manifest {
+    attributes 'Main-Class' : 'blacksmyth.personalfinancier.personalfinancier'
+  }
+}
+
+// modify the sourceSets to match the layout of my java-only project.
+
+sourceSets {
+  main {
+    java {
+      srcDir 'src'
+    }
+  }
+}
+
+
+// the java plugin task uploadArchives, modified as below is equivalent 
+// to my ant script "dist" target. So, I just got lazy and made a dist
+// task dependent on a slightly modified uploadArchives.
+
+uploadArchives {
+  repositories {
+    flatDir {
+      dirs 'dist'
+    }
+  }
+}
+
+task dist {
+  dependsOn uploadArchives
+}
+
+// the full task is the gradle equivalent of the ant script's 
+// full target.
+
+task full {
+  dependsOn clean, dist
+}
