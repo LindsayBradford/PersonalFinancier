@@ -1,3 +1,10 @@
+/**
+ * PersonalFinancier by Lindsay Bradford is licensed under a 
+ * Creative Commons Attribution-ShareAlike 3.0 Unported License.
+ *
+ * Year: 2012 
+ */
+
 package blacksmyth.personalfinancier.gui;
 
 import java.awt.BorderLayout;
@@ -6,6 +13,9 @@ import java.awt.Toolkit;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
@@ -21,6 +31,10 @@ public class PersonalFinancierUIFactory {
     
     frame.setDefaultCloseOperation(
         WindowConstants.EXIT_ON_CLOSE
+    );
+    
+    frame.setJMenuBar(
+        createMenu()
     );
     
     frame.getContentPane().add(
@@ -71,6 +85,17 @@ public class PersonalFinancierUIFactory {
     messagePanel.add(messageLabel, BorderLayout.CENTER);
   
     return messagePanel;
+  }
+
+  private static JMenuBar createMenu() {
+    JMenuBar menuBar = new JMenuBar();
+  
+    JMenu fileMenu = new JMenu("File");
+    fileMenu.add(new JMenuItem("Preferences"));
+  
+    menuBar.add(fileMenu);
+  
+    return menuBar;
   }
 }
 
