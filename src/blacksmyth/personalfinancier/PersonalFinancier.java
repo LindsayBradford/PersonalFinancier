@@ -15,6 +15,7 @@ import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
 
 public class PersonalFinancier {
 
+  @SuppressWarnings("unused")
   private static final long serialVersionUID = 1L;
 
   /**
