@@ -16,10 +16,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+
+import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
 
 public class PersonalFinancier {
 
@@ -31,7 +34,8 @@ public class PersonalFinancier {
   public static void main(String[] args) {
     try {
       UIManager.setLookAndFeel(
-          "com.jtattoo.plaf.hifi.HiFiLookAndFeel"
+          new HiFiLookAndFeel()
+ //         "com.jtattoo.plaf.hifi.HiFiLookAndFeel"
         );
     } catch (Exception e) {
       e.printStackTrace();
@@ -47,6 +51,10 @@ class PersonalFinancierFactory {
     
     JFrame frame = new JFrame("Personal Financier");
     
+    frame.setDefaultCloseOperation(
+        WindowConstants.EXIT_ON_CLOSE
+    );
+    
     frame.getContentPane().add(
         createContentPane(), 
         BorderLayout.CENTER
@@ -58,9 +66,10 @@ class PersonalFinancierFactory {
     );
    
     frame.setBounds(
-        0, 0,    // x,y coords
-        Toolkit.getDefaultToolkit().getScreenSize().width, 
-        Toolkit.getDefaultToolkit().getScreenSize().height
+        Toolkit.getDefaultToolkit().getScreenSize().width/4, 
+        Toolkit.getDefaultToolkit().getScreenSize().height/4, 
+        Toolkit.getDefaultToolkit().getScreenSize().width/2, 
+        Toolkit.getDefaultToolkit().getScreenSize().height/2
     );
 
     

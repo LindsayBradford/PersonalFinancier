@@ -5,10 +5,17 @@ targetCompatibility = '1.6'
 
 project.group = "blacksmyth.personalfinancier"
 project.version = "0.1"
-jar {
-  manifest {
-    attributes 'Main-Class' : 'blacksmyth.personalfinancier.personalfinancier'
-  }
+
+// Storing all dependencies in a libs directory. 
+
+repositories {
+   flatDir {
+     dirs 'libs'  
+   }
+}
+
+dependencies {
+  compile 'jtattoo:JTattoo:1.3'
 }
 
 // modify the sourceSets to match the layout of my java-only project.
@@ -18,6 +25,23 @@ sourceSets {
     java {
       srcDir 'src'
     }
+    resources {
+      srcDir 'src/resources'
+    }
+  }
+}
+
+jar {
+  // Merge jars we're dependent on into the executable jar.
+
+  from { 
+    configurations.compile.collect { 
+      it.isDirectory() ? it : zipTree(it)
+    } 
+  }
+
+  manifest {
+    attributes 'Main-Class' : 'blacksmyth.personalfinancier.PersonalFinancier'
   }
 }
 
