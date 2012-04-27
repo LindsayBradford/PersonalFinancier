@@ -7,12 +7,19 @@
 
 package blacksmyth.personalfinancier.model;
 
+import java.awt.Color;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Currency;
 import java.util.Observable;
 import java.util.prefs.Preferences;
 
+/**
+ * A Singleton model that manages user preferences. It implements the {@link Observable} interface
+ * allowing observers to react to user preference changes.
+ * @author linds
+ *
+ */
 public class PreferencesModel extends Observable {
   private static final String BASENODE = "blacksmyth/personalfinancier/prefs";
   private Preferences prefs = Preferences.userRoot().node(BASENODE);
@@ -25,7 +32,7 @@ public class PreferencesModel extends Observable {
   
   private static MathContext preferredMathContext;
   
-   protected PreferencesModel() {
+  protected PreferencesModel() {
      // Exists only to defeat instantiation.
   }
   
@@ -113,7 +120,6 @@ public class PreferencesModel extends Observable {
     }
     return preferredMathContext;
   }
-
   
   // TODO: Switch from String to Account objects
   private static final String DEFAULT_BUDGET_ACCOUNT = "Default";
@@ -154,5 +160,104 @@ public class PreferencesModel extends Observable {
     this.notifyObservers();
   }
 
+  private static final int DEFAULT_EVEN_ROW_COLOR = Color.BLACK.getRGB();
+  private static final String EVEN_ROW_COLOR_KEY = "EvenRowColor";
   
+  public Color getPreferredEvenRowColor() {
+    return new Color(
+        this.prefs.getInt(
+            EVEN_ROW_COLOR_KEY, 
+            DEFAULT_EVEN_ROW_COLOR
+        )
+    );
+  }
+
+  public void setPreferredEvenRowColor(Color color) {
+    this.prefs.putInt(
+        EVEN_ROW_COLOR_KEY,
+        color.getRGB()
+    );
+    this.notifyObservers();
+  }
+
+  private static final int DEFAULT_ODD_ROW_COLOR = Color.DARK_GRAY.darker().getRGB();
+  private static final String ODD_ROW_COLOR_KEY = "OddRowColor";
+  
+  public Color getPreferredOddRowColor() {
+    return new Color(
+        this.prefs.getInt(
+            ODD_ROW_COLOR_KEY, 
+            DEFAULT_ODD_ROW_COLOR
+        )
+    );
+  }
+
+  public void setPreferredOddRowColor(Color color) {
+    this.prefs.putInt(
+        ODD_ROW_COLOR_KEY,
+        color.getRGB()
+    );
+    this.notifyObservers();
+  }
+
+  private static final int DEFAULT_EDITABLE_CELL_COLOR = Color.ORANGE.getRGB();
+  private static final String EDITABLE_CELL_COLOR_KEY = "EditableCellColor";
+  
+  public Color getPreferredEditableCellColor() {
+    return new Color(
+        this.prefs.getInt(
+            EDITABLE_CELL_COLOR_KEY, 
+            DEFAULT_EDITABLE_CELL_COLOR
+        )
+    );
+  }
+
+  public void setPreferredEditableCellColor(Color color) {
+    this.prefs.putInt(
+        EDITABLE_CELL_COLOR_KEY,
+        color.getRGB()
+    );
+    this.notifyObservers();
+  }
+
+  private static final int DEFAULT_UNEDITABLE_CELL_COLOR = Color.GRAY.getRGB();
+  private static final String UNEDITABLE_CELL_COLOR_KEY = "UnEditableCellColor";
+  
+  public Color getPreferredUnEditableCellColor() {
+    return new Color(
+        this.prefs.getInt(
+            UNEDITABLE_CELL_COLOR_KEY, 
+            DEFAULT_UNEDITABLE_CELL_COLOR
+        )
+    );
+  }
+
+  public void setPreferredUnEditableCellColor(Color color) {
+    this.prefs.putInt(
+        UNEDITABLE_CELL_COLOR_KEY,
+        color.getRGB()
+    );
+    this.notifyObservers();
+  }
+
+  private static final int DEFAULT_BUDGET_FREQUENCY_CELL_COLOR = Color.GRAY.brighter().brighter().getRGB();
+  private static final String BUDGET_FREQUENCY_CELLL_COLOR_KEY = "BudgetFrequencyCellColor";
+  
+  public Color getPreferredBudgetFrequencyCellColor() {
+    return new Color(
+        this.prefs.getInt(
+            BUDGET_FREQUENCY_CELLL_COLOR_KEY, 
+            DEFAULT_BUDGET_FREQUENCY_CELL_COLOR
+        )
+    );
+  }
+
+  public void setPreferredBudgetFrequencyCellColor(Color color) {
+    this.prefs.putInt(
+        BUDGET_FREQUENCY_CELLL_COLOR_KEY,
+        color.getRGB()
+    );
+    this.notifyObservers();
+  }
+
 }

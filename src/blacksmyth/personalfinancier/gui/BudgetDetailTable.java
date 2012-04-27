@@ -1,11 +1,13 @@
 package blacksmyth.personalfinancier.gui;
 
+import java.awt.Component;
 import java.math.BigDecimal;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import blacksmyth.general.swing.SwingUtilities;
@@ -14,6 +16,7 @@ import blacksmyth.personalfinancier.model.Account;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.MoneyAmount;
 import blacksmyth.personalfinancier.model.MoneyUtilties;
+import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
@@ -92,7 +95,34 @@ public class BudgetDetailTable extends JTable {
   private TableColumn getColFromEnum(COLS_ENUM thisEnum) {
     return this.getColumnModel().getColumn(thisEnum.ordinal());
   }
+  
+  public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
 
+    Component cellRenderer = super.prepareRenderer(renderer, row, column);
+    
+    WidgetFactory.prepareTableCellRenderer(
+      cellRenderer,
+      row, 
+      column, 
+      this.getModel().isCellEditable(row, column)
+    );
+    
+    // One final tweak specific to this table below.  
+    // when the frequency selected matches the column name, render the 
+    // foreground text of the cell slightly differently.
+
+    if (this.getColumnName(column) == this.getFrequencyAt(row).toString()) {
+      cellRenderer.setForeground(
+          PreferencesModel.getInstance().getPreferredBudgetFrequencyCellColor()
+      );
+    }
+   
+     return cellRenderer;
+  }
+  
+  private CashFlowFrequency getFrequencyAt(int row) {
+    return (CashFlowFrequency) this.getModel().getValueAt(row, COLS_ENUM.Frequency.ordinal());
+  }
 }
 
 
@@ -100,7 +130,6 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
   private static final long serialVersionUID = 1L;
 
   private BudgetModel baseModel;
-  
  
   public BudgetDetailTableModel() {
     super();
@@ -126,18 +155,18 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public Class getColumnClass(int colNum) {
 
-    
     switch (COLS_ENUM.values()[colNum]) {
-    case Description:
-      return String.class;
-    case Amount: 
-      return MoneyAmount.class;
-    case Frequency:
-      return CashFlowFrequency.class;
-    case Daily: case Weekly: case Fortnightly: case Monthly: case Quarterly: case Yearly:
-      return BigDecimal.class;
-    case Account:
-      return Account.class;
+      case Description:
+        return String.class;
+      case Amount: 
+        return MoneyAmount.class;
+      case Frequency:
+        return CashFlowFrequency.class;
+      case Daily: case Weekly: case Fortnightly: 
+      case Monthly: case Quarterly: case Yearly:
+        return BigDecimal.class;
+      case Account:
+        return Account.class;
     }
     return Object.class;
   }
@@ -147,43 +176,43 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
   }
   
   public boolean isCellEditable(int rowNum, int colNum) {
-    switch (colNum) {
-    case 3: case 4: case 5: case 6: case 7: case 8:
-      return false;
+    switch (COLS_ENUM.values()[colNum]) {
+      case Daily: case Weekly: case Fortnightly: 
+      case Monthly: case Quarterly: case Yearly:
+        return false;
+      default:
+        return true;
     }
-    return true;
   }
 
   public Object getValueAt(int rowNum, int colNum) {
     @SuppressWarnings("cast")
     BudgetItem item = (BudgetItem) baseModel.getBudgetItems().get(rowNum);
     
-    COLS_ENUM colsEnum = COLS_ENUM.values()[colNum];
-    
-    switch (colsEnum) {
-    case Description:
-      return item.getDescription();
-    // TODO: Add FrequencyConverter formulas.
-    case Amount: 
-      return item.getAmount().getAmount();
-    case Daily:
-      return convertAmount(item, CashFlowFrequency.Daily);
-    case Weekly:
-      return convertAmount(item, CashFlowFrequency.Weekly);
-    case Fortnightly:
-      return convertAmount(item, CashFlowFrequency.Fortnightly);
-    case Monthly:
-      return convertAmount(item, CashFlowFrequency.Monthly);
-    case Quarterly:
-      return convertAmount(item, CashFlowFrequency.Quarterly);
-    case Yearly:
-      return convertAmount(item, CashFlowFrequency.Yearly);
-    case Frequency:
-      return item.getFrequency();
-    case Account:
-       return item.getAccount();
+    switch (COLS_ENUM.values()[colNum]) {
+      case Description:
+        return item.getDescription();
+      case Amount: 
+        return item.getAmount().getAmount();
+      case Daily:
+        return convertAmount(item, CashFlowFrequency.Daily);
+      case Weekly:
+        return convertAmount(item, CashFlowFrequency.Weekly);
+      case Fortnightly:
+        return convertAmount(item, CashFlowFrequency.Fortnightly);
+      case Monthly:
+        return convertAmount(item, CashFlowFrequency.Monthly);
+      case Quarterly:
+        return convertAmount(item, CashFlowFrequency.Quarterly);
+      case Yearly:
+        return convertAmount(item, CashFlowFrequency.Yearly);
+      case Frequency:
+        return item.getFrequency();
+      case Account:
+         return item.getAccount();
+       default:
+         return null;
     }
-    return null;
   }
   
   private BigDecimal convertAmount(BudgetItem item, CashFlowFrequency newFrequency) {
@@ -197,14 +226,14 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
   public void setValueAt(Object value, int rowNum, int colNum) {
     @SuppressWarnings("cast")
     BudgetItem item = (BudgetItem) baseModel.getBudgetItems().get(rowNum);
-    switch (colNum) {
-    case 0 :
+    switch (COLS_ENUM.values()[colNum]) {
+    case Description:
       item.setDescription((String) value);
       break;
-    case 1:
+    case Amount:
       item.getAmount().setAmount(new BigDecimal((String) value));
       break;
-    case 2 :
+    case Frequency:
       item.setFrequency(CashFlowFrequency.valueOf((String) value));
       break;
     }

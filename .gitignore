@@ -3,3 +3,5 @@ bin/*
 .gradle
 build/*
 dist/*
+javadocs/*
+.settings/*
