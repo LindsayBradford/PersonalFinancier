@@ -7,6 +7,7 @@
 
 package blacksmyth.personalfinancier.model;
 
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Currency;
 import java.util.Observable;
@@ -22,7 +23,9 @@ public class PreferencesModel extends Observable {
   
   private static PreferencesModel instance = null;
   
-  protected PreferencesModel() {
+  private static MathContext preferredMathContext;
+  
+   protected PreferencesModel() {
      // Exists only to defeat instantiation.
   }
   
@@ -72,9 +75,46 @@ public class PreferencesModel extends Observable {
         ROUNDING_MODE_KEY,
         roundingMode.toString()
     );
+    updatePreferredMathContext();
     this.notifyObservers();
   }
 
+  
+  // this rounding mode introduces the least bias.
+  private static final int DEFAULT_PRECISION = 6;
+  private static final String PRECISION_KEY = "Precision";
+  
+  public int getPreferredPrecision() {
+      return this.prefs.getInt(
+          PRECISION_KEY, 
+          DEFAULT_PRECISION
+      );
+  }
+  
+  public void setPreferredPrecision(int precision) {
+    this.prefs.putInt(
+        PRECISION_KEY,
+        precision
+    );
+    updatePreferredMathContext();
+    this.notifyObservers();
+  }
+
+  private void updatePreferredMathContext() {
+    preferredMathContext = new MathContext(
+        getPreferredPrecision(), 
+        getPreferredRoundingMode()
+    );
+  }
+  
+  public MathContext getPreferredMathContext() {
+    if (preferredMathContext == null) {
+      updatePreferredMathContext();
+    }
+    return preferredMathContext;
+  }
+
+  
   // TODO: Switch from String to Account objects
   private static final String DEFAULT_BUDGET_ACCOUNT = "Default";
   private static final String BUDGET_ACCOUNT_KEY = "BudgetAccount";

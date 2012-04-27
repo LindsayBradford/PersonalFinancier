@@ -22,7 +22,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 
-public class WidgetFactory {
+public final class WidgetFactory {
   
   public static final String DECIMAL_FORMAT_PATTERN = "###,###,##0.00";
   

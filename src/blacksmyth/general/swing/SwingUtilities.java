@@ -18,7 +18,7 @@ import javax.swing.table.TableColumn;
  * @author linds
  *
  */
-public class SwingUtilities {
+public final class SwingUtilities {
 
   /**
    * Locks the width of <tt>column</tt> to the <tt>width</tt> specified.

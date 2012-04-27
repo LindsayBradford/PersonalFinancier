@@ -13,7 +13,7 @@ import blacksmyth.personalfinancier.gui.PersonalFinancierUIFactory;
 
 import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
 
-public class PersonalFinancier {
+public final class PersonalFinancier {
 
   @SuppressWarnings("unused")
   private static final long serialVersionUID = 1L;

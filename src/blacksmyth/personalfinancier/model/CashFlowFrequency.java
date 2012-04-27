@@ -8,5 +8,5 @@
 package blacksmyth.personalfinancier.model;
 
 public enum CashFlowFrequency {
-  Daily, Fortnightly, Monthly, Quarterly, Yearly
+  Daily, Weekly, Fortnightly, Monthly, Quarterly, Yearly 
 }

@@ -13,6 +13,7 @@ import blacksmyth.general.swing.SwingUtilities;
 import blacksmyth.personalfinancier.model.Account;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.MoneyAmount;
+import blacksmyth.personalfinancier.model.MoneyUtilties;
 import blacksmyth.personalfinancier.model.budget.BudgetItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
@@ -124,14 +125,18 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
   
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public Class getColumnClass(int colNum) {
-    switch (colNum) {
-    case 0:
+
+    
+    switch (COLS_ENUM.values()[colNum]) {
+    case Description:
       return String.class;
-    case 1: case 3: case 4: case 5: case 6: case 7: case 8:
+    case Amount: 
       return MoneyAmount.class;
-    case 2:
+    case Frequency:
       return CashFlowFrequency.class;
-    case 9:
+    case Daily: case Weekly: case Fortnightly: case Monthly: case Quarterly: case Yearly:
+      return BigDecimal.class;
+    case Account:
       return Account.class;
     }
     return Object.class;
@@ -152,18 +157,41 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
   public Object getValueAt(int rowNum, int colNum) {
     @SuppressWarnings("cast")
     BudgetItem item = (BudgetItem) baseModel.getBudgetItems().get(rowNum);
-    switch (colNum) {
-    case 0:
+    
+    COLS_ENUM colsEnum = COLS_ENUM.values()[colNum];
+    
+    switch (colsEnum) {
+    case Description:
       return item.getDescription();
     // TODO: Add FrequencyConverter formulas.
-    case 1: case 3: case 4: case 5: case 6: case 7: case 8:
+    case Amount: 
       return item.getAmount().getAmount();
-    case 2:
+    case Daily:
+      return convertAmount(item, CashFlowFrequency.Daily);
+    case Weekly:
+      return convertAmount(item, CashFlowFrequency.Weekly);
+    case Fortnightly:
+      return convertAmount(item, CashFlowFrequency.Fortnightly);
+    case Monthly:
+      return convertAmount(item, CashFlowFrequency.Monthly);
+    case Quarterly:
+      return convertAmount(item, CashFlowFrequency.Quarterly);
+    case Yearly:
+      return convertAmount(item, CashFlowFrequency.Yearly);
+    case Frequency:
       return item.getFrequency();
-    case 9:
+    case Account:
        return item.getAccount();
     }
     return null;
+  }
+  
+  private BigDecimal convertAmount(BudgetItem item, CashFlowFrequency newFrequency) {
+    return MoneyUtilties.convertFrequencyAmount(
+        item.getAmount().getAmount(), 
+        item.getFrequency(), 
+        newFrequency
+    );
   }
   
   public void setValueAt(Object value, int rowNum, int colNum) {
@@ -180,6 +208,7 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
       item.setFrequency(CashFlowFrequency.valueOf((String) value));
       break;
     }
+    this.fireTableRowsUpdated(rowNum, rowNum);
   }
 
   public void update(Observable o, Object arg) {

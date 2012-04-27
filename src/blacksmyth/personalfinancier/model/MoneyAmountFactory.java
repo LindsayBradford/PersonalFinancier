@@ -33,5 +33,4 @@ public class MoneyAmountFactory {
          new BigDecimal(amount)
      );
    }
-
 }
