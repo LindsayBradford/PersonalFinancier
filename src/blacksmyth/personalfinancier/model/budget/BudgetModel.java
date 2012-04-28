@@ -60,35 +60,30 @@ public class BudgetModel extends Observable implements Observer {
     this.changeAndNotifyObservers();
   }
 
-  public void setBudgetItemDescription(String oldDescription, String newDescription) {
-    this.getBudgetItem(oldDescription).setDescription(newDescription);
+  public void setBudgetItemDescription(int index, String newDescription) {
+    assert (index >= 0 && index < this.budgetItems.size());
+    this.budgetItems.get(index).setDescription(newDescription);
     this.changeAndNotifyObservers();
   }
   
-  public void setBudgetItemTotal(String description, BigDecimal total) {
-    this.getBudgetItem(description).getBudgettedAmount().setTotal(total);
+  public void setBudgetItemTotal(int index, BigDecimal total) {
+    assert (index >= 0 && index < this.budgetItems.size());
+    this.budgetItems.get(index).getBudgettedAmount().setTotal(total);
     this.changeAndNotifyObservers();
   }
   
-  public void setBudgetItemFrequency(String description, CashFlowFrequency frequency) {
-    this.getBudgetItem(description).setFrequency(frequency);
+  public void setBudgetItemFrequency(int index, CashFlowFrequency frequency) {
+    assert (index >= 0 && index < this.budgetItems.size());
+    this.budgetItems.get(index).setFrequency(frequency);
     this.changeAndNotifyObservers();
   }
   
-  public void setBudgetItemAccount(String description, String accountName) {
-    this.getBudgetItem(description).setBudgetAccount(
+  public void setBudgetItemAccount(int index, String accountName) {
+    assert (index >= 0 && index < this.budgetItems.size());
+    this.budgetItems.get(index).setBudgetAccount(
         accountModel.getAccount(accountName)
     );
     this.changeAndNotifyObservers();
-  }
-
-  public BudgetItem getBudgetItem(String description) {
-    for (BudgetItem item : this.getBudgetItems()) {
-      if (item.getDescription().equals(description)) {
-        return item;
-      }
-    }
-    return null;
   }
   
   @SuppressWarnings("unchecked")

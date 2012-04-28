@@ -246,35 +246,28 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
   public void setValueAt(Object value, int rowNum, int colNum) {
     switch (COLS_ENUM.values()[colNum]) {
     case Description:
-      baseModel.setBudgetItemDescription(
-          getBudgetItemDescription(rowNum),
-          (String) value
-      );
+      baseModel.setBudgetItemDescription(rowNum, (String) value);
       break;
     case Amount:
       baseModel.setBudgetItemTotal(
-          getBudgetItemDescription(rowNum),
+          rowNum,
           BigDecimalFactory.create((String) value)
       );
       break;
     case Frequency:
       baseModel.setBudgetItemFrequency(
-          getBudgetItemDescription(rowNum),
+          rowNum,
           CashFlowFrequency.valueOf((String) value)
       );
       break;
     case Account:
       baseModel.setBudgetItemAccount(
-          getBudgetItemDescription(rowNum),
+          rowNum,
           (String) value
       );
       break;
     }
     this.fireTableRowsUpdated(rowNum, rowNum);
-  }
-  
-  private String getBudgetItemDescription(int rowNum) {
-    return (String) getValueAt(rowNum, COLS_ENUM.Description.ordinal());    
   }
 
   public void update(Observable o, Object arg) {
