@@ -12,18 +12,28 @@ import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 
 public class BudgetItem {
+  private BudgetCategory category;
   private String description;
   private Money budgettedAmount;
   private CashFlowFrequency frequency;
   private Account budgetAccount;
   
-  public BudgetItem(String description, Money amount, CashFlowFrequency frequency, Account account) {
+  public BudgetItem(BudgetCategory category, String description, Money amount, CashFlowFrequency frequency, Account account) {
+    this.category = category;
     this.description = description;
     this.budgettedAmount = amount;
     this.frequency = frequency;
     this.budgetAccount = account;
   }
+
+  public BudgetCategory getCategory() {
+    return this.category;
+  }
   
+  protected void setCategory(BudgetCategory category) {
+    this.category = category;
+  }
+
   public String getDescription() {
     return description;
   }
@@ -55,4 +65,5 @@ public class BudgetItem {
   protected void setBudgetAccount(Account account) {
     this.budgetAccount = account;
   }
+
 }

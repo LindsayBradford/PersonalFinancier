@@ -95,6 +95,12 @@ public class BudgetModel extends Observable implements Observer {
     return accountModel.getBudgetAccount(nickname);
   }
   
+  public void setBudgetItemCategory(int index, BudgetCategory category) {
+    assert (index >= 0 && index < this.budgetItems.size());
+    this.budgetItems.get(index).setCategory(category);
+    this.changeAndNotifyObservers();
+  }
+
   private void changeAndNotifyObservers() {
     this.setChanged();
     this.notifyObservers();
@@ -108,4 +114,5 @@ public class BudgetModel extends Observable implements Observer {
   public void update(Observable o, Object arg) {
     this.changeAndNotifyObservers();
   }
+
 }

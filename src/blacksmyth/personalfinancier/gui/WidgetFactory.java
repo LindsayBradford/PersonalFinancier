@@ -29,6 +29,7 @@ import javax.swing.text.DocumentFilter;
 
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
+import blacksmyth.personalfinancier.model.budget.BudgetCategory;
 
 /**
  * A library of methods to construct low-level Swing JComponet widgets in a uniform
@@ -43,52 +44,43 @@ public final class WidgetFactory {
   protected static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat(DECIMAL_FORMAT_PATTERN);
 
   @SuppressWarnings("serial")
-  public static DefaultTableCellRenderer createCashFlowFrequencyCellRenderer() {
+  public static DefaultTableCellRenderer createTableCellRenderer(final int alignment) {
     return new DefaultTableCellRenderer() {
       public void setValue(Object value) {
-        this.setHorizontalAlignment(JTextField.CENTER);
+        this.setHorizontalAlignment(alignment);
         super.setValue(value);
       }
     };
   }
-  
-  public static DefaultCellEditor createCashFlowFrequencyCellEditor() {
-    return new DefaultCellEditor(
-        createCashFlowFrequencyComboBox()
-    );
-  }
-  
-  /**
-   * Creates a <tt>JComboBox</tt> pre-loaded with items from the 
-   * <tt>CashFlowFrequency</tt> enumeration.
-   * @return JComboBox
-   */
-  public static JComboBox createCashFlowFrequencyComboBox() {
-    JComboBox comboBox = new JComboBox();
 
-    DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
-    dlcr.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
-    dlcr.setForeground(
-        PreferencesModel.getInstance().getPreferredEditableCellColor()
-    );
-
-    comboBox.setRenderer(dlcr);
-    
-    for (CashFlowFrequency frequency : CashFlowFrequency.values()) {
-      comboBox.addItem(frequency.toString());
-    }
-    
-    return comboBox;
-  }
-  
   @SuppressWarnings("serial")
   public static DefaultTableCellRenderer createAmountCellRenderer() {
     return new DefaultTableCellRenderer() {
       public void setValue(Object value) {
         this.setHorizontalAlignment(JTextField.RIGHT);
-        this.setText((value == null) ? "" : DECIMAL_FORMAT.format(value));
+        this.setText((value == null) ? "" : DECIMAL_FORMAT.format(value));            
       }
     };
+  }
+
+  public static DefaultCellEditor createBudgetCategoryCellEditor() {
+    JComboBox comboBox = createTableComboBox();
+
+    for (BudgetCategory category : BudgetCategory.values()) {
+      comboBox.addItem(category.toString());
+    }
+
+    return new DefaultCellEditor(comboBox);
+  }
+  
+  public static DefaultCellEditor createCashFlowFrequencyCellEditor() {
+    JComboBox comboBox = createTableComboBox();
+    
+    for (CashFlowFrequency frequency : CashFlowFrequency.values()) {
+      comboBox.addItem(frequency.toString());
+    }
+    
+    return new DefaultCellEditor(comboBox);
   }
   
   public static DefaultCellEditor createAmountCellEditor() {
@@ -144,16 +136,6 @@ public final class WidgetFactory {
     return field;
   }
 
-  @SuppressWarnings("serial")
-  public static DefaultTableCellRenderer createBudgetAccountCellRenderer() {
-    return new DefaultTableCellRenderer() {
-      public void setValue(Object value) {
-        this.setHorizontalAlignment(JTextField.CENTER);
-        super.setValue(value);
-      }
-    };
-  }
-  
   public static DefaultCellEditor createBudgetAccountCellEditor() {
     return new DefaultCellEditor(
         createBudgetAccountComboBox()
@@ -173,12 +155,28 @@ public final class WidgetFactory {
     dlcr.setForeground(
         PreferencesModel.getInstance().getPreferredEditableCellColor()
     );
-
     comboBox.setRenderer(dlcr);
 
     return comboBox;
   }
 
+  /**
+   * Creates a <tt>JComboBox</tt> suitable for application table cell editors with
+   * a static enumeration.
+   * @return JComboBox
+   */
+  public static JComboBox createTableComboBox() {
+    JComboBox comboBox = new JComboBox();
+
+    DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
+    dlcr.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
+    dlcr.setForeground(
+        PreferencesModel.getInstance().getPreferredEditableCellColor()
+    );
+    comboBox.setRenderer(dlcr);
+    
+    return comboBox;
+  }
 }
 
 class FormatVerifier extends InputVerifier {

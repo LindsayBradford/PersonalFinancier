@@ -7,6 +7,7 @@ import java.util.Observer;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -19,20 +20,14 @@ import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyUtilties;
 import blacksmyth.personalfinancier.model.PreferencesModel;
+import blacksmyth.personalfinancier.model.budget.BudgetCategory;
 import blacksmyth.personalfinancier.model.budget.BudgetItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
-enum COLS_ENUM {
-  Description,
-  Amount,
-  Frequency,
-  Daily,
-  Weekly,
-  Fortnightly,
-  Monthly,
-  Quarterly,
-  Yearly,
-  Account
+enum COLUMN_HEADERS {
+  Category, Description, Amount, Frequency, 
+  Daily, Weekly,Fortnightly, Monthly,
+  Quarterly, Yearly, Account
 }
 
 public class BudgetDetailTable extends JTable {
@@ -52,37 +47,39 @@ public class BudgetDetailTable extends JTable {
   private void setupColumns() {
     this.tableHeader.setReorderingAllowed(false);
     this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-    setupAmountCol(COLS_ENUM.Amount);
+    
+    setupCategoryCol();
+    setupAmountCol(COLUMN_HEADERS.Amount);
     setupFrequencyCol();
-    setupAmountCol(COLS_ENUM.Daily);
-    setupAmountCol(COLS_ENUM.Weekly);
-    setupAmountCol(COLS_ENUM.Fortnightly);
-    setupAmountCol(COLS_ENUM.Monthly);
-    setupAmountCol(COLS_ENUM.Quarterly);
-    setupAmountCol(COLS_ENUM.Yearly);
+    setupAmountCol(COLUMN_HEADERS.Daily);
+    setupAmountCol(COLUMN_HEADERS.Weekly);
+    setupAmountCol(COLUMN_HEADERS.Fortnightly);
+    setupAmountCol(COLUMN_HEADERS.Monthly);
+    setupAmountCol(COLUMN_HEADERS.Quarterly);
+    setupAmountCol(COLUMN_HEADERS.Yearly);
     setupAccountCol();
   }
   
   private void setupAccountCol() {
-    getColFromEnum(COLS_ENUM.Account).setCellRenderer(
-        WidgetFactory.createBudgetAccountCellRenderer()    
+    getColFromEnum(COLUMN_HEADERS.Account).setCellRenderer(
+        WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
     
     DefaultCellEditor editor = WidgetFactory.createBudgetAccountCellEditor();    
 
-    getColFromEnum(COLS_ENUM.Account).setCellEditor(editor);
+    getColFromEnum(COLUMN_HEADERS.Account).setCellEditor(editor);
     
     this.getBudgetDetailTableModel().addBaseModelObserver(
         (Observer) editor.getComponent()
     );
     
     SwingUtilities.lockColumnWidth(
-        getColFromEnum(COLS_ENUM.Account),
+        getColFromEnum(COLUMN_HEADERS.Account),
         (int) editor.getComponent().getPreferredSize().getWidth()
     );
   }
 
-  private void setupAmountCol(COLS_ENUM thisColumn) {
+  private void setupAmountCol(COLUMN_HEADERS thisColumn) {
     SwingUtilities.lockColumnWidth(
         getColFromEnum(thisColumn),
         SwingUtilities.getTextWidth(
@@ -97,22 +94,36 @@ public class BudgetDetailTable extends JTable {
         WidgetFactory.createAmountCellEditor()    
     );
   }
-  
+
+  private void setupCategoryCol() {
+    getColFromEnum(COLUMN_HEADERS.Category).setCellRenderer(
+        WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
+    );
+
+    DefaultCellEditor editor = WidgetFactory.createBudgetCategoryCellEditor();    
+    getColFromEnum(COLUMN_HEADERS.Category).setCellEditor(editor);
+
+    SwingUtilities.lockColumnWidth(
+        getColFromEnum(COLUMN_HEADERS.Category),
+        (int) editor.getComponent().getPreferredSize().getWidth()
+    );
+  }
+
   private void setupFrequencyCol() {
-    getColFromEnum(COLS_ENUM.Frequency).setCellRenderer(
-        WidgetFactory.createCashFlowFrequencyCellRenderer()    
+    getColFromEnum(COLUMN_HEADERS.Frequency).setCellRenderer(
+        WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
 
     DefaultCellEditor editor = WidgetFactory.createCashFlowFrequencyCellEditor();    
-    getColFromEnum(COLS_ENUM.Frequency).setCellEditor(editor);
+    getColFromEnum(COLUMN_HEADERS.Frequency).setCellEditor(editor);
 
     SwingUtilities.lockColumnWidth(
-        getColFromEnum(COLS_ENUM.Frequency),
+        getColFromEnum(COLUMN_HEADERS.Frequency),
         (int) editor.getComponent().getPreferredSize().getWidth()
     );
   }
   
-  private TableColumn getColFromEnum(COLS_ENUM thisEnum) {
+  private TableColumn getColFromEnum(COLUMN_HEADERS thisEnum) {
     return this.getColumnModel().getColumn(thisEnum.ordinal());
   }
   
@@ -141,7 +152,7 @@ public class BudgetDetailTable extends JTable {
   }
   
   private CashFlowFrequency getFrequencyAt(int row) {
-    return (CashFlowFrequency) this.getModel().getValueAt(row, COLS_ENUM.Frequency.ordinal());
+    return (CashFlowFrequency) this.getModel().getValueAt(row, COLUMN_HEADERS.Frequency.ordinal());
   }
 
   private BudgetDetailTableModel getBudgetDetailTableModel() {
@@ -165,17 +176,19 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
   }
 
   public int getColumnCount() {
-    return COLS_ENUM.values().length;
+    return COLUMN_HEADERS.values().length;
   }
   
   public String getColumnName(int colNum) {
-    return COLS_ENUM.values()[colNum].toString();
+    return COLUMN_HEADERS.values()[colNum].toString();
   }
   
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public Class getColumnClass(int colNum) {
 
-    switch (COLS_ENUM.values()[colNum]) {
+    switch (COLUMN_HEADERS.values()[colNum]) {
+      case Category:
+        return BudgetCategory.class;
       case Description:
         return String.class;
       case Amount: 
@@ -196,7 +209,7 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
   }
   
   public boolean isCellEditable(int rowNum, int colNum) {
-    switch (COLS_ENUM.values()[colNum]) {
+    switch (COLUMN_HEADERS.values()[colNum]) {
       case Daily: case Weekly: case Fortnightly: 
       case Monthly: case Quarterly: case Yearly:
         return false;
@@ -209,7 +222,9 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
     @SuppressWarnings("cast")
     BudgetItem item = (BudgetItem) baseModel.getBudgetItems().get(rowNum);
     
-    switch (COLS_ENUM.values()[colNum]) {
+    switch (COLUMN_HEADERS.values()[colNum]) {
+      case Category:
+        return item.getCategory();
       case Description:
         return item.getDescription();
       case Amount: 
@@ -244,7 +259,13 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
   }
   
   public void setValueAt(Object value, int rowNum, int colNum) {
-    switch (COLS_ENUM.values()[colNum]) {
+    switch (COLUMN_HEADERS.values()[colNum]) {
+    case Category:
+      baseModel.setBudgetItemCategory(
+          rowNum, 
+          BudgetCategory.valueOf((String) value)
+      );
+      break;
     case Description:
       baseModel.setBudgetItemDescription(rowNum, (String) value);
       break;
