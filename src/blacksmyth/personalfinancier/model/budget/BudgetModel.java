@@ -9,24 +9,30 @@ package blacksmyth.personalfinancier.model.budget;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Observable;
 import java.util.Observer;
 
 import blacksmyth.personalfinancier.model.Account;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
+import blacksmyth.personalfinancier.model.MoneyUtilties;
+import blacksmyth.personalfinancier.model.PreferencesModel;
 
 public class BudgetModel extends Observable implements Observer {
-  private AccountModel accountModel = new AccountModel();
+  private AccountModel accountModel; 
   private ArrayList<BudgetItem> budgetItems;
+  private ArrayList<BudgetSummary> budgetSummaries;
   
-  public BudgetModel() {
+  public BudgetModel(AccountModel accountModel) {
     this.budgetItems = new ArrayList<BudgetItem>();
+    this.budgetSummaries = new ArrayList<BudgetSummary>();
+    this.accountModel = accountModel;
     
     // TODO: implement full budget account lifecycle.
     
     this.mockModelData();
-    
+    this.changeAndNotifyObservers();
   }
   
   // TODO: Move to budget controller.
@@ -101,7 +107,41 @@ public class BudgetModel extends Observable implements Observer {
     this.changeAndNotifyObservers();
   }
 
+  public ArrayList<BudgetSummary> getBudgetSummaries() {
+    return this.budgetSummaries;
+  }
+
+  @SuppressWarnings("unchecked")
+  private void updateDerivedData() {
+    Hashtable<String, BudgetSummary> summaryTable = new Hashtable<String, BudgetSummary>();
+    this.budgetSummaries = new ArrayList<BudgetSummary>();
+    for(BudgetItem item : this.budgetItems) {
+      if (!summaryTable.containsKey(item.getBudgetAccount().getNickname())) {
+        BudgetSummary newSummary = new BudgetSummary(item.getBudgetAccount());
+        summaryTable.put(item.getBudgetAccount().getNickname(), newSummary);
+      }
+      
+      BudgetSummary summary = summaryTable.get(item.getBudgetAccount().getNickname());
+      
+      BigDecimal convertedBudgetAmount = MoneyUtilties.convertFrequencyAmount(
+              item.getBudgettedAmount().getTotal(), 
+              item.getFrequency(), 
+              summary.getBudgettedFrequency()
+      );
+      
+      BigDecimal originalTotal = summary.getBudgettedAmount().getTotal();
+      BigDecimal newTotal = originalTotal.add(
+        convertedBudgetAmount,
+        PreferencesModel.getInstance().getPreferredMathContext()
+      );
+      
+      summary.getBudgettedAmount().setTotal(newTotal);
+    }
+    this.budgetSummaries = new ArrayList<BudgetSummary>(summaryTable.values());
+  }
+  
   private void changeAndNotifyObservers() {
+    this.updateDerivedData();
     this.setChanged();
     this.notifyObservers();
   }
@@ -114,5 +154,6 @@ public class BudgetModel extends Observable implements Observer {
   public void update(Observable o, Object arg) {
     this.changeAndNotifyObservers();
   }
+
 
 }

@@ -11,7 +11,7 @@ public class BudgetItemFactory {
   
   public static BudgetItem create(String description) {
     return  new BudgetItem(
-        BudgetCategory.DiscretionaryExpense,
+        BudgetCategory.Discretionary,
         description,
         MoneyAmountFactory.createAmount(BigDecimal.ZERO),
         PreferencesModel.getInstance().getPreferredCashflowFrequency(),

@@ -16,9 +16,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 
+import blacksmyth.personalfinancier.model.AccountModel;
+import blacksmyth.personalfinancier.model.budget.BudgetModel;
+
 class BudgetUIFactory {
+  private static BudgetModel budgetModel = new BudgetModel(new AccountModel());
   
   public static JComponent createBudgetComponent() {
+    
     JPanel budgetPanel = new JPanel(new BorderLayout());
     
     budgetPanel.add(
@@ -27,7 +32,7 @@ class BudgetUIFactory {
     );
 
     budgetPanel.add(
-        createBudgetSummariesPanel(), 
+        createBudgetSummaryPanel(), 
         BorderLayout.PAGE_END
     );
 
@@ -41,43 +46,25 @@ class BudgetUIFactory {
     
     panel.add(
         new JScrollPane(
-            new BudgetDetailTable()
+            new BudgetDetailTable(budgetModel)
         ),
         BorderLayout.CENTER
     );
     
     return panel;    
   }
-
-  private static JComponent createBudgetSummariesPanel() {
-    JPanel panel = new JPanel(new GridLayout(0,2));
-    
-    panel.add(
-        createBudgetedAccountExpensesPanel()
-    ); 
-
-    panel.add(
-        createSalaryDistributionPanel()
-    ); 
-
-    return panel;    
-  }
   
-  private static JComponent createBudgetedAccountExpensesPanel() {
+  private static JComponent createBudgetSummaryPanel() {
     JPanel panel  = new JPanel(new BorderLayout());
     
-    panel.setBorder(new TitledBorder("Budgeted Account Expenses"));
-    panel.add(new JLabel("Budgeted Account Expenses"));
+    panel.setBorder(new TitledBorder("Budget Summary"));
     
-    return panel;    
-  }
-
-  private static JComponent createSalaryDistributionPanel() {
-    JPanel panel  = new JPanel(new BorderLayout());
-    
-    panel.setBorder(new TitledBorder("Salary Distribution"));
-    
-    panel.add(new JLabel("Salary Distribution"));
+    panel.add(
+        new JScrollPane(
+            new BudgetAccountSummaryTable(budgetModel)
+        ),
+        BorderLayout.LINE_END
+    );
     
     return panel;    
   }
