@@ -1,6 +1,7 @@
 package blacksmyth.personalfinancier.gui;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -20,14 +21,27 @@ enum BUDGET_SUMMARY_COLUMNS {
   Account, Detail, Budgetted
 }
 
+// TODO: Sorting from largest budgetted amount to smallest.
+
+@SuppressWarnings("serial")
 public class BudgetAccountSummaryTable extends JTable {
   private static final int CELL_BUFFER = 15;
+  
+  private static final int ROW_LIMIT = 5;
   
   public BudgetAccountSummaryTable(BudgetModel budgetModel) {
     super(
         new BudgetAccountSummaryModel(budgetModel)
     );
     setupColumns();
+
+    this.setPreferredScrollableViewportSize(
+        new Dimension(
+            (int) this.getPreferredScrollableViewportSize().getWidth(),
+            this.getRowHeight() * ROW_LIMIT
+        )
+    );
+    
   }
   
   private void setupColumns() {
@@ -82,6 +96,7 @@ public class BudgetAccountSummaryTable extends JTable {
 
 // TODO: Refactor commonalities between this and BudgetDetailtableModel
 
+@SuppressWarnings("serial")
 class BudgetAccountSummaryModel extends AbstractTableModel implements Observer {
 
   private BudgetModel baseModel;

@@ -9,6 +9,11 @@ import blacksmyth.personalfinancier.model.PreferencesModel;
 public class BudgetItemFactory {
   // TODO: Expand to be more than just a nickname device.
   
+
+  public static BudgetItem create() {
+    return create("");
+  }
+  
   public static BudgetItem create(String description) {
     return  new BudgetItem(
         BudgetCategory.Discretionary,

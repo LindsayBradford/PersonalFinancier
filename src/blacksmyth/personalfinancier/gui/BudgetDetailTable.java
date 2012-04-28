@@ -41,6 +41,7 @@ public class BudgetDetailTable extends JTable {
     super(
         new BudgetDetailTableModel(budgetModel)
     );
+    this.setRowSelectionAllowed(true);
     setupColumns();
   }
   

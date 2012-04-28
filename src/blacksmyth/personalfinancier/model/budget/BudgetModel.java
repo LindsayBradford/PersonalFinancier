@@ -31,24 +31,23 @@ public class BudgetModel extends Observable implements Observer {
     
     // TODO: implement full budget account lifecycle.
     
-    this.mockModelData();
     this.changeAndNotifyObservers();
   }
   
-  // TODO: Move to budget controller.
-  private void mockModelData() {
 
-    ArrayList<BudgetItem> tmpItems = new ArrayList<BudgetItem>();
-
-    tmpItems.add(BudgetItemFactory.create("test"));
-    tmpItems.add(BudgetItemFactory.create("another test"));
-    tmpItems.add(BudgetItemFactory.create("yet another test"));
-    this.setBudgetItems(tmpItems);
-    
+  public void addBudgetItem() {
+    this.addBudgetItem(
+        BudgetItemFactory.create()
+    );
   }
-  
+
   public void addBudgetItem(BudgetItem item) {
     this.budgetItems.add(item);
+    this.changeAndNotifyObservers();
+  }
+  
+  public void removeBudgetItem(int index) {
+    this.budgetItems.remove(index);
     this.changeAndNotifyObservers();
   }
   
