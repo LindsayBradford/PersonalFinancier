@@ -17,4 +17,10 @@ public class BigDecimalFactory {
       );
     }
     
+    public static BigDecimal create(String value) {
+      return new BigDecimal(
+          value, 
+          PreferencesModel.getInstance().getPreferredMathContext()
+      );
+    }
 }

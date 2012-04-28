@@ -9,6 +9,7 @@ package blacksmyth.general.swing;
 
 import java.awt.FontMetrics;
 
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.table.TableColumn;
 
@@ -46,6 +47,26 @@ public final class SwingUtilities {
         label.getGraphics()
     ).getWidth();
 
+  }
+  
+  /**
+   * eturns the longest string set as an item in the supplied <tt>comboBox</tt>
+   * @param comboBox
+   * @return
+   */
+  public static String getWidestTextInComboBox(JComboBox comboBox) {
+    
+    String longestFoundString = "";
+
+    for(int i = 0; i < comboBox.getItemCount(); i++) {
+      assert (comboBox.getItemAt(i).getClass().equals(String.class));
+    
+      String item = (String) comboBox.getItemAt(i);
+      if (item.length() > longestFoundString.length()) {
+        longestFoundString = item;
+      }
+    }
+    return longestFoundString;
   }
 
 }

@@ -9,19 +9,19 @@ package blacksmyth.personalfinancier.model.budget;
 
 import blacksmyth.personalfinancier.model.Account;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
-import blacksmyth.personalfinancier.model.MoneyAmount;
+import blacksmyth.personalfinancier.model.Money;
 
 public class BudgetItem {
   private String description;
-  private MoneyAmount amount;
+  private Money budgettedAmount;
   private CashFlowFrequency frequency;
-  private Account account;
+  private Account budgetAccount;
   
-  public BudgetItem(String description, MoneyAmount amount, CashFlowFrequency frequency, Account account) {
+  public BudgetItem(String description, Money amount, CashFlowFrequency frequency, Account account) {
     this.description = description;
-    this.amount = amount;
+    this.budgettedAmount = amount;
     this.frequency = frequency;
-    this.account = account;
+    this.budgetAccount = account;
   }
   
   public String getDescription() {
@@ -32,12 +32,12 @@ public class BudgetItem {
     this.description = description;
   }
 
-  public MoneyAmount getAmount() {
-    return amount;
+  public Money getBudgettedAmount() {
+    return budgettedAmount;
   }
 
-  public void setAmount(MoneyAmount amount) {
-    this.amount = amount;
+  public void setBudgettedAmount(Money amount) {
+    this.budgettedAmount = amount;
   }
 
   public CashFlowFrequency getFrequency() {
@@ -49,11 +49,11 @@ public class BudgetItem {
   }
 
   
-  public Account getAccount() {
-    return account;
+  public Account getBudgetAccount() {
+    return budgetAccount;
   }
 
-  public void setAccount(Account account) {
-    this.account = account;
+  public void setBudgetAccount(Account account) {
+    this.budgetAccount = account;
   }
 }

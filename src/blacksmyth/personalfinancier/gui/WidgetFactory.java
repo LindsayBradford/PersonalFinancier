@@ -9,10 +9,10 @@ package blacksmyth.personalfinancier.gui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.FocusEvent;
 import java.text.DecimalFormat;
-import java.text.Format;
 import java.text.ParseException;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListCellRenderer;
@@ -21,19 +21,17 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFormattedTextField.AbstractFormatter;
-import javax.swing.JFormattedTextField.AbstractFormatterFactory;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
 
 import javax.swing.text.DocumentFilter;
 
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
+import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 /**
  * A library of methods to construct low-level Swing JComponet widgets in a uniform
@@ -89,7 +87,6 @@ public final class WidgetFactory {
   @SuppressWarnings("serial")
   public static DefaultTableCellRenderer createAmountCellRenderer() {
     return new DefaultTableCellRenderer() {
-      
       public void setValue(Object value) {
         this.setHorizontalAlignment(JTextField.RIGHT);
         this.setText((value == null) ? "" : DECIMAL_FORMAT.format(value));
@@ -133,13 +130,14 @@ public final class WidgetFactory {
    * Create a {@link JFormattedTextField} configured to edit decimal numbers in an application-specific way.
    * @return
    */
-  @SuppressWarnings("serial")
   public static JFormattedTextField createAmountTextField() {
     JFormattedTextField field = new JFormattedTextField();
     
     field.setInputVerifier(new FormatVerifier());
     
-    ((AbstractDocument) field.getDocument()).setDocumentFilter(new DecimalFilter());
+    ((AbstractDocument) field.getDocument()).setDocumentFilter(
+        new DecimalCharFilter()
+    );
     
     field.setForeground(
         PreferencesModel.getInstance().getPreferredEditableCellColor()
@@ -148,6 +146,42 @@ public final class WidgetFactory {
     
     return field;
   }
+
+  @SuppressWarnings("serial")
+  public static DefaultTableCellRenderer createBudgetAccountCellRenderer() {
+    return new DefaultTableCellRenderer() {
+      public void setValue(Object value) {
+        this.setHorizontalAlignment(JTextField.CENTER);
+        super.setValue(value);
+      }
+    };
+  }
+  
+  public static DefaultCellEditor createBudgetAccountCellEditor() {
+    return new DefaultCellEditor(
+        createBudgetAccountComboBox()
+    );
+  }
+  
+  /**
+   * Creates a <tt>JComboBox</tt> pre-loaded with Accounts used
+   * in budgetting.
+   * @return JComboBox
+   */
+  public static JComboBox createBudgetAccountComboBox() {
+    BudgetAccountComboBox comboBox = new BudgetAccountComboBox();  
+    
+    DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
+    dlcr.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
+    dlcr.setForeground(
+        PreferencesModel.getInstance().getPreferredEditableCellColor()
+    );
+
+    comboBox.setRenderer(dlcr);
+
+    return comboBox;
+  }
+
 }
 
 class FormatVerifier extends InputVerifier {
@@ -173,18 +207,18 @@ class FormatVerifier extends InputVerifier {
   }
 }
 
-class DecimalFilter extends DocumentFilter {
-  private static DecimalFilter instance;
+class DecimalCharFilter extends DocumentFilter {
+  private static DecimalCharFilter instance;
   
   private static final String VALID_CHARS = "0123456789.,";
   
-  protected DecimalFilter() {
+  protected DecimalCharFilter() {
     super();
   }
   
-  public static DecimalFilter getInstance() {
+  public static DecimalCharFilter getInstance() {
     if (instance == null) {
-      instance = new DecimalFilter();
+      instance = new DecimalCharFilter();
     }
     return instance;
   }

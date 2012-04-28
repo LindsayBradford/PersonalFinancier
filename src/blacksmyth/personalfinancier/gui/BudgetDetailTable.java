@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -12,9 +13,10 @@ import javax.swing.table.TableColumn;
 
 import blacksmyth.general.swing.SwingUtilities;
 
-import blacksmyth.personalfinancier.model.Account;
+
+import blacksmyth.personalfinancier.model.BigDecimalFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
-import blacksmyth.personalfinancier.model.MoneyAmount;
+import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyUtilties;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetItem;
@@ -58,8 +60,28 @@ public class BudgetDetailTable extends JTable {
     setupAmountCol(COLS_ENUM.Monthly);
     setupAmountCol(COLS_ENUM.Quarterly);
     setupAmountCol(COLS_ENUM.Yearly);
+    setupAccountCol();
   }
   
+  private void setupAccountCol() {
+    getColFromEnum(COLS_ENUM.Account).setCellRenderer(
+        WidgetFactory.createBudgetAccountCellRenderer()    
+    );
+    
+    DefaultCellEditor editor = WidgetFactory.createBudgetAccountCellEditor();    
+
+    getColFromEnum(COLS_ENUM.Account).setCellEditor(editor);
+    
+    this.getBudgetDetailTableModel().addBaseModelObserver(
+        (Observer) editor.getComponent()
+    );
+    
+    SwingUtilities.lockColumnWidth(
+        getColFromEnum(COLS_ENUM.Account),
+        (int) editor.getComponent().getPreferredSize().getWidth()
+    );
+  }
+
   private void setupAmountCol(COLS_ENUM thisColumn) {
     SwingUtilities.lockColumnWidth(
         getColFromEnum(thisColumn),
@@ -77,18 +99,16 @@ public class BudgetDetailTable extends JTable {
   }
   
   private void setupFrequencyCol() {
-    SwingUtilities.lockColumnWidth(
-        getColFromEnum(COLS_ENUM.Frequency),
-        SwingUtilities.getTextWidth(
-            COLS_ENUM.Frequency.toString()
-        ) + CELL_BUFFER
-    );
-
     getColFromEnum(COLS_ENUM.Frequency).setCellRenderer(
         WidgetFactory.createCashFlowFrequencyCellRenderer()    
     );
-    getColFromEnum(COLS_ENUM.Frequency).setCellEditor(
-        WidgetFactory.createCashFlowFrequencyCellEditor()    
+
+    DefaultCellEditor editor = WidgetFactory.createCashFlowFrequencyCellEditor();    
+    getColFromEnum(COLS_ENUM.Frequency).setCellEditor(editor);
+
+    SwingUtilities.lockColumnWidth(
+        getColFromEnum(COLS_ENUM.Frequency),
+        (int) editor.getComponent().getPreferredSize().getWidth()
     );
   }
   
@@ -122,6 +142,10 @@ public class BudgetDetailTable extends JTable {
   
   private CashFlowFrequency getFrequencyAt(int row) {
     return (CashFlowFrequency) this.getModel().getValueAt(row, COLS_ENUM.Frequency.ordinal());
+  }
+
+  private BudgetDetailTableModel getBudgetDetailTableModel() {
+    return (BudgetDetailTableModel) getModel();
   }
 }
 
@@ -159,14 +183,14 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
       case Description:
         return String.class;
       case Amount: 
-        return MoneyAmount.class;
+        return Money.class;
       case Frequency:
         return CashFlowFrequency.class;
       case Daily: case Weekly: case Fortnightly: 
       case Monthly: case Quarterly: case Yearly:
         return BigDecimal.class;
       case Account:
-        return Account.class;
+        return String.class;
     }
     return Object.class;
   }
@@ -193,7 +217,7 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
       case Description:
         return item.getDescription();
       case Amount: 
-        return item.getAmount().getAmount();
+        return item.getBudgettedAmount().getTotal();
       case Daily:
         return convertAmount(item, CashFlowFrequency.Daily);
       case Weekly:
@@ -209,7 +233,7 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
       case Frequency:
         return item.getFrequency();
       case Account:
-         return item.getAccount();
+         return item.getBudgetAccount().getNickname();
        default:
          return null;
     }
@@ -217,7 +241,7 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
   
   private BigDecimal convertAmount(BudgetItem item, CashFlowFrequency newFrequency) {
     return MoneyUtilties.convertFrequencyAmount(
-        item.getAmount().getAmount(), 
+        item.getBudgettedAmount().getTotal(), 
         item.getFrequency(), 
         newFrequency
     );
@@ -231,10 +255,15 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
       item.setDescription((String) value);
       break;
     case Amount:
-      item.getAmount().setAmount(new BigDecimal((String) value));
+      item.getBudgettedAmount().setTotal(
+          BigDecimalFactory.create((String) value)
+      );
       break;
     case Frequency:
       item.setFrequency(CashFlowFrequency.valueOf((String) value));
+      break;
+    case Account:
+      item.setBudgetAccount(baseModel.getBudgetAccount((String) value));
       break;
     }
     this.fireTableRowsUpdated(rowNum, rowNum);
@@ -243,4 +272,13 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
   public void update(Observable o, Object arg) {
     this.fireTableDataChanged();
   }
+  
+  public Observable getBaseModel() {
+    return baseModel;
+  }
+  
+  public void addBaseModelObserver(Observer observer) {
+    this.getBaseModel().addObserver(observer);
+  }
+  
 }

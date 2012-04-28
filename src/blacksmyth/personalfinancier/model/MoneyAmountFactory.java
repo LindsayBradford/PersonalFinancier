@@ -10,24 +10,24 @@ package blacksmyth.personalfinancier.model;
 import java.math.BigDecimal;
 
 public class MoneyAmountFactory {
-   public static MoneyAmount createAmount(BigDecimal amount) {
-     return new MoneyAmount(
+   public static Money createAmount(BigDecimal amount) {
+     return new Money(
          PreferencesModel.getInstance().getPreferredCurrency(), 
          PreferencesModel.getInstance().getPreferredRoundingMode(), 
          amount
      );
    }
    
-   public static MoneyAmount createAmount(double amount) {
-     return new MoneyAmount(
+   public static Money createAmount(double amount) {
+     return new Money(
          PreferencesModel.getInstance().getPreferredCurrency(), 
          PreferencesModel.getInstance().getPreferredRoundingMode(), 
          BigDecimal.valueOf(amount)
      );
    }
 
-   public static MoneyAmount createAmount(String amount) {
-     return new MoneyAmount(
+   public static Money createAmount(String amount) {
+     return new Money(
          PreferencesModel.getInstance().getPreferredCurrency(), 
          PreferencesModel.getInstance().getPreferredRoundingMode(), 
          new BigDecimal(amount)
