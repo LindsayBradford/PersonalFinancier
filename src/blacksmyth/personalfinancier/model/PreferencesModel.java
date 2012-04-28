@@ -121,23 +121,24 @@ public class PreferencesModel extends Observable {
     return preferredMathContext;
   }
   
-  // TODO: Switch from String to Account objects
   private static final String DEFAULT_BUDGET_ACCOUNT = "Default";
   private static final String BUDGET_ACCOUNT_KEY = "BudgetAccount";
   
-  public String getPreferredBudgetAccount() {
-    return this.prefs.get(
-       BUDGET_ACCOUNT_KEY, 
-       DEFAULT_BUDGET_ACCOUNT
-    );
+  public Account getPreferredBudgetAccount() {
+    // TODO: introduce account model.
+    return Account.DEFAULT;
+//    return this.prefs.get(
+//       BUDGET_ACCOUNT_KEY, 
+//       DEFAULT_BUDGET_ACCOUNT
+//    );
   }
   
-  public void setPreferredBudgetAccount(String budgetAccount) {
+  public void setPreferredBudgetAccount(Account budgetAccount) {
     this.prefs.put(
         BUDGET_ACCOUNT_KEY,
-        budgetAccount
+        budgetAccount.getNickname()
     );
-    this.notifyObservers();
+    this.setChangeAndNotifyObservers();
   }
 
   private static final String DEFAULT_CASHFLOW_FREQUENCY = CashFlowFrequency.Daily.toString();
@@ -157,7 +158,7 @@ public class PreferencesModel extends Observable {
         CASHFLOW_FREQUENCY_KEY,
         frequency.toString()
     );
-    this.notifyObservers();
+    this.setChangeAndNotifyObservers();
   }
 
   private static final int DEFAULT_EVEN_ROW_COLOR = Color.BLACK.getRGB();
@@ -177,7 +178,7 @@ public class PreferencesModel extends Observable {
         EVEN_ROW_COLOR_KEY,
         color.getRGB()
     );
-    this.notifyObservers();
+    this.setChangeAndNotifyObservers();
   }
 
   private static final int DEFAULT_ODD_ROW_COLOR = Color.DARK_GRAY.darker().getRGB();
@@ -197,7 +198,7 @@ public class PreferencesModel extends Observable {
         ODD_ROW_COLOR_KEY,
         color.getRGB()
     );
-    this.notifyObservers();
+    this.setChangeAndNotifyObservers();
   }
 
   private static final int DEFAULT_EDITABLE_CELL_COLOR = Color.ORANGE.getRGB();
@@ -217,7 +218,7 @@ public class PreferencesModel extends Observable {
         EDITABLE_CELL_COLOR_KEY,
         color.getRGB()
     );
-    this.notifyObservers();
+    this.setChangeAndNotifyObservers();
   }
 
   private static final int DEFAULT_UNEDITABLE_CELL_COLOR = Color.GRAY.getRGB();
@@ -237,7 +238,7 @@ public class PreferencesModel extends Observable {
         UNEDITABLE_CELL_COLOR_KEY,
         color.getRGB()
     );
-    this.notifyObservers();
+    this.setChangeAndNotifyObservers();
   }
 
   private static final int DEFAULT_BUDGET_FREQUENCY_CELL_COLOR = Color.GRAY.brighter().brighter().getRGB();
@@ -257,7 +258,11 @@ public class PreferencesModel extends Observable {
         BUDGET_FREQUENCY_CELLL_COLOR_KEY,
         color.getRGB()
     );
+    this.setChangeAndNotifyObservers();
+  }
+  
+  private void setChangeAndNotifyObservers() {
+    this.setChanged();
     this.notifyObservers();
   }
-
 }

@@ -161,11 +161,7 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
 
     // TODO: we need a BudgetModel controller.
     
-    baseModel.addObserver(this);
-    
-    baseModel.addBudgetItem("test");
-    baseModel.addBudgetItem("another test");
-    baseModel.addBudgetItem("yet another test");
+    addBaseModelObserver(this);
   }
 
   public int getColumnCount() {
@@ -248,25 +244,37 @@ class BudgetDetailTableModel extends AbstractTableModel implements Observer {
   }
   
   public void setValueAt(Object value, int rowNum, int colNum) {
-    @SuppressWarnings("cast")
-    BudgetItem item = (BudgetItem) baseModel.getBudgetItems().get(rowNum);
     switch (COLS_ENUM.values()[colNum]) {
     case Description:
-      item.setDescription((String) value);
+      baseModel.setBudgetItemDescription(
+          getBudgetItemDescription(rowNum),
+          (String) value
+      );
       break;
     case Amount:
-      item.getBudgettedAmount().setTotal(
+      baseModel.setBudgetItemTotal(
+          getBudgetItemDescription(rowNum),
           BigDecimalFactory.create((String) value)
       );
       break;
     case Frequency:
-      item.setFrequency(CashFlowFrequency.valueOf((String) value));
+      baseModel.setBudgetItemFrequency(
+          getBudgetItemDescription(rowNum),
+          CashFlowFrequency.valueOf((String) value)
+      );
       break;
     case Account:
-      item.setBudgetAccount(baseModel.getBudgetAccount((String) value));
+      baseModel.setBudgetItemAccount(
+          getBudgetItemDescription(rowNum),
+          (String) value
+      );
       break;
     }
     this.fireTableRowsUpdated(rowNum, rowNum);
+  }
+  
+  private String getBudgetItemDescription(int rowNum) {
+    return (String) getValueAt(rowNum, COLS_ENUM.Description.ordinal());    
   }
 
   public void update(Observable o, Object arg) {

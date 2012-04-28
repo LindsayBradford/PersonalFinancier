@@ -28,7 +28,7 @@ public class BudgetItem {
     return description;
   }
 
-  public void setDescription(String description) {
+  protected void setDescription(String description) {
     this.description = description;
   }
 
@@ -36,7 +36,7 @@ public class BudgetItem {
     return budgettedAmount;
   }
 
-  public void setBudgettedAmount(Money amount) {
+  protected void setBudgettedAmount(Money amount) {
     this.budgettedAmount = amount;
   }
 
@@ -44,16 +44,15 @@ public class BudgetItem {
     return frequency;
   }
 
-  public void setFrequency(CashFlowFrequency frequency) {
+  protected void setFrequency(CashFlowFrequency frequency) {
     this.frequency = frequency;
   }
-
   
   public Account getBudgetAccount() {
     return budgetAccount;
   }
 
-  public void setBudgetAccount(Account account) {
+  protected void setBudgetAccount(Account account) {
     this.budgetAccount = account;
   }
 }

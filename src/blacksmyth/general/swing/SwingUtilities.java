@@ -50,7 +50,7 @@ public final class SwingUtilities {
   }
   
   /**
-   * eturns the longest string set as an item in the supplied <tt>comboBox</tt>
+   * Returns the longest string set as an item in the supplied <tt>comboBox</tt>
    * @param comboBox
    * @return
    */

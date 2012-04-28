@@ -11,8 +11,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListCellRenderer;
@@ -31,7 +29,6 @@ import javax.swing.text.DocumentFilter;
 
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
-import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 /**
  * A library of methods to construct low-level Swing JComponet widgets in a uniform
