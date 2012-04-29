@@ -26,9 +26,18 @@ sourceSets {
       srcDir 'src'
     }
     resources {
-      srcDir 'src/resources'
+      srcDir 'src/blacksmyth/resources'
     }
   }
+//  output.resourcesDir = 'build/classes/main/blacksmyth/resources'
+}
+
+// Sub-par.  How can I set this nicely from within sourceSets?
+// the sourceset command above is parsed, but doesn't seem to have
+// effect at processResources task execution time.
+
+processResources {
+ destinationDir = file('build/classes/main/blacksmyth/resources')
 }
 
 jar {
