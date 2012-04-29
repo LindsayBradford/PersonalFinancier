@@ -148,7 +148,7 @@ class BudgetAccountSummaryModel extends AbstractTableModel implements Observer {
     case Detail:
       return summary.getAccountDetail();
     case Budgetted: 
-      return summary.getBudgettedAmount(CashFlowFrequency.Fortnightly);
+      return summary.getBudgettedAmountAtFrequency(CashFlowFrequency.Fortnightly);
     default:
          return null;
     }

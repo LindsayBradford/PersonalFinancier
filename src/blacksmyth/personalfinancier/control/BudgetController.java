@@ -3,15 +3,23 @@ package blacksmyth.personalfinancier.control;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 
+import com.google.gson.reflect.TypeToken;
+
 import blacksmyth.personalfinancier.gui.BudgetAccountSummaryTable;
 import blacksmyth.personalfinancier.gui.BudgetDetailTable;
+import blacksmyth.personalfinancier.io.json.JSonAdapter;
 import blacksmyth.personalfinancier.model.AccountModel;
+import blacksmyth.personalfinancier.model.budget.BudgetItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 public class BudgetController {
+  private static final String fileName = "test.json";
+  
   private BudgetModel model;
   private BudgetDetailTable budgetDetailTable;
   private BudgetAccountSummaryTable accountSummaryTable;
@@ -87,5 +95,19 @@ public class BudgetController {
         }
     );
   }
-  
+
+  public void save() {
+    JSonAdapter.getInstance().save(
+        this.getModel().getBudgetItems(),
+        fileName
+    );
+  }
+
+  @SuppressWarnings("unchecked")
+  public void load() {
+    Type budgetItemsType = new TypeToken<ArrayList<BudgetItem>>() {}.getType();
+    this.getModel().setBudgetItems(
+        (ArrayList<BudgetItem>) JSonAdapter.getInstance().load(fileName, budgetItemsType)
+    );
+  }
 }

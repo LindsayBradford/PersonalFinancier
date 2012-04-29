@@ -52,7 +52,7 @@ public class BudgetSummary {
     this.budgettedFrequency = budgettedFrequency;
   }
 
-  public Object getBudgettedAmount(CashFlowFrequency newFrequency) {
+  public Object getBudgettedAmountAtFrequency(CashFlowFrequency newFrequency) {
     return MoneyUtilties.convertFrequencyAmount(
         this.getBudgettedAmount().getTotal(), 
         getBudgettedFrequency(), 

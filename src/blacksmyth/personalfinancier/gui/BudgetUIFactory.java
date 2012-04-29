@@ -8,13 +8,9 @@
 package blacksmyth.personalfinancier.gui;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
@@ -22,16 +18,11 @@ import javax.swing.border.TitledBorder;
 
 import blacksmyth.general.ResourceBridge;
 import blacksmyth.personalfinancier.control.BudgetController;
-import blacksmyth.personalfinancier.model.AccountModel;
-import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 class BudgetUIFactory {
   
-  
-  public static JComponent createBudgetComponent() {
+  public static JComponent createBudgetComponent(BudgetController controller) {
 
-    BudgetController controller = new BudgetController(new AccountModel());
-    
     JPanel budgetPanel = new JPanel(new BorderLayout());
     
     budgetPanel.add(

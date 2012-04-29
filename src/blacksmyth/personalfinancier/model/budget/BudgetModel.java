@@ -24,12 +24,18 @@ public class BudgetModel extends Observable implements Observer {
   private ArrayList<BudgetItem> budgetItems;
   private ArrayList<BudgetSummary> budgetSummaries;
   
+  public BudgetModel() {
+    this.budgetItems = new ArrayList<BudgetItem>();
+    this.budgetSummaries = new ArrayList<BudgetSummary>();
+    this.accountModel = new AccountModel();
+
+    this.changeAndNotifyObservers();
+  }
+  
   public BudgetModel(AccountModel accountModel) {
     this.budgetItems = new ArrayList<BudgetItem>();
     this.budgetSummaries = new ArrayList<BudgetSummary>();
     this.accountModel = accountModel;
-    
-    // TODO: implement full budget account lifecycle.
     
     this.changeAndNotifyObservers();
   }
@@ -139,7 +145,7 @@ public class BudgetModel extends Observable implements Observer {
     this.budgetSummaries = new ArrayList<BudgetSummary>(summaryTable.values());
   }
   
-  private void changeAndNotifyObservers() {
+  public void changeAndNotifyObservers() {
     this.updateDerivedData();
     this.setChanged();
     this.notifyObservers();
@@ -154,5 +160,6 @@ public class BudgetModel extends Observable implements Observer {
     this.changeAndNotifyObservers();
   }
 
-
 }
+
+

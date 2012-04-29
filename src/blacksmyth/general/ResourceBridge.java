@@ -17,7 +17,7 @@ import javax.swing.ImageIcon;
 
 public class ResourceBridge {
 
-  private static final int MENU_ICON_BUFFER_SIZE = 1024;  // 4k
+  private static final int MENU_ICON_BUFFER_SIZE = 1024;  // 1k
 
   private static final String RESOURCE_PATH = "/blacksmyth/resources";
   private static final String MENU_ICON_PATH = RESOURCE_PATH + "/menuIcons";

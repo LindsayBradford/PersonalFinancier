@@ -8,8 +8,10 @@
 package blacksmyth.personalfinancier.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Toolkit;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,14 +20,20 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
+import blacksmyth.general.ResourceBridge;
+import blacksmyth.personalfinancier.control.PersonalFinancierController;
+
 public class PersonalFinancierUIFactory {
   
   public static JFrame createJFrame() {
+    
+    final PersonalFinancierController controller = new PersonalFinancierController();
     
     JFrame frame = new JFrame("Personal Financier");
     
@@ -38,7 +46,12 @@ public class PersonalFinancierUIFactory {
     );
     
     frame.getContentPane().add(
-        createContentPane(), 
+        getMainToolbar(controller),
+        BorderLayout.PAGE_START
+    );
+    
+    frame.getContentPane().add(
+        createContentPane(controller), 
         BorderLayout.CENTER
     );
     
@@ -58,11 +71,43 @@ public class PersonalFinancierUIFactory {
   }
   
   
-  private static JComponent createContentPane() {
+  private static Component getMainToolbar(PersonalFinancierController controller) {
+    JToolBar toolbar = new JToolBar();
+    
+    controller.setLoadButton(
+        new JButton(
+            ResourceBridge.getMenuIcon("load24.png")
+        )
+    );
+    
+    toolbar.add(
+        controller.getLoadButton()
+    );
+
+    controller.setSaveButton(
+        new JButton(
+            ResourceBridge.getMenuIcon("save24.png")
+        )
+    );
+    
+    toolbar.add(
+        controller.getSaveButton()
+    );
+    
+    return toolbar;
+  }
+
+
+  private static JComponent createContentPane(PersonalFinancierController controller) {
     JTabbedPane pane = new JTabbedPane();
     pane.setBorder(new EmptyBorder(5,5,5,5));
     
-    pane.addTab("Budget", BudgetUIFactory.createBudgetComponent());
+    pane.addTab(
+        "Budget", 
+        BudgetUIFactory.createBudgetComponent(
+            controller.getBudgetController()
+        )
+    );
     pane.addTab("Ledgers", LedgersUIFactory.createLedgersComponent());
     
     return pane;
