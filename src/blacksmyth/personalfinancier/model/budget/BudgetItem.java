@@ -7,17 +7,16 @@
 
 package blacksmyth.personalfinancier.model.budget;
 
-import blacksmyth.general.JSonField;
 import blacksmyth.personalfinancier.model.Account;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 
 public class BudgetItem {
-  @JSonField private BudgetCategory category;
-  @JSonField private String description;
-  @JSonField private Money budgettedAmount;
-  @JSonField private CashFlowFrequency frequency;
-  @JSonField private Account budgetAccount;
+  private BudgetCategory category;
+  private String description;
+  private Money budgettedAmount;
+  private CashFlowFrequency frequency;
+  private Account budgetAccount;
   
   public BudgetItem(BudgetCategory category, String description, Money amount, CashFlowFrequency frequency, Account account) {
     this.category = category;

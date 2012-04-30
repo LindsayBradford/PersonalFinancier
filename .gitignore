@@ -1,5 +1,7 @@
 bin/*
 *.swp
+*.json
+*.~
 .gradle
 build/*
 dist/*

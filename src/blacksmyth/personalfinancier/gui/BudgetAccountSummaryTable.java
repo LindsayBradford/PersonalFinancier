@@ -31,7 +31,7 @@ public class BudgetAccountSummaryTable extends JTable {
   
   public BudgetAccountSummaryTable(BudgetModel budgetModel) {
     super(
-        new BudgetAccountSummaryModel(budgetModel)
+        new BudgetAccountSummaryController(budgetModel)
     );
     setupColumns();
 
@@ -89,81 +89,4 @@ public class BudgetAccountSummaryTable extends JTable {
      return cellRenderer;
   }
   
-  private BudgetAccountSummaryModel getBudgetAccountSummaryModel() {
-    return (BudgetAccountSummaryModel) getModel();
-  }
-}
-
-// TODO: Refactor commonalities between this and BudgetDetailtableModel
-
-@SuppressWarnings("serial")
-class BudgetAccountSummaryModel extends AbstractTableModel implements Observer {
-
-  private BudgetModel baseModel;
-  
-  public BudgetAccountSummaryModel(BudgetModel budgetModel) {
-    super();
-    baseModel = budgetModel;
-
-    addBaseModelObserver(this);
-  }
-
-  public int getColumnCount() {
-    return BUDGET_SUMMARY_COLUMNS.values().length;
-  }
-  
-  public String getColumnName(int colNum) {
-    return BUDGET_SUMMARY_COLUMNS.values()[colNum].toString();
-  }
-  
-  @SuppressWarnings({ "unchecked", "rawtypes" })
-  public Class getColumnClass(int colNum) {
-
-    switch (BUDGET_SUMMARY_COLUMNS.values()[colNum]) {
-      case Account:
-        return String.class;
-      case Detail:
-        return String.class;
-      case Budgetted: 
-        return Money.class;
-    }
-    return Object.class;
-  }
-
-  public int getRowCount() {
-    return baseModel.getBudgetSummaries().size();
-  }
-  
-  public boolean isCellEditable(int rowNum, int colNum) {
-    return false;
-  }
-
-  public Object getValueAt(int rowNum, int colNum) {
-    @SuppressWarnings("cast")
-    BudgetSummary summary = (BudgetSummary) baseModel.getBudgetSummaries().get(rowNum);
-    
-    switch (BUDGET_SUMMARY_COLUMNS.values()[colNum]) {
-    case Account:
-      return summary.getAccountNickname();
-    case Detail:
-      return summary.getAccountDetail();
-    case Budgetted: 
-      return summary.getBudgettedAmountAtFrequency(CashFlowFrequency.Fortnightly);
-    default:
-         return null;
-    }
-  }
-
-
-  public void update(Observable o, Object arg) {
-    this.fireTableDataChanged();
-  }
-  
-  public Observable getBaseModel() {
-    return baseModel;
-  }
-  
-  public void addBaseModelObserver(Observer observer) {
-    this.getBaseModel().addObserver(observer);
-  }
 }

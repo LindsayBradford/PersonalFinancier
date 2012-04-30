@@ -13,18 +13,18 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class JSonAdapter {
+public class GSonAdapter {
   private Gson gsonHandle;
-  private static JSonAdapter instance;
+  private static GSonAdapter instance;
   
-  public static JSonAdapter getInstance() {
+  public static GSonAdapter getInstance() {
     if (instance == null) {
-      instance = new JSonAdapter();
+      instance = new GSonAdapter();
     }
     return instance;
   }
   
-  protected JSonAdapter() {
+  protected GSonAdapter() {
     gsonHandle = new GsonBuilder()
                       .setPrettyPrinting()
                       .registerTypeAdapter(

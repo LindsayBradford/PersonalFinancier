@@ -10,6 +10,8 @@ package blacksmyth.personalfinancier.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -27,13 +29,14 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.ResourceBridge;
-import blacksmyth.personalfinancier.control.PersonalFinancierController;
+import blacksmyth.personalfinancier.control.BudgetFileController;
+import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 public class PersonalFinancierUIFactory {
   
   public static JFrame createJFrame() {
     
-    final PersonalFinancierController controller = new PersonalFinancierController();
+    final BudgetModel  budgetModel = new BudgetModel();
     
     JFrame frame = new JFrame("Personal Financier");
     
@@ -46,12 +49,12 @@ public class PersonalFinancierUIFactory {
     );
     
     frame.getContentPane().add(
-        getMainToolbar(controller),
+        getMainToolbar(budgetModel),
         BorderLayout.PAGE_START
     );
     
     frame.getContentPane().add(
-        createContentPane(controller), 
+        createContentPane(budgetModel), 
         BorderLayout.CENTER
     );
     
@@ -71,42 +74,50 @@ public class PersonalFinancierUIFactory {
   }
   
   
-  private static Component getMainToolbar(PersonalFinancierController controller) {
+  private static Component getMainToolbar(BudgetModel model) {
     JToolBar toolbar = new JToolBar();
     
-    controller.setLoadButton(
-        new JButton(
-            ResourceBridge.getMenuIcon("load24.png")
-        )
+    final BudgetFileController fileController = new BudgetFileController(model);
+    
+    JButton loadButton = new JButton(
+      ResourceBridge.getMenuIcon("load24.png")
     );
     
-    toolbar.add(
-        controller.getLoadButton()
+    loadButton.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+            fileController.load();
+          }
+        }
     );
 
-    controller.setSaveButton(
-        new JButton(
-            ResourceBridge.getMenuIcon("save24.png")
-        )
+    toolbar.add(loadButton);
+
+    JButton saveButton = new JButton(
+      ResourceBridge.getMenuIcon("save24.png")
+    );
+
+    saveButton.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+            fileController.save();
+          }
+        }
     );
     
-    toolbar.add(
-        controller.getSaveButton()
-    );
+    toolbar.add(saveButton);
     
     return toolbar;
   }
 
 
-  private static JComponent createContentPane(PersonalFinancierController controller) {
+  private static JComponent createContentPane(BudgetModel model) {
     JTabbedPane pane = new JTabbedPane();
     pane.setBorder(new EmptyBorder(5,5,5,5));
     
     pane.addTab(
         "Budget", 
-        BudgetUIFactory.createBudgetComponent(
-            controller.getBudgetController()
-        )
+        BudgetUIFactory.createBudgetComponent(model)
     );
     pane.addTab("Ledgers", LedgersUIFactory.createLedgersComponent());
     

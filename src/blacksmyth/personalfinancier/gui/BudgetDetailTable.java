@@ -1,28 +1,19 @@
 package blacksmyth.personalfinancier.gui;
 
 import java.awt.Component;
-import java.math.BigDecimal;
-import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import blacksmyth.general.swing.SwingUtilities;
 
 
-import blacksmyth.personalfinancier.model.BigDecimalFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
-import blacksmyth.personalfinancier.model.Money;
-import blacksmyth.personalfinancier.model.MoneyUtilties;
 import blacksmyth.personalfinancier.model.PreferencesModel;
-import blacksmyth.personalfinancier.model.budget.BudgetCategory;
-import blacksmyth.personalfinancier.model.budget.BudgetItem;
-import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 enum BUDGET_DETAIL_COLUMNS {
   Category, Description, Amount, Frequency, 
@@ -35,14 +26,11 @@ public class BudgetDetailTable extends JTable {
   
   private static final int CELL_BUFFER = 15;
 
-  // TODO: align with BudgetModel;
-  
-  public BudgetDetailTable(BudgetModel budgetModel) {
-    super(
-        new BudgetDetailTableModel(budgetModel)
-    );
+  public BudgetDetailTable(BudgetDetailTableController model) {
+    super(model);
     this.setRowSelectionAllowed(true);
     setupColumns();
+    this.getBudgetController().fireTableDataChanged();
   }
   
   private void setupColumns() {
@@ -70,7 +58,7 @@ public class BudgetDetailTable extends JTable {
 
     getColFromEnum(BUDGET_DETAIL_COLUMNS.Account).setCellEditor(editor);
     
-    this.getBudgetDetailTableModel().addBaseModelObserver(
+    this.getBudgetController().addModelObserver(
         (Observer) editor.getComponent()
     );
     
@@ -156,150 +144,20 @@ public class BudgetDetailTable extends JTable {
     return (CashFlowFrequency) this.getModel().getValueAt(row, BUDGET_DETAIL_COLUMNS.Frequency.ordinal());
   }
 
-  private BudgetDetailTableModel getBudgetDetailTableModel() {
-    return (BudgetDetailTableModel) getModel();
+  public BudgetDetailTableController getBudgetController() {
+    return (BudgetDetailTableController) getModel();
+  }
+
+  public void addBudgetItem() {
+    this.getBudgetController().addBudgetItem();
+  }
+  
+  public void removeBudgetItem() {
+    int row = this.getSelectedRow();
+    if (row >= 0) {
+      this.getBudgetController().removeItem(row);
+    }
   }
 }
 
 
-class BudgetDetailTableModel extends AbstractTableModel implements Observer {
-  private static final long serialVersionUID = 1L;
-
-  private BudgetModel baseModel;
- 
-  public BudgetDetailTableModel(BudgetModel budgetModel) {
-    super();
-    baseModel = budgetModel;
-
-    addBaseModelObserver(this);
-  }
-
-  public int getColumnCount() {
-    return BUDGET_DETAIL_COLUMNS.values().length;
-  }
-  
-  public String getColumnName(int colNum) {
-    return BUDGET_DETAIL_COLUMNS.values()[colNum].toString();
-  }
-  
-  @SuppressWarnings({ "unchecked", "rawtypes" })
-  public Class getColumnClass(int colNum) {
-
-    switch (BUDGET_DETAIL_COLUMNS.values()[colNum]) {
-      case Category:
-        return BudgetCategory.class;
-      case Description:
-        return String.class;
-      case Amount: 
-        return Money.class;
-      case Frequency:
-        return CashFlowFrequency.class;
-      case Daily: case Weekly: case Fortnightly: 
-      case Monthly: case Quarterly: case Yearly:
-        return BigDecimal.class;
-      case Account:
-        return String.class;
-    }
-    return Object.class;
-  }
-
-  public int getRowCount() {
-    return baseModel.getBudgetItems().size();
-  }
-  
-  public boolean isCellEditable(int rowNum, int colNum) {
-    switch (BUDGET_DETAIL_COLUMNS.values()[colNum]) {
-      case Daily: case Weekly: case Fortnightly: 
-      case Monthly: case Quarterly: case Yearly:
-        return false;
-      default:
-        return true;
-    }
-  }
-
-  public Object getValueAt(int rowNum, int colNum) {
-    @SuppressWarnings("cast")
-    BudgetItem item = (BudgetItem) baseModel.getBudgetItems().get(rowNum);
-    
-    switch (BUDGET_DETAIL_COLUMNS.values()[colNum]) {
-      case Category:
-        return item.getCategory();
-      case Description:
-        return item.getDescription();
-      case Amount: 
-        return item.getBudgettedAmount().getTotal();
-      case Daily:
-        return convertAmount(item, CashFlowFrequency.Daily);
-      case Weekly:
-        return convertAmount(item, CashFlowFrequency.Weekly);
-      case Fortnightly:
-        return convertAmount(item, CashFlowFrequency.Fortnightly);
-      case Monthly:
-        return convertAmount(item, CashFlowFrequency.Monthly);
-      case Quarterly:
-        return convertAmount(item, CashFlowFrequency.Quarterly);
-      case Yearly:
-        return convertAmount(item, CashFlowFrequency.Yearly);
-      case Frequency:
-        return item.getFrequency();
-      case Account:
-         return item.getBudgetAccount().getNickname();
-       default:
-         return null;
-    }
-  }
-  
-  private BigDecimal convertAmount(BudgetItem item, CashFlowFrequency newFrequency) {
-    return MoneyUtilties.convertFrequencyAmount(
-        item.getBudgettedAmount().getTotal(), 
-        item.getFrequency(), 
-        newFrequency
-    );
-  }
-  
-  public void setValueAt(Object value, int rowNum, int colNum) {
-    switch (BUDGET_DETAIL_COLUMNS.values()[colNum]) {
-    case Category:
-      baseModel.setBudgetItemCategory(
-          rowNum, 
-          BudgetCategory.valueOf((String) value)
-      );
-      break;
-    case Description:
-      baseModel.setBudgetItemDescription(rowNum, (String) value);
-      break;
-    case Amount:
-      baseModel.setBudgetItemTotal(
-          rowNum,
-          BigDecimalFactory.create((String) value)
-      );
-      break;
-    case Frequency:
-      baseModel.setBudgetItemFrequency(
-          rowNum,
-          CashFlowFrequency.valueOf((String) value)
-      );
-      break;
-    case Account:
-      baseModel.setBudgetItemAccount(
-          rowNum,
-          (String) value
-      );
-      break;
-    }
-    this.fireTableRowsUpdated(rowNum, rowNum);
-  }
-
-  public void update(Observable o, Object arg) {
-    this.fireTableDataChanged();
-  }
-  
-  public Observable getBaseModel() {
-    return baseModel;
-  }
-  
-  public void addBaseModelObserver(Observer observer) {
-    this.getBaseModel().addObserver(observer);
-  }
-  
-}

@@ -8,6 +8,8 @@
 package blacksmyth.personalfinancier.gui;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -17,40 +19,40 @@ import javax.swing.JToolBar;
 import javax.swing.border.TitledBorder;
 
 import blacksmyth.general.ResourceBridge;
-import blacksmyth.personalfinancier.control.BudgetController;
+import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 class BudgetUIFactory {
   
-  public static JComponent createBudgetComponent(BudgetController controller) {
-
+  public static JComponent createBudgetComponent(BudgetModel model) {
+    
     JPanel budgetPanel = new JPanel(new BorderLayout());
     
     budgetPanel.add(
-        createBudgetItemPanel(controller), 
+        createBudgetItemPanel(model), 
         BorderLayout.CENTER
     );
 
     budgetPanel.add(
-        createBudgetSummaryPanel(controller), 
+        createBudgetSummaryPanel(model), 
         BorderLayout.PAGE_END
     );
 
     return budgetPanel;
   }
   
-  private static JComponent createBudgetItemPanel(BudgetController controller) {
+  private static JComponent createBudgetItemPanel(BudgetModel model) {
     JPanel panel = new JPanel(new BorderLayout());
     
     BudgetDetailTable budgetTable = new BudgetDetailTable(
-        controller.getModel()
-    );
-    
-    controller.setDetailTable(budgetTable);
+        new BudgetDetailTableController(
+            model
+        )
+     );
     
     panel.setBorder(new TitledBorder("Budget Items"));
     
     panel.add(
-        createBudgetItemToolbar(controller), 
+        createBudgetItemToolbar(budgetTable), 
         BorderLayout.PAGE_START
     );
     
@@ -66,53 +68,58 @@ class BudgetUIFactory {
   // TODO: replace JButton text with an embeeded images from a resource archive.
   
   @SuppressWarnings("serial")
-  private static JToolBar createBudgetItemToolbar(BudgetController controller) {
+  private static JToolBar createBudgetItemToolbar(final BudgetDetailTable budgetTable) {
     JToolBar toolbar = new JToolBar();
     
-    controller.setAddItemButton(
-        new JButton(
-            ResourceBridge.getMenuIcon("plus16.png")
-        )
-     );
-    controller.getAddItemButton().setToolTipText(
+    JButton addItemButton = new JButton(
+        ResourceBridge.getMenuIcon("plus16.png")
+    );
+    addItemButton.setToolTipText(
         "Add a new budget item"
     );
     
-    toolbar.add(
-      controller.getAddItemButton()
+    addItemButton.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+            budgetTable.addBudgetItem();
+          }
+        }
     );
 
-    controller.setRemoveItemButton(
-        new JButton(
-            ResourceBridge.getMenuIcon("minus16.png")
-        )
-     );
-    controller.getRemoveItemButton().setToolTipText(
+    toolbar.add(addItemButton);
+
+    
+    JButton removeItemButton = new JButton(
+        ResourceBridge.getMenuIcon("minus16.png")
+    );
+
+    removeItemButton.setToolTipText(
         "Remove selected budget item"
     );
-
-    toolbar.add(
-        controller.getRemoveItemButton()
+    
+    removeItemButton.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+            budgetTable.removeBudgetItem();
+          }
+        }
     );
+
+    toolbar.add(removeItemButton);
     
     return toolbar;
   }
   
-  private static JComponent createBudgetSummaryPanel(BudgetController controller) {
+  private static JComponent createBudgetSummaryPanel(BudgetModel model) {
     JPanel panel  = new JPanel(new BorderLayout());
     
-    assert controller.getModel() != null;
-    controller.setAccountSummaryTable(
-        new BudgetAccountSummaryTable(
-            controller.getModel()
-        )
-    );
+    BudgetAccountSummaryTable table = new BudgetAccountSummaryTable(model);
     
     panel.setBorder(new TitledBorder("Budget Summary"));
     
     panel.add(
         new JScrollPane(
-            controller.getAccountSummaryTable()
+            table
         ),
         BorderLayout.LINE_END
     );
