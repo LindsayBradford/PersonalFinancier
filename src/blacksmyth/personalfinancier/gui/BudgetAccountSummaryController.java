@@ -1,17 +1,18 @@
 package blacksmyth.personalfinancier.gui;
 
 import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.table.AbstractTableModel;
 
+import blacksmyth.personalfinancier.control.IBudgetObserver;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.model.budget.BudgetSummary;
 
 @SuppressWarnings("serial")
-public class BudgetAccountSummaryController extends AbstractTableModel implements Observer {
+public class BudgetAccountSummaryController extends AbstractTableModel 
+               implements IBudgetObserver {
 
   private BudgetModel budgetModel;
   

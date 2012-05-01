@@ -2,20 +2,14 @@ package blacksmyth.personalfinancier.gui;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import blacksmyth.general.swing.SwingUtilities;
-import blacksmyth.personalfinancier.model.CashFlowFrequency;
-import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
-import blacksmyth.personalfinancier.model.budget.BudgetSummary;
 
 enum BUDGET_SUMMARY_COLUMNS {
   Account, Detail, Budgetted

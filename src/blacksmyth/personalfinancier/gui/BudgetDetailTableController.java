@@ -6,6 +6,8 @@ import java.util.Observer;
 
 import javax.swing.table.AbstractTableModel;
 
+import blacksmyth.personalfinancier.control.IBudgetController;
+import blacksmyth.personalfinancier.control.IBudgetObserver;
 import blacksmyth.personalfinancier.model.BigDecimalFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
@@ -14,7 +16,8 @@ import blacksmyth.personalfinancier.model.budget.BudgetCategory;
 import blacksmyth.personalfinancier.model.budget.BudgetItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
-public class BudgetDetailTableController extends AbstractTableModel implements Observer {
+public class BudgetDetailTableController extends AbstractTableModel 
+                implements IBudgetObserver, IBudgetController {
   private static final long serialVersionUID = 1L;
 
   private BudgetModel budgetMmodel;

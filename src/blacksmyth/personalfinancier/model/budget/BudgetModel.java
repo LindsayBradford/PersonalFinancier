@@ -13,6 +13,9 @@ import java.util.Hashtable;
 import java.util.Observable;
 import java.util.Observer;
 
+import blacksmyth.general.ReflectionUtilities;
+import blacksmyth.personalfinancier.control.IBudgetController;
+import blacksmyth.personalfinancier.control.IBudgetObserver;
 import blacksmyth.personalfinancier.model.Account;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
@@ -42,22 +45,26 @@ public class BudgetModel extends Observable implements Observer {
   
 
   public void addBudgetItem() {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : 
+      "caller to addBudgetItem() is not an IBudgetController";
     this.addBudgetItem(
         BudgetItemFactory.create()
     );
   }
 
-  public void addBudgetItem(BudgetItem item) {
+  private void addBudgetItem(BudgetItem item) {
     this.budgetItems.add(item);
     this.changeAndNotifyObservers();
   }
   
   public void removeBudgetItem(int index) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class);
     this.budgetItems.remove(index);
     this.changeAndNotifyObservers();
   }
   
   public void removeBudgetItem(BudgetItem item) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class);
     this.budgetItems.remove(item);
     this.changeAndNotifyObservers();
   }
@@ -67,29 +74,34 @@ public class BudgetModel extends Observable implements Observer {
   }
   
   public void setBudgetItems(ArrayList<BudgetItem> budgetItems) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class);
     this.budgetItems = budgetItems;
     this.changeAndNotifyObservers();
   }
 
   public void setBudgetItemDescription(int index, String newDescription) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class);
     assert (index >= 0 && index < this.budgetItems.size());
     this.budgetItems.get(index).setDescription(newDescription);
     this.changeAndNotifyObservers();
   }
   
   public void setBudgetItemTotal(int index, BigDecimal total) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class);
     assert (index >= 0 && index < this.budgetItems.size());
     this.budgetItems.get(index).getBudgettedAmount().setTotal(total);
     this.changeAndNotifyObservers();
   }
   
   public void setBudgetItemFrequency(int index, CashFlowFrequency frequency) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class);
     assert (index >= 0 && index < this.budgetItems.size());
     this.budgetItems.get(index).setFrequency(frequency);
     this.changeAndNotifyObservers();
   }
   
   public void setBudgetItemAccount(int index, String accountName) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class);
     assert (index >= 0 && index < this.budgetItems.size());
     this.budgetItems.get(index).setBudgetAccount(
         accountModel.getAccount(accountName)
@@ -107,6 +119,7 @@ public class BudgetModel extends Observable implements Observer {
   }
   
   public void setBudgetItemCategory(int index, BudgetCategory category) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class);
     assert (index >= 0 && index < this.budgetItems.size());
     this.budgetItems.get(index).setCategory(category);
     this.changeAndNotifyObservers();
@@ -152,6 +165,8 @@ public class BudgetModel extends Observable implements Observer {
   }
   
   public void addObserver(Observer observer) {
+    assert (ReflectionUtilities.classImplements(observer.getClass(), IBudgetObserver.class)) : 
+      "observer specified does not implement the interface IBudgetObserver";
     super.addObserver(observer);
     this.changeAndNotifyObservers();
   }

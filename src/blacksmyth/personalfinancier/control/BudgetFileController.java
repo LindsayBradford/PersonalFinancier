@@ -10,8 +10,9 @@ import com.google.gson.reflect.TypeToken;
 import blacksmyth.personalfinancier.io.json.GSonAdapter;
 import blacksmyth.personalfinancier.model.budget.BudgetItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
+  
 
-public class BudgetFileController implements Observer {
+public class BudgetFileController implements Observer, IBudgetController, IBudgetObserver {
   private static final String fileName = "test.json";
   
   private BudgetModel model;

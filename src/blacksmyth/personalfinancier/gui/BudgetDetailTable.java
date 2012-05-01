@@ -11,7 +11,6 @@ import javax.swing.table.TableColumn;
 
 import blacksmyth.general.swing.SwingUtilities;
 
-
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 
