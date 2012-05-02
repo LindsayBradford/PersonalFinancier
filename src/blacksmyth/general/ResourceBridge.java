@@ -1,5 +1,6 @@
 package blacksmyth.general;
 
+import java.awt.Font;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class ResourceBridge {
 
   private static final String RESOURCE_PATH = "/blacksmyth/resources";
   private static final String MENU_ICON_PATH = RESOURCE_PATH + "/menuIcons";
+  private static final String FONT_PATH = RESOURCE_PATH + "/fonts";
   
   /**
    * Supplies an <ImageIcon> from the set of menu icons available from 
@@ -69,4 +71,16 @@ public class ResourceBridge {
      outStream.flush();
      return outStream.toByteArray();
  }
+   
+   public static Font getFont(String fontFilename) {
+     String fontPath = FONT_PATH + "/" + fontFilename;
+
+     try {
+       InputStream inStream = ResourceBridge.class.getResourceAsStream(fontPath);
+       return Font.createFont(Font.TRUETYPE_FONT, inStream);
+     } catch (Exception e) {
+       e.printStackTrace();
+       return null;
+     }
+   }
 }

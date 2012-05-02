@@ -45,7 +45,5 @@ public class BudgetFileController implements Observer, IBudgetController, IBudge
     );
   }
 
-  public void update(Observable o, Object arg) {
-    System.out.println("File controller ready.");
-  }
+  public void update(Observable o, Object arg) {}
 }

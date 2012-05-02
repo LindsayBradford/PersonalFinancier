@@ -8,6 +8,7 @@
 package blacksmyth.personalfinancier.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -79,8 +80,11 @@ public class PersonalFinancierUIFactory {
     
     final BudgetFileController fileController = new BudgetFileController(model);
     
-    JButton loadButton = new JButton(
-      ResourceBridge.getMenuIcon("load24.png")
+    JButton loadButton = new JButton();
+    
+    FontIconProvider.getInstance().configureButton(
+        loadButton, 
+        FontIconProvider.icon_download_alt
     );
     
     loadButton.addActionListener(
@@ -90,13 +94,25 @@ public class PersonalFinancierUIFactory {
           }
         }
     );
+    
+    loadButton.setForeground(Color.GREEN.darker());
+    
+    loadButton.setToolTipText(
+        " Load a budget "
+    );
 
     toolbar.add(loadButton);
 
-    JButton saveButton = new JButton(
-      ResourceBridge.getMenuIcon("save24.png")
+    JButton saveButton = new JButton();
+
+    saveButton.setForeground(Color.GREEN.darker());
+
+    FontIconProvider.getInstance().configureButton(
+        saveButton, 
+        FontIconProvider.icon_upload_alt
     );
 
+    
     saveButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
@@ -104,8 +120,27 @@ public class PersonalFinancierUIFactory {
           }
         }
     );
-    
+
+    saveButton.setToolTipText(
+        " Save the budget "
+    );
+
     toolbar.add(saveButton);
+
+    JButton configButton = new JButton();
+    
+    FontIconProvider.getInstance().configureButton(
+        configButton, 
+        FontIconProvider.icon_cogs
+    );
+    
+    configButton.setToolTipText(
+        " Preferences "
+    );
+
+    toolbar.addSeparator();
+    
+    toolbar.add(configButton);
     
     return toolbar;
   }

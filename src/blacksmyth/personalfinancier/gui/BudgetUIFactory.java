@@ -8,6 +8,7 @@
 package blacksmyth.personalfinancier.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -71,12 +72,20 @@ class BudgetUIFactory {
   private static JToolBar createBudgetItemToolbar(final BudgetDetailTable budgetTable) {
     JToolBar toolbar = new JToolBar();
     
-    JButton addItemButton = new JButton(
-        ResourceBridge.getMenuIcon("plus16.png")
+    JButton addItemButton = new JButton();
+    
+    FontIconProvider.getInstance().configureButton(
+        addItemButton, 
+        FontIconProvider.icon_plus
     );
+    
     addItemButton.setToolTipText(
         "Add a new budget item"
     );
+    
+    addItemButton.setForeground(
+        Color.GREEN.brighter()
+   );
     
     addItemButton.addActionListener(
         new ActionListener() {
@@ -88,9 +97,15 @@ class BudgetUIFactory {
 
     toolbar.add(addItemButton);
 
+    JButton removeItemButton = new JButton();
+
+    removeItemButton.setForeground(
+        Color.RED.brighter()
+   );
     
-    JButton removeItemButton = new JButton(
-        ResourceBridge.getMenuIcon("minus16.png")
+    FontIconProvider.getInstance().configureButton(
+        removeItemButton, 
+        FontIconProvider.icon_remove
     );
 
     removeItemButton.setToolTipText(
