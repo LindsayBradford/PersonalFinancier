@@ -7,6 +7,12 @@ import javax.swing.JButton;
 
 import blacksmyth.general.ResourceBridge;
 
+/**
+ * A bridge/singleton pattern implementation providing convenient access to the 
+ * excellent "Font Awesome" font set: http://fortawesome.github.com/Font-Awesome
+ * for usage as an alternative to icon images in Swing components. 
+ * @author linds
+ */
 public class FontIconProvider {
   private static final String FONT_FILENAME = "fontawesome-webfont.ttf";
   private static Font BASE_ICON_FONT;
