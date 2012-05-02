@@ -2,7 +2,7 @@
 
 A budgetting and bookeeping application  done to suit my own way of doing things.
 
-This app lication depends on the following resources:
+This application depends on the following resources:
 --------------------------------------------
   * GSson (<http://code.google.com/p/google-gson/>) for Java JSon serialisation
   * JTattoo (<http://www.jtattoo.net/>) for a radically different Swing Look & Feel
