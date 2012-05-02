@@ -157,6 +157,10 @@ public class BudgetDetailTable extends JTable {
       this.getBudgetController().removeItem(row);
     }
   }
+
+  public void resetBudgetItems() {
+    this.getBudgetController().removeAllBudgetItems();
+  }
 }
 
 

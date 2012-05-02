@@ -125,6 +125,12 @@ public class BudgetModel extends Observable implements Observer {
     this.changeAndNotifyObservers();
   }
 
+  public void removeAllBudgetItems() {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class);
+    this.budgetItems = new ArrayList<BudgetItem>();
+    this.changeAndNotifyObservers();
+  }
+  
   public ArrayList<BudgetSummary> getBudgetSummaries() {
     return this.budgetSummaries;
   }
@@ -174,7 +180,6 @@ public class BudgetModel extends Observable implements Observer {
   public void update(Observable o, Object arg) {
     this.changeAndNotifyObservers();
   }
-
 }
 
 

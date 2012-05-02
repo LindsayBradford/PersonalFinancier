@@ -167,4 +167,8 @@ public class BudgetDetailTableController extends AbstractTableModel
   public void removeItem(int row) {
     this.getBudgetModel().removeBudgetItem(row);
   }
+
+  public void removeAllBudgetItems() {
+    this.getBudgetModel().removeAllBudgetItems();
+  }
 }

@@ -105,7 +105,7 @@ class BudgetUIFactory {
     
     FontIconProvider.getInstance().configureButton(
         removeItemButton, 
-        FontIconProvider.icon_remove
+        FontIconProvider.icon_minus
     );
 
     removeItemButton.setToolTipText(
@@ -121,6 +121,34 @@ class BudgetUIFactory {
     );
 
     toolbar.add(removeItemButton);
+    
+    toolbar.addSeparator();
+
+    JButton resetItemsButton = new JButton();
+
+    resetItemsButton.setForeground(
+        Color.GRAY.brighter()
+   );
+    
+    FontIconProvider.getInstance().configureButton(
+        resetItemsButton, 
+        FontIconProvider.icon_trash
+    );
+
+    resetItemsButton.setToolTipText(
+        " Clear Budget Items"
+    );
+    
+    resetItemsButton.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+            budgetTable.resetBudgetItems();
+          }
+        }
+    );
+
+    toolbar.add(resetItemsButton);
+
     
     return toolbar;
   }
