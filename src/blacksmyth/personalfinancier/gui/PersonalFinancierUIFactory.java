@@ -10,12 +10,14 @@ package blacksmyth.personalfinancier.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -127,8 +129,11 @@ public class PersonalFinancierUIFactory {
 
     toolbar.add(saveButton);
 
-    JButton configButton = new JButton();
     
+    JButton configButton = new JButton();
+
+    configButton.setForeground(Color.GRAY);
+
     FontIconProvider.getInstance().configureButton(
         configButton, 
         FontIconProvider.icon_cogs
@@ -141,6 +146,66 @@ public class PersonalFinancierUIFactory {
     toolbar.addSeparator();
     
     toolbar.add(configButton);
+
+    JButton infoButton = new JButton();
+    
+    infoButton.setForeground(Color.GRAY);
+    
+    FontIconProvider.getInstance().configureButton(
+        infoButton, 
+        FontIconProvider.icon_info_sign
+    );
+    
+    infoButton.setToolTipText(
+        " About "
+    );
+    
+    
+    // TODO: clean this hackjob up:
+    
+    infoButton.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent arg0) {
+            JDialog.setDefaultLookAndFeelDecorated(true);
+            JDialog infoDialog = new JDialog();
+            
+            JLabel infoLabel = new JLabel(
+                "<html><body>" +
+                "This application depends on the following packages:" + 
+                 "<ul>" +
+                 "<li> GSson (http://code.google.com/p/google-gson/) for Java JSon serialisation" +
+                 "<li> JTattoo (http://www.jtattoo.net/) for a radically different Swing Look & Feel" +
+                 "<li> FontAwesome (http://fortawesome.github.com/Font-Awesome) for icon-friendly font glyphs" +
+                "</ul>" + 
+                "</body></html>"
+            );
+
+            infoLabel.setForeground(Color.BLACK);
+            
+            infoDialog.setTitle("Info");
+            infoDialog.setContentPane(infoLabel);
+            
+            infoDialog.setSize(
+                infoDialog.getPreferredSize()
+            );
+            infoDialog.setBounds(
+                Toolkit.getDefaultToolkit().getScreenSize().width/4, 
+                Toolkit.getDefaultToolkit().getScreenSize().height/4, 
+                Toolkit.getDefaultToolkit().getScreenSize().width/2, 
+                (int) infoDialog.getPreferredSize().getHeight() + 20
+            );
+            
+            infoDialog.setResizable(false);
+            
+            infoDialog.setVisible(true);
+          }
+        }
+    );
+
+    toolbar.addSeparator();
+    
+    toolbar.add(infoButton);
+    
     
     return toolbar;
   }
