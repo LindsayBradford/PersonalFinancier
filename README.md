@@ -1,7 +1,8 @@
 #Personal Financier
-## A budgetting and bookeeping application  done to suit my own way of doing things.
 
-This app depends on the following resources:
+A budgetting and bookeeping application  done to suit my own way of doing things.
+
+This application depends on the following resources:
 --------------------------------------------
   * GSson (<http://code.google.com/p/google-gson/>) for Java JSon serialisation
   * JTattoo (<http://www.jtattoo.net/>) for a radically different Swing Look & Feel
@@ -9,7 +10,6 @@ This app depends on the following resources:
 
   
 ## Contact Detail:
-##Contact
 - Email: lindsay.w.bradford@gmail.com
 - Twitter: http://twitter.com/hollowdreamer
 
