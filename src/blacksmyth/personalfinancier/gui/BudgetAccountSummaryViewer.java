@@ -8,15 +8,15 @@ import blacksmyth.personalfinancier.control.IBudgetObserver;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
-import blacksmyth.personalfinancier.model.budget.BudgetSummary;
+import blacksmyth.personalfinancier.model.budget.AccountSummary;
 
 @SuppressWarnings("serial")
-public class BudgetAccountSummaryController extends AbstractTableModel 
+public class BudgetAccountSummaryViewer extends AbstractTableModel 
                implements IBudgetObserver {
 
   private BudgetModel budgetModel;
   
-  public BudgetAccountSummaryController(BudgetModel budgetModel) {
+  public BudgetAccountSummaryViewer(BudgetModel budgetModel) {
     super();
     this.setBudgetModel(budgetModel);
   }
@@ -27,17 +27,17 @@ public class BudgetAccountSummaryController extends AbstractTableModel
   }
 
   public int getColumnCount() {
-    return BUDGET_SUMMARY_COLUMNS.values().length;
+    return BudgetAccountSummaryTable.COLUMN_HEADERS.values().length;
   }
   
   public String getColumnName(int colNum) {
-    return BUDGET_SUMMARY_COLUMNS.values()[colNum].toString();
+    return BudgetAccountSummaryTable.COLUMN_HEADERS.values()[colNum].toString();
   }
   
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public Class getColumnClass(int colNum) {
 
-    switch (BUDGET_SUMMARY_COLUMNS.values()[colNum]) {
+    switch (BudgetAccountSummaryTable.COLUMN_HEADERS.values()[colNum]) {
       case Account:
         return String.class;
       case Detail:
@@ -49,7 +49,7 @@ public class BudgetAccountSummaryController extends AbstractTableModel
   }
 
   public int getRowCount() {
-    return budgetModel.getBudgetSummaries().size();
+    return budgetModel.getAccountSummaries().size();
   }
   
   public boolean isCellEditable(int rowNum, int colNum) {
@@ -58,9 +58,9 @@ public class BudgetAccountSummaryController extends AbstractTableModel
 
   public Object getValueAt(int rowNum, int colNum) {
     @SuppressWarnings("cast")
-    BudgetSummary summary = (BudgetSummary) getBudgetModel().getBudgetSummaries().get(rowNum);
+    AccountSummary summary = (AccountSummary) getBudgetModel().getAccountSummaries().get(rowNum);
     
-    switch (BUDGET_SUMMARY_COLUMNS.values()[colNum]) {
+    switch (BudgetAccountSummaryTable.COLUMN_HEADERS.values()[colNum]) {
     case Account:
       return summary.getAccountNickname();
     case Detail:

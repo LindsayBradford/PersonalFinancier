@@ -25,11 +25,14 @@ import blacksmyth.personalfinancier.model.PreferencesModel;
 public class BudgetModel extends Observable implements Observer {
   private AccountModel accountModel; 
   private ArrayList<BudgetItem> budgetItems;
-  private ArrayList<BudgetSummary> budgetSummaries;
+  private ArrayList<AccountSummary> accountSummaries;
+  private ArrayList<CategorySummary> categorySummaries;
   
   public BudgetModel() {
     this.budgetItems = new ArrayList<BudgetItem>();
-    this.budgetSummaries = new ArrayList<BudgetSummary>();
+    this.accountSummaries = new ArrayList<AccountSummary>();
+    this.categorySummaries = new ArrayList<CategorySummary>();
+
     this.accountModel = new AccountModel();
 
     this.changeAndNotifyObservers();
@@ -37,7 +40,9 @@ public class BudgetModel extends Observable implements Observer {
   
   public BudgetModel(AccountModel accountModel) {
     this.budgetItems = new ArrayList<BudgetItem>();
-    this.budgetSummaries = new ArrayList<BudgetSummary>();
+    this.accountSummaries = new ArrayList<AccountSummary>();
+    this.categorySummaries = new ArrayList<CategorySummary>();
+    
     this.accountModel = accountModel;
     
     this.changeAndNotifyObservers();
@@ -131,21 +136,29 @@ public class BudgetModel extends Observable implements Observer {
     this.changeAndNotifyObservers();
   }
   
-  public ArrayList<BudgetSummary> getBudgetSummaries() {
-    return this.budgetSummaries;
+  public ArrayList<AccountSummary> getAccountSummaries() {
+    return this.accountSummaries;
   }
-
-  @SuppressWarnings("unchecked")
+ 
+  public ArrayList<CategorySummary> getCategorySummaries() {
+    return this.categorySummaries;
+  }
+  
   private void updateDerivedData() {
-    Hashtable<String, BudgetSummary> summaryTable = new Hashtable<String, BudgetSummary>();
-    this.budgetSummaries = new ArrayList<BudgetSummary>();
+    updateAccountSummaries();
+    updateCategorySummaries();
+  }
+  
+  private void updateAccountSummaries() {
+    Hashtable<String, AccountSummary> summaryTable = new Hashtable<String, AccountSummary>();
+    this.accountSummaries = new ArrayList<AccountSummary>();
     for(BudgetItem item : this.budgetItems) {
       if (!summaryTable.containsKey(item.getBudgetAccount().getNickname())) {
-        BudgetSummary newSummary = new BudgetSummary(item.getBudgetAccount());
+        AccountSummary newSummary = new AccountSummary(item.getBudgetAccount());
         summaryTable.put(item.getBudgetAccount().getNickname(), newSummary);
       }
       
-      BudgetSummary summary = summaryTable.get(item.getBudgetAccount().getNickname());
+      AccountSummary summary = summaryTable.get(item.getBudgetAccount().getNickname());
       
       BigDecimal convertedBudgetAmount = MoneyUtilties.convertFrequencyAmount(
               item.getBudgettedAmount().getTotal(), 
@@ -161,9 +174,37 @@ public class BudgetModel extends Observable implements Observer {
       
       summary.getBudgettedAmount().setTotal(newTotal);
     }
-    this.budgetSummaries = new ArrayList<BudgetSummary>(summaryTable.values());
+    this.accountSummaries = new ArrayList<AccountSummary>(summaryTable.values());
   }
-  
+
+  private void updateCategorySummaries() {
+    Hashtable<BudgetCategory, CategorySummary> summaryTable = new Hashtable<BudgetCategory, CategorySummary>();
+    this.categorySummaries = new ArrayList<CategorySummary>();
+    for(BudgetItem item : this.budgetItems) {
+      if (!summaryTable.containsKey(item.getCategory())) {
+        CategorySummary newSummary = new CategorySummary(item.getCategory());
+        summaryTable.put(item.getCategory(), newSummary);
+      }
+      
+      CategorySummary summary = summaryTable.get(item.getCategory());
+      
+      BigDecimal convertedBudgetAmount = MoneyUtilties.convertFrequencyAmount(
+              item.getBudgettedAmount().getTotal(), 
+              item.getFrequency(), 
+              summary.getBudgettedFrequency()
+      );
+      
+      BigDecimal originalTotal = summary.getBudgettedAmount().getTotal();
+      BigDecimal newTotal = originalTotal.add(
+        convertedBudgetAmount,
+        PreferencesModel.getInstance().getPreferredMathContext()
+      );
+      
+      summary.getBudgettedAmount().setTotal(newTotal);
+    }
+    this.categorySummaries = new ArrayList<CategorySummary>(summaryTable.values());
+  }
+
   public void changeAndNotifyObservers() {
     this.updateDerivedData();
     this.setChanged();
@@ -174,6 +215,7 @@ public class BudgetModel extends Observable implements Observer {
     assert (ReflectionUtilities.classImplements(observer.getClass(), IBudgetObserver.class)) : 
       "observer specified does not implement the interface IBudgetObserver";
     super.addObserver(observer);
+    
     this.changeAndNotifyObservers();
   }
 

@@ -1,31 +1,29 @@
 package blacksmyth.personalfinancier.model.budget;
 
-import blacksmyth.personalfinancier.model.Account;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyAmountFactory;
 import blacksmyth.personalfinancier.model.MoneyUtilties;
 
-public class BudgetSummary {
+public class CategorySummary {
   
-  private Account budgetAccount;
+  private BudgetCategory budgetCategory;
   private Money   budgettedAmount;
   private CashFlowFrequency budgettedFrequency;
   
-  public BudgetSummary(Account account) {
-    assert account.isBudgetAccount();
-    this.budgetAccount = account;
+  public CategorySummary(BudgetCategory category) {
+    this.budgetCategory = category;
     this.budgettedAmount = MoneyAmountFactory.createAmount(0);
     // TODO: drive frequency off preferences.
     this.budgettedFrequency = CashFlowFrequency.Monthly;
   }
   
-  public Account getBudgetAccount() {
-    return budgetAccount;
+  public BudgetCategory getBudgetCategory() {
+    return this.budgetCategory;
   }
   
-  protected void setBudgetAccount(Account budgetAccount) {
-    this.budgetAccount = budgetAccount;
+  protected void setBudgetCategory(BudgetCategory category) {
+    this.budgetCategory = category;
   }
   
   public Money getBudgettedAmount() {
@@ -35,15 +33,6 @@ public class BudgetSummary {
     this.budgettedAmount = budgettedAmount;
   }
   
-  public String getAccountNickname() {
-    return budgetAccount.getNickname();
-  }
-  
-  public String getAccountDetail() {
-    // TODO: pad out account detail
-    return budgetAccount.getNickname();
-  }
-
   public CashFlowFrequency getBudgettedFrequency() {
     return budgettedFrequency;
   }

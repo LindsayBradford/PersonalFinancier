@@ -65,9 +65,6 @@ class BudgetUIFactory {
     return panel;    
   }
   
-  // TODO: eye-bending JButtons.  Make it more accessible to mortals.
-  // TODO: replace JButton text with an embeeded images from a resource archive.
-  
   @SuppressWarnings("serial")
   private static JToolBar createBudgetItemToolbar(final BudgetDetailTable budgetTable) {
     JToolBar toolbar = new JToolBar();
@@ -155,14 +152,23 @@ class BudgetUIFactory {
   
   private static JComponent createBudgetSummaryPanel(BudgetModel model) {
     JPanel panel  = new JPanel(new BorderLayout());
-    
-    BudgetAccountSummaryTable table = new BudgetAccountSummaryTable(model);
-    
+
     panel.setBorder(new TitledBorder("Budget Summary"));
-    
+
+    BudgetCategorySummaryTable categorySummaryTable = new BudgetCategorySummaryTable(model);
+
     panel.add(
         new JScrollPane(
-            table
+            categorySummaryTable
+        ),
+        BorderLayout.LINE_START
+    );
+    
+    BudgetAccountSummaryTable accountSummaryTable = new BudgetAccountSummaryTable(model);
+
+    panel.add(
+        new JScrollPane(
+            accountSummaryTable
         ),
         BorderLayout.LINE_END
     );
