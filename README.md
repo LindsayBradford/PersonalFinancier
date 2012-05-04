@@ -1,6 +1,8 @@
 #Personal Financier
 
-A budgetting and bookeeping application  done to suit my own way of doing things.
+A budgetting and bookeeping application built to suit my own way of doing my finances.
+
+![A recent image](https://p.twimg.com/Ar4oWfhCIAAK3Iw.png)
 
 This application depends on the following resources:
 --------------------------------------------
