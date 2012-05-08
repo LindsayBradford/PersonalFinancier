@@ -1,7 +1,9 @@
 package blacksmyth.personalfinancier.gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.math.BigDecimal;
 
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -9,6 +11,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import blacksmyth.general.swing.SwingUtilities;
+import blacksmyth.personalfinancier.gui.BudgetCategorySummaryTable.COLUMN_HEADERS;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 
@@ -81,7 +84,17 @@ public class BudgetAccountSummaryTable extends JTable {
       this.getModel().isCellEditable(row, column)
     );
     
-     return cellRenderer;
+    if (this.getColFromEnum(COLUMN_HEADERS.Budgetted).getModelIndex() == column) {
+      BigDecimal value = (BigDecimal) this.getModel().getValueAt(row, column);
+      if (value.compareTo(BigDecimal.ZERO) == -1) {
+        cellRenderer.setForeground(Color.RED);
+      }
+      if (value.compareTo(BigDecimal.ZERO) == 1) {
+        cellRenderer.setForeground(Color.GREEN);
+      }
+    }
+
+    return cellRenderer;
   }
   
 }

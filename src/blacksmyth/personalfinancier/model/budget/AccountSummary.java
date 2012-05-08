@@ -17,7 +17,7 @@ public class AccountSummary {
     this.budgetAccount = account;
     this.budgettedAmount = MoneyAmountFactory.createAmount(0);
     // TODO: drive frequency off preferences.
-    this.budgettedFrequency = CashFlowFrequency.Monthly;
+    this.budgettedFrequency = CashFlowFrequency.Fortnightly;
   }
   
   public Account getBudgetAccount() {

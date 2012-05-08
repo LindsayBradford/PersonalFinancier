@@ -1,6 +1,7 @@
 package blacksmyth.personalfinancier.gui;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.util.Observer;
 
 import javax.swing.DefaultCellEditor;
@@ -14,22 +15,23 @@ import blacksmyth.general.swing.SwingUtilities;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 
-enum BUDGET_DETAIL_COLUMNS {
-  Category, Description, Amount, Frequency, 
-  Daily, Weekly,Fortnightly, Monthly,
-  Quarterly, Yearly, Account
-}
-
-public class BudgetDetailTable extends JTable {
+public class IncomeItemTable extends JTable {
   private static final long serialVersionUID = 1L;
   
+  public enum TABLE_COLUMNS {
+    Category, Description, Amount, Frequency, 
+    Daily, Weekly,Fortnightly, Monthly,
+    Quarterly, Yearly, Account
+  }
+  
   private static final int CELL_BUFFER = 15;
-
-  public BudgetDetailTable(BudgetDetailTableController model) {
+  
+  public IncomeItemTable(IncomeItemTableController model) {
     super(model);
     this.setRowSelectionAllowed(true);
     setupColumns();
-    this.getBudgetController().fireTableDataChanged();
+
+    this.getIncomeItemController().fireTableDataChanged();
   }
   
   private void setupColumns() {
@@ -37,37 +39,37 @@ public class BudgetDetailTable extends JTable {
     this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
     
     setupCategoryCol();
-    setupAmountCol(BUDGET_DETAIL_COLUMNS.Amount);
+    setupAmountCol(TABLE_COLUMNS.Amount);
     setupFrequencyCol();
-    setupAmountCol(BUDGET_DETAIL_COLUMNS.Daily);
-    setupAmountCol(BUDGET_DETAIL_COLUMNS.Weekly);
-    setupAmountCol(BUDGET_DETAIL_COLUMNS.Fortnightly);
-    setupAmountCol(BUDGET_DETAIL_COLUMNS.Monthly);
-    setupAmountCol(BUDGET_DETAIL_COLUMNS.Quarterly);
-    setupAmountCol(BUDGET_DETAIL_COLUMNS.Yearly);
+    setupAmountCol(TABLE_COLUMNS.Daily);
+    setupAmountCol(TABLE_COLUMNS.Weekly);
+    setupAmountCol(TABLE_COLUMNS.Fortnightly);
+    setupAmountCol(TABLE_COLUMNS.Monthly);
+    setupAmountCol(TABLE_COLUMNS.Quarterly);
+    setupAmountCol(TABLE_COLUMNS.Yearly);
     setupAccountCol();
   }
   
   private void setupAccountCol() {
-    getColFromEnum(BUDGET_DETAIL_COLUMNS.Account).setCellRenderer(
+    getColFromEnum(TABLE_COLUMNS.Account).setCellRenderer(
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
     
     DefaultCellEditor editor = WidgetFactory.createBudgetAccountCellEditor();    
 
-    getColFromEnum(BUDGET_DETAIL_COLUMNS.Account).setCellEditor(editor);
+    getColFromEnum(TABLE_COLUMNS.Account).setCellEditor(editor);
     
-    this.getBudgetController().addModelObserver(
+    this.getIncomeItemController().addModelObserver(
         (Observer) editor.getComponent()
     );
     
     SwingUtilities.lockColumnWidth(
-        getColFromEnum(BUDGET_DETAIL_COLUMNS.Account),
+        getColFromEnum(TABLE_COLUMNS.Account),
         (int) editor.getComponent().getPreferredSize().getWidth()
     );
   }
 
-  private void setupAmountCol(BUDGET_DETAIL_COLUMNS thisColumn) {
+  private void setupAmountCol(TABLE_COLUMNS thisColumn) {
     SwingUtilities.lockColumnWidth(
         getColFromEnum(thisColumn),
         SwingUtilities.getTextWidth(
@@ -84,34 +86,34 @@ public class BudgetDetailTable extends JTable {
   }
 
   private void setupCategoryCol() {
-    getColFromEnum(BUDGET_DETAIL_COLUMNS.Category).setCellRenderer(
+    getColFromEnum(TABLE_COLUMNS.Category).setCellRenderer(
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
 
     DefaultCellEditor editor = WidgetFactory.createBudgetCategoryCellEditor();    
-    getColFromEnum(BUDGET_DETAIL_COLUMNS.Category).setCellEditor(editor);
+    getColFromEnum(TABLE_COLUMNS.Category).setCellEditor(editor);
 
     SwingUtilities.lockColumnWidth(
-        getColFromEnum(BUDGET_DETAIL_COLUMNS.Category),
+        getColFromEnum(TABLE_COLUMNS.Category),
         (int) editor.getComponent().getPreferredSize().getWidth()
     );
   }
 
   private void setupFrequencyCol() {
-    getColFromEnum(BUDGET_DETAIL_COLUMNS.Frequency).setCellRenderer(
+    getColFromEnum(TABLE_COLUMNS.Frequency).setCellRenderer(
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
 
     DefaultCellEditor editor = WidgetFactory.createCashFlowFrequencyCellEditor();    
-    getColFromEnum(BUDGET_DETAIL_COLUMNS.Frequency).setCellEditor(editor);
+    getColFromEnum(TABLE_COLUMNS.Frequency).setCellEditor(editor);
 
     SwingUtilities.lockColumnWidth(
-        getColFromEnum(BUDGET_DETAIL_COLUMNS.Frequency),
+        getColFromEnum(TABLE_COLUMNS.Frequency),
         (int) editor.getComponent().getPreferredSize().getWidth()
     );
   }
   
-  private TableColumn getColFromEnum(BUDGET_DETAIL_COLUMNS thisEnum) {
+  private TableColumn getColFromEnum(TABLE_COLUMNS thisEnum) {
     return this.getColumnModel().getColumn(thisEnum.ordinal());
   }
   
@@ -140,26 +142,26 @@ public class BudgetDetailTable extends JTable {
   }
   
   private CashFlowFrequency getFrequencyAt(int row) {
-    return (CashFlowFrequency) this.getModel().getValueAt(row, BUDGET_DETAIL_COLUMNS.Frequency.ordinal());
+    return (CashFlowFrequency) this.getModel().getValueAt(row, TABLE_COLUMNS.Frequency.ordinal());
   }
 
-  public BudgetDetailTableController getBudgetController() {
-    return (BudgetDetailTableController) getModel();
+  public IncomeItemTableController getIncomeItemController() {
+    return (IncomeItemTableController) getModel();
   }
 
   public void addBudgetItem() {
-    this.getBudgetController().addBudgetItem();
+    this.getIncomeItemController().addBudgetItem();
   }
   
   public void removeBudgetItem() {
     int row = this.getSelectedRow();
     if (row >= 0) {
-      this.getBudgetController().removeItem(row);
+      this.getIncomeItemController().removeItem(row);
     }
   }
 
   public void resetBudgetItems() {
-    this.getBudgetController().removeAllBudgetItems();
+    this.getIncomeItemController().removeAllBudgetItems();
   }
 }
 

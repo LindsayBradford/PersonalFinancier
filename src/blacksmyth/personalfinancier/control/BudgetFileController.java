@@ -8,7 +8,7 @@ import java.util.Observer;
 import com.google.gson.reflect.TypeToken;
 
 import blacksmyth.personalfinancier.io.json.GSonAdapter;
-import blacksmyth.personalfinancier.model.budget.BudgetItem;
+import blacksmyth.personalfinancier.model.budget.ExpenseItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
   
 
@@ -32,16 +32,16 @@ public class BudgetFileController implements Observer, IBudgetController, IBudge
 
   public void save() {
     GSonAdapter.getInstance().save(
-        this.getBudgetModel().getBudgetItems(),
+        this.getBudgetModel().getState(),
         fileName
     );
   }
 
   @SuppressWarnings("unchecked")
   public void load() {
-    Type budgetItemsType = new TypeToken<ArrayList<BudgetItem>>() {}.getType();
-    this.getBudgetModel().setBudgetItems(
-        (ArrayList<BudgetItem>) GSonAdapter.getInstance().load(fileName, budgetItemsType)
+    Type budgetItemsType = new TypeToken<BudgetModel.SerializableState>() {}.getType();
+    this.getBudgetModel().setState(
+        (BudgetModel.SerializableState) GSonAdapter.getInstance().load(fileName, budgetItemsType)
     );
   }
 

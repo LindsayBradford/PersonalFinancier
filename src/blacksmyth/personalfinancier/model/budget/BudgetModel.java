@@ -23,13 +23,22 @@ import blacksmyth.personalfinancier.model.MoneyUtilties;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 
 public class BudgetModel extends Observable implements Observer {
-  private AccountModel accountModel; 
-  private ArrayList<BudgetItem> budgetItems;
+  
+  private static final String CONTROLLER_ASSERT_MSG = "Caller does not implement IBudgetController.";
+  private static final String VIEWER_ASSERT_MSG = "Caller does not implement IBudgetObserver.";
+
+  private AccountModel accountModel;
+  
+  private ArrayList<ExpenseItem> expenseItems;
+  private ArrayList<IncomeItem> incomeItems;
+  
   private ArrayList<AccountSummary> accountSummaries;
   private ArrayList<CategorySummary> categorySummaries;
   
   public BudgetModel() {
-    this.budgetItems = new ArrayList<BudgetItem>();
+    this.expenseItems = new ArrayList<ExpenseItem>();
+    this.incomeItems = new ArrayList<IncomeItem>();
+
     this.accountSummaries = new ArrayList<AccountSummary>();
     this.categorySummaries = new ArrayList<CategorySummary>();
 
@@ -39,7 +48,7 @@ public class BudgetModel extends Observable implements Observer {
   }
   
   public BudgetModel(AccountModel accountModel) {
-    this.budgetItems = new ArrayList<BudgetItem>();
+    this.expenseItems = new ArrayList<ExpenseItem>();
     this.accountSummaries = new ArrayList<AccountSummary>();
     this.categorySummaries = new ArrayList<CategorySummary>();
     
@@ -48,72 +57,151 @@ public class BudgetModel extends Observable implements Observer {
     this.changeAndNotifyObservers();
   }
   
+  public BudgetModel(BudgetModel.SerializableState state) {
+    this.expenseItems = state.expenseItems;
+    this.incomeItems = state.incomeItems;
 
-  public void addBudgetItem() {
-    assert ReflectionUtilities.callerImplements(IBudgetController.class) : 
-      "caller to addBudgetItem() is not an IBudgetController";
-    this.addBudgetItem(
-        BudgetItemFactory.create()
+    this.accountModel = new AccountModel();
+
+    this.changeAndNotifyObservers();
+  }
+
+  public void addExpenseItem() {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    this.addExpenseItem(
+        BudgetItemFactory.createExpense()
     );
   }
 
-  private void addBudgetItem(BudgetItem item) {
-    this.budgetItems.add(item);
-    this.changeAndNotifyObservers();
+  public void addIncomeItem() {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    this.addIncomeItem(
+        BudgetItemFactory.createIncome()
+    );
   }
   
-  public void removeBudgetItem(int index) {
-    assert ReflectionUtilities.callerImplements(IBudgetController.class);
-    this.budgetItems.remove(index);
-    this.changeAndNotifyObservers();
-  }
-  
-  public void removeBudgetItem(BudgetItem item) {
-    assert ReflectionUtilities.callerImplements(IBudgetController.class);
-    this.budgetItems.remove(item);
-    this.changeAndNotifyObservers();
-  }
-  
-  public ArrayList<BudgetItem> getBudgetItems() {
-    return this.budgetItems;
-  }
-  
-  public void setBudgetItems(ArrayList<BudgetItem> budgetItems) {
-    assert ReflectionUtilities.callerImplements(IBudgetController.class);
-    this.budgetItems = budgetItems;
+  private void addExpenseItem(ExpenseItem item) {
+    this.expenseItems.add(item);
     this.changeAndNotifyObservers();
   }
 
-  public void setBudgetItemDescription(int index, String newDescription) {
-    assert ReflectionUtilities.callerImplements(IBudgetController.class);
-    assert (index >= 0 && index < this.budgetItems.size());
-    this.budgetItems.get(index).setDescription(newDescription);
+  private void addIncomeItem(IncomeItem item) {
+    this.incomeItems.add(item);
+    this.changeAndNotifyObservers();
+  }
+
+  public void removeExpenseItem(int index) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    this.expenseItems.remove(index);
+    this.changeAndNotifyObservers();
+  }
+
+  public void removeIncomeItem(int index) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    this.incomeItems.remove(index);
     this.changeAndNotifyObservers();
   }
   
-  public void setBudgetItemTotal(int index, BigDecimal total) {
-    assert ReflectionUtilities.callerImplements(IBudgetController.class);
-    assert (index >= 0 && index < this.budgetItems.size());
-    this.budgetItems.get(index).getBudgettedAmount().setTotal(total);
+  public void removeExpenseItem(BudgetItem item) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    this.expenseItems.remove(item);
     this.changeAndNotifyObservers();
   }
   
-  public void setBudgetItemFrequency(int index, CashFlowFrequency frequency) {
-    assert ReflectionUtilities.callerImplements(IBudgetController.class);
-    assert (index >= 0 && index < this.budgetItems.size());
-    this.budgetItems.get(index).setFrequency(frequency);
+  public ArrayList<ExpenseItem> getExpsnesItems() {
+    return this.expenseItems;
+  }
+  
+  public void setExpenseItems(ArrayList<ExpenseItem> expenseItems) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    this.expenseItems = expenseItems;
+    this.changeAndNotifyObservers();
+  }
+
+  public ArrayList<IncomeItem> getIncomeItems() {
+    return incomeItems;
+  }
+
+  public void setIncomeItems(ArrayList<IncomeItem> incomeItems) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    this.incomeItems = incomeItems;
     this.changeAndNotifyObservers();
   }
   
-  public void setBudgetItemAccount(int index, String accountName) {
-    assert ReflectionUtilities.callerImplements(IBudgetController.class);
-    assert (index >= 0 && index < this.budgetItems.size());
-    this.budgetItems.get(index).setBudgetAccount(
+  public void setExpenseItemDescription(int index, String newDescription) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    assert (index >= 0 && index < this.expenseItems.size());
+    this.expenseItems.get(index).setDescription(newDescription);
+    this.changeAndNotifyObservers();
+  }
+
+  public void setIncomeItemDescription(int index, String newDescription) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    assert (index >= 0 && index < this.incomeItems.size());
+    this.incomeItems.get(index).setDescription(newDescription);
+    this.changeAndNotifyObservers();
+  }
+  
+  public void setExpenseItemTotal(int index, BigDecimal total) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    assert (index >= 0 && index < this.expenseItems.size());
+    this.expenseItems.get(index).getBudgettedAmount().setTotal(total);
+    this.changeAndNotifyObservers();
+  }
+
+  public void setIncomeItemTotal(int index, BigDecimal total) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    assert (index >= 0 && index < this.incomeItems.size());
+    this.incomeItems.get(index).getBudgettedAmount().setTotal(total);
+    this.changeAndNotifyObservers();
+  }
+
+  public void setExpenseItemFrequency(int index, CashFlowFrequency frequency) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    assert (index >= 0 && index < this.expenseItems.size());
+    this.expenseItems.get(index).setFrequency(frequency);
+    this.changeAndNotifyObservers();
+  }
+
+  public void setIncomeItemFrequency(int index, CashFlowFrequency frequency) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    assert (index >= 0 && index < this.incomeItems.size());
+    this.incomeItems.get(index).setFrequency(frequency);
+    this.changeAndNotifyObservers();
+  }
+
+  public void setExpenseItemAccount(int index, String accountName) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    assert (index >= 0 && index < this.expenseItems.size());
+    this.expenseItems.get(index).setBudgetAccount(
         accountModel.getAccount(accountName)
     );
     this.changeAndNotifyObservers();
   }
-  
+
+  public void setIncomeItemAccount(int index, String accountName) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    assert (index >= 0 && index < this.incomeItems.size());
+    this.incomeItems.get(index).setBudgetAccount(
+        accountModel.getAccount(accountName)
+    );
+    this.changeAndNotifyObservers();
+  }
+
+  public void setExpenseItemCategory(int index, ExpesneCategory category) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    assert (index >= 0 && index < this.expenseItems.size());
+    this.expenseItems.get(index).setCategory(category);
+    this.changeAndNotifyObservers();
+  }
+
+  public void setIncomeItemCategory(int index, IncomeCategory category) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    assert (index >= 0 && index < this.incomeItems.size());
+    this.incomeItems.get(index).setCategory(category);
+    this.changeAndNotifyObservers();
+  }
+
   @SuppressWarnings("unchecked")
   public ArrayList<Account> getBudgetAccounts() {
     return accountModel.getBudgetAccounts();
@@ -123,19 +211,23 @@ public class BudgetModel extends Observable implements Observer {
     return accountModel.getBudgetAccount(nickname);
   }
   
-  public void setBudgetItemCategory(int index, BudgetCategory category) {
-    assert ReflectionUtilities.callerImplements(IBudgetController.class);
-    assert (index >= 0 && index < this.budgetItems.size());
-    this.budgetItems.get(index).setCategory(category);
+  public void removeAllExpenseItems() {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    this.expenseItems = new ArrayList<ExpenseItem>();
     this.changeAndNotifyObservers();
   }
 
-  public void removeAllBudgetItems() {
-    assert ReflectionUtilities.callerImplements(IBudgetController.class);
-    this.budgetItems = new ArrayList<BudgetItem>();
+  public void removeAllIncomeItems() {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    this.incomeItems = new ArrayList<IncomeItem>();
     this.changeAndNotifyObservers();
   }
   
+  public void removeAllBudgetItmes() {
+    this.removeAllIncomeItems();
+    this.removeAllExpenseItems();
+  }
+
   public ArrayList<AccountSummary> getAccountSummaries() {
     return this.accountSummaries;
   }
@@ -148,11 +240,12 @@ public class BudgetModel extends Observable implements Observer {
     updateAccountSummaries();
     updateCategorySummaries();
   }
-  
+
   private void updateAccountSummaries() {
     Hashtable<String, AccountSummary> summaryTable = new Hashtable<String, AccountSummary>();
     this.accountSummaries = new ArrayList<AccountSummary>();
-    for(BudgetItem item : this.budgetItems) {
+
+    for(IncomeItem item : this.incomeItems) {
       if (!summaryTable.containsKey(item.getBudgetAccount().getNickname())) {
         AccountSummary newSummary = new AccountSummary(item.getBudgetAccount());
         summaryTable.put(item.getBudgetAccount().getNickname(), newSummary);
@@ -174,19 +267,45 @@ public class BudgetModel extends Observable implements Observer {
       
       summary.getBudgettedAmount().setTotal(newTotal);
     }
+    
+    for(ExpenseItem item : this.expenseItems) {
+      if (!summaryTable.containsKey(item.getBudgetAccount().getNickname())) {
+        AccountSummary newSummary = new AccountSummary(item.getBudgetAccount());
+        summaryTable.put(item.getBudgetAccount().getNickname(), newSummary);
+      }
+      
+      AccountSummary summary = summaryTable.get(item.getBudgetAccount().getNickname());
+      
+      BigDecimal convertedBudgetAmount = MoneyUtilties.convertFrequencyAmount(
+              item.getBudgettedAmount().getTotal(), 
+              item.getFrequency(), 
+              summary.getBudgettedFrequency()
+      );
+      
+      BigDecimal originalTotal = summary.getBudgettedAmount().getTotal();
+      BigDecimal newTotal = originalTotal.subtract(
+        convertedBudgetAmount,
+        PreferencesModel.getInstance().getPreferredMathContext()
+      );
+      
+      summary.getBudgettedAmount().setTotal(newTotal);
+    }
+
     this.accountSummaries = new ArrayList<AccountSummary>(summaryTable.values());
   }
 
+  // TOOO: Include IncomeItems
   private void updateCategorySummaries() {
-    Hashtable<BudgetCategory, CategorySummary> summaryTable = new Hashtable<BudgetCategory, CategorySummary>();
+    Hashtable<String, CategorySummary> summaryTable = new Hashtable<String, CategorySummary>();
     this.categorySummaries = new ArrayList<CategorySummary>();
-    for(BudgetItem item : this.budgetItems) {
-      if (!summaryTable.containsKey(item.getCategory())) {
-        CategorySummary newSummary = new CategorySummary(item.getCategory());
-        summaryTable.put(item.getCategory(), newSummary);
+
+    for(IncomeItem item : this.incomeItems) {
+      if (!summaryTable.containsKey(item.getCategory().toString())) {
+        CategorySummary newSummary = new CategorySummary(item.getCategory().toString());
+        summaryTable.put(item.getCategory().toString(), newSummary);
       }
       
-      CategorySummary summary = summaryTable.get(item.getCategory());
+      CategorySummary summary = summaryTable.get(item.getCategory().toString());
       
       BigDecimal convertedBudgetAmount = MoneyUtilties.convertFrequencyAmount(
               item.getBudgettedAmount().getTotal(), 
@@ -196,6 +315,29 @@ public class BudgetModel extends Observable implements Observer {
       
       BigDecimal originalTotal = summary.getBudgettedAmount().getTotal();
       BigDecimal newTotal = originalTotal.add(
+        convertedBudgetAmount,
+        PreferencesModel.getInstance().getPreferredMathContext()
+      );
+      
+      summary.getBudgettedAmount().setTotal(newTotal);
+    }
+
+    for(ExpenseItem item : this.expenseItems) {
+      if (!summaryTable.containsKey(item.getCategory().toString())) {
+        CategorySummary newSummary = new CategorySummary(item.getCategory().toString());
+        summaryTable.put(item.getCategory().toString(), newSummary);
+      }
+      
+      CategorySummary summary = summaryTable.get(item.getCategory().toString());
+      
+      BigDecimal convertedBudgetAmount = MoneyUtilties.convertFrequencyAmount(
+              item.getBudgettedAmount().getTotal(), 
+              item.getFrequency(), 
+              summary.getBudgettedFrequency()
+      );
+      
+      BigDecimal originalTotal = summary.getBudgettedAmount().getTotal();
+      BigDecimal newTotal = originalTotal.subtract(
         convertedBudgetAmount,
         PreferencesModel.getInstance().getPreferredMathContext()
       );
@@ -212,8 +354,7 @@ public class BudgetModel extends Observable implements Observer {
   }
   
   public void addObserver(Observer observer) {
-    assert (ReflectionUtilities.classImplements(observer.getClass(), IBudgetObserver.class)) : 
-      "observer specified does not implement the interface IBudgetObserver";
+    assert (ReflectionUtilities.classImplements(observer.getClass(), IBudgetObserver.class)) : VIEWER_ASSERT_MSG;
     super.addObserver(observer);
     
     this.changeAndNotifyObservers();
@@ -222,6 +363,30 @@ public class BudgetModel extends Observable implements Observer {
   public void update(Observable o, Object arg) {
     this.changeAndNotifyObservers();
   }
+  
+  
+  public BudgetModel.SerializableState getState() {
+    return new BudgetModel.SerializableState(
+        this.incomeItems, 
+        this.expenseItems
+    );
+  }
+
+  public void setState(BudgetModel.SerializableState state) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    this.incomeItems = state.incomeItems;
+    this.expenseItems = state.expenseItems;
+    
+    this.changeAndNotifyObservers();
+  }
+  
+  public class SerializableState {
+    private ArrayList<IncomeItem> incomeItems;
+    private ArrayList<ExpenseItem> expenseItems;
+    
+    public SerializableState(ArrayList<IncomeItem> incomeItems, ArrayList<ExpenseItem> expenseItems) {
+      this.incomeItems = incomeItems;
+      this.expenseItems = expenseItems;
+    }
+  }
 }
-
-

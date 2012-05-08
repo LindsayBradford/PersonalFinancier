@@ -66,7 +66,7 @@ public class BudgetAccountSummaryViewer extends AbstractTableModel
     case Detail:
       return summary.getAccountDetail();
     case Budgetted: 
-      return summary.getBudgettedAmountAtFrequency(CashFlowFrequency.Monthly);
+      return summary.getBudgettedAmountAtFrequency(CashFlowFrequency.Fortnightly);
     default:
          return null;
     }

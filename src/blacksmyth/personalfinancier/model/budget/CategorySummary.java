@@ -7,28 +7,29 @@ import blacksmyth.personalfinancier.model.MoneyUtilties;
 
 public class CategorySummary {
   
-  private BudgetCategory budgetCategory;
+  private String budgetCategory;
   private Money   budgettedAmount;
   private CashFlowFrequency budgettedFrequency;
   
-  public CategorySummary(BudgetCategory category) {
+  public CategorySummary(String category) {
     this.budgetCategory = category;
     this.budgettedAmount = MoneyAmountFactory.createAmount(0);
     // TODO: drive frequency off preferences.
-    this.budgettedFrequency = CashFlowFrequency.Monthly;
+    this.budgettedFrequency = CashFlowFrequency.Fortnightly;
   }
   
-  public BudgetCategory getBudgetCategory() {
+  public String getBudgetCategory() {
     return this.budgetCategory;
   }
   
-  protected void setBudgetCategory(BudgetCategory category) {
+  protected void setBudgetCategory(String category) {
     this.budgetCategory = category;
   }
   
   public Money getBudgettedAmount() {
     return budgettedAmount;
   }
+  
   protected void setBudgettedAmount(Money budgettedAmount) {
     this.budgettedAmount = budgettedAmount;
   }

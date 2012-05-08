@@ -17,7 +17,7 @@ public class BudgetModelSerializer implements JsonSerializer<BudgetModel> {
     
     obj.add(
         "budgetItems", 
-        context.serialize(src.getBudgetItems())
+        context.serialize(src.getExpsnesItems())
     );
 
     return obj;

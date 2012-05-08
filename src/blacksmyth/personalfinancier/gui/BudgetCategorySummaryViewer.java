@@ -8,7 +8,6 @@ import blacksmyth.personalfinancier.control.IBudgetObserver;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
-import blacksmyth.personalfinancier.model.budget.AccountSummary;
 import blacksmyth.personalfinancier.model.budget.CategorySummary;
 
 @SuppressWarnings("serial")
@@ -63,7 +62,7 @@ public class BudgetCategorySummaryViewer extends AbstractTableModel
     case Category:
       return summary.getBudgetCategory().toString();
     case Budgetted: 
-      return summary.getBudgettedAmountAtFrequency(CashFlowFrequency.Monthly);
+      return summary.getBudgettedAmountAtFrequency(CashFlowFrequency.Fortnightly);
     default:
          return null;
     }

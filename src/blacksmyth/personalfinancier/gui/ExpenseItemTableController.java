@@ -12,35 +12,36 @@ import blacksmyth.personalfinancier.model.BigDecimalFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyUtilties;
-import blacksmyth.personalfinancier.model.budget.BudgetCategory;
 import blacksmyth.personalfinancier.model.budget.BudgetItem;
+import blacksmyth.personalfinancier.model.budget.ExpesneCategory;
+import blacksmyth.personalfinancier.model.budget.ExpenseItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
-public class BudgetDetailTableController extends AbstractTableModel 
+public class ExpenseItemTableController extends AbstractTableModel 
                 implements IBudgetObserver, IBudgetController {
   private static final long serialVersionUID = 1L;
 
   private BudgetModel budgetMmodel;
  
-  public BudgetDetailTableController(BudgetModel budgetModel) {
+  public ExpenseItemTableController(BudgetModel budgetModel) {
     super();
     setBudgetModel(budgetModel);
   }
 
   public int getColumnCount() {
-    return BUDGET_DETAIL_COLUMNS.values().length;
+    return ExpenseItemTable.TABLE_COLUMNS.values().length;
   }
   
   public String getColumnName(int colNum) {
-    return BUDGET_DETAIL_COLUMNS.values()[colNum].toString();
+    return ExpenseItemTable.TABLE_COLUMNS.values()[colNum].toString();
   }
   
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public Class getColumnClass(int colNum) {
 
-    switch (BUDGET_DETAIL_COLUMNS.values()[colNum]) {
+    switch (ExpenseItemTable.TABLE_COLUMNS.values()[colNum]) {
       case Category:
-        return BudgetCategory.class;
+        return ExpesneCategory.class;
       case Description:
         return String.class;
       case Amount: 
@@ -57,11 +58,11 @@ public class BudgetDetailTableController extends AbstractTableModel
   }
 
   public int getRowCount() {
-    return getBudgetModel().getBudgetItems().size();
+    return getBudgetModel().getExpsnesItems().size();
   }
   
   public boolean isCellEditable(int rowNum, int colNum) {
-    switch (BUDGET_DETAIL_COLUMNS.values()[colNum]) {
+    switch (ExpenseItemTable.TABLE_COLUMNS.values()[colNum]) {
       case Daily: case Weekly: case Fortnightly: 
       case Monthly: case Quarterly: case Yearly:
         return false;
@@ -72,9 +73,9 @@ public class BudgetDetailTableController extends AbstractTableModel
 
   public Object getValueAt(int rowNum, int colNum) {
     @SuppressWarnings("cast")
-    BudgetItem item = (BudgetItem) getBudgetModel().getBudgetItems().get(rowNum);
+    ExpenseItem item = (ExpenseItem) getBudgetModel().getExpsnesItems().get(rowNum);
     
-    switch (BUDGET_DETAIL_COLUMNS.values()[colNum]) {
+    switch (ExpenseItemTable.TABLE_COLUMNS.values()[colNum]) {
       case Category:
         return item.getCategory();
       case Description:
@@ -111,30 +112,30 @@ public class BudgetDetailTableController extends AbstractTableModel
   }
   
   public void setValueAt(Object value, int rowNum, int colNum) {
-    switch (BUDGET_DETAIL_COLUMNS.values()[colNum]) {
+    switch (ExpenseItemTable.TABLE_COLUMNS.values()[colNum]) {
     case Category:
-      getBudgetModel().setBudgetItemCategory(
+      getBudgetModel().setExpenseItemCategory(
           rowNum, 
-          BudgetCategory.valueOf((String) value)
+          ExpesneCategory.valueOf((String) value)
       );
       break;
     case Description:
-      getBudgetModel().setBudgetItemDescription(rowNum, (String) value);
+      getBudgetModel().setExpenseItemDescription(rowNum, (String) value);
       break;
     case Amount:
-      getBudgetModel().setBudgetItemTotal(
+      getBudgetModel().setExpenseItemTotal(
           rowNum,
           BigDecimalFactory.create((String) value)
       );
       break;
     case Frequency:
-      getBudgetModel().setBudgetItemFrequency(
+      getBudgetModel().setExpenseItemFrequency(
           rowNum,
           CashFlowFrequency.valueOf((String) value)
       );
       break;
     case Account:
-      getBudgetModel().setBudgetItemAccount(
+      getBudgetModel().setExpenseItemAccount(
           rowNum,
           (String) value
       );
@@ -161,14 +162,14 @@ public class BudgetDetailTableController extends AbstractTableModel
   }
 
   public void addBudgetItem() {
-    this.getBudgetModel().addBudgetItem();
+    this.getBudgetModel().addExpenseItem();
   }
 
   public void removeItem(int row) {
-    this.getBudgetModel().removeBudgetItem(row);
+    this.getBudgetModel().removeExpenseItem(row);
   }
 
   public void removeAllBudgetItems() {
-    this.getBudgetModel().removeAllBudgetItems();
+    this.getBudgetModel().removeAllExpenseItems();
   }
 }

@@ -10,7 +10,6 @@ package blacksmyth.personalfinancier.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,7 +30,6 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
-import blacksmyth.general.ResourceBridge;
 import blacksmyth.personalfinancier.control.BudgetFileController;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
@@ -75,7 +73,6 @@ public class PersonalFinancierUIFactory {
     
     return frame;
   }
-  
   
   private static Component getMainToolbar(BudgetModel model) {
     JToolBar toolbar = new JToolBar();
@@ -209,7 +206,6 @@ public class PersonalFinancierUIFactory {
     
     return toolbar;
   }
-
 
   private static JComponent createContentPane(BudgetModel model) {
     JTabbedPane pane = new JTabbedPane();

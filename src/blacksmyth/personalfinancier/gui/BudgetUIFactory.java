@@ -9,6 +9,8 @@ package blacksmyth.personalfinancier.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,10 +18,11 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.border.TitledBorder;
 
-import blacksmyth.general.ResourceBridge;
+import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 class BudgetUIFactory {
@@ -44,29 +47,79 @@ class BudgetUIFactory {
   private static JComponent createBudgetItemPanel(BudgetModel model) {
     JPanel panel = new JPanel(new BorderLayout());
     
-    BudgetDetailTable budgetTable = new BudgetDetailTable(
-        new BudgetDetailTableController(
+    IncomeItemTable incomeItemTable = new IncomeItemTable(
+        new IncomeItemTableController(
             model
         )
      );
-    
-    panel.setBorder(new TitledBorder("Budget Items"));
-    
+
+    ExpenseItemTable expenseItemTable = new ExpenseItemTable(
+        new ExpenseItemTableController(
+            model
+        )
+     );
+
     panel.add(
-        createBudgetItemToolbar(budgetTable), 
+        createBudgetItemToolbar(expenseItemTable, incomeItemTable),
         BorderLayout.PAGE_START
     );
     
     panel.add(
-        new JScrollPane(budgetTable),
+        createBudgetItemsTablePanel(expenseItemTable, incomeItemTable),
         BorderLayout.CENTER
     );
-    
+
     return panel;    
   }
   
+  private static JSplitPane createBudgetItemsTablePanel(final ExpenseItemTable expenseItemTable, final IncomeItemTable incomeItemTable) {
+    JSplitPane splitPane = new JSplitPane(
+        JSplitPane.VERTICAL_SPLIT,
+        createIncomeItemsTablePanel(incomeItemTable),
+        createExpenseItemsTablePanel(expenseItemTable)
+    );
+    
+    return splitPane;
+  }
+
+  private static JPanel createExpenseItemsTablePanel(final ExpenseItemTable expenseItemTable) {
+    JPanel panel = new JPanel(new BorderLayout());
+
+    panel.setBorder(new TitledBorder("Expense Items"));
+    
+    panel.add(
+        createExpenseItemToolbar(expenseItemTable),
+        BorderLayout.PAGE_START
+    );
+
+    panel.add(
+        new JScrollPane(expenseItemTable),
+        BorderLayout.CENTER
+    );
+  
+    return panel;
+  }
+
+  private static JPanel createIncomeItemsTablePanel(final IncomeItemTable incomeItemTable) {
+    JPanel panel = new JPanel(new BorderLayout());
+
+    panel.setBorder(new TitledBorder("Income Items"));
+    
+    panel.add(
+        createIncomeItemToolbar(incomeItemTable),
+        BorderLayout.PAGE_START
+    );
+
+    panel.add(
+        new JScrollPane(incomeItemTable),
+        BorderLayout.CENTER
+    );
+    
+    return panel;
+  }
+
   @SuppressWarnings("serial")
-  private static JToolBar createBudgetItemToolbar(final BudgetDetailTable budgetTable) {
+  private static JToolBar createExpenseItemToolbar(final ExpenseItemTable expenseItemTable) {
     JToolBar toolbar = new JToolBar();
     
     JButton addItemButton = new JButton();
@@ -77,7 +130,7 @@ class BudgetUIFactory {
     );
     
     addItemButton.setToolTipText(
-        "Add a new budget item"
+        "Add a new expense item"
     );
     
     addItemButton.setForeground(
@@ -87,7 +140,7 @@ class BudgetUIFactory {
     addItemButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
-            budgetTable.addBudgetItem();
+            expenseItemTable.addBudgetItem();
           }
         }
     );
@@ -106,20 +159,82 @@ class BudgetUIFactory {
     );
 
     removeItemButton.setToolTipText(
-        "Remove selected budget item"
+        "Remove selected expense item"
     );
     
     removeItemButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
-            budgetTable.removeBudgetItem();
+            expenseItemTable.removeBudgetItem();
           }
         }
     );
 
     toolbar.add(removeItemButton);
     
-    toolbar.addSeparator();
+    return toolbar;
+  }
+
+  @SuppressWarnings("serial")
+  private static JToolBar createIncomeItemToolbar(final IncomeItemTable incomeItemTable) {
+    JToolBar toolbar = new JToolBar();
+    
+    JButton addItemButton = new JButton();
+    
+    FontIconProvider.getInstance().configureButton(
+        addItemButton, 
+        FontIconProvider.icon_plus
+    );
+    
+    addItemButton.setToolTipText(
+        "Add a new income item"
+    );
+    
+    addItemButton.setForeground(
+        Color.GREEN.brighter()
+   );
+    
+    addItemButton.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+            incomeItemTable.addBudgetItem();
+          }
+        }
+    );
+
+    toolbar.add(addItemButton);
+
+    JButton removeItemButton = new JButton();
+
+    removeItemButton.setForeground(
+        Color.RED.brighter()
+   );
+    
+    FontIconProvider.getInstance().configureButton(
+        removeItemButton, 
+        FontIconProvider.icon_minus
+    );
+
+    removeItemButton.setToolTipText(
+        "Remove selected income item"
+    );
+    
+    removeItemButton.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+            incomeItemTable.removeBudgetItem();
+          }
+        }
+    );
+
+    toolbar.add(removeItemButton);
+    
+    return toolbar;
+  }
+
+  @SuppressWarnings("serial")
+  private static JToolBar createBudgetItemToolbar(final ExpenseItemTable expenseItemTable, final IncomeItemTable incomeItemTable) {
+    JToolBar toolbar = new JToolBar();
 
     JButton resetItemsButton = new JButton();
 
@@ -133,19 +248,19 @@ class BudgetUIFactory {
     );
 
     resetItemsButton.setToolTipText(
-        " Clear Budget Items"
+        " Clear all income and expense items"
     );
     
     resetItemsButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
-            budgetTable.resetBudgetItems();
+            expenseItemTable.resetBudgetItems();
+            incomeItemTable.resetBudgetItems();
           }
         }
     );
 
     toolbar.add(resetItemsButton);
-
     
     return toolbar;
   }
@@ -153,7 +268,7 @@ class BudgetUIFactory {
   private static JComponent createBudgetSummaryPanel(BudgetModel model) {
     JPanel panel  = new JPanel(new BorderLayout());
 
-    panel.setBorder(new TitledBorder("Budget Summary"));
+    panel.setBorder(new TitledBorder("Budget " + CashFlowFrequency.Fortnightly.toString() + " Summary"));
 
     BudgetCategorySummaryTable categorySummaryTable = new BudgetCategorySummaryTable(model);
 
