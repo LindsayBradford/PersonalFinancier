@@ -1,5 +1,10 @@
 package blacksmyth.general;
-
+/**
+ * A collection of utilities that use reflection to determine useful things about the 
+ * running code. Being a library, the class is not able to be instantiated.
+ * @author linds
+ *
+ */
 public final class ReflectionUtilities {
   
   /**

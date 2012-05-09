@@ -5,14 +5,13 @@ import java.awt.GraphicsEnvironment;
 
 import javax.swing.JButton;
 
-
 /**
  * A bridge/singleton pattern implementation providing convenient access to the 
- * excellent "Font Awesome" font set: http://fortawesome.github.com/Font-Awesome
- * for usage as an alternative to icon images in Swing components. 
+ * "Font Awesome" font set. The glyphs from this font set are used as an 
+ * alternative to icon images in Swing components. 
  * @author linds
  */
-public class FontIconProvider {
+public final class FontIconProvider {
   private static final String FONT_FILENAME = "fontawesome-webfont.ttf";
   private static Font BASE_ICON_FONT;
   private static Font MAIN_ICON_FONT;
@@ -28,6 +27,11 @@ public class FontIconProvider {
     MAIN_ICON_FONT = BASE_ICON_FONT.deriveFont(Font.PLAIN, 24);
   }
   
+  /**
+   * Provides the single instance of this class, configured to provide 
+   * icon glyphs from a dedicated font, accessible only via this instance.
+   * @return
+   */
   public static FontIconProvider getInstance() {
     if (instance == null) {
       instance = new FontIconProvider();
@@ -35,6 +39,15 @@ public class FontIconProvider {
     return instance;
   }
 
+  /**
+   * Configures the supplied <tt>button</tt> to display the provided
+   * <tt>iconAsChar</tt> as button icon by using the specialised 
+   * font within this class for glyph production.  The character
+   * specified should only bee one of the characters supplied via
+   * this class.
+   * @param button
+   * @param iconAsChar
+   */
   public void configureButton(JButton button, char iconAsChar) {
     button.setFont(MAIN_ICON_FONT);
     button.setText(String.valueOf(iconAsChar));

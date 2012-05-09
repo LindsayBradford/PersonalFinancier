@@ -225,7 +225,11 @@ public class PersonalFinancierUIFactory {
         "Budget", 
         BudgetUIFactory.createBudgetComponent(model)
     );
-    pane.addTab("Ledgers", LedgersUIFactory.createLedgersComponent());
+    
+    pane.addTab(
+        "Ledgers", 
+        LedgersUIFactory.createLedgersComponent()
+    );
     
     return pane;
   }

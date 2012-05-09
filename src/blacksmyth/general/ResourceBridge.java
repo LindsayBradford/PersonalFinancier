@@ -9,7 +9,7 @@ import java.io.InputStream;
 import javax.swing.ImageIcon;
 
 /**
- * Acts as a bridge through to the application's resource bundle. 
+ * This class acts as a bridge through to the application's resource bundle. 
  * Freeing the developer from having to know anything more than the
  * filename and type of resource they want to retrieve.
  * 
@@ -25,10 +25,10 @@ public class ResourceBridge {
   private static final String FONT_PATH = RESOURCE_PATH + "/fonts";
   
   /**
-   * Supplies an <ImageIcon> from the set of menu icons available from 
+   * Supplies an {@link ImageIcon} from the set of menu icons available from 
    * the application's resource bundle.
-   * @param iconImageFileName
-   * @return
+   * @param iconImageFileName The filename of the file within this resource bundle.
+   * @return {@link ImageIcon}
    */
    public static ImageIcon getMenuIcon(String iconImageFileName) {
      String iconPath = MENU_ICON_PATH + "/" + iconImageFileName;
@@ -72,6 +72,12 @@ public class ResourceBridge {
      return outStream.toByteArray();
  }
    
+   /**
+    * Supplies a <Font> from the set of true-type fonts available from the 
+    * application's resource bundle.
+    * @param fontFilename The filename of the font within this resource bundle
+    * @return
+    */
    public static Font getFont(String fontFilename) {
      String fontPath = FONT_PATH + "/" + fontFilename;
 

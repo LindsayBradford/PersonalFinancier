@@ -1,15 +1,15 @@
 #Personal Financier
 
-A budgetting and bookeeping application built to suit my own way of doing my finances.
+A budgetting and bookeeping application built to suit my way of doing household finances.
 
 ![A recent image](https://p.twimg.com/AsYGiCHCQAEpQCH.png:large)
 
-This application depends on the following resources:
---------------------------------------------
+![Architecture Layers](https://p.twimg.com/AsfwyrBCEAEoGza.png:large)
+
+##This application depends on the following resources:
   * GSson (<http://code.google.com/p/google-gson/>) for Java JSon serialisation
   * JTattoo (<http://www.jtattoo.net/>) for a radically different Swing Look & Feel
   * FontAwesome (<http://fortawesome.github.com/Font-Awesome>) for icon-friendly font glyphs 
-
   
 ## Contact Detail:
 - Email: lindsay.w.bradford@gmail.com
