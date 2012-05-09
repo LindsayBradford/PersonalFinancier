@@ -1,14 +1,12 @@
 package blacksmyth.personalfinancier.control;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
 import com.google.gson.reflect.TypeToken;
 
-import blacksmyth.personalfinancier.io.json.GSonAdapter;
-import blacksmyth.personalfinancier.model.budget.ExpenseItem;
+import blacksmyth.general.GSonAdapter;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
   
 
@@ -37,7 +35,6 @@ public class BudgetFileController implements Observer, IBudgetController, IBudge
     );
   }
 
-  @SuppressWarnings("unchecked")
   public void load() {
     Type budgetItemsType = new TypeToken<BudgetModel.SerializableState>() {}.getType();
     this.getBudgetModel().setState(

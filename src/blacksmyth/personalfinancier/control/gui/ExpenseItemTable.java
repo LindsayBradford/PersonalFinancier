@@ -1,7 +1,6 @@
-package blacksmyth.personalfinancier.gui;
+package blacksmyth.personalfinancier.control.gui;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.util.Observer;
 
 import javax.swing.DefaultCellEditor;
@@ -10,12 +9,12 @@ import javax.swing.JTextField;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import blacksmyth.general.swing.SwingUtilities;
+import blacksmyth.general.SwingUtilities;
 
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 
-public class IncomeItemTable extends JTable {
+public class ExpenseItemTable extends JTable {
   private static final long serialVersionUID = 1L;
   
   public enum TABLE_COLUMNS {
@@ -25,13 +24,12 @@ public class IncomeItemTable extends JTable {
   }
   
   private static final int CELL_BUFFER = 15;
-  
-  public IncomeItemTable(IncomeItemTableController model) {
+
+  public ExpenseItemTable(ExpenseItemTableController model) {
     super(model);
     this.setRowSelectionAllowed(true);
     setupColumns();
-
-    this.getIncomeItemController().fireTableDataChanged();
+    this.getBudgetController().fireTableDataChanged();
   }
   
   private void setupColumns() {
@@ -59,7 +57,7 @@ public class IncomeItemTable extends JTable {
 
     getColFromEnum(TABLE_COLUMNS.Account).setCellEditor(editor);
     
-    this.getIncomeItemController().addModelObserver(
+    this.getBudgetController().addModelObserver(
         (Observer) editor.getComponent()
     );
     
@@ -145,23 +143,23 @@ public class IncomeItemTable extends JTable {
     return (CashFlowFrequency) this.getModel().getValueAt(row, TABLE_COLUMNS.Frequency.ordinal());
   }
 
-  public IncomeItemTableController getIncomeItemController() {
-    return (IncomeItemTableController) getModel();
+  public ExpenseItemTableController getBudgetController() {
+    return (ExpenseItemTableController) getModel();
   }
 
   public void addBudgetItem() {
-    this.getIncomeItemController().addBudgetItem();
+    this.getBudgetController().addBudgetItem();
   }
   
   public void removeBudgetItem() {
     int row = this.getSelectedRow();
     if (row >= 0) {
-      this.getIncomeItemController().removeItem(row);
+      this.getBudgetController().removeItem(row);
     }
   }
 
   public void resetBudgetItems() {
-    this.getIncomeItemController().removeAllBudgetItems();
+    this.getBudgetController().removeAllBudgetItems();
   }
 }
 

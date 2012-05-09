@@ -1,4 +1,4 @@
-package blacksmyth.personalfinancier.gui;
+package blacksmyth.personalfinancier.control.gui;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -10,27 +10,26 @@ import javax.swing.JTextField;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import blacksmyth.general.swing.SwingUtilities;
-import blacksmyth.personalfinancier.model.PreferencesModel;
+import blacksmyth.general.SwingUtilities;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 
 // TODO: Sorting from largest budgetted amount to smallest.
 
 @SuppressWarnings("serial")
-public class BudgetCategorySummaryTable extends JTable {
+public class BudgetAccountSummaryTable extends JTable {
 
   enum COLUMN_HEADERS {
-    Category, Budgetted
+    Account, Detail, Budgetted
   }
 
   private static final int CELL_BUFFER = 15;
   
   private static final int ROW_LIMIT = 5;
   
-  public BudgetCategorySummaryTable(BudgetModel budgetModel) {
+  public BudgetAccountSummaryTable(BudgetModel budgetModel) {
     super(
-        new BudgetCategorySummaryViewer(budgetModel)
+        new BudgetAccountSummaryViewer(budgetModel)
     );
     setupColumns();
 
@@ -41,12 +40,17 @@ public class BudgetCategorySummaryTable extends JTable {
         )
     );
   }
+  
   private void setupColumns() {
     this.tableHeader.setReorderingAllowed(false);
     this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
     setupBudgettedCol();
     
-    getColFromEnum(COLUMN_HEADERS.Category).setCellRenderer(
+    getColFromEnum(COLUMN_HEADERS.Account).setCellRenderer(
+        WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
+    );
+
+    getColFromEnum(COLUMN_HEADERS.Detail).setCellRenderer(
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
   }
@@ -88,8 +92,8 @@ public class BudgetCategorySummaryTable extends JTable {
         cellRenderer.setForeground(Color.GREEN);
       }
     }
-    
-     return cellRenderer;
+
+    return cellRenderer;
   }
   
 }

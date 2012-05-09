@@ -5,12 +5,10 @@
  * Year: 2012 
  */
 
-package blacksmyth.personalfinancier.gui;
+package blacksmyth.personalfinancier;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -22,6 +20,13 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.border.TitledBorder;
 
+import blacksmyth.general.FontIconProvider;
+import blacksmyth.personalfinancier.control.gui.BudgetAccountSummaryTable;
+import blacksmyth.personalfinancier.control.gui.BudgetCategorySummaryTable;
+import blacksmyth.personalfinancier.control.gui.ExpenseItemTable;
+import blacksmyth.personalfinancier.control.gui.ExpenseItemTableController;
+import blacksmyth.personalfinancier.control.gui.IncomeItemTable;
+import blacksmyth.personalfinancier.control.gui.IncomeItemTableController;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 

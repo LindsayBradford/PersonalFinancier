@@ -5,7 +5,7 @@
  * Year: 2012 
  */
 
-package blacksmyth.personalfinancier.gui;
+package blacksmyth.personalfinancier.control.gui;
 
 import java.awt.Color;
 import java.awt.Component;

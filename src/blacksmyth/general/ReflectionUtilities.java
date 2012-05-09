@@ -45,7 +45,7 @@ public final class ReflectionUtilities {
    * @return
    */
   public static boolean classImplements(Class<?> theClass, Class<?> theInterface) {
-    Class[] interfaceArray = theClass.getInterfaces();
+    Class<?>[] interfaceArray = theClass.getInterfaces();
     for (Class<?> thisInterface : interfaceArray) {
       if (thisInterface.equals(theInterface)) {
         return true;

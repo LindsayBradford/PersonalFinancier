@@ -1,4 +1,4 @@
-package blacksmyth.personalfinancier.io.json;
+package blacksmyth.general;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -7,8 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
-
-import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -27,11 +25,7 @@ public class GSonAdapter {
   protected GSonAdapter() {
     gsonHandle = new GsonBuilder()
                       .setPrettyPrinting()
-                      .registerTypeAdapter(
-                         BudgetModel.class, 
-                         new BudgetModelSerializer()
-                       )
-                       .create();
+                      .create();
   }
   
   public void save(Object object, String fileName) {

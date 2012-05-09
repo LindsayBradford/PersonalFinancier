@@ -1,4 +1,4 @@
-package blacksmyth.personalfinancier.gui;
+package blacksmyth.personalfinancier.control.gui;
 
 import java.util.Observable;
 

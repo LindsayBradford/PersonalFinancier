@@ -1,11 +1,10 @@
-package blacksmyth.personalfinancier.gui;
+package blacksmyth.general;
 
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 
 import javax.swing.JButton;
 
-import blacksmyth.general.ResourceBridge;
 
 /**
  * A bridge/singleton pattern implementation providing convenient access to the 

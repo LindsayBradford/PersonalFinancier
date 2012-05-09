@@ -1,6 +1,5 @@
-package blacksmyth.personalfinancier.gui;
+package blacksmyth.personalfinancier.control.gui;
 
-import java.util.ArrayList;
 import java.util.Observable;
 
 import javax.swing.JComboBox;
@@ -16,11 +15,10 @@ public class BudgetAccountComboBox extends JComboBox implements IBudgetObserver 
     buildItemList((BudgetModel) budgetModel);
   }
   
-  @SuppressWarnings("unchecked")
   private void buildItemList(BudgetModel budgetModel) {
     this.removeAllItems();
 
-    for (Account budgetAccount : (ArrayList<Account>) budgetModel.getBudgetAccounts()) {
+    for (Account budgetAccount : budgetModel.getBudgetAccounts()) {
       this.addItem(budgetAccount.getNickname());
     }
   }

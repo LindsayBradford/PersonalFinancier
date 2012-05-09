@@ -121,6 +121,9 @@ public class PreferencesModel extends Observable {
     return preferredMathContext;
   }
   
+  
+  // TODO: Build out Account support.
+  @SuppressWarnings("unused")
   private static final String DEFAULT_BUDGET_ACCOUNT = "Default";
   private static final String BUDGET_ACCOUNT_KEY = "BudgetAccount";
   

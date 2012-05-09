@@ -5,7 +5,7 @@
  * Year: 2012 
  */
 
-package blacksmyth.personalfinancier.gui;
+package blacksmyth.personalfinancier;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -30,6 +30,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
+import blacksmyth.general.FontIconProvider;
 import blacksmyth.personalfinancier.control.BudgetFileController;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
@@ -79,92 +80,47 @@ public class PersonalFinancierUIFactory {
     
     final BudgetFileController fileController = new BudgetFileController(model);
     
-    JButton loadButton = new JButton();
-    
-    FontIconProvider.getInstance().configureButton(
-        loadButton, 
-        FontIconProvider.icon_download_alt
-    );
-    
-    loadButton.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
-            fileController.load();
-          }
-        }
-    );
-    
-    loadButton.setForeground(Color.GREEN.darker());
-    
-    loadButton.setToolTipText(
-        " Load a budget "
+    toolbar.add(
+        createLoadButton(fileController)
     );
 
-    toolbar.add(loadButton);
-
-    JButton saveButton = new JButton();
-
-    saveButton.setForeground(Color.GREEN.darker());
-
-    FontIconProvider.getInstance().configureButton(
-        saveButton, 
-        FontIconProvider.icon_upload_alt
-    );
-
-    
-    saveButton.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
-            fileController.save();
-          }
-        }
-    );
-
-    saveButton.setToolTipText(
-        " Save the budget "
-    );
-
-    toolbar.add(saveButton);
-
-    
-    JButton configButton = new JButton();
-
-    configButton.setForeground(Color.GRAY);
-
-    FontIconProvider.getInstance().configureButton(
-        configButton, 
-        FontIconProvider.icon_cogs
+    toolbar.add(
+        createSaveButton(fileController)    
     );
     
-    configButton.setToolTipText(
-        " Preferences "
+    toolbar.addSeparator();
+    
+    toolbar.add(
+        createPreferencesButton()
     );
 
     toolbar.addSeparator();
     
-    toolbar.add(configButton);
-
-    JButton infoButton = new JButton();
+    toolbar.add(
+        createAboutButton()
+    );
     
-    infoButton.setForeground(Color.GRAY);
+    return toolbar;
+  }
+
+  private static JButton createAboutButton() {
+    JButton button = new JButton();
+    
+    button.setForeground(Color.GRAY);
     
     FontIconProvider.getInstance().configureButton(
-        infoButton, 
+        button, 
         FontIconProvider.icon_info_sign
     );
     
-    infoButton.setToolTipText(
-        " About "
-    );
-    
+    button.setToolTipText(" About ");
     
     // TODO: clean this hackjob up:
-    
-    infoButton.addActionListener(
+    button.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent arg0) {
             JDialog.setDefaultLookAndFeelDecorated(true);
-            JDialog infoDialog = new JDialog();
+            JDialog dialog = new JDialog();
             
             JLabel infoLabel = new JLabel(
                 "<html><body>" +
@@ -179,32 +135,86 @@ public class PersonalFinancierUIFactory {
 
             infoLabel.setForeground(Color.BLACK);
             
-            infoDialog.setTitle("Info");
-            infoDialog.setContentPane(infoLabel);
+            dialog.setTitle("Info");
+            dialog.setContentPane(infoLabel);
             
-            infoDialog.setSize(
-                infoDialog.getPreferredSize()
+            dialog.setSize(
+                dialog.getPreferredSize()
             );
-            infoDialog.setBounds(
+            
+            dialog.setBounds(
                 Toolkit.getDefaultToolkit().getScreenSize().width/4, 
                 Toolkit.getDefaultToolkit().getScreenSize().height/4, 
                 Toolkit.getDefaultToolkit().getScreenSize().width/2, 
-                (int) infoDialog.getPreferredSize().getHeight() + 20
+                (int) dialog.getPreferredSize().getHeight() + 20
             );
             
-            infoDialog.setResizable(false);
+            dialog.setResizable(false);
             
-            infoDialog.setVisible(true);
+            dialog.setVisible(true);
+          }
+        }
+    );
+    return button;
+  }
+
+  private static JButton createPreferencesButton() {
+    JButton button = new JButton();
+
+    button.setForeground(Color.GRAY);
+
+    FontIconProvider.getInstance().configureButton(
+        button, 
+        FontIconProvider.icon_cogs
+    );
+    
+    button.setToolTipText(" Preferences ");
+    return button;
+  }
+
+  private static JButton createSaveButton(final BudgetFileController controller) {
+    JButton button = new JButton();
+
+    button.setForeground(Color.GREEN.darker());
+
+    FontIconProvider.getInstance().configureButton(
+        button, 
+        FontIconProvider.icon_upload_alt
+    );
+    
+    button.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+            controller.save();
           }
         }
     );
 
-    toolbar.addSeparator();
+    button.setToolTipText(" Save the budget ");
+    return button;
+  }
+
+  private static JButton createLoadButton(final BudgetFileController controller) {
+    JButton button = new JButton();
     
-    toolbar.add(infoButton);
+    FontIconProvider.getInstance().configureButton(
+        button, 
+        FontIconProvider.icon_download_alt
+    );
     
+    button.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+            controller.load();
+          }
+        }
+    );
     
-    return toolbar;
+    button.setForeground(Color.GREEN.darker());
+    
+    button.setToolTipText(" Load a budget ");
+    
+    return button;
   }
 
   private static JComponent createContentPane(BudgetModel model) {

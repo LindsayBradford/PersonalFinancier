@@ -5,7 +5,7 @@
  * Year: 2012 
  */
 
-package blacksmyth.general.swing;
+package blacksmyth.general;
 
 import java.awt.FontMetrics;
 

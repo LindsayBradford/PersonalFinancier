@@ -9,7 +9,6 @@ package blacksmyth.personalfinancier;
 
 import javax.swing.UIManager;
 
-import blacksmyth.personalfinancier.gui.PersonalFinancierUIFactory;
 
 import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
 

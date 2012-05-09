@@ -1,4 +1,4 @@
-package blacksmyth.personalfinancier.gui;
+package blacksmyth.personalfinancier.control.gui;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -10,27 +10,26 @@ import javax.swing.JTextField;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import blacksmyth.general.swing.SwingUtilities;
-import blacksmyth.personalfinancier.gui.BudgetCategorySummaryTable.COLUMN_HEADERS;
+import blacksmyth.general.SwingUtilities;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 
 // TODO: Sorting from largest budgetted amount to smallest.
 
 @SuppressWarnings("serial")
-public class BudgetAccountSummaryTable extends JTable {
+public class BudgetCategorySummaryTable extends JTable {
 
   enum COLUMN_HEADERS {
-    Account, Detail, Budgetted
+    Category, Budgetted
   }
 
   private static final int CELL_BUFFER = 15;
   
   private static final int ROW_LIMIT = 5;
   
-  public BudgetAccountSummaryTable(BudgetModel budgetModel) {
+  public BudgetCategorySummaryTable(BudgetModel budgetModel) {
     super(
-        new BudgetAccountSummaryViewer(budgetModel)
+        new BudgetCategorySummaryViewer(budgetModel)
     );
     setupColumns();
 
@@ -41,17 +40,12 @@ public class BudgetAccountSummaryTable extends JTable {
         )
     );
   }
-  
   private void setupColumns() {
     this.tableHeader.setReorderingAllowed(false);
     this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
     setupBudgettedCol();
     
-    getColFromEnum(COLUMN_HEADERS.Account).setCellRenderer(
-        WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
-    );
-
-    getColFromEnum(COLUMN_HEADERS.Detail).setCellRenderer(
+    getColFromEnum(COLUMN_HEADERS.Category).setCellRenderer(
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
   }
@@ -93,8 +87,8 @@ public class BudgetAccountSummaryTable extends JTable {
         cellRenderer.setForeground(Color.GREEN);
       }
     }
-
-    return cellRenderer;
+    
+     return cellRenderer;
   }
   
 }

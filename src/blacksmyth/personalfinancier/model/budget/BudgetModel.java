@@ -202,7 +202,6 @@ public class BudgetModel extends Observable implements Observer {
     this.changeAndNotifyObservers();
   }
 
-  @SuppressWarnings("unchecked")
   public ArrayList<Account> getBudgetAccounts() {
     return accountModel.getBudgetAccounts();
   }
