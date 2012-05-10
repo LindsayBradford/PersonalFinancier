@@ -32,6 +32,7 @@ import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.personalfinancier.control.BudgetFileController;
+import blacksmyth.personalfinancier.control.BudgetUndoManager;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 public class PersonalFinancierUIFactory {
@@ -51,7 +52,7 @@ public class PersonalFinancierUIFactory {
     );
     
     frame.getContentPane().add(
-        getMainToolbar(budgetModel),
+        createMainToolbar(budgetModel),
         BorderLayout.PAGE_START
     );
     
@@ -75,7 +76,7 @@ public class PersonalFinancierUIFactory {
     return frame;
   }
   
-  private static Component getMainToolbar(BudgetModel model) {
+  private static Component createMainToolbar(BudgetModel model) {
     JToolBar toolbar = new JToolBar();
     
     final BudgetFileController fileController = new BudgetFileController(model);
@@ -87,9 +88,9 @@ public class PersonalFinancierUIFactory {
     toolbar.add(
         createSaveButton(fileController)    
     );
-    
+
     toolbar.addSeparator();
-    
+
     toolbar.add(
         createPreferencesButton()
     );
@@ -102,7 +103,7 @@ public class PersonalFinancierUIFactory {
     
     return toolbar;
   }
-
+  
   private static JButton createAboutButton() {
     JButton button = new JButton();
     
@@ -205,6 +206,7 @@ public class PersonalFinancierUIFactory {
     button.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
+            BudgetUndoManager.getInstance().discardAllEdits();
             controller.load();
           }
         }

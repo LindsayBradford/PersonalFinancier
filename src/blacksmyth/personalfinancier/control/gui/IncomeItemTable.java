@@ -149,7 +149,7 @@ public class IncomeItemTable extends JTable {
   }
 
   public void addBudgetItem() {
-    this.getIncomeItemController().addBudgetItem();
+    this.getIncomeItemController().addIncomeItem();
   }
   
   public void removeBudgetItem() {
@@ -157,10 +157,6 @@ public class IncomeItemTable extends JTable {
     if (row >= 0) {
       this.getIncomeItemController().removeItem(row);
     }
-  }
-
-  public void resetBudgetItems() {
-    this.getIncomeItemController().removeAllBudgetItems();
   }
 }
 

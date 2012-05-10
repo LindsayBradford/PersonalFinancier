@@ -21,12 +21,14 @@ import javax.swing.JToolBar;
 import javax.swing.border.TitledBorder;
 
 import blacksmyth.general.FontIconProvider;
+import blacksmyth.personalfinancier.control.BudgetUndoManager;
 import blacksmyth.personalfinancier.control.gui.BudgetAccountSummaryTable;
 import blacksmyth.personalfinancier.control.gui.BudgetCategorySummaryTable;
 import blacksmyth.personalfinancier.control.gui.ExpenseItemTable;
 import blacksmyth.personalfinancier.control.gui.ExpenseItemTableController;
 import blacksmyth.personalfinancier.control.gui.IncomeItemTable;
 import blacksmyth.personalfinancier.control.gui.IncomeItemTableController;
+import blacksmyth.personalfinancier.control.gui.ResetBudgetItemsCommand;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
@@ -65,7 +67,7 @@ class BudgetUIFactory {
      );
 
     panel.add(
-        createBudgetItemToolbar(expenseItemTable, incomeItemTable),
+        createBudgetItemToolbar(model),
         BorderLayout.PAGE_START
     );
     
@@ -238,7 +240,7 @@ class BudgetUIFactory {
   }
 
   @SuppressWarnings("serial")
-  private static JToolBar createBudgetItemToolbar(final ExpenseItemTable expenseItemTable, final IncomeItemTable incomeItemTable) {
+  private static JToolBar createBudgetItemToolbar(final BudgetModel model) {
     JToolBar toolbar = new JToolBar();
 
     JButton resetItemsButton = new JButton();
@@ -259,16 +261,76 @@ class BudgetUIFactory {
     resetItemsButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
-            expenseItemTable.resetBudgetItems();
-            incomeItemTable.resetBudgetItems();
+            BudgetUndoManager.getInstance().addEdit(
+                ResetBudgetItemsCommand.doCmd(model)
+            );
           }
         }
     );
 
     toolbar.add(resetItemsButton);
     
+    toolbar.addSeparator();
+
+    toolbar.add(
+        createUndoButton()    
+    );
+
+    toolbar.add(
+        createRedoButton()    
+    );
+
+    toolbar.addSeparator();
+    
     return toolbar;
   }
+  
+  private static JButton createUndoButton() {
+    JButton button = new JButton();
+
+    FontIconProvider.getInstance().configureButton(
+        button, 
+        FontIconProvider.icon_step_backward
+    );
+    
+    button.addActionListener(
+        new ActionListener() {
+          @Override
+          public void actionPerformed(ActionEvent arg0) {
+            if (BudgetUndoManager.getInstance().canUndo()) {
+              BudgetUndoManager.getInstance().undo();
+            }
+          }
+        }
+    );
+    
+    button.setToolTipText(" Undo ");
+    return button;
+  }
+
+  private static JButton createRedoButton() {
+    JButton button = new JButton();
+
+    FontIconProvider.getInstance().configureButton(
+        button, 
+        FontIconProvider.icon_step_forward
+    );
+
+    button.addActionListener(
+        new ActionListener() {
+          @Override
+          public void actionPerformed(ActionEvent arg0) {
+            if (BudgetUndoManager.getInstance().canRedo()) {
+              BudgetUndoManager.getInstance().redo();
+            }
+          }
+        }
+    );
+
+    button.setToolTipText(" Redo ");
+    return button;
+  }
+
   
   private static JComponent createBudgetSummaryPanel(BudgetModel model) {
     JPanel panel  = new JPanel(new BorderLayout());

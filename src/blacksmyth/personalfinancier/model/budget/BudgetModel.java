@@ -22,7 +22,7 @@ import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.MoneyUtilties;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 
-public class BudgetModel extends Observable implements Observer {
+public class BudgetModel extends Observable implements Observer, IBudgetController {
   
   private static final String CONTROLLER_ASSERT_MSG = "Caller does not implement IBudgetController.";
   private static final String VIEWER_ASSERT_MSG = "Caller does not implement IBudgetObserver.";
@@ -66,39 +66,64 @@ public class BudgetModel extends Observable implements Observer {
     this.changeAndNotifyObservers();
   }
 
-  public void addExpenseItem() {
+  public ExpenseItem addExpenseItem() {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
-    this.addExpenseItem(
-        BudgetItemFactory.createExpense()
-    );
+    ExpenseItem newItem = BudgetItemFactory.createExpense();
+    this.addExpenseItem(newItem);
+    return newItem;
   }
 
-  public void addIncomeItem() {
+  public IncomeItem addIncomeItem() {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
-    this.addIncomeItem(
-        BudgetItemFactory.createIncome()
-    );
+    
+    IncomeItem newItem = BudgetItemFactory.createIncome();
+    
+    this.addIncomeItem(newItem);
+    
+    return newItem;
   }
   
-  private void addExpenseItem(ExpenseItem item) {
+  public void addExpenseItem(ExpenseItem item) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.expenseItems.add(item);
     this.changeAndNotifyObservers();
   }
 
-  private void addIncomeItem(IncomeItem item) {
+  public void addIncomeItem(IncomeItem item) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.incomeItems.add(item);
     this.changeAndNotifyObservers();
   }
 
-  public void removeExpenseItem(int index) {
+  public void addIncomeItem(int index, IncomeItem item) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
-    this.expenseItems.remove(index);
+    this.incomeItems.add(index, item);
     this.changeAndNotifyObservers();
   }
 
-  public void removeIncomeItem(int index) {
+  public void addExpenseItem(int index, ExpenseItem item) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
-    this.incomeItems.remove(index);
+    this.expenseItems.add(index, item);
+    this.changeAndNotifyObservers();
+  }
+
+  public ExpenseItem removeExpenseItem(int index) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    ExpenseItem removedItem = this.expenseItems.remove(index);
+    this.changeAndNotifyObservers();
+    return removedItem;
+  }
+
+  public IncomeItem removeIncomeItem(int index) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    IncomeItem removedItem = this.incomeItems.remove(index);
+    this.changeAndNotifyObservers();
+    return removedItem;
+  }
+
+  public void removeIncomeItem(IncomeItem item) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    this.incomeItems.remove(item);
     this.changeAndNotifyObservers();
   }
   
@@ -108,7 +133,7 @@ public class BudgetModel extends Observable implements Observer {
     this.changeAndNotifyObservers();
   }
   
-  public ArrayList<ExpenseItem> getExpsnesItems() {
+  public ArrayList<ExpenseItem> getExpenseItems() {
     return this.expenseItems;
   }
   
@@ -188,7 +213,7 @@ public class BudgetModel extends Observable implements Observer {
     this.changeAndNotifyObservers();
   }
 
-  public void setExpenseItemCategory(int index, ExpesneCategory category) {
+  public void setExpenseItemCategory(int index, ExpenseCategory category) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     assert (index >= 0 && index < this.expenseItems.size());
     this.expenseItems.get(index).setCategory(category);

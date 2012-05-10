@@ -1,5 +1,5 @@
 package blacksmyth.personalfinancier.model.budget;
 
-public enum ExpesneCategory {
+public enum ExpenseCategory {
   EssentialFixed, EssentialVariable, Discretionary, Savings
 }

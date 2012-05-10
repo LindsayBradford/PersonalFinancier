@@ -148,7 +148,7 @@ public class ExpenseItemTable extends JTable {
   }
 
   public void addBudgetItem() {
-    this.getBudgetController().addBudgetItem();
+    this.getBudgetController().addExpenseItem();
   }
   
   public void removeBudgetItem() {
@@ -156,10 +156,6 @@ public class ExpenseItemTable extends JTable {
     if (row >= 0) {
       this.getBudgetController().removeItem(row);
     }
-  }
-
-  public void resetBudgetItems() {
-    this.getBudgetController().removeAllBudgetItems();
   }
 }
 

@@ -6,6 +6,7 @@ import java.util.Observer;
 
 import javax.swing.table.AbstractTableModel;
 
+import blacksmyth.personalfinancier.control.BudgetUndoManager;
 import blacksmyth.personalfinancier.control.IBudgetController;
 import blacksmyth.personalfinancier.control.IBudgetObserver;
 import blacksmyth.personalfinancier.model.BigDecimalFactory;
@@ -13,7 +14,7 @@ import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyUtilties;
 import blacksmyth.personalfinancier.model.budget.BudgetItem;
-import blacksmyth.personalfinancier.model.budget.ExpesneCategory;
+import blacksmyth.personalfinancier.model.budget.ExpenseCategory;
 import blacksmyth.personalfinancier.model.budget.ExpenseItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
@@ -41,7 +42,7 @@ public class ExpenseItemTableController extends AbstractTableModel
 
     switch (ExpenseItemTable.TABLE_COLUMNS.values()[colNum]) {
       case Category:
-        return ExpesneCategory.class;
+        return ExpenseCategory.class;
       case Description:
         return String.class;
       case Amount: 
@@ -58,7 +59,7 @@ public class ExpenseItemTableController extends AbstractTableModel
   }
 
   public int getRowCount() {
-    return getBudgetModel().getExpsnesItems().size();
+    return getBudgetModel().getExpenseItems().size();
   }
   
   public boolean isCellEditable(int rowNum, int colNum) {
@@ -73,7 +74,7 @@ public class ExpenseItemTableController extends AbstractTableModel
 
   public Object getValueAt(int rowNum, int colNum) {
     @SuppressWarnings("cast")
-    ExpenseItem item = (ExpenseItem) getBudgetModel().getExpsnesItems().get(rowNum);
+    ExpenseItem item = (ExpenseItem) getBudgetModel().getExpenseItems().get(rowNum);
     
     switch (ExpenseItemTable.TABLE_COLUMNS.values()[colNum]) {
       case Category:
@@ -114,30 +115,48 @@ public class ExpenseItemTableController extends AbstractTableModel
   public void setValueAt(Object value, int rowNum, int colNum) {
     switch (ExpenseItemTable.TABLE_COLUMNS.values()[colNum]) {
     case Category:
-      getBudgetModel().setExpenseItemCategory(
-          rowNum, 
-          ExpesneCategory.valueOf((String) value)
+      BudgetUndoManager.getInstance().addEdit(
+          ChangeExpenseCategoryCommand.doCmd(
+              getBudgetModel(), 
+              rowNum, 
+              ExpenseCategory.valueOf((String) value)
+          )
       );
       break;
     case Description:
-      getBudgetModel().setExpenseItemDescription(rowNum, (String) value);
+      BudgetUndoManager.getInstance().addEdit(
+          ChangeExpenseDescriptionCommand.doCmd(
+              getBudgetModel(), 
+              rowNum, 
+              (String) value
+          )
+      );
       break;
     case Amount:
-      getBudgetModel().setExpenseItemTotal(
-          rowNum,
-          BigDecimalFactory.create((String) value)
+      BudgetUndoManager.getInstance().addEdit(
+          ChangeExpenseAmountCommand.doCmd(
+              getBudgetModel(), 
+              rowNum, 
+              BigDecimalFactory.create((String) value)
+          )
       );
       break;
     case Frequency:
-      getBudgetModel().setExpenseItemFrequency(
-          rowNum,
-          CashFlowFrequency.valueOf((String) value)
+      BudgetUndoManager.getInstance().addEdit(
+          ChangeExpenseFrequencyCommand.doCmd(
+              getBudgetModel(), 
+              rowNum, 
+              CashFlowFrequency.valueOf((String) value)
+          )
       );
       break;
     case Account:
-      getBudgetModel().setExpenseItemAccount(
-          rowNum,
-          (String) value
+      BudgetUndoManager.getInstance().addEdit(
+          ChangeExpenseAccountCommand.doCmd(
+              getBudgetModel(), 
+              rowNum, 
+              (String) value
+          )
       );
       break;
     }
@@ -161,15 +180,20 @@ public class ExpenseItemTableController extends AbstractTableModel
     this.getBudgetModel().addObserver(observer);
   }
 
-  public void addBudgetItem() {
-    this.getBudgetModel().addExpenseItem();
+  public void addExpenseItem() {    
+    BudgetUndoManager.getInstance().addEdit(
+      AddExpenseItemCommand.doCmd(
+          getBudgetModel()
+      )
+    );
   }
 
   public void removeItem(int row) {
-    this.getBudgetModel().removeExpenseItem(row);
-  }
-
-  public void removeAllBudgetItems() {
-    this.getBudgetModel().removeAllExpenseItems();
+    BudgetUndoManager.getInstance().addEdit(
+        RemoveExpenseItemCommand.doCmd(
+            getBudgetModel(),
+            row
+        )
+    );
   }
 }

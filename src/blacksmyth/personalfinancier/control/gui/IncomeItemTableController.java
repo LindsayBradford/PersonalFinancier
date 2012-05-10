@@ -6,6 +6,7 @@ import java.util.Observer;
 
 import javax.swing.table.AbstractTableModel;
 
+import blacksmyth.personalfinancier.control.BudgetUndoManager;
 import blacksmyth.personalfinancier.control.IBudgetController;
 import blacksmyth.personalfinancier.control.IBudgetObserver;
 import blacksmyth.personalfinancier.model.BigDecimalFactory;
@@ -114,30 +115,48 @@ public class IncomeItemTableController extends AbstractTableModel
   public void setValueAt(Object value, int rowNum, int colNum) {
     switch (IncomeItemTable.TABLE_COLUMNS.values()[colNum]) {
     case Category:
-      getBudgetModel().setIncomeItemCategory(
-          rowNum, 
-          IncomeCategory.valueOf((String) value)
+      BudgetUndoManager.getInstance().addEdit(
+          ChangeIncomeCategoryCommand.doCmd(
+              getBudgetModel(), 
+              rowNum, 
+              IncomeCategory.valueOf((String) value)
+          )
       );
       break;
     case Description:
-      getBudgetModel().setIncomeItemDescription(rowNum, (String) value);
+      BudgetUndoManager.getInstance().addEdit(
+          ChangeIncomeDescriptionCommand.doCmd(
+              getBudgetModel(), 
+              rowNum, 
+              (String) value
+          )
+      );
       break;
     case Amount:
-      getBudgetModel().setIncomeItemTotal(
-          rowNum,
-          BigDecimalFactory.create((String) value)
+      BudgetUndoManager.getInstance().addEdit(
+          ChangeIncomeAmountCommand.doCmd(
+              getBudgetModel(), 
+              rowNum, 
+              BigDecimalFactory.create((String) value)
+          )
       );
       break;
     case Frequency:
-      getBudgetModel().setIncomeItemFrequency(
-          rowNum,
-          CashFlowFrequency.valueOf((String) value)
+      BudgetUndoManager.getInstance().addEdit(
+          ChangeIncomeFrequencyCommand.doCmd(
+              getBudgetModel(), 
+              rowNum, 
+              CashFlowFrequency.valueOf((String) value)
+          )
       );
       break;
     case Account:
-      getBudgetModel().setIncomeItemAccount(
-          rowNum,
-          (String) value
+      BudgetUndoManager.getInstance().addEdit(
+          ChangeIncomeAccountCommand.doCmd(
+              getBudgetModel(), 
+              rowNum, 
+              (String) value
+          )
       );
       break;
     }
@@ -161,15 +180,20 @@ public class IncomeItemTableController extends AbstractTableModel
     this.getBudgetModel().addObserver(observer);
   }
 
-  public void addBudgetItem() {
-    this.getBudgetModel().addIncomeItem();
+  public void addIncomeItem() {
+    BudgetUndoManager.getInstance().addEdit(
+        AddIncomeItemCommand.doCmd(
+            getBudgetModel()
+        )
+    );
   }
 
   public void removeItem(int row) {
-    this.getBudgetModel().removeIncomeItem(row);
-  }
-
-  public void removeAllBudgetItems() {
-    this.getBudgetModel().removeAllIncomeItems();
+    BudgetUndoManager.getInstance().addEdit(
+        RemoveIncomeItemCommand.doCmd(
+            getBudgetModel(),
+            row
+        )
+    );
   }
 }
