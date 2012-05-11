@@ -1,4 +1,7 @@
 package blacksmyth.general;
+
+import java.util.ArrayList;
+
 /**
  * A collection of utilities that use reflection to determine useful things about the 
  * running code. Being a library, the class is not able to be instantiated.
@@ -50,12 +53,38 @@ public final class ReflectionUtilities {
    * @return
    */
   public static boolean classImplements(Class<?> theClass, Class<?> theInterface) {
-    Class<?>[] interfaceArray = theClass.getInterfaces();
-    for (Class<?> thisInterface : interfaceArray) {
-      if (thisInterface.equals(theInterface)) {
-        return true;
-      }
+    ArrayList<Class<?>> interfaceArray = getInterfacesForClass(theClass);
+    if (interfaceArray.contains(theInterface)) {
+      return true;
     }
     return false;
+  }
+
+  /**
+   * Recursively build and returns a list of all interfaces implemented by the 
+   * supplied class and all its superclasses.
+   * @param theClass
+   * @return
+   */
+  private static ArrayList<Class<?>> getInterfacesForClass(Class<?> theClass) {
+    
+    if (theClass == null) {
+      return null;
+    }
+    
+    Class<?>[] interfaceArray = theClass.getInterfaces();
+    Class<?> theSuperclass = theClass.getSuperclass();
+    
+    ArrayList<Class<?>> totalInterfaces = new ArrayList<Class<?>>();
+    for (Class<?> currInterface : interfaceArray) {
+      totalInterfaces.add(currInterface);
+      totalInterfaces.addAll(getInterfacesForClass(currInterface));
+    }
+    ArrayList<Class<?>> superClassInterfaces = getInterfacesForClass(theSuperclass);
+    if (superClassInterfaces != null) {
+      totalInterfaces.addAll(superClassInterfaces);
+    }
+    
+    return totalInterfaces;
   }
 }
