@@ -89,7 +89,7 @@ public class IncomeItemTable extends JTable {
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
 
-    DefaultCellEditor editor = WidgetFactory.createBudgetCategoryCellEditor();    
+    DefaultCellEditor editor = WidgetFactory.createIncomeCategoryCellEditor();    
     getColFromEnum(TABLE_COLUMNS.Category).setCellEditor(editor);
 
     SwingUtilities.lockColumnWidth(

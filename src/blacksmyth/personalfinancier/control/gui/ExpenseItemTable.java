@@ -88,7 +88,7 @@ public class ExpenseItemTable extends JTable {
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
 
-    DefaultCellEditor editor = WidgetFactory.createBudgetCategoryCellEditor();    
+    DefaultCellEditor editor = WidgetFactory.createExpenseCategoryCellEditor();    
     getColFromEnum(TABLE_COLUMNS.Category).setCellEditor(editor);
 
     SwingUtilities.lockColumnWidth(
