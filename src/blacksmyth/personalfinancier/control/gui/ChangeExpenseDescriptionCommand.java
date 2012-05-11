@@ -68,14 +68,14 @@ public class ChangeExpenseDescriptionCommand implements UndoableBudgetCommand, I
 
   @Override
   public String getRedoPresentationName() {
-    // TODO Auto-generated method stub
-    return null;
+    return " Change expense item description back to '" +
+        this.postCommandDescription + "'. ";
   }
 
   @Override
   public String getUndoPresentationName() {
-    // TODO Auto-generated method stub
-    return null;
+    return " Change expense item description back to '" +
+    		this.preCommandDescription + "'. ";
   }
 
   @Override

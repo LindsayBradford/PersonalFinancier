@@ -48,7 +48,7 @@ public final class FontIconProvider {
    * @param button
    * @param iconAsChar
    */
-  public void configureButton(JButton button, char iconAsChar) {
+  public void setGlyphAsText(JButton button, char iconAsChar) {
     button.setFont(MAIN_ICON_FONT);
     button.setText(String.valueOf(iconAsChar));
   }

@@ -10,10 +10,13 @@ package blacksmyth.personalfinancier;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Event;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -25,12 +28,14 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
+import blacksmyth.general.SwingUtilities;
 import blacksmyth.personalfinancier.control.BudgetFileController;
 import blacksmyth.personalfinancier.control.BudgetUndoManager;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
@@ -109,7 +114,7 @@ public class PersonalFinancierUIFactory {
     
     button.setForeground(Color.GRAY);
     
-    FontIconProvider.getInstance().configureButton(
+    FontIconProvider.getInstance().setGlyphAsText(
         button, 
         FontIconProvider.icon_info_sign
     );
@@ -164,7 +169,7 @@ public class PersonalFinancierUIFactory {
 
     button.setForeground(Color.GRAY);
 
-    FontIconProvider.getInstance().configureButton(
+    FontIconProvider.getInstance().setGlyphAsText(
         button, 
         FontIconProvider.icon_cogs
     );
@@ -174,21 +179,31 @@ public class PersonalFinancierUIFactory {
   }
 
   private static JButton createSaveButton(final BudgetFileController controller) {
-    JButton button = new JButton();
+    AbstractAction saveAction = new AbstractAction() {
+      public void actionPerformed(ActionEvent e) {
+        BudgetUndoManager.getInstance().discardAllEdits();
+        controller.save();
+      }
+    };
+    
+    JButton button = new JButton(saveAction);
 
     button.setForeground(Color.GREEN.darker());
 
-    FontIconProvider.getInstance().configureButton(
+    SwingUtilities.bindKeyStrokeToAction(
         button, 
-        FontIconProvider.icon_upload_alt
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_S, 
+            Event.CTRL_MASK
+        ), 
+        saveAction
     );
     
-    button.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
-            controller.save();
-          }
-        }
+    button.setMnemonic(KeyEvent.VK_S);
+
+    FontIconProvider.getInstance().setGlyphAsText(
+        button, 
+        FontIconProvider.icon_upload_alt
     );
 
     button.setToolTipText(" Save the budget ");
@@ -196,20 +211,29 @@ public class PersonalFinancierUIFactory {
   }
 
   private static JButton createLoadButton(final BudgetFileController controller) {
-    JButton button = new JButton();
+    AbstractAction loadAction = new AbstractAction() {
+      public void actionPerformed(ActionEvent e) {
+        BudgetUndoManager.getInstance().discardAllEdits();
+        controller.load();
+      }
+    };
     
-    FontIconProvider.getInstance().configureButton(
+    JButton button = new JButton(loadAction);
+    
+    SwingUtilities.bindKeyStrokeToAction(
         button, 
-        FontIconProvider.icon_download_alt
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_O, 
+            Event.CTRL_MASK
+        ), 
+        loadAction
     );
     
-    button.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
-            BudgetUndoManager.getInstance().discardAllEdits();
-            controller.load();
-          }
-        }
+    button.setMnemonic(KeyEvent.VK_O);
+    
+    FontIconProvider.getInstance().setGlyphAsText(
+        button, 
+        FontIconProvider.icon_download_alt
     );
     
     button.setForeground(Color.GREEN.darker());

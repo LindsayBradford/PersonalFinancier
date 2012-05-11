@@ -9,18 +9,23 @@ package blacksmyth.personalfinancier;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import javax.swing.border.TitledBorder;
 
 import blacksmyth.general.FontIconProvider;
+import blacksmyth.general.SwingUtilities;
 import blacksmyth.personalfinancier.control.BudgetUndoManager;
 import blacksmyth.personalfinancier.control.gui.BudgetAccountSummaryTable;
 import blacksmyth.personalfinancier.control.gui.BudgetCategorySummaryTable;
@@ -131,7 +136,7 @@ class BudgetUIFactory {
     
     JButton addItemButton = new JButton();
     
-    FontIconProvider.getInstance().configureButton(
+    FontIconProvider.getInstance().setGlyphAsText(
         addItemButton, 
         FontIconProvider.icon_plus
     );
@@ -160,7 +165,7 @@ class BudgetUIFactory {
         Color.RED.brighter()
    );
     
-    FontIconProvider.getInstance().configureButton(
+    FontIconProvider.getInstance().setGlyphAsText(
         removeItemButton, 
         FontIconProvider.icon_minus
     );
@@ -183,7 +188,7 @@ class BudgetUIFactory {
     
     JButton moveItemDownButton = new JButton();
     
-    FontIconProvider.getInstance().configureButton(
+    FontIconProvider.getInstance().setGlyphAsText(
         moveItemDownButton, 
         FontIconProvider.icon_arrow_down
     );
@@ -204,7 +209,7 @@ class BudgetUIFactory {
 
     JButton moveItemUpButton = new JButton();
     
-    FontIconProvider.getInstance().configureButton(
+    FontIconProvider.getInstance().setGlyphAsText(
         moveItemUpButton, 
         FontIconProvider.icon_arrow_up
     );
@@ -232,7 +237,7 @@ class BudgetUIFactory {
     
     JButton addItemButton = new JButton();
     
-    FontIconProvider.getInstance().configureButton(
+    FontIconProvider.getInstance().setGlyphAsText(
         addItemButton, 
         FontIconProvider.icon_plus
     );
@@ -261,7 +266,7 @@ class BudgetUIFactory {
         Color.RED.brighter()
    );
     
-    FontIconProvider.getInstance().configureButton(
+    FontIconProvider.getInstance().setGlyphAsText(
         removeItemButton, 
         FontIconProvider.icon_minus
     );
@@ -284,7 +289,7 @@ class BudgetUIFactory {
     
     JButton moveItemDownButton = new JButton();
     
-    FontIconProvider.getInstance().configureButton(
+    FontIconProvider.getInstance().setGlyphAsText(
         moveItemDownButton, 
         FontIconProvider.icon_arrow_down
     );
@@ -305,7 +310,7 @@ class BudgetUIFactory {
 
     JButton moveItemUpButton = new JButton();
     
-    FontIconProvider.getInstance().configureButton(
+    FontIconProvider.getInstance().setGlyphAsText(
         moveItemUpButton, 
         FontIconProvider.icon_arrow_up
     );
@@ -329,34 +334,12 @@ class BudgetUIFactory {
 
   @SuppressWarnings("serial")
   private static JToolBar createBudgetItemToolbar(final BudgetModel model) {
+
     JToolBar toolbar = new JToolBar();
 
-    JButton resetItemsButton = new JButton();
-
-    resetItemsButton.setForeground(
-        Color.GRAY.brighter()
-   );
-    
-    FontIconProvider.getInstance().configureButton(
-        resetItemsButton, 
-        FontIconProvider.icon_trash
+    toolbar.add(
+        createResetItemsButton(model)
     );
-
-    resetItemsButton.setToolTipText(
-        " Clear all income and expense items"
-    );
-    
-    resetItemsButton.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
-            BudgetUndoManager.getInstance().addEdit(
-                ResetBudgetItemsCommand.doCmd(model)
-            );
-          }
-        }
-    );
-
-    toolbar.add(resetItemsButton);
     
     toolbar.addSeparator();
 
@@ -372,50 +355,99 @@ class BudgetUIFactory {
     
     return toolbar;
   }
+
+  private static JButton createResetItemsButton(final BudgetModel model) {
+    AbstractAction resetItemsAction = new AbstractAction() {
+      public void actionPerformed(ActionEvent e) {
+        BudgetUndoManager.getInstance().addEdit(
+            ResetBudgetItemsCommand.doCmd(model)
+        );
+      }
+    };
+
+    JButton resetItemsButton = new JButton(resetItemsAction);
+
+    resetItemsButton.setForeground(
+        Color.GRAY.brighter()
+   );
+    
+    FontIconProvider.getInstance().setGlyphAsText(
+        resetItemsButton, 
+        FontIconProvider.icon_trash
+    );
+
+    resetItemsButton.setToolTipText(
+        " Clear all income and expense items"
+    );
+    
+    SwingUtilities.bindKeyStrokeToAction(
+        resetItemsButton, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_DELETE, 
+            Event.CTRL_MASK
+        ), 
+        resetItemsAction
+    );
+    return resetItemsButton;
+  }
   
   private static JButton createUndoButton() {
-    JButton button = new JButton();
+    AbstractAction undoAction = new AbstractAction() {
+      public void actionPerformed(ActionEvent e) {
+        if (BudgetUndoManager.getInstance().canUndo()) {
+           BudgetUndoManager.getInstance().undo();
+        }
+      }
+    };
+    
+    JButton button = new JButton(undoAction);
 
-    FontIconProvider.getInstance().configureButton(
+    FontIconProvider.getInstance().setGlyphAsText(
         button, 
         FontIconProvider.icon_step_backward
     );
     
-    button.addActionListener(
-        new ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent arg0) {
-            if (BudgetUndoManager.getInstance().canUndo()) {
-              BudgetUndoManager.getInstance().undo();
-            }
-          }
-        }
+    SwingUtilities.bindKeyStrokeToAction(
+        button, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_Z, 
+            Event.CTRL_MASK
+        ), 
+        undoAction
     );
-    
+
     button.setToolTipText(" Undo ");
+
     return button;
   }
 
   private static JButton createRedoButton() {
-    JButton button = new JButton();
+    AbstractAction redoAction = new AbstractAction() {
+      public void actionPerformed(ActionEvent e) {
+        if (BudgetUndoManager.getInstance().canRedo()) {
+           BudgetUndoManager.getInstance().redo();
+        }
+      }
+    };
 
-    FontIconProvider.getInstance().configureButton(
+    JButton button = new JButton(redoAction);
+
+    FontIconProvider.getInstance().setGlyphAsText(
         button, 
         FontIconProvider.icon_step_forward
     );
 
-    button.addActionListener(
-        new ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent arg0) {
-            if (BudgetUndoManager.getInstance().canRedo()) {
-              BudgetUndoManager.getInstance().redo();
-            }
-          }
-        }
+    SwingUtilities.bindKeyStrokeToAction(
+        button, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_Y, 
+            Event.CTRL_MASK
+        ), 
+        redoAction
     );
 
     button.setToolTipText(" Redo ");
+
     return button;
   }
 
