@@ -39,6 +39,7 @@ public class BudgetCategorySummaryTable extends JTable {
             this.getRowHeight() * ROW_LIMIT
         )
     );
+    this.setAutoCreateRowSorter(true);
   }
   private void setupColumns() {
     this.tableHeader.setReorderingAllowed(false);
@@ -79,7 +80,10 @@ public class BudgetCategorySummaryTable extends JTable {
     );
     
     if (this.getColFromEnum(COLUMN_HEADERS.Budgetted).getModelIndex() == column) {
-      BigDecimal value = (BigDecimal) this.getModel().getValueAt(row, column);
+      BigDecimal value = (BigDecimal) this.getModel().getValueAt(
+          this.convertRowIndexToModel(row), 
+          column
+      );
       if (value.compareTo(BigDecimal.ZERO) == -1) {
         cellRenderer.setForeground(Color.RED);
       }

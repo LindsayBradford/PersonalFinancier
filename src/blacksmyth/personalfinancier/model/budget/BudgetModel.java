@@ -413,4 +413,26 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
       this.expenseItems = expenseItems;
     }
   }
+  
+
+  public void moveExpenseItemDown(int itemIndex) {
+    ExpenseItem movingExpense = this.removeExpenseItem(itemIndex);
+    this.addExpenseItem(itemIndex + 1, movingExpense);
+  }
+  
+  public void moveExpenseItemUp(int itemIndex) {
+    ExpenseItem movingExpense = this.removeExpenseItem(itemIndex);
+    this.addExpenseItem(itemIndex - 1, movingExpense);
+  }
+
+  public void moveIncomeItemDown(int itemIndex) {
+    IncomeItem movingIncome = this.removeIncomeItem(itemIndex);
+    this.addIncomeItem(itemIndex + 1, movingIncome);
+  }
+  
+  public void moveIncomeItemUp(int itemIndex) {
+    IncomeItem movingIncome = this.removeIncomeItem(itemIndex);
+    this.addIncomeItem(itemIndex - 1, movingIncome);
+  }
+
 }

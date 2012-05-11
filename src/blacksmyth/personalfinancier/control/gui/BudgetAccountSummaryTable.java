@@ -39,6 +39,7 @@ public class BudgetAccountSummaryTable extends JTable {
             this.getRowHeight() * ROW_LIMIT
         )
     );
+    this.setAutoCreateRowSorter(true);
   }
   
   private void setupColumns() {

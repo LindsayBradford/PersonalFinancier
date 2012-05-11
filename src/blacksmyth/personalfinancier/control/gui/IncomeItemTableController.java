@@ -196,4 +196,23 @@ public class IncomeItemTableController extends AbstractTableModel
         )
     );
   }
+  
+  public void moveIncomeItemDown(int row) {
+    BudgetUndoManager.getInstance().addEdit(
+        MoveIncomeItemDownCommand.doCmd(
+            getBudgetModel(),
+            row
+        )
+    );
+  }
+
+  public void moveIncomeItemUp(int row) {
+    BudgetUndoManager.getInstance().addEdit(
+        MoveIncomeItemUpCommand.doCmd(
+            getBudgetModel(),
+            row
+        )
+    );
+  }
+
 }

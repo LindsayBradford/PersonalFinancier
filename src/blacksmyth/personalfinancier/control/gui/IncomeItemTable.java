@@ -158,6 +158,23 @@ public class IncomeItemTable extends JTable {
       this.getIncomeItemController().removeItem(row);
     }
   }
+  
+
+  public void moveSelectedItemDown() {
+    int row = this.getSelectedRow();
+    if (row >= 0 && row < this.getRowCount() - 1) {
+      this.getIncomeItemController().moveIncomeItemDown(row);
+      this.selectionModel.setSelectionInterval(row + 1, row + 1);
+    }
+  }
+
+  public void moveSelectedItemUp() {
+    int row = this.getSelectedRow();
+    if (row > 0) {
+      this.getIncomeItemController().moveIncomeItemUp(row);
+      this.selectionModel.setSelectionInterval(row - 1, row - 1);
+    }
+  }
 }
 
 

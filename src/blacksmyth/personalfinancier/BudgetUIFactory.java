@@ -179,6 +179,50 @@ class BudgetUIFactory {
 
     toolbar.add(removeItemButton);
     
+    toolbar.addSeparator();
+    
+    JButton moveItemDownButton = new JButton();
+    
+    FontIconProvider.getInstance().configureButton(
+        moveItemDownButton, 
+        FontIconProvider.icon_arrow_down
+    );
+
+    moveItemDownButton.setToolTipText(
+        " Move item down in list "
+    );
+    
+    moveItemDownButton.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+            expenseItemTable.moveSelectedItemDown();
+          }
+        }
+    );
+
+    toolbar.add(moveItemDownButton);
+
+    JButton moveItemUpButton = new JButton();
+    
+    FontIconProvider.getInstance().configureButton(
+        moveItemUpButton, 
+        FontIconProvider.icon_arrow_up
+    );
+
+    moveItemUpButton.setToolTipText(
+        " Move item up in list "
+    );
+    
+    moveItemUpButton.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+            expenseItemTable.moveSelectedItemUp();
+          }
+        }
+    );
+
+    toolbar.add(moveItemUpButton);
+    
     return toolbar;
   }
 
@@ -236,6 +280,50 @@ class BudgetUIFactory {
 
     toolbar.add(removeItemButton);
     
+    toolbar.addSeparator();
+    
+    JButton moveItemDownButton = new JButton();
+    
+    FontIconProvider.getInstance().configureButton(
+        moveItemDownButton, 
+        FontIconProvider.icon_arrow_down
+    );
+
+    moveItemDownButton.setToolTipText(
+        " Move item down in list "
+    );
+    
+    moveItemDownButton.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+            incomeItemTable.moveSelectedItemDown();
+          }
+        }
+    );
+
+    toolbar.add(moveItemDownButton);
+
+    JButton moveItemUpButton = new JButton();
+    
+    FontIconProvider.getInstance().configureButton(
+        moveItemUpButton, 
+        FontIconProvider.icon_arrow_up
+    );
+
+    moveItemUpButton.setToolTipText(
+        " Move item up in list "
+    );
+    
+    moveItemUpButton.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+            incomeItemTable.moveSelectedItemUp();
+          }
+        }
+    );
+
+    toolbar.add(moveItemUpButton);
+
     return toolbar;
   }
 

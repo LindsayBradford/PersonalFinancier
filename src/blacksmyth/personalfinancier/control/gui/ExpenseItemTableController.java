@@ -196,4 +196,23 @@ public class ExpenseItemTableController extends AbstractTableModel
         )
     );
   }
+  
+
+  public void moveExpenseItemDown(int row) {
+    BudgetUndoManager.getInstance().addEdit(
+        MoveExpenseItemDownCommand.doCmd(
+            getBudgetModel(),
+            row
+        )
+    );
+  }
+
+  public void moveExpenseItemUp(int row) {
+    BudgetUndoManager.getInstance().addEdit(
+        MoveExpenseItemUpCommand.doCmd(
+            getBudgetModel(),
+            row
+        )
+    );
+  }
 }

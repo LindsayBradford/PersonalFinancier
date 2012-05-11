@@ -157,6 +157,23 @@ public class ExpenseItemTable extends JTable {
       this.getBudgetController().removeItem(row);
     }
   }
+  
+
+  public void moveSelectedItemDown() {
+    int row = this.getSelectedRow();
+    if (row >= 0 && row < this.getRowCount() - 1) {
+      this.getBudgetController().moveExpenseItemDown(row);
+      this.selectionModel.setSelectionInterval(row + 1, row + 1);
+    }
+  }
+
+  public void moveSelectedItemUp() {
+    int row = this.getSelectedRow();
+    if (row > 0) {
+      this.getBudgetController().moveExpenseItemUp(row);
+      this.selectionModel.setSelectionInterval(row - 1, row - 1);
+    }
+  }
 }
 
 
