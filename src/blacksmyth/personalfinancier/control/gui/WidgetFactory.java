@@ -20,6 +20,8 @@ import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
@@ -187,6 +189,20 @@ public final class WidgetFactory {
     comboBox.setRenderer(dlcr);
     
     return comboBox;
+  }
+  /**
+   * Creates a standard {@link TitledBorder} of the specified title and color.
+   * @param title 
+   * @param color
+   * @return
+   */
+  public static TitledBorder createColoredTitledBorder(String title, Color color) {
+    TitledBorder border = new TitledBorder(title);
+
+    border.setBorder(new LineBorder(color));
+    border.setTitleColor(color);
+    
+    return border;
   }
 }
 

@@ -22,7 +22,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
-import javax.swing.border.TitledBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.SwingUtilities;
@@ -31,9 +32,10 @@ import blacksmyth.personalfinancier.control.command.ResetBudgetItemsCommand;
 import blacksmyth.personalfinancier.control.gui.BudgetAccountSummaryTable;
 import blacksmyth.personalfinancier.control.gui.BudgetCategorySummaryTable;
 import blacksmyth.personalfinancier.control.gui.ExpenseItemTable;
-import blacksmyth.personalfinancier.control.gui.ExpenseItemTableController;
+import blacksmyth.personalfinancier.control.gui.ExpenseItemTableModel;
 import blacksmyth.personalfinancier.control.gui.IncomeItemTable;
-import blacksmyth.personalfinancier.control.gui.IncomeItemTableController;
+import blacksmyth.personalfinancier.control.gui.IncomeItemTableModel;
+import blacksmyth.personalfinancier.control.gui.WidgetFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
@@ -60,13 +62,13 @@ class BudgetUIFactory {
     JPanel panel = new JPanel(new BorderLayout());
     
     IncomeItemTable incomeItemTable = new IncomeItemTable(
-        new IncomeItemTableController(
+        new IncomeItemTableModel(
             model
         )
      );
 
     ExpenseItemTable expenseItemTable = new ExpenseItemTable(
-        new ExpenseItemTableController(
+        new ExpenseItemTableModel(
             model
         )
      );
@@ -91,21 +93,36 @@ class BudgetUIFactory {
         createExpenseItemsTablePanel(expenseItemTable)
     );
     
+    splitPane.setOneTouchExpandable(true);
+    splitPane.setResizeWeight(0.5);
+    
     return splitPane;
   }
+  
 
   private static JPanel createExpenseItemsTablePanel(final ExpenseItemTable expenseItemTable) {
     JPanel panel = new JPanel(new BorderLayout());
 
-    panel.setBorder(new TitledBorder("Expense Items"));
+    panel.setBorder(
+        new CompoundBorder(
+            WidgetFactory.createColoredTitledBorder(
+                " Expense Items ",
+                Color.GRAY.brighter()
+            ),
+            new EmptyBorder(0,3,5,4)
+        )
+    );
     
     panel.add(
         createExpenseItemToolbar(expenseItemTable),
         BorderLayout.PAGE_START
     );
 
+    JScrollPane tableScrollPane =  new JScrollPane(expenseItemTable);
+    
+    
     panel.add(
-        new JScrollPane(expenseItemTable),
+        tableScrollPane,
         BorderLayout.CENTER
     );
   
@@ -115,8 +132,16 @@ class BudgetUIFactory {
   private static JPanel createIncomeItemsTablePanel(final IncomeItemTable incomeItemTable) {
     JPanel panel = new JPanel(new BorderLayout());
 
-    panel.setBorder(new TitledBorder("Income Items"));
-    
+    panel.setBorder(
+        new CompoundBorder(
+            WidgetFactory.createColoredTitledBorder(
+                " Income Items ",
+                Color.GRAY.brighter()
+            ),
+            new EmptyBorder(0,3,5,4)
+        )
+    );
+
     panel.add(
         createIncomeItemToolbar(incomeItemTable),
         BorderLayout.PAGE_START
@@ -129,6 +154,7 @@ class BudgetUIFactory {
     
     return panel;
   }
+  
 
   @SuppressWarnings("serial")
   private static JToolBar createExpenseItemToolbar(final ExpenseItemTable expenseItemTable) {
@@ -450,12 +476,19 @@ class BudgetUIFactory {
 
     return button;
   }
-
   
   private static JComponent createBudgetSummaryPanel(BudgetModel model) {
     JPanel panel  = new JPanel(new BorderLayout());
 
-    panel.setBorder(new TitledBorder("Budget " + CashFlowFrequency.Fortnightly.toString() + " Summary"));
+    panel.setBorder(
+        new CompoundBorder(
+            WidgetFactory.createColoredTitledBorder(
+                " " + CashFlowFrequency.Fortnightly.toString() + " Summary ",
+                Color.GRAY.brighter()
+            ),
+            new EmptyBorder(0,3,5,4)
+        )
+    );
 
     BudgetCategorySummaryTable categorySummaryTable = new BudgetCategorySummaryTable(model);
 

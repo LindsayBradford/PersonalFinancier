@@ -1,5 +1,6 @@
 package blacksmyth.personalfinancier.control.gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.util.Observer;
 
@@ -25,11 +26,11 @@ public class ExpenseItemTable extends JTable {
   
   private static final int CELL_BUFFER = 15;
 
-  public ExpenseItemTable(ExpenseItemTableController model) {
+  public ExpenseItemTable(ExpenseItemTableModel model) {
     super(model);
     this.setRowSelectionAllowed(true);
     setupColumns();
-    this.getBudgetController().fireTableDataChanged();
+    this.getExpenseItemTableModel().fireTableDataChanged();
   }
   
   private void setupColumns() {
@@ -57,7 +58,7 @@ public class ExpenseItemTable extends JTable {
 
     getColFromEnum(TABLE_COLUMNS.Account).setCellEditor(editor);
     
-    this.getBudgetController().addModelObserver(
+    this.getExpenseItemTableModel().addModelObserver(
         (Observer) editor.getComponent()
     );
     
@@ -135,7 +136,11 @@ public class ExpenseItemTable extends JTable {
           PreferencesModel.getInstance().getPreferredBudgetFrequencyCellColor()
       );
     }
-   
+    
+    if (this.isCellSelected(row, column)) {
+      cellRenderer.setBackground(Color.GRAY.darker());
+    }
+    
      return cellRenderer;
   }
   
@@ -143,26 +148,34 @@ public class ExpenseItemTable extends JTable {
     return (CashFlowFrequency) this.getModel().getValueAt(row, TABLE_COLUMNS.Frequency.ordinal());
   }
 
-  public ExpenseItemTableController getBudgetController() {
-    return (ExpenseItemTableController) getModel();
+  public ExpenseItemTableModel getExpenseItemTableModel() {
+    return (ExpenseItemTableModel) getModel();
   }
 
   public void addBudgetItem() {
-    this.getBudgetController().addExpenseItem();
+    this.getExpenseItemTableModel().addExpenseItem();
+    this.scrollRectToVisible(
+        this.getCellRect(
+            this.getRowCount() - 1, 0, true
+        )
+    );
+    this.selectionModel.setSelectionInterval(
+        this.getRowCount() - 1, 
+        this.getRowCount() - 1
+    );
   }
   
   public void removeBudgetItem() {
     int row = this.getSelectedRow();
     if (row >= 0) {
-      this.getBudgetController().removeItem(row);
+      this.getExpenseItemTableModel().removeItem(row);
     }
   }
-  
 
   public void moveSelectedItemDown() {
     int row = this.getSelectedRow();
     if (row >= 0 && row < this.getRowCount() - 1) {
-      this.getBudgetController().moveExpenseItemDown(row);
+      this.getExpenseItemTableModel().moveExpenseItemDown(row);
       this.selectionModel.setSelectionInterval(row + 1, row + 1);
     }
   }
@@ -170,7 +183,7 @@ public class ExpenseItemTable extends JTable {
   public void moveSelectedItemUp() {
     int row = this.getSelectedRow();
     if (row > 0) {
-      this.getBudgetController().moveExpenseItemUp(row);
+      this.getExpenseItemTableModel().moveExpenseItemUp(row);
       this.selectionModel.setSelectionInterval(row - 1, row - 1);
     }
   }

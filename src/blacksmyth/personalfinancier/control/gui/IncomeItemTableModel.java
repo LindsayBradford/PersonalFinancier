@@ -27,13 +27,13 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.model.budget.IncomeCategory;
 import blacksmyth.personalfinancier.model.budget.IncomeItem;
 
-public class IncomeItemTableController extends AbstractTableModel 
-                implements IBudgetObserver, IBudgetController {
+public class IncomeItemTableModel extends AbstractTableModel 
+                implements IBudgetObserver {
   private static final long serialVersionUID = 1L;
 
   private BudgetModel budgetMmodel;
  
-  public IncomeItemTableController(BudgetModel budgetModel) {
+  public IncomeItemTableModel(BudgetModel budgetModel) {
     super();
     setBudgetModel(budgetModel);
   }
