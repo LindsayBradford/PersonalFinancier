@@ -19,6 +19,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFormattedTextField.AbstractFormatter;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -110,20 +111,29 @@ public final class WidgetFactory {
    * @param column 
    * @param isEditable Indicates wheether the cell is editable or not.
    */
-  public static void prepareTableCellRenderer(Component cellRenderer, int row, int column, boolean isEditable) {
+  public static void prepareTableCellRenderer(JTable table, Component cellRenderer, int row, int column) {
     Color rowColor = (row % 2 == 0) ? 
         PreferencesModel.getInstance().getPreferredEvenRowColor() : 
         PreferencesModel.getInstance().getPreferredOddRowColor();
     
     cellRenderer.setBackground(rowColor);
     
-    if (isEditable) {
+    if (table.isCellEditable(row,column)) {
       cellRenderer.setForeground(
         PreferencesModel.getInstance().getPreferredEditableCellColor()
       );
     } else {
       cellRenderer.setForeground(
         PreferencesModel.getInstance().getPreferredUnEditableCellColor()
+      );
+    }
+    
+    if (table.isCellSelected(row, column)) {
+      cellRenderer.setBackground(
+          PreferencesModel.getInstance().getPreferredSelectedCellColor()
+      );
+      cellRenderer.setForeground(
+          cellRenderer.getForeground().brighter()
       );
     }
   }

@@ -73,10 +73,10 @@ public class BudgetCategorySummaryTable extends JTable {
     Component cellRenderer = super.prepareRenderer(renderer, row, column);
     
     WidgetFactory.prepareTableCellRenderer(
-      cellRenderer,
-      row, 
-      column, 
-      this.getModel().isCellEditable(row, column)
+        this,
+        cellRenderer,
+        row, 
+        column
     );
     
     if (this.getColFromEnum(COLUMN_HEADERS.Budgetted).getModelIndex() == column) {

@@ -7,7 +7,6 @@ import java.util.Observer;
 import javax.swing.table.AbstractTableModel;
 
 import blacksmyth.personalfinancier.control.BudgetUndoManager;
-import blacksmyth.personalfinancier.control.IBudgetController;
 import blacksmyth.personalfinancier.control.IBudgetObserver;
 import blacksmyth.personalfinancier.control.command.AddExpenseItemCommand;
 import blacksmyth.personalfinancier.control.command.ChangeExpenseAccountCommand;
@@ -27,7 +26,7 @@ import blacksmyth.personalfinancier.model.budget.ExpenseCategory;
 import blacksmyth.personalfinancier.model.budget.ExpenseItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
-public class ExpenseItemTableModel extends AbstractTableModel implements IBudgetObserver {
+class ExpenseItemTableModel extends AbstractTableModel implements IBudgetObserver {
   private static final long serialVersionUID = 1L;
 
   private BudgetModel budgetMmodel;
@@ -205,7 +204,6 @@ public class ExpenseItemTableModel extends AbstractTableModel implements IBudget
     );
   }
   
-
   public void moveExpenseItemDown(int row) {
     BudgetUndoManager.getInstance().addEdit(
         MoveExpenseItemDownCommand.doCmd(

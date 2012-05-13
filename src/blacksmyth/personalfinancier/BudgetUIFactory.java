@@ -32,9 +32,7 @@ import blacksmyth.personalfinancier.control.command.ResetBudgetItemsCommand;
 import blacksmyth.personalfinancier.control.gui.BudgetAccountSummaryTable;
 import blacksmyth.personalfinancier.control.gui.BudgetCategorySummaryTable;
 import blacksmyth.personalfinancier.control.gui.ExpenseItemTable;
-import blacksmyth.personalfinancier.control.gui.ExpenseItemTableModel;
 import blacksmyth.personalfinancier.control.gui.IncomeItemTable;
-import blacksmyth.personalfinancier.control.gui.IncomeItemTableModel;
 import blacksmyth.personalfinancier.control.gui.WidgetFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
@@ -61,17 +59,9 @@ class BudgetUIFactory {
   private static JComponent createBudgetItemPanel(BudgetModel model) {
     JPanel panel = new JPanel(new BorderLayout());
     
-    IncomeItemTable incomeItemTable = new IncomeItemTable(
-        new IncomeItemTableModel(
-            model
-        )
-     );
+    IncomeItemTable incomeItemTable = new IncomeItemTable(model);
 
-    ExpenseItemTable expenseItemTable = new ExpenseItemTable(
-        new ExpenseItemTableModel(
-            model
-        )
-     );
+    ExpenseItemTable expenseItemTable = new ExpenseItemTable(model);
 
     panel.add(
         createBudgetItemToolbar(model),
@@ -155,7 +145,6 @@ class BudgetUIFactory {
     return panel;
   }
   
-
   @SuppressWarnings("serial")
   private static JToolBar createExpenseItemToolbar(final ExpenseItemTable expenseItemTable) {
     JToolBar toolbar = new JToolBar();

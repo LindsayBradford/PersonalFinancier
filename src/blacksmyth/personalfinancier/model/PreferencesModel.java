@@ -268,4 +268,25 @@ public class PreferencesModel extends Observable {
     this.setChanged();
     this.notifyObservers();
   }
+  
+  private static final int DEFAULT_SELECTED_CELL_COLOR = Color.GRAY.darker().getRGB();
+  private static final String SELECTED_CELL_COLOR_KEY = "SelectedCellColor";
+  
+  public Color getPreferredSelectedCellColor() {
+    return new Color(
+        this.prefs.getInt(
+            UNEDITABLE_CELL_COLOR_KEY, 
+            DEFAULT_SELECTED_CELL_COLOR
+        )
+    );
+  }
+
+  public void setPreferredSelectedCellColor(Color color) {
+    this.prefs.putInt(
+        SELECTED_CELL_COLOR_KEY,
+        color.getRGB()
+    );
+    this.setChangeAndNotifyObservers();
+  }
+
 }

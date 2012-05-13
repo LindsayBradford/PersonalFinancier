@@ -15,6 +15,7 @@ import javax.swing.InputMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.table.TableColumn;
 
@@ -123,6 +124,14 @@ public final class SwingUtilities {
     component.getActionMap().put(
         keyStrokeLabel, 
         actionToPerform
+    );
+  }
+  
+  public static void scrollRowToVisible(JTable table, int row) {
+    table.scrollRectToVisible(
+        table.getCellRect(
+            row, 0, true
+        )
     );
   }
 }

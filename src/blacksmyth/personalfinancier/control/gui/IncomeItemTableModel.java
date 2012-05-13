@@ -7,7 +7,6 @@ import java.util.Observer;
 import javax.swing.table.AbstractTableModel;
 
 import blacksmyth.personalfinancier.control.BudgetUndoManager;
-import blacksmyth.personalfinancier.control.IBudgetController;
 import blacksmyth.personalfinancier.control.IBudgetObserver;
 import blacksmyth.personalfinancier.control.command.AddIncomeItemCommand;
 import blacksmyth.personalfinancier.control.command.ChangeIncomeAccountCommand;
@@ -27,7 +26,7 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.model.budget.IncomeCategory;
 import blacksmyth.personalfinancier.model.budget.IncomeItem;
 
-public class IncomeItemTableModel extends AbstractTableModel 
+class IncomeItemTableModel extends AbstractTableModel 
                 implements IBudgetObserver {
   private static final long serialVersionUID = 1L;
 

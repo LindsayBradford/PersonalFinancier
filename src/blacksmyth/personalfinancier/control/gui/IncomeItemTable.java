@@ -1,6 +1,5 @@
 package blacksmyth.personalfinancier.control.gui;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.util.Observer;
 
@@ -14,11 +13,12 @@ import blacksmyth.general.SwingUtilities;
 
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
+import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 public class IncomeItemTable extends JTable {
   private static final long serialVersionUID = 1L;
   
-  public enum TABLE_COLUMNS {
+  enum TABLE_COLUMNS {
     Category, Description, Amount, Frequency, 
     Daily, Weekly,Fortnightly, Monthly,
     Quarterly, Yearly, Account
@@ -26,8 +26,10 @@ public class IncomeItemTable extends JTable {
   
   private static final int CELL_BUFFER = 15;
   
-  public IncomeItemTable(IncomeItemTableModel model) {
-    super(model);
+  public IncomeItemTable(BudgetModel budgetModel) {
+    super(
+        new IncomeItemTableModel(budgetModel)
+    );
     this.setRowSelectionAllowed(true);
     setupColumns();
 
@@ -122,10 +124,10 @@ public class IncomeItemTable extends JTable {
     Component cellRenderer = super.prepareRenderer(renderer, row, column);
     
     WidgetFactory.prepareTableCellRenderer(
+      this,
       cellRenderer,
       row, 
-      column, 
-      this.getModel().isCellEditable(row, column)
+      column 
     );
     
     // One final tweak specific to this table below.  
@@ -138,10 +140,6 @@ public class IncomeItemTable extends JTable {
       );
     }
    
-    if (this.isCellSelected(row, column)) {
-      cellRenderer.setBackground(Color.GRAY.darker());
-    }
-
     return cellRenderer;
   }
   
@@ -155,11 +153,12 @@ public class IncomeItemTable extends JTable {
 
   public void addBudgetItem() {
     this.getIncomeItemTableModel().addIncomeItem();
-    this.scrollRectToVisible(
-        this.getCellRect(
-            this.getRowCount() - 1, 0, true
-        )
+
+    SwingUtilities.scrollRowToVisible(
+        this, 
+        this.getRowCount() - 1
     );
+    
     this.selectionModel.setSelectionInterval(
         this.getRowCount() - 1, 
         this.getRowCount() - 1
@@ -168,25 +167,31 @@ public class IncomeItemTable extends JTable {
   
   public void removeBudgetItem() {
     int row = this.getSelectedRow();
-    if (row >= 0) {
-      this.getIncomeItemTableModel().removeItem(row);
-    }
+    
+    if (row < 0) return; // nothing to do
+
+    this.getIncomeItemTableModel().removeItem(row);
+    this.selectionModel.setSelectionInterval(row, row);
   }
 
   public void moveSelectedItemDown() {
     int row = this.getSelectedRow();
-    if (row >= 0 && row < this.getRowCount() - 1) {
-      this.getIncomeItemTableModel().moveIncomeItemDown(row);
-      this.selectionModel.setSelectionInterval(row + 1, row + 1);
-    }
+    
+    if (row < 0 || row == this.getRowCount() - 1) return; // nothing to do
+    
+    this.getIncomeItemTableModel().moveIncomeItemDown(row);
+    this.selectionModel.setSelectionInterval(row + 1, row + 1);
+    SwingUtilities.scrollRowToVisible(this, row + 1);
   }
 
   public void moveSelectedItemUp() {
     int row = this.getSelectedRow();
-    if (row > 0) {
-      this.getIncomeItemTableModel().moveIncomeItemUp(row);
-      this.selectionModel.setSelectionInterval(row - 1, row - 1);
-    }
+    
+    if (row <= 0) return; // nothing to do
+
+    this.getIncomeItemTableModel().moveIncomeItemUp(row);
+    this.selectionModel.setSelectionInterval(row - 1, row - 1);
+    SwingUtilities.scrollRowToVisible(this, row - 1);
   }
 }
 
