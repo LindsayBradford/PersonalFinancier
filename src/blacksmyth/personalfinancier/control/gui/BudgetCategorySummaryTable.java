@@ -19,18 +19,15 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 @SuppressWarnings("serial")
 public class BudgetCategorySummaryTable extends JTable {
 
-  enum COLUMN_HEADERS {
-    Category, Budgetted
-  }
-
   private static final int CELL_BUFFER = 15;
   
   private static final int ROW_LIMIT = 5;
   
   public BudgetCategorySummaryTable(BudgetModel budgetModel) {
     super(
-        new BudgetCategorySummaryViewer(budgetModel)
+        new BudgetCategorySummaryTableModel(budgetModel)
     );
+    
     setupColumns();
 
     this.setPreferredScrollableViewportSize(
@@ -46,25 +43,25 @@ public class BudgetCategorySummaryTable extends JTable {
     this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
     setupBudgettedCol();
     
-    getColFromEnum(COLUMN_HEADERS.Category).setCellRenderer(
+    getColFromEnum(CATEGORY_SUMMARY_COLUMNS.Category).setCellRenderer(
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
   }
   
   private void setupBudgettedCol() {
     SwingUtilities.lockColumnWidth(
-        getColFromEnum(COLUMN_HEADERS.Budgetted),
+        getColFromEnum(CATEGORY_SUMMARY_COLUMNS.Budgeted),
         SwingUtilities.getTextWidth(
             WidgetFactory.DECIMAL_FORMAT_PATTERN
         ) + CELL_BUFFER
     );
 
-    getColFromEnum(COLUMN_HEADERS.Budgetted).setCellRenderer(
+    getColFromEnum(CATEGORY_SUMMARY_COLUMNS.Budgeted).setCellRenderer(
         WidgetFactory.createAmountCellRenderer()    
     );
   }
 
-  private TableColumn getColFromEnum(COLUMN_HEADERS thisEnum) {
+  private TableColumn getColFromEnum(CATEGORY_SUMMARY_COLUMNS thisEnum) {
     return this.getColumnModel().getColumn(thisEnum.ordinal());
   }
   
@@ -79,7 +76,7 @@ public class BudgetCategorySummaryTable extends JTable {
         column
     );
     
-    if (this.getColFromEnum(COLUMN_HEADERS.Budgetted).getModelIndex() == column) {
+    if (this.getColFromEnum(CATEGORY_SUMMARY_COLUMNS.Budgeted).getModelIndex() == column) {
       BigDecimal value = (BigDecimal) this.getModel().getValueAt(
           this.convertRowIndexToModel(row), 
           column

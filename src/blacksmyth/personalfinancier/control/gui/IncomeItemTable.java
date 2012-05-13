@@ -18,12 +18,6 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 public class IncomeItemTable extends JTable {
   private static final long serialVersionUID = 1L;
   
-  enum TABLE_COLUMNS {
-    Category, Description, Amount, Frequency, 
-    Daily, Weekly,Fortnightly, Monthly,
-    Quarterly, Yearly, Account
-  }
-  
   private static final int CELL_BUFFER = 15;
   
   public IncomeItemTable(BudgetModel budgetModel) {
@@ -41,37 +35,37 @@ public class IncomeItemTable extends JTable {
     this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
     
     setupCategoryCol();
-    setupAmountCol(TABLE_COLUMNS.Amount);
+    setupAmountCol(INCOME_ITEM_COLUMNS.Amount);
     setupFrequencyCol();
-    setupAmountCol(TABLE_COLUMNS.Daily);
-    setupAmountCol(TABLE_COLUMNS.Weekly);
-    setupAmountCol(TABLE_COLUMNS.Fortnightly);
-    setupAmountCol(TABLE_COLUMNS.Monthly);
-    setupAmountCol(TABLE_COLUMNS.Quarterly);
-    setupAmountCol(TABLE_COLUMNS.Yearly);
+    setupAmountCol(INCOME_ITEM_COLUMNS.Daily);
+    setupAmountCol(INCOME_ITEM_COLUMNS.Weekly);
+    setupAmountCol(INCOME_ITEM_COLUMNS.Fortnightly);
+    setupAmountCol(INCOME_ITEM_COLUMNS.Monthly);
+    setupAmountCol(INCOME_ITEM_COLUMNS.Quarterly);
+    setupAmountCol(INCOME_ITEM_COLUMNS.Yearly);
     setupAccountCol();
   }
   
   private void setupAccountCol() {
-    getColFromEnum(TABLE_COLUMNS.Account).setCellRenderer(
+    getColFromEnum(INCOME_ITEM_COLUMNS.Account).setCellRenderer(
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
     
     DefaultCellEditor editor = WidgetFactory.createBudgetAccountCellEditor();    
 
-    getColFromEnum(TABLE_COLUMNS.Account).setCellEditor(editor);
+    getColFromEnum(INCOME_ITEM_COLUMNS.Account).setCellEditor(editor);
     
     this.getIncomeItemTableModel().addModelObserver(
         (Observer) editor.getComponent()
     );
     
     SwingUtilities.lockColumnWidth(
-        getColFromEnum(TABLE_COLUMNS.Account),
+        getColFromEnum(INCOME_ITEM_COLUMNS.Account),
         (int) editor.getComponent().getPreferredSize().getWidth()
     );
   }
 
-  private void setupAmountCol(TABLE_COLUMNS thisColumn) {
+  private void setupAmountCol(INCOME_ITEM_COLUMNS thisColumn) {
     SwingUtilities.lockColumnWidth(
         getColFromEnum(thisColumn),
         SwingUtilities.getTextWidth(
@@ -88,34 +82,34 @@ public class IncomeItemTable extends JTable {
   }
 
   private void setupCategoryCol() {
-    getColFromEnum(TABLE_COLUMNS.Category).setCellRenderer(
+    getColFromEnum(INCOME_ITEM_COLUMNS.Category).setCellRenderer(
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
 
     DefaultCellEditor editor = WidgetFactory.createIncomeCategoryCellEditor();    
-    getColFromEnum(TABLE_COLUMNS.Category).setCellEditor(editor);
+    getColFromEnum(INCOME_ITEM_COLUMNS.Category).setCellEditor(editor);
 
     SwingUtilities.lockColumnWidth(
-        getColFromEnum(TABLE_COLUMNS.Category),
+        getColFromEnum(INCOME_ITEM_COLUMNS.Category),
         (int) editor.getComponent().getPreferredSize().getWidth()
     );
   }
 
   private void setupFrequencyCol() {
-    getColFromEnum(TABLE_COLUMNS.Frequency).setCellRenderer(
+    getColFromEnum(INCOME_ITEM_COLUMNS.Frequency).setCellRenderer(
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
 
     DefaultCellEditor editor = WidgetFactory.createCashFlowFrequencyCellEditor();    
-    getColFromEnum(TABLE_COLUMNS.Frequency).setCellEditor(editor);
+    getColFromEnum(INCOME_ITEM_COLUMNS.Frequency).setCellEditor(editor);
 
     SwingUtilities.lockColumnWidth(
-        getColFromEnum(TABLE_COLUMNS.Frequency),
+        getColFromEnum(INCOME_ITEM_COLUMNS.Frequency),
         (int) editor.getComponent().getPreferredSize().getWidth()
     );
   }
   
-  private TableColumn getColFromEnum(TABLE_COLUMNS thisEnum) {
+  private TableColumn getColFromEnum(INCOME_ITEM_COLUMNS thisEnum) {
     return this.getColumnModel().getColumn(thisEnum.ordinal());
   }
   
@@ -144,7 +138,10 @@ public class IncomeItemTable extends JTable {
   }
   
   private CashFlowFrequency getFrequencyAt(int row) {
-    return (CashFlowFrequency) this.getModel().getValueAt(row, TABLE_COLUMNS.Frequency.ordinal());
+    return (CashFlowFrequency) this.getModel().getValueAt(
+        row, 
+        INCOME_ITEM_COLUMNS.Frequency.ordinal()
+    );
   }
 
   public IncomeItemTableModel getIncomeItemTableModel() {

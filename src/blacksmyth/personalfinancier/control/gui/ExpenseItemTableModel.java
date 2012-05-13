@@ -1,13 +1,9 @@
 package blacksmyth.personalfinancier.control.gui;
 
 import java.math.BigDecimal;
-import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.table.AbstractTableModel;
-
 import blacksmyth.personalfinancier.control.BudgetUndoManager;
-import blacksmyth.personalfinancier.control.IBudgetObserver;
 import blacksmyth.personalfinancier.control.command.AddExpenseItemCommand;
 import blacksmyth.personalfinancier.control.command.ChangeExpenseAccountCommand;
 import blacksmyth.personalfinancier.control.command.ChangeExpenseAmountCommand;
@@ -26,28 +22,23 @@ import blacksmyth.personalfinancier.model.budget.ExpenseCategory;
 import blacksmyth.personalfinancier.model.budget.ExpenseItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
-class ExpenseItemTableModel extends AbstractTableModel implements IBudgetObserver {
-  private static final long serialVersionUID = 1L;
+enum EXPENSE_ITEM_COLUMNS {
+  Category, Description, Amount, Frequency, 
+  Daily, Weekly,Fortnightly, Monthly,
+  Quarterly, Yearly, Account
+}
 
-  private BudgetModel budgetMmodel;
+class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMNS> {
  
   public ExpenseItemTableModel(BudgetModel budgetModel) {
     super();
     setBudgetModel(budgetModel);
   }
-
-  public int getColumnCount() {
-    return ExpenseItemTable.TABLE_COLUMNS.values().length;
-  }
-  
-  public String getColumnName(int colNum) {
-    return ExpenseItemTable.TABLE_COLUMNS.values()[colNum].toString();
-  }
   
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public Class getColumnClass(int colNum) {
 
-    switch (ExpenseItemTable.TABLE_COLUMNS.values()[colNum]) {
+    switch (this.getColumnEnumValueAt(colNum)) {
       case Category:
         return ExpenseCategory.class;
       case Description:
@@ -70,7 +61,7 @@ class ExpenseItemTableModel extends AbstractTableModel implements IBudgetObserve
   }
   
   public boolean isCellEditable(int rowNum, int colNum) {
-    switch (ExpenseItemTable.TABLE_COLUMNS.values()[colNum]) {
+    switch (this.getColumnEnumValueAt(colNum)) {
       case Daily: case Weekly: case Fortnightly: 
       case Monthly: case Quarterly: case Yearly:
         return false;
@@ -80,10 +71,9 @@ class ExpenseItemTableModel extends AbstractTableModel implements IBudgetObserve
   }
 
   public Object getValueAt(int rowNum, int colNum) {
-    @SuppressWarnings("cast")
-    ExpenseItem item = (ExpenseItem) getBudgetModel().getExpenseItems().get(rowNum);
+    ExpenseItem item = getBudgetModel().getExpenseItems().get(rowNum);
     
-    switch (ExpenseItemTable.TABLE_COLUMNS.values()[colNum]) {
+    switch (this.getColumnEnumValueAt(colNum)) {
       case Category:
         return item.getCategory();
       case Description:
@@ -120,7 +110,7 @@ class ExpenseItemTableModel extends AbstractTableModel implements IBudgetObserve
   }
   
   public void setValueAt(Object value, int rowNum, int colNum) {
-    switch (ExpenseItemTable.TABLE_COLUMNS.values()[colNum]) {
+    switch (this.getColumnEnumValueAt(colNum)) {
     case Category:
       BudgetUndoManager.getInstance().addEdit(
           ChangeExpenseCategoryCommand.doCmd(
@@ -170,19 +160,6 @@ class ExpenseItemTableModel extends AbstractTableModel implements IBudgetObserve
     this.fireTableRowsUpdated(rowNum, rowNum);
   }
 
-  public void update(Observable o, Object arg) {
-    this.fireTableDataChanged();
-  }
-  
-  private void setBudgetModel(BudgetModel model) {
-    this.budgetMmodel = model;
-    this.budgetMmodel.addObserver(this);
-  }
-  
-  public BudgetModel getBudgetModel() {
-    return this.budgetMmodel;
-  }
-  
   public void addModelObserver(Observer observer) {
     this.getBudgetModel().addObserver(observer);
   }

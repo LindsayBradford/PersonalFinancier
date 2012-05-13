@@ -19,17 +19,13 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 @SuppressWarnings("serial")
 public class BudgetAccountSummaryTable extends JTable {
 
-  enum COLUMN_HEADERS {
-    Account, Detail, Budgetted
-  }
-
   private static final int CELL_BUFFER = 15;
   
   private static final int ROW_LIMIT = 5;
   
   public BudgetAccountSummaryTable(BudgetModel budgetModel) {
     super(
-        new BudgetAccountSummaryViewer(budgetModel)
+        new BudgetAccountSummaryTableModel(budgetModel)
     );
     setupColumns();
 
@@ -47,29 +43,29 @@ public class BudgetAccountSummaryTable extends JTable {
     this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
     setupBudgettedCol();
     
-    getColFromEnum(COLUMN_HEADERS.Account).setCellRenderer(
+    getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.Account).setCellRenderer(
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
 
-    getColFromEnum(COLUMN_HEADERS.Detail).setCellRenderer(
+    getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.Detail).setCellRenderer(
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
   }
   
   private void setupBudgettedCol() {
     SwingUtilities.lockColumnWidth(
-        getColFromEnum(COLUMN_HEADERS.Budgetted),
+        getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.Budgeted),
         SwingUtilities.getTextWidth(
             WidgetFactory.DECIMAL_FORMAT_PATTERN
         ) + CELL_BUFFER
     );
 
-    getColFromEnum(COLUMN_HEADERS.Budgetted).setCellRenderer(
+    getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.Budgeted).setCellRenderer(
         WidgetFactory.createAmountCellRenderer()    
     );
   }
 
-  private TableColumn getColFromEnum(COLUMN_HEADERS thisEnum) {
+  private TableColumn getColFromEnum(ACCOUNT_SUMMARY_COLUMNS thisEnum) {
     return this.getColumnModel().getColumn(thisEnum.ordinal());
   }
   
@@ -84,7 +80,7 @@ public class BudgetAccountSummaryTable extends JTable {
         column
     );
     
-    if (this.getColFromEnum(COLUMN_HEADERS.Budgetted).getModelIndex() == column) {
+    if (this.getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.Budgeted).getModelIndex() == column) {
       BigDecimal value = (BigDecimal) this.getModel().getValueAt(row, column);
       if (value.compareTo(BigDecimal.ZERO) == -1) {
         cellRenderer.setForeground(Color.RED);
@@ -96,5 +92,4 @@ public class BudgetAccountSummaryTable extends JTable {
 
     return cellRenderer;
   }
-  
 }
