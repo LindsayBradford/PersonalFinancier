@@ -10,6 +10,7 @@ package blacksmyth.personalfinancier;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Event;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -31,6 +32,7 @@ import blacksmyth.personalfinancier.control.BudgetUndoManager;
 import blacksmyth.personalfinancier.control.command.ResetBudgetItemsCommand;
 import blacksmyth.personalfinancier.control.gui.BudgetAccountSummaryTable;
 import blacksmyth.personalfinancier.control.gui.BudgetCategorySummaryTable;
+import blacksmyth.personalfinancier.control.gui.CategoryPieChart;
 import blacksmyth.personalfinancier.control.gui.ExpenseItemTable;
 import blacksmyth.personalfinancier.control.gui.IncomeItemTable;
 import blacksmyth.personalfinancier.control.gui.WidgetFactory;
@@ -467,7 +469,7 @@ class BudgetUIFactory {
   }
   
   private static JComponent createBudgetSummaryPanel(BudgetModel model) {
-    JPanel panel  = new JPanel(new BorderLayout());
+    JPanel panel  = new JPanel(new GridLayout(1,3));
 
     panel.setBorder(
         new CompoundBorder(
@@ -479,24 +481,35 @@ class BudgetUIFactory {
         )
     );
 
-    BudgetCategorySummaryTable categorySummaryTable = new BudgetCategorySummaryTable(model);
-
     panel.add(
-        new JScrollPane(
-            categorySummaryTable
-        ),
-        BorderLayout.LINE_START
+        createCategorySummaryTable(model)
     );
-    
-    BudgetAccountSummaryTable accountSummaryTable = new BudgetAccountSummaryTable(model);
 
     panel.add(
-        new JScrollPane(
-            accountSummaryTable
-        ),
-        BorderLayout.LINE_END
+        createCategoryPieChart(model)
+    );
+
+    panel.add(
+        createAccountSummaryTable(model)
     );
     
     return panel;    
   }
+
+  private static JComponent createCategorySummaryTable(BudgetModel model) {
+    return new JScrollPane(
+        new BudgetCategorySummaryTable(model)
+    );
+  }
+  
+  private static JComponent createAccountSummaryTable(BudgetModel model) {
+    return new JScrollPane(
+        new BudgetAccountSummaryTable(model)
+    );
+  }
+  
+  private static JComponent createCategoryPieChart(BudgetModel model) {
+    return new CategoryPieChart(model);
+  }
+
 }

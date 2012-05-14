@@ -6,6 +6,7 @@ import java.util.Observer;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -109,6 +110,12 @@ public class IncomeItemTable extends JTable {
     );
   }
   
+  public void tableChanged(TableModelEvent e) {
+    this.setVisible(false);
+    super.tableChanged(e);
+    this.setVisible(true);
+  }
+
   private TableColumn getColFromEnum(INCOME_ITEM_COLUMNS thisEnum) {
     return this.getColumnModel().getColumn(thisEnum.ordinal());
   }

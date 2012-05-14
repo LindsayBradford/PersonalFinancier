@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -38,6 +39,13 @@ public class BudgetCategorySummaryTable extends JTable {
     );
     this.setAutoCreateRowSorter(true);
   }
+
+  public void tableChanged(TableModelEvent e) {
+    this.setVisible(false);
+    super.tableChanged(e);
+    this.setVisible(true);
+  }
+
   private void setupColumns() {
     this.tableHeader.setReorderingAllowed(false);
     this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);

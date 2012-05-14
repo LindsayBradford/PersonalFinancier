@@ -2,7 +2,7 @@
 
 A budgetting and bookeeping application built to suit my way of doing household finances.
 
-![A recent image](https://p.twimg.com/AsYGiCHCQAEpQCH.png:large)
+![A recent image](https://p.twimg.com/As0lX_CCAAER7rg.png:large)
 
 ![Architecture Layers](https://p.twimg.com/AsfwyrBCEAEoGza.png:large)
 

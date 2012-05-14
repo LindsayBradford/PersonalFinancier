@@ -52,6 +52,8 @@ public class PersonalFinancierUIFactory {
         WindowConstants.EXIT_ON_CLOSE
     );
     
+    Toolkit.getDefaultToolkit().setDynamicLayout(false);
+    
     frame.setJMenuBar(
         createMenu()
     );
