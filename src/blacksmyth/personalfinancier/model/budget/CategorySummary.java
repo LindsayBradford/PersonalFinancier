@@ -54,10 +54,9 @@ public class CategorySummary implements Comparable<CategorySummary> {
   @Override
   public int compareTo(CategorySummary otherCategory) {
     // TODO: This needs to be more intelligent.
-    // Right now, it forces a sorted list of CategorySummary instances
-    // to sort from largest to smallest budgeted amount total, regardless
-    // of currency.
-    return -1 * this.getBudgettedAmount().getTotal().compareTo(
+    // Right now, comparison of CategorySummary instances
+    // is on budgeted amount total, regardless of exchange rates.
+    return this.getBudgettedAmount().getTotal().compareTo(
         otherCategory.getBudgettedAmount().getTotal()
     );
   }

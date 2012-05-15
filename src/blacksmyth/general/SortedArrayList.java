@@ -2,15 +2,23 @@ package blacksmyth.general;
 
 import java.util.ArrayList;
 
+/**
+ * Implements an insertion Sort from greatest to smallest (only if
+ * all entries are inserted with {@link #insertSorted(Object)}.. 
+ * Essentially a tweak of an insertion sort algorithm posted
+ * to stackexchange by user http://stackoverflow.com/users/276052/aioobe
+ * Author: Mostly ailbo. 
+ * @param <T>
+ */
 public class SortedArrayList<T> extends ArrayList<T> {
     @SuppressWarnings("unchecked")
-    public void insertSorted(T value) {
-        add(value);
-        Comparable<T> cmp = (Comparable<T>) value;
-        for (int i = size()-1; i > 0 && cmp.compareTo(get(i-1)) < 0; i--) {
+    public void insertSorted(T newValue) {
+        add(0, newValue);
+        Comparable<T> cmp = (Comparable<T>) newValue;
+        for (int i = 0; i < size() -1 && cmp.compareTo(get(i+1)) < 0; i++) {
             T tmp = get(i);
-            set(i, get(i-1));
-            set(i-1, tmp);
+            set(i, get(i+1));
+            set(i+1, tmp);
         }
     }
 }
