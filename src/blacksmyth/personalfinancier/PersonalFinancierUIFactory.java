@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
@@ -59,7 +60,7 @@ public class PersonalFinancierUIFactory {
     );
     
     frame.getContentPane().add(
-        createMainToolbar(budgetModel),
+        createMainToolbar(frame, budgetModel),
         BorderLayout.PAGE_START
     );
     
@@ -83,7 +84,7 @@ public class PersonalFinancierUIFactory {
     return frame;
   }
   
-  private static Component createMainToolbar(BudgetModel model) {
+  private static Component createMainToolbar(final JFrame baseFrame, final BudgetModel model) {
     JToolBar toolbar = new JToolBar();
     
     final BudgetFileController fileController = new BudgetFileController(model);
@@ -105,13 +106,13 @@ public class PersonalFinancierUIFactory {
     toolbar.addSeparator();
     
     toolbar.add(
-        createAboutButton()
+        createAboutButton(baseFrame)
     );
     
     return toolbar;
   }
   
-  private static JButton createAboutButton() {
+  private static JButton createAboutButton(final JFrame baseFrame) {
     JButton button = new JButton();
     
     button.setForeground(Color.GRAY);
@@ -123,43 +124,22 @@ public class PersonalFinancierUIFactory {
     
     button.setToolTipText(" About ");
     
-    // TODO: clean this hackjob up:
     button.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent arg0) {
-            JDialog.setDefaultLookAndFeelDecorated(true);
-            JDialog dialog = new JDialog();
-            
-            JLabel infoLabel = new JLabel(
+            JOptionPane.showMessageDialog(
+                baseFrame,
                 "<html><body>" +
                 "This application depends on the following packages:" + 
                  "<ul>" +
                  "<li> GSson (http://code.google.com/p/google-gson/) for Java JSon serialisation" +
                  "<li> JTattoo (http://www.jtattoo.net/) for a radically different Swing Look & Feel" +
                  "<li> FontAwesome (http://fortawesome.github.com/Font-Awesome) for icon-friendly font glyphs" +
-                "</ul>" + 
+                 "<li> charts4j (https://github.com/julienchastang/charts4j) for charting." +
+                 "</ul>" +
+                 "Many thanks for their excellent libraries." +
                 "</body></html>"
             );
-
-            infoLabel.setForeground(Color.BLACK);
-            
-            dialog.setTitle("Info");
-            dialog.setContentPane(infoLabel);
-            
-            dialog.setSize(
-                dialog.getPreferredSize()
-            );
-            
-            dialog.setBounds(
-                Toolkit.getDefaultToolkit().getScreenSize().width/4, 
-                Toolkit.getDefaultToolkit().getScreenSize().height/4, 
-                Toolkit.getDefaultToolkit().getScreenSize().width/2, 
-                (int) dialog.getPreferredSize().getHeight() + 20
-            );
-            
-            dialog.setResizable(false);
-            
-            dialog.setVisible(true);
           }
         }
     );

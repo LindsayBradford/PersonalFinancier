@@ -10,6 +10,7 @@ A budgetting and bookeeping application built to suit my way of doing household 
   * GSson (<http://code.google.com/p/google-gson/>) for Java JSon serialisation
   * JTattoo (<http://www.jtattoo.net/>) for a radically different Swing Look & Feel
   * FontAwesome (<http://fortawesome.github.com/Font-Awesome>) for icon-friendly font glyphs 
+  * charts4j (<https://github.com/julienchastang/charts4j>) for charting. 
   
 ## Contact Detail:
 - Email: lindsay.w.bradford@gmail.com
