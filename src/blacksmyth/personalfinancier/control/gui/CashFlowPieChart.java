@@ -13,25 +13,28 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import com.googlecode.charts4j.Data;
 import com.googlecode.charts4j.GCharts;
 import com.googlecode.charts4j.PieChart;
+import com.googlecode.charts4j.Plot;
+import com.googlecode.charts4j.Plots;
 import com.googlecode.charts4j.Slice;
 
 import blacksmyth.personalfinancier.control.IBudgetObserver;
+import blacksmyth.personalfinancier.model.budget.AccountSummary;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
-import blacksmyth.personalfinancier.model.budget.CategorySummary;
 
-public class CategoryPieChart extends JLabel implements IBudgetObserver, Runnable {
+public class CashFlowPieChart extends JLabel implements IBudgetObserver, Runnable {
   private BudgetModel budgetModel;
   
-  public CategoryPieChart(BudgetModel model) {
+  public CashFlowPieChart(BudgetModel model) {
     this.budgetModel = model;
     model.addObserver(this);
     
     this.setVerticalAlignment(CENTER);
     this.setHorizontalAlignment(CENTER);
 
-    final CategoryPieChart chart = this;
+    final CashFlowPieChart chart = this;
     
     this.addComponentListener(new ComponentAdapter() {
       public void componentResized(ComponentEvent e) {
@@ -84,12 +87,26 @@ public class CategoryPieChart extends JLabel implements IBudgetObserver, Runnabl
     com.googlecode.charts4j.Color blackColor = com.googlecode.charts4j.Color.BLACK;
     com.googlecode.charts4j.Color redColor = com.googlecode.charts4j.Color.RED;
     
+    double netCashFlow = 0;
     double total = 0;
     double incomeTotal = 0;
     
-    for (CategorySummary category : model.getCategorySummaries()) {
+    double minValue = 0;
+    double maxValue = 0;
+    
+    for (AccountSummary account : model.getAccountSummaries()) {
       
-      double summaryFigure = category.getBudgettedAmount().getTotal().doubleValue();
+      double summaryFigure = account.getBudgettedAmount().getTotal().doubleValue();
+      
+      if (summaryFigure < minValue) {
+        minValue = summaryFigure;
+      }
+      
+      if (summaryFigure > maxValue) {
+        maxValue = summaryFigure;
+      }
+      
+      netCashFlow = netCashFlow + summaryFigure;
       
       double absSummaryFigure = Math.abs(summaryFigure);
       
@@ -98,16 +115,14 @@ public class CategoryPieChart extends JLabel implements IBudgetObserver, Runnabl
         incomeTotal = incomeTotal + summaryFigure;
       }
     }
-
-    for (CategorySummary category : model.getCategorySummaries()) {
+    
+    for (AccountSummary account : model.getAccountSummaries()) {
       
-      double summaryFigure = category.getBudgettedAmount().getTotal().doubleValue();
+      double summaryFigure = account.getBudgettedAmount().getTotal().doubleValue();
       
       double absSummaryFigure = Math.abs(summaryFigure);
       int percentageAsInteger = (int) Math.round(((absSummaryFigure / total) * 100));
       
-      int percentageOfIncome = (int) Math.round(((absSummaryFigure / incomeTotal) * 100));
-
       com.googlecode.charts4j.Color sliceColor = summaryFigure < 0 ? redColor : blackColor;
 
       sliceColor = com.googlecode.charts4j.Color.newColor(
@@ -115,10 +130,10 @@ public class CategoryPieChart extends JLabel implements IBudgetObserver, Runnabl
           summaryFigure < 0 ? redOpacity : blackOpacity
       );
 
-      Slice categorySlice = Slice.newSlice(
+      Slice accountSlice = Slice.newSlice(
           percentageAsInteger, 
           sliceColor,
-          category.getBudgetCategory() + ", " + String.valueOf(percentageOfIncome) + "%"
+          account.getAccountNickname() + ", " + WidgetFactory.DECIMAL_FORMAT.format(summaryFigure)
       );
 
       if (summaryFigure < 0) {
@@ -127,14 +142,16 @@ public class CategoryPieChart extends JLabel implements IBudgetObserver, Runnabl
         blackOpacity -= 20;
       }
 
-      slices.add(categorySlice);
+      slices.add(accountSlice);
     }
     
+    String surplusOrDeficit = netCashFlow >= 0 ? "Surplus" : "Deficit";
+    com.googlecode.charts4j.Color surplusOrDeficitColor = netCashFlow >= 0 ? com.googlecode.charts4j.Color.BLACK : com.googlecode.charts4j.Color.RED;
+    
     PieChart chart = GCharts.newPieChart(slices);
-    // chart.setThreeD(true);
     chart.setTitle(
-        "Budget Category as % of Total Income", 
-        com.googlecode.charts4j.Color.BLACK, 
+        "Net Cash Flow " + surplusOrDeficit + ": " + WidgetFactory.DECIMAL_FORMAT.format(netCashFlow), 
+        surplusOrDeficitColor, 
         16
     );
     
@@ -143,7 +160,7 @@ public class CategoryPieChart extends JLabel implements IBudgetObserver, Runnabl
     try {
       chart.setSize(
           this.getPreferredSize().width,
-          this.getPreferredSize().height 
+          this.getPreferredSize().height
       );
     } catch (Exception e) {
       chart.setSize(500,200);
@@ -151,7 +168,7 @@ public class CategoryPieChart extends JLabel implements IBudgetObserver, Runnabl
     
     return chart.toURLString();
   }
-
+  
   @Override
   public Dimension getPreferredSize() {
     Dimension theSize = this.getParent().getSize();
@@ -160,4 +177,6 @@ public class CategoryPieChart extends JLabel implements IBudgetObserver, Runnabl
     
     return theSize;
   }
+
+
 }

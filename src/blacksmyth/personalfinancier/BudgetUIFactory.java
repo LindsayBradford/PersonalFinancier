@@ -32,6 +32,7 @@ import blacksmyth.personalfinancier.control.BudgetUndoManager;
 import blacksmyth.personalfinancier.control.command.ResetBudgetItemsCommand;
 import blacksmyth.personalfinancier.control.gui.BudgetAccountSummaryTable;
 import blacksmyth.personalfinancier.control.gui.BudgetCategorySummaryTable;
+import blacksmyth.personalfinancier.control.gui.CashFlowPieChart;
 import blacksmyth.personalfinancier.control.gui.CategoryPieChart;
 import blacksmyth.personalfinancier.control.gui.ExpenseItemTable;
 import blacksmyth.personalfinancier.control.gui.IncomeItemTable;
@@ -469,7 +470,7 @@ class BudgetUIFactory {
   }
   
   private static JComponent createBudgetSummaryPanel(BudgetModel model) {
-    JPanel panel  = new JPanel(new GridLayout(1,3));
+    JPanel panel  = new JPanel(new GridLayout(1,2));
 
     panel.setBorder(
         new CompoundBorder(
@@ -482,17 +483,19 @@ class BudgetUIFactory {
     );
 
     panel.add(
-        createCategorySummaryTable(model)
+        WidgetFactory.createGraphTablePane(
+          new CashFlowPieChart(model),
+          createAccountSummaryTable(model) 
+        )
     );
 
     panel.add(
-        createCategoryPieChart(model)
+        WidgetFactory.createGraphTablePane(
+          createCategoryPieChart(model),
+          createCategorySummaryTable(model) 
+        )
     );
 
-    panel.add(
-        createAccountSummaryTable(model)
-    );
-    
     return panel;    
   }
 

@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 
 import javax.swing.JButton;
+import javax.swing.JTabbedPane;
 
 /**
  * A bridge/singleton pattern implementation providing convenient access to the 
@@ -51,6 +52,11 @@ public final class FontIconProvider {
   public void setGlyphAsText(JButton button, char iconAsChar) {
     button.setFont(MAIN_ICON_FONT);
     button.setText(String.valueOf(iconAsChar));
+  }
+
+  public void setGlyphAsTitle(JTabbedPane pane, int tabIndex, char iconAsChar) {
+    pane.setFont(MAIN_ICON_FONT);
+    pane.setTitleAt(tabIndex, String.valueOf(iconAsChar));
   }
   
   public static final char icon_glass = '\uf000';

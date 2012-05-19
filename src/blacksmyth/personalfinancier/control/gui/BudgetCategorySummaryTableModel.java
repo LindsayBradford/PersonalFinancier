@@ -1,5 +1,7 @@
 package blacksmyth.personalfinancier.control.gui;
 
+import java.util.Observable;
+
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
@@ -10,7 +12,8 @@ enum CATEGORY_SUMMARY_COLUMNS {
 }
 
 @SuppressWarnings("serial")
-public class BudgetCategorySummaryTableModel extends AbstractBudgetTableModel<CATEGORY_SUMMARY_COLUMNS> {
+public class BudgetCategorySummaryTableModel extends AbstractBudgetTableModel<CATEGORY_SUMMARY_COLUMNS> 
+                                             implements Runnable {
 
   public BudgetCategorySummaryTableModel(BudgetModel budgetModel) {
     super();
@@ -44,4 +47,15 @@ public class BudgetCategorySummaryTableModel extends AbstractBudgetTableModel<CA
          return null;
     }
   }
+  
+  @Override
+  public void update(Observable arg0, Object arg1) {
+    RunnableQueueThread.getInstance().push(this);
+  }
+
+  @Override
+  public void run() {
+    this.fireTableDataChanged();
+  }
+
 }

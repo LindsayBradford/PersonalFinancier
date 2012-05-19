@@ -18,6 +18,7 @@ import javax.swing.InputVerifier;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
+import javax.swing.JTabbedPane;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -30,6 +31,7 @@ import javax.swing.text.BadLocationException;
 
 import javax.swing.text.DocumentFilter;
 
+import blacksmyth.general.FontIconProvider;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.ExpenseCategory;
@@ -45,7 +47,7 @@ public final class WidgetFactory {
   
   public static final String DECIMAL_FORMAT_PATTERN = "###,##0.00";
   
-  protected static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat(DECIMAL_FORMAT_PATTERN);
+  public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat(DECIMAL_FORMAT_PATTERN);
 
   @SuppressWarnings("serial")
   public static DefaultTableCellRenderer createTableCellRenderer(final int alignment) {
@@ -213,6 +215,28 @@ public final class WidgetFactory {
     border.setTitleColor(color);
     
     return border;
+  }
+  
+  public static JTabbedPane createGraphTablePane(JComponent graphComponent, JComponent tableComponent) {
+    JTabbedPane pane = new JTabbedPane();
+    pane.setTabPlacement(JTabbedPane.LEFT);
+    //pane.setBorder(new EmptyBorder(5,5,5,5));
+    
+    pane.addTab("",graphComponent);
+    
+    FontIconProvider.getInstance().setGlyphAsTitle(
+        pane, 0, 
+        FontIconProvider.icon_bar_chart
+    );
+    
+    pane.addTab("", tableComponent);
+
+    FontIconProvider.getInstance().setGlyphAsTitle(
+        pane, 1, 
+        FontIconProvider.icon_list_alt
+    );
+    
+    return pane;
   }
 }
 

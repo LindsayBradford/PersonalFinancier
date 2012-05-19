@@ -19,7 +19,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -39,6 +38,7 @@ import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.SwingUtilities;
 import blacksmyth.personalfinancier.control.BudgetFileController;
 import blacksmyth.personalfinancier.control.BudgetUndoManager;
+import blacksmyth.personalfinancier.control.gui.RunnableQueueThread;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 public class PersonalFinancierUIFactory {
@@ -46,6 +46,7 @@ public class PersonalFinancierUIFactory {
   public static JFrame createJFrame() {
     
     final BudgetModel  budgetModel = new BudgetModel();
+    RunnableQueueThread.getInstance().start();
     
     JFrame frame = new JFrame("Personal Financier");
     

@@ -1,16 +1,19 @@
 package blacksmyth.personalfinancier.control.gui;
 
+import java.util.Observable;
+
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.model.budget.AccountSummary;
 
 enum ACCOUNT_SUMMARY_COLUMNS {
-  Account, Detail, Budgeted
+  Account, Detail, CashFlow
 }
 
 @SuppressWarnings("serial")
-public class BudgetAccountSummaryTableModel extends AbstractBudgetTableModel<ACCOUNT_SUMMARY_COLUMNS> {
+public class BudgetAccountSummaryTableModel extends AbstractBudgetTableModel<ACCOUNT_SUMMARY_COLUMNS> 
+                                            implements Runnable{
 
   public BudgetAccountSummaryTableModel(BudgetModel budgetModel) {
     super();
@@ -25,7 +28,7 @@ public class BudgetAccountSummaryTableModel extends AbstractBudgetTableModel<ACC
         return String.class;
       case Detail:
         return String.class;
-      case Budgeted: 
+      case CashFlow: 
         return Money.class;
     }
     return Object.class;
@@ -43,10 +46,20 @@ public class BudgetAccountSummaryTableModel extends AbstractBudgetTableModel<ACC
       return summary.getAccountNickname();
     case Detail:
       return summary.getAccountDetail();
-    case Budgeted: 
+    case CashFlow: 
       return summary.getBudgettedAmountAtFrequency(CashFlowFrequency.Fortnightly);
     default:
          return null;
     }
+  }
+  
+  @Override
+  public void update(Observable arg0, Object arg1) {
+    RunnableQueueThread.getInstance().push(this);
+  }
+
+  @Override
+  public void run() {
+    this.fireTableDataChanged();
   }
 }

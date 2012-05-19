@@ -61,13 +61,13 @@ public class BudgetAccountSummaryTable extends JTable {
   
   private void setupBudgettedCol() {
     SwingUtilities.lockColumnWidth(
-        getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.Budgeted),
+        getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.CashFlow),
         SwingUtilities.getTextWidth(
             WidgetFactory.DECIMAL_FORMAT_PATTERN
         ) + CELL_BUFFER
     );
 
-    getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.Budgeted).setCellRenderer(
+    getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.CashFlow).setCellRenderer(
         WidgetFactory.createAmountCellRenderer()    
     );
   }
@@ -87,7 +87,7 @@ public class BudgetAccountSummaryTable extends JTable {
         column
     );
     
-    if (this.getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.Budgeted).getModelIndex() == column) {
+    if (this.getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.CashFlow).getModelIndex() == column) {
       BigDecimal value = (BigDecimal) this.getModel().getValueAt(row, column);
       if (value.compareTo(BigDecimal.ZERO) == -1) {
         cellRenderer.setForeground(Color.RED);
