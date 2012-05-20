@@ -289,4 +289,17 @@ public class PreferencesModel extends Observable {
     this.setChangeAndNotifyObservers();
   }
 
+  private static final String DEFAULT_LAST_USED_FILE_PATH = ".";
+  private static final String LAST_USED_FILE_PATH = "LastUsedFilePath";
+
+  public String getLastUsedFilePath() {
+    return this.prefs.get(LAST_USED_FILE_PATH, DEFAULT_LAST_USED_FILE_PATH);
+  }
+  
+  public void setLastUsedFilePath(String lastUsedPath) {
+    this.prefs.put(
+        LAST_USED_FILE_PATH,
+        lastUsedPath
+    );
+  }
 }

@@ -91,11 +91,11 @@ public class PersonalFinancierUIFactory {
     final BudgetFileController fileController = new BudgetFileController(model);
     
     toolbar.add(
-        createLoadButton(fileController)
+        createLoadButton(baseFrame, fileController)
     );
 
     toolbar.add(
-        createSaveButton(fileController)    
+        createSaveButton(baseFrame, fileController)    
     );
 
     toolbar.addSeparator();
@@ -161,11 +161,11 @@ public class PersonalFinancierUIFactory {
     return button;
   }
 
-  private static JButton createSaveButton(final BudgetFileController controller) {
+  private static JButton createSaveButton(final JFrame baseFrame, final BudgetFileController controller) {
     AbstractAction saveAction = new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
         BudgetUndoManager.getInstance().discardAllEdits();
-        controller.save();
+        controller.save(baseFrame);
       }
     };
     
@@ -193,11 +193,11 @@ public class PersonalFinancierUIFactory {
     return button;
   }
 
-  private static JButton createLoadButton(final BudgetFileController controller) {
+  private static JButton createLoadButton(final JFrame baseFrame, final BudgetFileController controller) {
     AbstractAction loadAction = new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
         BudgetUndoManager.getInstance().discardAllEdits();
-        controller.load();
+        controller.load(baseFrame);
       }
     };
     

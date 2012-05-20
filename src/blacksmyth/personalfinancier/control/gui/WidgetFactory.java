@@ -223,6 +223,7 @@ public final class WidgetFactory {
     //pane.setBorder(new EmptyBorder(5,5,5,5));
     
     pane.addTab("",graphComponent);
+    pane.setToolTipTextAt(0, " View as graph ");
     
     FontIconProvider.getInstance().setGlyphAsTitle(
         pane, 0, 
@@ -230,6 +231,7 @@ public final class WidgetFactory {
     );
     
     pane.addTab("", tableComponent);
+    pane.setToolTipTextAt(1, " View as table ");
 
     FontIconProvider.getInstance().setGlyphAsTitle(
         pane, 1, 
