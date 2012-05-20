@@ -20,6 +20,8 @@ import blacksmyth.personalfinancier.control.IBudgetObserver;
 import blacksmyth.personalfinancier.model.Account;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
+import blacksmyth.personalfinancier.model.Money;
+import blacksmyth.personalfinancier.model.MoneyFactory;
 import blacksmyth.personalfinancier.model.MoneyUtilties;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 
@@ -33,14 +35,16 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
   private ArrayList<ExpenseItem> expenseItems;
   private ArrayList<IncomeItem> incomeItems;
   
-  private SortedArrayList<AccountSummary> accountSummaries;
+  private SortedArrayList<AccountSummary> cashFlowSummaries;
   private SortedArrayList<CategorySummary> categorySummaries;
+  
+  private Money netCashFlow;
   
   public BudgetModel() {
     this.expenseItems = new ArrayList<ExpenseItem>();
     this.incomeItems = new ArrayList<IncomeItem>();
 
-    this.accountSummaries = new SortedArrayList<AccountSummary>();
+    this.cashFlowSummaries = new SortedArrayList<AccountSummary>();
     this.categorySummaries = new SortedArrayList<CategorySummary>();
 
     this.accountModel = new AccountModel();
@@ -50,7 +54,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
   
   public BudgetModel(AccountModel accountModel) {
     this.expenseItems = new ArrayList<ExpenseItem>();
-    this.accountSummaries = new SortedArrayList<AccountSummary>();
+    this.cashFlowSummaries = new SortedArrayList<AccountSummary>();
     this.categorySummaries = new SortedArrayList<CategorySummary>();
     
     this.accountModel = accountModel;
@@ -253,8 +257,8 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     this.removeAllExpenseItems();
   }
 
-  public ArrayList<AccountSummary> getAccountSummaries() {
-    return this.accountSummaries;
+  public ArrayList<AccountSummary> getCashFlowSummaries() {
+    return this.cashFlowSummaries;
   }
  
   public SortedArrayList<CategorySummary> getCategorySummaries() {
@@ -262,13 +266,28 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
   }
   
   private void updateDerivedData() {
-    updateAccountSummaries();
+    updateCashFlowSummaries();
     updateCategorySummaries();
+    updateNetCashFlow();
+  }
+  
+  private void updateNetCashFlow() {
+    netCashFlow = MoneyFactory.createAmount(0);
+
+    for(AccountSummary summary : this.cashFlowSummaries) {
+      netCashFlow.setTotal(
+          netCashFlow.getTotal().add(
+            summary.getBudgettedAmount().getTotal()    
+          )
+      );  
+    }
   }
 
-  private void updateAccountSummaries() {
+  private void updateCashFlowSummaries() {
     Hashtable<String, AccountSummary> summaryTable = new Hashtable<String, AccountSummary>();
-    this.accountSummaries = new SortedArrayList<AccountSummary>();
+    this.cashFlowSummaries = new SortedArrayList<AccountSummary>();
+    
+    netCashFlow = MoneyFactory.createAmount(0);
 
     for(IncomeItem item : this.incomeItems) {
       if (!summaryTable.containsKey(item.getBudgetAccount().getNickname())) {
@@ -317,7 +336,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     }
 
     for(AccountSummary summary : summaryTable.values()) {
-      this.accountSummaries.insertSorted(summary);
+      this.cashFlowSummaries.insertSorted(summary);
     }
   }
 
@@ -439,6 +458,11 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
   public void moveIncomeItemUp(int itemIndex) {
     IncomeItem movingIncome = this.removeIncomeItem(itemIndex);
     this.addIncomeItem(itemIndex - 1, movingIncome);
+  }
+  
+
+  public Money getNetCashFlow() {
+    return this.netCashFlow;
   }
 
 }

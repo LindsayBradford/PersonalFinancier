@@ -12,10 +12,10 @@ enum ACCOUNT_SUMMARY_COLUMNS {
 }
 
 @SuppressWarnings("serial")
-public class BudgetAccountSummaryTableModel extends AbstractBudgetTableModel<ACCOUNT_SUMMARY_COLUMNS> 
+public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<ACCOUNT_SUMMARY_COLUMNS> 
                                             implements Runnable{
 
-  public BudgetAccountSummaryTableModel(BudgetModel budgetModel) {
+  public BudgetCashFlowSummaryTableModel(BudgetModel budgetModel) {
     super();
     this.setBudgetModel(budgetModel);
   }
@@ -35,21 +35,35 @@ public class BudgetAccountSummaryTableModel extends AbstractBudgetTableModel<ACC
   }
 
   public int getRowCount() {
-    return getBudgetModel().getAccountSummaries().size();
+    return getBudgetModel().getCashFlowSummaries().size() + 1;
   }
 
   public Object getValueAt(int rowNum, int colNum) {
-    AccountSummary summary = getBudgetModel().getAccountSummaries().get(rowNum);
     
+    if (rowNum == this.getRowCount() - 1) {
+      switch (this.getColumnEnumValueAt(colNum)) {
+      case Account:
+        return null;
+      case Detail:
+        return "Net Cash Flow: ";
+      case CashFlow: 
+        return getBudgetModel().getNetCashFlow().getTotal();
+      default:
+           return null;
+      }
+    }
+    
+    AccountSummary summary = getBudgetModel().getCashFlowSummaries().get(rowNum);
+
     switch (this.getColumnEnumValueAt(colNum)) {
-    case Account:
-      return summary.getAccountNickname();
-    case Detail:
-      return summary.getAccountDetail();
-    case CashFlow: 
-      return summary.getBudgettedAmountAtFrequency(CashFlowFrequency.Fortnightly);
-    default:
-         return null;
+      case Account:
+        return summary.getAccountNickname();
+      case Detail:
+        return summary.getAccountDetail();
+      case CashFlow: 
+        return summary.getBudgettedAmountAtFrequency(CashFlowFrequency.Fortnightly);
+      default:
+           return null;
     }
   }
   

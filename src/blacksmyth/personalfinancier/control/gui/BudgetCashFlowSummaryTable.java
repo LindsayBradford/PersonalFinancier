@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.math.BigDecimal;
 
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.TableModelEvent;
@@ -18,15 +20,15 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 // TODO: Sorting from largest budgetted amount to smallest.
 
 @SuppressWarnings("serial")
-public class BudgetAccountSummaryTable extends JTable {
+public class BudgetCashFlowSummaryTable extends JTable {
 
   private static final int CELL_BUFFER = 15;
   
   private static final int ROW_LIMIT = 5;
   
-  public BudgetAccountSummaryTable(BudgetModel budgetModel) {
+  public BudgetCashFlowSummaryTable(BudgetModel budgetModel) {
     super(
-        new BudgetAccountSummaryTableModel(budgetModel)
+        new BudgetCashFlowSummaryTableModel(budgetModel)
     );
     setupColumns();
 
@@ -36,7 +38,6 @@ public class BudgetAccountSummaryTable extends JTable {
             this.getRowHeight() * ROW_LIMIT
         )
     );
-    this.setAutoCreateRowSorter(true);
   }
   
   public void tableChanged(TableModelEvent e) {
@@ -96,7 +97,11 @@ public class BudgetAccountSummaryTable extends JTable {
         cellRenderer.setForeground(Color.GREEN);
       }
     }
-
+    
+    if (this.getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.Detail).getModelIndex() == column &&
+        row == this.getRowCount() - 1) {
+      ((JLabel) cellRenderer).setHorizontalAlignment(DefaultListCellRenderer.RIGHT);
+    }
     return cellRenderer;
   }
 }

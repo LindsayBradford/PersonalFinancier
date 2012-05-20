@@ -9,7 +9,7 @@ package blacksmyth.personalfinancier.model;
 
 import java.math.BigDecimal;
 
-public class MoneyAmountFactory {
+public class MoneyFactory {
    public static Money createAmount(BigDecimal amount) {
      return new Money(
          PreferencesModel.getInstance().getPreferredCurrency(), 

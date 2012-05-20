@@ -3,7 +3,7 @@ package blacksmyth.personalfinancier.model.budget;
 import blacksmyth.personalfinancier.model.Account;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
-import blacksmyth.personalfinancier.model.MoneyAmountFactory;
+import blacksmyth.personalfinancier.model.MoneyFactory;
 import blacksmyth.personalfinancier.model.MoneyUtilties;
 
 public class AccountSummary implements Comparable<AccountSummary> {
@@ -15,7 +15,7 @@ public class AccountSummary implements Comparable<AccountSummary> {
   public AccountSummary(Account account) {
     assert account.isBudgetAccount();
     this.budgetAccount = account;
-    this.budgettedAmount = MoneyAmountFactory.createAmount(0);
+    this.budgettedAmount = MoneyFactory.createAmount(0);
     // TODO: drive frequency off preferences.
     this.budgettedFrequency = CashFlowFrequency.Fortnightly;
   }

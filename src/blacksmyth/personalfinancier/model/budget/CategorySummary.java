@@ -2,7 +2,7 @@ package blacksmyth.personalfinancier.model.budget;
 
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
-import blacksmyth.personalfinancier.model.MoneyAmountFactory;
+import blacksmyth.personalfinancier.model.MoneyFactory;
 import blacksmyth.personalfinancier.model.MoneyUtilties;
 
 public class CategorySummary implements Comparable<CategorySummary> {
@@ -13,7 +13,7 @@ public class CategorySummary implements Comparable<CategorySummary> {
   
   public CategorySummary(String category) {
     this.budgetCategory = category;
-    this.budgettedAmount = MoneyAmountFactory.createAmount(0);
+    this.budgettedAmount = MoneyFactory.createAmount(0);
     // TODO: drive frequency off preferences.
     this.budgettedFrequency = CashFlowFrequency.Fortnightly;
   }

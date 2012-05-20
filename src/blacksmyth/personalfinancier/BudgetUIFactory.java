@@ -30,7 +30,7 @@ import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.SwingUtilities;
 import blacksmyth.personalfinancier.control.BudgetUndoManager;
 import blacksmyth.personalfinancier.control.command.ResetBudgetItemsCommand;
-import blacksmyth.personalfinancier.control.gui.BudgetAccountSummaryTable;
+import blacksmyth.personalfinancier.control.gui.BudgetCashFlowSummaryTable;
 import blacksmyth.personalfinancier.control.gui.BudgetCategorySummaryTable;
 import blacksmyth.personalfinancier.control.gui.CashFlowPieChart;
 import blacksmyth.personalfinancier.control.gui.CategoryPieChart;
@@ -507,7 +507,7 @@ class BudgetUIFactory {
   
   private static JComponent createAccountSummaryTable(BudgetModel model) {
     return new JScrollPane(
-        new BudgetAccountSummaryTable(model)
+        new BudgetCashFlowSummaryTable(model)
     );
   }
   

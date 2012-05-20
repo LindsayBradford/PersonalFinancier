@@ -91,7 +91,7 @@ public class CashFlowPieChart extends JLabel implements IBudgetObserver, Runnabl
     double minValue = 0;
     double maxValue = 0;
     
-    for (AccountSummary account : model.getAccountSummaries()) {
+    for (AccountSummary account : model.getCashFlowSummaries()) {
       
       double summaryFigure = account.getBudgettedAmount().getTotal().doubleValue();
       
@@ -113,7 +113,7 @@ public class CashFlowPieChart extends JLabel implements IBudgetObserver, Runnabl
       }
     }
     
-    for (AccountSummary account : model.getAccountSummaries()) {
+    for (AccountSummary account : model.getCashFlowSummaries()) {
       
       double summaryFigure = account.getBudgettedAmount().getTotal().doubleValue();
       

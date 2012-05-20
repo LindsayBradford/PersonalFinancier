@@ -2,7 +2,7 @@ package blacksmyth.personalfinancier.model.budget;
 
 import java.math.BigDecimal;
 
-import blacksmyth.personalfinancier.model.MoneyAmountFactory;
+import blacksmyth.personalfinancier.model.MoneyFactory;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 
 public class BudgetItemFactory {
@@ -16,7 +16,7 @@ public class BudgetItemFactory {
     return  new ExpenseItem(
         ExpenseCategory.Discretionary,
         description,
-        MoneyAmountFactory.createAmount(BigDecimal.ZERO),
+        MoneyFactory.createAmount(BigDecimal.ZERO),
         PreferencesModel.getInstance().getPreferredCashflowFrequency(),
         PreferencesModel.getInstance().getPreferredBudgetAccount()
     );
@@ -30,7 +30,7 @@ public class BudgetItemFactory {
     return  new IncomeItem(
         IncomeCategory.Salary,
         description,
-        MoneyAmountFactory.createAmount(BigDecimal.ZERO),
+        MoneyFactory.createAmount(BigDecimal.ZERO),
         PreferencesModel.getInstance().getPreferredCashflowFrequency(),
         PreferencesModel.getInstance().getPreferredBudgetAccount()
     );
