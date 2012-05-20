@@ -13,11 +13,8 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import com.googlecode.charts4j.Data;
 import com.googlecode.charts4j.GCharts;
 import com.googlecode.charts4j.PieChart;
-import com.googlecode.charts4j.Plot;
-import com.googlecode.charts4j.Plots;
 import com.googlecode.charts4j.Slice;
 
 import blacksmyth.personalfinancier.control.IBudgetObserver;

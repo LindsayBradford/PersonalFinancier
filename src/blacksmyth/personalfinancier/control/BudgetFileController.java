@@ -6,6 +6,7 @@ import java.util.Observer;
 
 import com.google.gson.reflect.TypeToken;
 
+import blacksmyth.general.FileUtilities;
 import blacksmyth.general.JSonAdapter;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
   
@@ -29,18 +30,27 @@ public class BudgetFileController implements Observer, IBudgetController, IBudge
   }
 
   public void save() {
-    JSonAdapter.getInstance().save(
-        this.getBudgetModel().getState(),
-        fileName
+    FileUtilities.saveTextFile(
+        fileName, 
+        JSonAdapter.getInstance().toJSonFromObject(
+            this.getBudgetModel().getState()
+        )
     );
   }
-
+  
   public void load() {
     Type budgetItemsType = new TypeToken<BudgetModel.SerializableState>() {}.getType();
     this.getBudgetModel().setState(
-        (BudgetModel.SerializableState) JSonAdapter.getInstance().load(fileName, budgetItemsType)
+        (BudgetModel.SerializableState) this.loadJSon(fileName, budgetItemsType)
     );
   }
 
+  private Object loadJSon(String fileName, Type typeToExpect) {
+    return JSonAdapter.getInstance().toObjectFromJSon(
+        FileUtilities.loadTextFile(fileName), 
+        typeToExpect
+    );
+  }
+  
   public void update(Observable o, Object arg) {}
 }
