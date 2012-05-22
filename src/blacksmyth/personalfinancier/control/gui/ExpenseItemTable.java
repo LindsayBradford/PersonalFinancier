@@ -1,6 +1,7 @@
 package blacksmyth.personalfinancier.control.gui;
 
 import java.awt.Component;
+import java.util.LinkedList;
 import java.util.Observer;
 
 import javax.swing.DefaultCellEditor;
@@ -20,6 +21,19 @@ public class ExpenseItemTable extends JTable {
   private static final long serialVersionUID = 1L;
  
   private static final int CELL_BUFFER = 15;
+  
+  private boolean showDerivedColumns = true;
+  
+  private LinkedList<TableColumn> tableColumnList = new LinkedList<TableColumn>();
+  
+  private static final EXPENSE_ITEM_COLUMNS[] DERIVED_COLUMNS = {
+    EXPENSE_ITEM_COLUMNS.Daily,
+    EXPENSE_ITEM_COLUMNS.Weekly,
+    EXPENSE_ITEM_COLUMNS.Fortnightly,
+    EXPENSE_ITEM_COLUMNS.Monthly,
+    EXPENSE_ITEM_COLUMNS.Quarterly,
+    EXPENSE_ITEM_COLUMNS.Yearly,
+  };
 
   public ExpenseItemTable(BudgetModel budgetModel) {
     super(
@@ -27,6 +41,13 @@ public class ExpenseItemTable extends JTable {
     );
     this.setRowSelectionAllowed(true);
     setupColumns();
+    
+    for(EXPENSE_ITEM_COLUMNS column : EXPENSE_ITEM_COLUMNS.values()) {
+      tableColumnList.add(
+          getColFromEnum(column)
+      );
+    }
+   
     this.getExpenseItemTableModel().fireTableDataChanged();
   }
   
@@ -195,6 +216,52 @@ public class ExpenseItemTable extends JTable {
     this.selectionModel.setSelectionInterval(row - 1, row - 1);
     SwingUtilities.scrollRowToVisible(this, row - 1);
   }
+
+
+  public void toggleDerivedColumnView() {
+    this.setShowDerivedColumns(
+      !this.isShowDerivedColumns()    
+    );
+  }
+
+  public boolean isShowDerivedColumns() {
+    return showDerivedColumns;
+  }
+
+  public void setShowDerivedColumns(boolean showDerivedColumns) {
+    this.showDerivedColumns = showDerivedColumns;
+    this.updateDerivedColumns();
+  }
+  
+  private void updateDerivedColumns() {
+    final int totalColumns = this.getColumnCount();
+    for(int i = 0; i < totalColumns; i++) {
+      this.removeColumn(
+        this.getColumnModel().getColumn(0)    
+      );
+    }
+    
+    for(int i = 0; i < this.getModel().getColumnCount(); i++) {
+      EXPENSE_ITEM_COLUMNS modelColumn = EXPENSE_ITEM_COLUMNS.values()[i];
+
+      boolean isDerivedColumn = false;
+
+      for(EXPENSE_ITEM_COLUMNS derivedColumn : DERIVED_COLUMNS) {
+        if (derivedColumn.equals(modelColumn)) isDerivedColumn = true;
+      }
+      if (!isDerivedColumn) {
+        this.addColumn(
+            this.tableColumnList.get(i)
+        );
+      }
+      if (isDerivedColumn && this.isShowDerivedColumns()) {
+        this.addColumn(
+            this.tableColumnList.get(i)
+        );
+      }
+    }
+  }
+
 }
 
 

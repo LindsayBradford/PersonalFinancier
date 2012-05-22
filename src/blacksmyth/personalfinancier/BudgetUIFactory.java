@@ -21,6 +21,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.border.CompoundBorder;
@@ -36,6 +37,7 @@ import blacksmyth.personalfinancier.control.gui.CashFlowPieChart;
 import blacksmyth.personalfinancier.control.gui.CategoryPieChart;
 import blacksmyth.personalfinancier.control.gui.ExpenseItemTable;
 import blacksmyth.personalfinancier.control.gui.IncomeItemTable;
+import blacksmyth.personalfinancier.control.gui.JToggleEyeButton;
 import blacksmyth.personalfinancier.control.gui.WidgetFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
@@ -67,7 +69,7 @@ class BudgetUIFactory {
     ExpenseItemTable expenseItemTable = new ExpenseItemTable(model);
 
     panel.add(
-        createBudgetItemToolbar(model),
+        createBudgetItemToolbar(expenseItemTable, incomeItemTable, model),
         BorderLayout.PAGE_START
     );
     
@@ -351,15 +353,12 @@ class BudgetUIFactory {
   }
 
   @SuppressWarnings("serial")
-  private static JToolBar createBudgetItemToolbar(final BudgetModel model) {
+  private static JToolBar createBudgetItemToolbar(
+      final ExpenseItemTable expenseItemTable, 
+      final IncomeItemTable incomeItemTable, 
+      final BudgetModel model) {
 
     JToolBar toolbar = new JToolBar();
-
-    toolbar.add(
-        createResetItemsButton(model)
-    );
-    
-    toolbar.addSeparator();
 
     toolbar.add(
         createUndoButton()    
@@ -371,7 +370,30 @@ class BudgetUIFactory {
 
     toolbar.addSeparator();
     
+    toolbar.add(
+        createDerivedColumnsVisibileButton(expenseItemTable, incomeItemTable)
+    );
+
+    toolbar.addSeparator();
+
+    toolbar.add(
+        createResetItemsButton(model)
+    );
+    
+    toolbar.addSeparator();
+
     return toolbar;
+  }
+  
+  private static JToggleButton createDerivedColumnsVisibileButton(final ExpenseItemTable expenseTable, final IncomeItemTable incomeTable) {
+    AbstractAction toggleAction = new AbstractAction() {
+      public void actionPerformed(ActionEvent e) {
+        incomeTable.toggleDerivedColumnView();
+        expenseTable.toggleDerivedColumnView();
+      }
+    };
+    
+    return new JToggleEyeButton(toggleAction);
   }
 
   private static JButton createResetItemsButton(final BudgetModel model) {

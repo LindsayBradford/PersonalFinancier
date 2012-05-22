@@ -31,7 +31,7 @@ enum EXPENSE_ITEM_COLUMNS {
 }
 
 class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMNS> {
- 
+  
   public ExpenseItemTableModel(BudgetModel budgetModel) {
     super();
     setBudgetModel(budgetModel);

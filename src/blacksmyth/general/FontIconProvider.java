@@ -3,6 +3,7 @@ package blacksmyth.general;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JTabbedPane;
 
@@ -49,7 +50,7 @@ public final class FontIconProvider {
    * @param button
    * @param iconAsChar
    */
-  public void setGlyphAsText(JButton button, char iconAsChar) {
+  public void setGlyphAsText(AbstractButton button, char iconAsChar) {
     button.setFont(MAIN_ICON_FONT);
     button.setText(String.valueOf(iconAsChar));
   }

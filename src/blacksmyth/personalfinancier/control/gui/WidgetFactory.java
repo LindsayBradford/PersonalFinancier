@@ -22,6 +22,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -30,6 +31,8 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 
 import javax.swing.text.DocumentFilter;
+
+import com.sun.corba.se.spi.orbutil.fsm.Action;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
@@ -220,22 +223,25 @@ public final class WidgetFactory {
   public static JTabbedPane createGraphTablePane(JComponent graphComponent, JComponent tableComponent) {
     JTabbedPane pane = new JTabbedPane();
     pane.setTabPlacement(JTabbedPane.LEFT);
-    //pane.setBorder(new EmptyBorder(5,5,5,5));
-    
-    pane.addTab("",graphComponent);
-    pane.setToolTipTextAt(0, " View as graph ");
-    
-    FontIconProvider.getInstance().setGlyphAsTitle(
-        pane, 0, 
-        FontIconProvider.icon_bar_chart
-    );
+
+    int currTabIndex = 0;
     
     pane.addTab("", tableComponent);
-    pane.setToolTipTextAt(1, " View as table ");
+    pane.setToolTipTextAt(currTabIndex, " View as table ");
 
     FontIconProvider.getInstance().setGlyphAsTitle(
-        pane, 1, 
+        pane, currTabIndex, 
         FontIconProvider.icon_list_alt
+    );
+
+    currTabIndex++;
+    
+    pane.addTab("",graphComponent);
+    pane.setToolTipTextAt(currTabIndex, " View as graph ");
+    
+    FontIconProvider.getInstance().setGlyphAsTitle(
+        pane, currTabIndex, 
+        FontIconProvider.icon_bar_chart
     );
     
     return pane;

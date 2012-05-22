@@ -99,6 +99,5 @@ abstract class AbstractBudgetTableModel<T extends Enum<T>> extends AbstractTable
    */
   protected final T getColumnEnumValueAt(int index) {
     return getColEnumClass().getEnumConstants()[index];
-    
   }
 }
