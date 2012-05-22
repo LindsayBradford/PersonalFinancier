@@ -189,7 +189,7 @@ public class PersonalFinancierUIFactory {
         FontIconProvider.icon_upload_alt
     );
 
-    button.setToolTipText(" Save the budget ");
+    button.setToolTipText(" Save the current budget ");
     return button;
   }
 

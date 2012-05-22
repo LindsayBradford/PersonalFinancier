@@ -91,51 +91,67 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
   public void addExpenseItem(ExpenseItem item) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.expenseItems.add(item);
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.ExpenseItems
+    );
   }
 
   public void addIncomeItem(IncomeItem item) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.incomeItems.add(item);
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.IncomeItems
+    );
   }
 
   public void addIncomeItem(int index, IncomeItem item) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.incomeItems.add(index, item);
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.IncomeItems
+    );
   }
 
   public void addExpenseItem(int index, ExpenseItem item) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.expenseItems.add(index, item);
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.ExpenseItems
+    );
   }
 
   public ExpenseItem removeExpenseItem(int index) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     ExpenseItem removedItem = this.expenseItems.remove(index);
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.ExpenseItems
+    );
     return removedItem;
   }
 
   public IncomeItem removeIncomeItem(int index) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     IncomeItem removedItem = this.incomeItems.remove(index);
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.ExpenseItems
+    );
     return removedItem;
   }
 
   public void removeIncomeItem(IncomeItem item) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.incomeItems.remove(item);
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.IncomeItems
+    );
   }
   
   public void removeExpenseItem(BudgetItem item) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.expenseItems.remove(item);
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.ExpenseItems
+    );
   }
   
   public ArrayList<ExpenseItem> getExpenseItems() {
@@ -155,49 +171,63 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
   public void setIncomeItems(ArrayList<IncomeItem> incomeItems) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.incomeItems = incomeItems;
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.IncomeItems
+    );
   }
   
   public void setExpenseItemDescription(int index, String newDescription) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     assert (index >= 0 && index < this.expenseItems.size());
     this.expenseItems.get(index).setDescription(newDescription);
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.ExpenseItems
+    );
   }
 
   public void setIncomeItemDescription(int index, String newDescription) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     assert (index >= 0 && index < this.incomeItems.size());
     this.incomeItems.get(index).setDescription(newDescription);
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.IncomeItems
+    );
   }
   
   public void setExpenseItemTotal(int index, BigDecimal total) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     assert (index >= 0 && index < this.expenseItems.size());
     this.expenseItems.get(index).getBudgettedAmount().setTotal(total);
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.ExpenseItems
+    );
   }
 
   public void setIncomeItemTotal(int index, BigDecimal total) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     assert (index >= 0 && index < this.incomeItems.size());
     this.incomeItems.get(index).getBudgettedAmount().setTotal(total);
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.IncomeItems
+    );
   }
 
   public void setExpenseItemFrequency(int index, CashFlowFrequency frequency) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     assert (index >= 0 && index < this.expenseItems.size());
     this.expenseItems.get(index).setFrequency(frequency);
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.ExpenseItems
+    );
   }
 
   public void setIncomeItemFrequency(int index, CashFlowFrequency frequency) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     assert (index >= 0 && index < this.incomeItems.size());
     this.incomeItems.get(index).setFrequency(frequency);
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.IncomeItems
+    );
   }
 
   public void setExpenseItemAccount(int index, String accountName) {
@@ -206,7 +236,9 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     this.expenseItems.get(index).setBudgetAccount(
         accountModel.getAccount(accountName)
     );
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.ExpenseItems
+    );
   }
 
   public void setIncomeItemAccount(int index, String accountName) {
@@ -215,21 +247,27 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     this.incomeItems.get(index).setBudgetAccount(
         accountModel.getAccount(accountName)
     );
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.IncomeItems
+    );
   }
 
   public void setExpenseItemCategory(int index, ExpenseCategory category) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     assert (index >= 0 && index < this.expenseItems.size());
     this.expenseItems.get(index).setCategory(category);
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.ExpenseItems
+    );
   }
 
   public void setIncomeItemCategory(int index, IncomeCategory category) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     assert (index >= 0 && index < this.incomeItems.size());
     this.incomeItems.get(index).setCategory(category);
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.IncomeItems
+    );
   }
 
   public ArrayList<Account> getBudgetAccounts() {
@@ -243,13 +281,17 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
   public void removeAllExpenseItems() {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.expenseItems = new ArrayList<ExpenseItem>();
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.ExpenseItems
+    );
   }
 
   public void removeAllIncomeItems() {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.incomeItems = new ArrayList<IncomeItem>();
-    this.changeAndNotifyObservers();
+    this.changeAndNotifyObservers(
+        BudgetEvent.ItemType.IncomeItems
+    );
   }
   
   public void removeAllBudgetItmes() {
@@ -397,10 +439,21 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
   }
 
   public void changeAndNotifyObservers() {
+    changeAndNotifyObservers(
+          BudgetEvent.ItemType.AllItems
+    );
+  }
+
+  public void changeAndNotifyObservers(BudgetEvent.ItemType itemType) {
     this.updateDerivedData();
     this.setChanged();
-    this.notifyObservers();
+    this.notifyObservers(
+        new BudgetEvent(
+            itemType
+        )
+    );
   }
+  
   
   public void addObserver(Observer observer) {
     assert (ReflectionUtilities.classImplements(observer.getClass(), IBudgetObserver.class)) : VIEWER_ASSERT_MSG;

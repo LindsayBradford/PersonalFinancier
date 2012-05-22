@@ -1,6 +1,7 @@
 package blacksmyth.personalfinancier.control.gui;
 
 import java.math.BigDecimal;
+import java.util.Observable;
 import java.util.Observer;
 
 import blacksmyth.personalfinancier.control.BudgetUndoManager;
@@ -17,6 +18,7 @@ import blacksmyth.personalfinancier.model.BigDecimalFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyUtilties;
+import blacksmyth.personalfinancier.model.budget.BudgetEvent;
 import blacksmyth.personalfinancier.model.budget.BudgetItem;
 import blacksmyth.personalfinancier.model.budget.ExpenseCategory;
 import blacksmyth.personalfinancier.model.budget.ExpenseItem;
@@ -157,7 +159,20 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
       );
       break;
     }
-    this.fireTableRowsUpdated(rowNum, rowNum);
+  }
+  
+  /**
+   * Forces a table refresh whenever the BudgetModel this TableModel
+   * observes sends an update.
+   */
+  @Override
+  public void update(Observable budgeModelAsObject, Object budgetEventAsObject) {
+    BudgetEvent event = (BudgetEvent) budgetEventAsObject;
+    
+    if (event.getItemType() == BudgetEvent.ItemType.ExpenseItems ||
+        event.getItemType() == BudgetEvent.ItemType.AllItems) {
+      this.fireTableDataChanged();
+    }
   }
 
   public void addModelObserver(Observer observer) {

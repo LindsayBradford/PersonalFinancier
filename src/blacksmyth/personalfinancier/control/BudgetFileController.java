@@ -59,7 +59,7 @@ public class BudgetFileController implements Observer, IBudgetController, IBudge
       if (response == JFileChooser.APPROVE_OPTION) {
         setCurrentFileName(
             parentFrame,
-            fileChooser.getSelectedFile().getName()
+            fileChooser.getSelectedFile().getAbsolutePath()
         );
       }
     }
@@ -99,7 +99,7 @@ public class BudgetFileController implements Observer, IBudgetController, IBudge
 
       setCurrentFileName(
           parentFrame,
-          fileChooser.getSelectedFile().getName()
+          fileChooser.getSelectedFile().getAbsolutePath()
       );
     }
   }
