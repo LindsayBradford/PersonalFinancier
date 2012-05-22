@@ -22,7 +22,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.JToggleButton;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -32,7 +31,6 @@ import javax.swing.text.BadLocationException;
 
 import javax.swing.text.DocumentFilter;
 
-import com.sun.corba.se.spi.orbutil.fsm.Action;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;

@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 
 import javax.swing.AbstractButton;
-import javax.swing.JButton;
 import javax.swing.JTabbedPane;
 
 /**
