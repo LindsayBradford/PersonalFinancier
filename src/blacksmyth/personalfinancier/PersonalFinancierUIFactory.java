@@ -186,7 +186,7 @@ public class PersonalFinancierUIFactory {
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_upload_alt
+        FontIconProvider.icon_save
     );
 
     button.setToolTipText(" Save the current budget ");

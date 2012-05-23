@@ -229,7 +229,7 @@ public final class WidgetFactory {
 
     FontIconProvider.getInstance().setGlyphAsTitle(
         pane, currTabIndex, 
-        FontIconProvider.icon_list_alt
+        FontIconProvider.icon_table
     );
 
     currTabIndex++;
@@ -239,7 +239,7 @@ public final class WidgetFactory {
     
     FontIconProvider.getInstance().setGlyphAsTitle(
         pane, currTabIndex, 
-        FontIconProvider.icon_bar_chart
+        FontIconProvider.icon_chart_pie_one_third
     );
     
     return pane;

@@ -393,27 +393,19 @@ class BudgetUIFactory {
 
     return new JToggleButton() {
       { // begin: instance initializer
+        
+        this.setSelected(false);
+        setIconGlyph(FontIconProvider.icon_filter);
+
         this.addActionListener(
             new ActionListener() {
               public void actionPerformed(ActionEvent arg0) {
                 incomeTable.toggleDerivedColumnView();
                 expenseTable.toggleDerivedColumnView();
-                setIconToSelected();
               }
             }
         );  
-        
-        this.setSelected(true);
-        setIconToSelected();
       } // end: instance initializer
-      
-      private void setIconToSelected() {
-        if (this.isSelected()) {
-          setIconGlyph(FontIconProvider.icon_eye_open);
-        } else {
-          setIconGlyph(FontIconProvider.icon_eye_close);
-        }
-      }
       
       private void setIconGlyph(char glyph) {
         FontIconProvider.getInstance().setGlyphAsText(
@@ -472,7 +464,7 @@ class BudgetUIFactory {
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_step_backward
+        FontIconProvider.icon_circle_arrow_left
     );
     
     SwingUtilities.bindKeyStrokeToAction(
@@ -502,7 +494,7 @@ class BudgetUIFactory {
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_step_forward
+        FontIconProvider.icon_circle_arrow_right
     );
 
     SwingUtilities.bindKeyStrokeToAction(
