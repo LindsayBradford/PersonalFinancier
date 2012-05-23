@@ -12,8 +12,7 @@ enum CATEGORY_SUMMARY_COLUMNS {
 }
 
 @SuppressWarnings("serial")
-public class BudgetCategorySummaryTableModel extends AbstractBudgetTableModel<CATEGORY_SUMMARY_COLUMNS> 
-                                             implements Runnable {
+public class BudgetCategorySummaryTableModel extends AbstractBudgetTableModel<CATEGORY_SUMMARY_COLUMNS> {
 
   public BudgetCategorySummaryTableModel(BudgetModel budgetModel) {
     super();
@@ -50,12 +49,6 @@ public class BudgetCategorySummaryTableModel extends AbstractBudgetTableModel<CA
   
   @Override
   public void update(Observable arg0, Object arg1) {
-    RunnableQueueThread.getInstance().push(this);
-  }
-
-  @Override
-  public void run() {
     this.fireTableDataChanged();
   }
-
 }

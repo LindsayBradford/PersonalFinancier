@@ -37,7 +37,6 @@ import blacksmyth.personalfinancier.control.gui.CashFlowPieChart;
 import blacksmyth.personalfinancier.control.gui.CategoryPieChart;
 import blacksmyth.personalfinancier.control.gui.ExpenseItemTable;
 import blacksmyth.personalfinancier.control.gui.IncomeItemTable;
-import blacksmyth.personalfinancier.control.gui.JToggleEyeButton;
 import blacksmyth.personalfinancier.control.gui.WidgetFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
@@ -371,7 +370,10 @@ class BudgetUIFactory {
     toolbar.addSeparator();
     
     toolbar.add(
-        createDerivedColumnsVisibileButton(expenseItemTable, incomeItemTable)
+        createDerivedColumnsVisibileButton(
+            expenseItemTable, 
+            incomeItemTable
+        )
     );
 
     toolbar.addSeparator();
@@ -385,15 +387,41 @@ class BudgetUIFactory {
     return toolbar;
   }
   
-  private static JToggleButton createDerivedColumnsVisibileButton(final ExpenseItemTable expenseTable, final IncomeItemTable incomeTable) {
-    AbstractAction toggleAction = new AbstractAction() {
-      public void actionPerformed(ActionEvent e) {
-        incomeTable.toggleDerivedColumnView();
-        expenseTable.toggleDerivedColumnView();
+  private static JToggleButton createDerivedColumnsVisibileButton(
+      final ExpenseItemTable expenseTable, 
+      final IncomeItemTable incomeTable) {
+
+    return new JToggleButton() {
+      { // begin: instance initializer
+        this.addActionListener(
+            new ActionListener() {
+              public void actionPerformed(ActionEvent arg0) {
+                incomeTable.toggleDerivedColumnView();
+                expenseTable.toggleDerivedColumnView();
+                setIconToSelected();
+              }
+            }
+        );  
+        
+        this.setSelected(true);
+        setIconToSelected();
+      } // end: instance initializer
+      
+      private void setIconToSelected() {
+        if (this.isSelected()) {
+          setIconGlyph(FontIconProvider.icon_eye_open);
+        } else {
+          setIconGlyph(FontIconProvider.icon_eye_close);
+        }
+      }
+      
+      private void setIconGlyph(char glyph) {
+        FontIconProvider.getInstance().setGlyphAsText(
+            this, 
+            glyph
+        );
       }
     };
-    
-    return new JToggleEyeButton(toggleAction);
   }
 
   private static JButton createResetItemsButton(final BudgetModel model) {

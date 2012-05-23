@@ -12,8 +12,7 @@ enum ACCOUNT_SUMMARY_COLUMNS {
 }
 
 @SuppressWarnings("serial")
-public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<ACCOUNT_SUMMARY_COLUMNS> 
-                                            implements Runnable{
+public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<ACCOUNT_SUMMARY_COLUMNS> {
 
   public BudgetCashFlowSummaryTableModel(BudgetModel budgetModel) {
     super();
@@ -69,11 +68,7 @@ public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<AC
   
   @Override
   public void update(Observable arg0, Object arg1) {
-    RunnableQueueThread.getInstance().push(this);
-  }
-
-  @Override
-  public void run() {
     this.fireTableDataChanged();
   }
+
 }
