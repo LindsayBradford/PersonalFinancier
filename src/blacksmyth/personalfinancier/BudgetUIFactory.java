@@ -37,6 +37,7 @@ import blacksmyth.personalfinancier.control.gui.CashFlowPieChart;
 import blacksmyth.personalfinancier.control.gui.CategoryPieChart;
 import blacksmyth.personalfinancier.control.gui.ExpenseItemTable;
 import blacksmyth.personalfinancier.control.gui.IncomeItemTable;
+import blacksmyth.personalfinancier.control.gui.JUndoListeningButton;
 import blacksmyth.personalfinancier.control.gui.WidgetFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
@@ -460,7 +461,18 @@ class BudgetUIFactory {
       }
     };
     
-    JButton button = new JButton(undoAction);
+    JUndoListeningButton button = new JUndoListeningButton(undoAction) {
+      
+      protected void handleCantUndoState() {
+        this.setEnabled(false);
+      }
+      
+      protected void handleCanUndoState() {
+        this.setEnabled(true);
+      }
+    };
+    
+    BudgetUndoManager.getInstance().addObserver(button);
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
@@ -490,7 +502,18 @@ class BudgetUIFactory {
       }
     };
 
-    JButton button = new JButton(redoAction);
+    JUndoListeningButton button = new JUndoListeningButton(redoAction) {
+      
+      protected void handleCantRedoState() {
+        this.setEnabled(false);
+      }
+      
+      protected void handleCanRedoState() {
+        this.setEnabled(true);
+      }
+    };
+    
+    BudgetUndoManager.getInstance().addObserver(button);
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
