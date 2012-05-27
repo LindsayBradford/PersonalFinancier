@@ -45,20 +45,16 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 class BudgetUIFactory {
   
   public static JComponent createBudgetComponent(BudgetModel model) {
-    
-    JPanel budgetPanel = new JPanel(new BorderLayout());
-    
-    budgetPanel.add(
+    JSplitPane splitPane = new JSplitPane(
+        JSplitPane.VERTICAL_SPLIT,
         createBudgetItemPanel(model), 
-        BorderLayout.CENTER
+        createBudgetSummaryPanel(model)
     );
-
-    budgetPanel.add(
-        createBudgetSummaryPanel(model), 
-        BorderLayout.PAGE_END
-    );
-
-    return budgetPanel;
+    
+    splitPane.setOneTouchExpandable(true);
+    splitPane.setResizeWeight(0.5);
+    
+    return splitPane;
   }
   
   private static JComponent createBudgetItemPanel(BudgetModel model) {
@@ -93,7 +89,6 @@ class BudgetUIFactory {
     
     return splitPane;
   }
-  
 
   private static JPanel createExpenseItemsTablePanel(final ExpenseItemTable expenseItemTable) {
     JPanel panel = new JPanel(new BorderLayout());

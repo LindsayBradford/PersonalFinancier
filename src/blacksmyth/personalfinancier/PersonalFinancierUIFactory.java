@@ -131,12 +131,12 @@ public class PersonalFinancierUIFactory {
             JOptionPane.showMessageDialog(
                 baseFrame,
                 "<html><body>" +
-                "This application depends on the following packages:" + 
+                "This application depends on unmodified binary distributions of the following libraries:" + 
                  "<ul>" +
                  "<li> GSson (http://code.google.com/p/google-gson/) for Java JSon serialisation" +
                  "<li> JTattoo (http://www.jtattoo.net/) for a radically different Swing Look & Feel" +
                  "<li> FontAwesome (http://fortawesome.github.com/Font-Awesome) for icon-friendly font glyphs" +
-                 "<li> charts4j (https://github.com/julienchastang/charts4j) for charting." +
+                 "<li> GRAL (http://trac.erichseifert.de/gral/) for charting." +
                  "</ul>" +
                  "Many thanks for their excellent libraries." +
                 "</body></html>"
