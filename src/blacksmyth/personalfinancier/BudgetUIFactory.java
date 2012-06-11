@@ -207,6 +207,8 @@ class BudgetUIFactory {
         moveItemDownButton, 
         FontIconProvider.icon_arrow_down
     );
+    
+    moveItemDownButton.setForeground(Color.GREEN);
 
     moveItemDownButton.setToolTipText(
         " Move item down in list "
@@ -232,7 +234,9 @@ class BudgetUIFactory {
     moveItemUpButton.setToolTipText(
         " Move item up in list "
     );
-    
+
+    moveItemUpButton.setForeground(Color.GREEN);
+
     moveItemUpButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
@@ -313,6 +317,8 @@ class BudgetUIFactory {
         " Move item down in list "
     );
     
+    moveItemDownButton.setForeground(Color.GREEN);
+    
     moveItemDownButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
@@ -333,7 +339,9 @@ class BudgetUIFactory {
     moveItemUpButton.setToolTipText(
         " Move item up in list "
     );
-    
+
+    moveItemUpButton.setForeground(Color.GREEN);
+
     moveItemUpButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
@@ -391,6 +399,7 @@ class BudgetUIFactory {
       { // begin: instance initializer
         
         this.setSelected(false);
+        this.setForeground(Color.GREEN);
         setIconGlyph(FontIconProvider.icon_filter);
 
         this.addActionListener(
@@ -436,6 +445,8 @@ class BudgetUIFactory {
         " Clear all income and expense items"
     );
     
+    resetItemsButton.setForeground(Color.RED);
+    
     SwingUtilities.bindKeyStrokeToAction(
         resetItemsButton, 
         KeyStroke.getKeyStroke(
@@ -471,7 +482,7 @@ class BudgetUIFactory {
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_circle_arrow_left
+        FontIconProvider.icon_undo
     );
     
     SwingUtilities.bindKeyStrokeToAction(
@@ -482,6 +493,8 @@ class BudgetUIFactory {
         ), 
         undoAction
     );
+    
+    button.setForeground(Color.GREEN);
 
     button.setToolTipText(" Undo ");
 
@@ -512,7 +525,7 @@ class BudgetUIFactory {
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_circle_arrow_right
+        FontIconProvider.icon_repeat
     );
 
     SwingUtilities.bindKeyStrokeToAction(
@@ -523,6 +536,8 @@ class BudgetUIFactory {
         ), 
         redoAction
     );
+    
+    button.setForeground(Color.GREEN);
 
     button.setToolTipText(" Redo ");
 

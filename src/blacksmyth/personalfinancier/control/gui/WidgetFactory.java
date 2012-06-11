@@ -220,6 +220,7 @@ public final class WidgetFactory {
   
   public static JTabbedPane createGraphTablePane(JComponent graphComponent, JComponent tableComponent) {
     JTabbedPane pane = new JTabbedPane();
+    
     pane.setTabPlacement(JTabbedPane.LEFT);
 
     int currTabIndex = 0;
@@ -239,7 +240,7 @@ public final class WidgetFactory {
     
     FontIconProvider.getInstance().setGlyphAsTitle(
         pane, currTabIndex, 
-        FontIconProvider.icon_chart_pie_one_third
+        FontIconProvider.icon_bar_chart
     );
     
     return pane;
