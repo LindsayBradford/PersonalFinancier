@@ -8,12 +8,12 @@ import blacksmyth.personalfinancier.model.PreferencesModel;
 public class BudgetItemFactory {
   // TODO: Expand to be more than just a nickname device.
 
-  public static ExpenseItem createExpense() {
+  public static BudgetItem createExpense() {
     return createExpense("");
   }
   
-  public static ExpenseItem createExpense(String description) {
-    return  new ExpenseItem(
+  public static BudgetItem createExpense(String description) {
+    return  new BudgetItem(
         "Discretionary",
         description,
         MoneyFactory.createAmount(BigDecimal.ZERO),
@@ -22,12 +22,12 @@ public class BudgetItemFactory {
     );
   }
   
-  public static IncomeItem createIncome() {
+  public static BudgetItem createIncome() {
     return createIncome("");
   }
   
-  public static IncomeItem createIncome(String description) {
-    return  new IncomeItem(
+  public static BudgetItem createIncome(String description) {
+    return  new BudgetItem(
         "Default",
         description,
         MoneyFactory.createAmount(BigDecimal.ZERO),

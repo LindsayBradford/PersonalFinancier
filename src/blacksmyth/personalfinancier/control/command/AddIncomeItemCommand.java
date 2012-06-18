@@ -4,12 +4,12 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
-import blacksmyth.personalfinancier.model.budget.IncomeItem;
+import blacksmyth.personalfinancier.model.budget.BudgetItem;
 
 public class AddIncomeItemCommand extends AbstractBudgetCommand {
   
   private BudgetModel model;
-  private IncomeItem postCommandItem;
+  private BudgetItem postCommandItem;
   
   public static AddIncomeItemCommand doCmd(BudgetModel model) {
     return new AddIncomeItemCommand(model);

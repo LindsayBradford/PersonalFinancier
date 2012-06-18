@@ -5,15 +5,14 @@ import java.util.ArrayList;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
+import blacksmyth.personalfinancier.model.budget.BudgetItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
-import blacksmyth.personalfinancier.model.budget.ExpenseItem;
-import blacksmyth.personalfinancier.model.budget.IncomeItem;
 
 public class ResetBudgetItemsCommand extends AbstractBudgetCommand {
   
   private BudgetModel model;
-  private ArrayList<IncomeItem> preCommandIncomeItems;
-  private ArrayList<ExpenseItem> preCommandExpenseItems;
+  private ArrayList<BudgetItem> preCommandIncomeItems;
+  private ArrayList<BudgetItem> preCommandExpenseItems;
   
   public static ResetBudgetItemsCommand doCmd(BudgetModel model) {
     ResetBudgetItemsCommand command = new ResetBudgetItemsCommand(model);
@@ -29,8 +28,8 @@ public class ResetBudgetItemsCommand extends AbstractBudgetCommand {
 
   @Override
   public void redo() throws CannotRedoException {
-    model.setExpenseItems(new ArrayList<ExpenseItem>());
-    model.setIncomeItems(new ArrayList<IncomeItem>());
+    model.setExpenseItems(new ArrayList<BudgetItem>());
+    model.setIncomeItems(new ArrayList<BudgetItem>());
   }
 
   @Override

@@ -20,7 +20,6 @@ import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyUtilties;
 import blacksmyth.personalfinancier.model.budget.BudgetEvent;
 import blacksmyth.personalfinancier.model.budget.BudgetItem;
-import blacksmyth.personalfinancier.model.budget.ExpenseItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 enum EXPENSE_ITEM_COLUMNS {
@@ -72,7 +71,7 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
   }
 
   public Object getValueAt(int rowNum, int colNum) {
-    ExpenseItem item = getBudgetModel().getExpenseItems().get(rowNum);
+    BudgetItem item = getBudgetModel().getExpenseItems().get(rowNum);
     
     switch (this.getColumnEnumValueAt(colNum)) {
       case Category:
