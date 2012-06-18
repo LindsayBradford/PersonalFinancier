@@ -4,17 +4,16 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
-import blacksmyth.personalfinancier.model.budget.IncomeCategory;
 
 public class ChangeIncomeCategoryCommand extends AbstractBudgetCommand {
   
   private BudgetModel model;
   private int incomeItemIndex;
-  private IncomeCategory preCommandCategory;
-  private IncomeCategory postCommandCategory;
+  private String preCommandCategory;
+  private String postCommandCategory;
   
   public static ChangeIncomeCategoryCommand doCmd(BudgetModel model, int incomeItemIndex, 
-                                                   IncomeCategory postCommandCategory) {
+                                                   String postCommandCategory) {
     
     ChangeIncomeCategoryCommand command = new ChangeIncomeCategoryCommand(
         model, 
@@ -29,7 +28,7 @@ public class ChangeIncomeCategoryCommand extends AbstractBudgetCommand {
   }
   
   protected ChangeIncomeCategoryCommand(BudgetModel model, int incomeItemIndex, 
-                                         IncomeCategory preCommandCategory, IncomeCategory postCommandCategory) {
+                                         String preCommandCategory, String postCommandCategory) {
     this.model = model;
     this.incomeItemIndex = incomeItemIndex;
     this.preCommandCategory = preCommandCategory;

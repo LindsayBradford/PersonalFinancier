@@ -12,8 +12,8 @@ import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 
 public class ExpenseItem extends BudgetItem {
-  private ExpenseCategory category;
-  public ExpenseItem(ExpenseCategory category, String description, Money amount, CashFlowFrequency frequency, Account account) {
+  private String category;
+  public ExpenseItem(String category, String description, Money amount, CashFlowFrequency frequency, Account account) {
     this.category = category;
     this.description = description;
     this.budgettedAmount = amount;
@@ -21,11 +21,11 @@ public class ExpenseItem extends BudgetItem {
     this.budgetAccount = account;
   }
 
-  public ExpenseCategory getCategory() {
+  public String getCategory() {
     return this.category;
   }
   
-  protected void setCategory(ExpenseCategory category) {
+  protected void setCategory(String category) {
     this.category = category;
   }
 

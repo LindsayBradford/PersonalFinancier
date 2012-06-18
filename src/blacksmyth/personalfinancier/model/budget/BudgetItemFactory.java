@@ -14,7 +14,7 @@ public class BudgetItemFactory {
   
   public static ExpenseItem createExpense(String description) {
     return  new ExpenseItem(
-        ExpenseCategory.Discretionary,
+        "Discretionary",
         description,
         MoneyFactory.createAmount(BigDecimal.ZERO),
         PreferencesModel.getInstance().getPreferredCashflowFrequency(),
@@ -28,7 +28,7 @@ public class BudgetItemFactory {
   
   public static IncomeItem createIncome(String description) {
     return  new IncomeItem(
-        IncomeCategory.Salary,
+        "Default",
         description,
         MoneyFactory.createAmount(BigDecimal.ZERO),
         PreferencesModel.getInstance().getPreferredCashflowFrequency(),

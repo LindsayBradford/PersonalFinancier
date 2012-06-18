@@ -20,7 +20,6 @@ import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyUtilties;
 import blacksmyth.personalfinancier.model.budget.BudgetEvent;
 import blacksmyth.personalfinancier.model.budget.BudgetItem;
-import blacksmyth.personalfinancier.model.budget.ExpenseCategory;
 import blacksmyth.personalfinancier.model.budget.ExpenseItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
@@ -42,7 +41,7 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
 
     switch (this.getColumnEnumValueAt(colNum)) {
       case Category:
-        return ExpenseCategory.class;
+        return String.class;
       case Description:
         return String.class;
       case Amount: 
@@ -118,7 +117,7 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
           ChangeExpenseCategoryCommand.doCmd(
               getBudgetModel(), 
               rowNum, 
-              ExpenseCategory.valueOf((String) value)
+              (String) value
           )
       );
       break;

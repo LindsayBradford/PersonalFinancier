@@ -21,7 +21,6 @@ import blacksmyth.personalfinancier.model.MoneyUtilties;
 import blacksmyth.personalfinancier.model.budget.BudgetEvent;
 import blacksmyth.personalfinancier.model.budget.BudgetItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
-import blacksmyth.personalfinancier.model.budget.IncomeCategory;
 import blacksmyth.personalfinancier.model.budget.IncomeItem;
 
 enum INCOME_ITEM_COLUMNS {
@@ -42,7 +41,7 @@ class IncomeItemTableModel extends AbstractBudgetTableModel<INCOME_ITEM_COLUMNS>
 
     switch (this.getColumnEnumValueAt(colNum)) {
       case Category:
-        return IncomeCategory.class;
+        return String.class;
       case Description:
         return String.class;
       case Amount: 
@@ -118,7 +117,7 @@ class IncomeItemTableModel extends AbstractBudgetTableModel<INCOME_ITEM_COLUMNS>
           ChangeIncomeCategoryCommand.doCmd(
               getBudgetModel(), 
               rowNum, 
-              IncomeCategory.valueOf((String) value)
+              (String) value
           )
       );
       break;

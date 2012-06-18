@@ -35,8 +35,7 @@ import javax.swing.text.DocumentFilter;
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
-import blacksmyth.personalfinancier.model.budget.ExpenseCategory;
-import blacksmyth.personalfinancier.model.budget.IncomeCategory;
+import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 /**
  * A library of methods to construct low-level Swing JComponet widgets in a uniform
@@ -70,22 +69,16 @@ public final class WidgetFactory {
     };
   }
 
-  public static DefaultCellEditor createIncomeCategoryCellEditor() {
-    JComboBox comboBox = createTableComboBox();
-
-    for (IncomeCategory category : IncomeCategory.values()) {
-      comboBox.addItem(category.toString());
-    }
+  public static DefaultCellEditor createIncomeCategoryCellEditor(BudgetModel model) {
+    JComboBox comboBox = new IncomeCategoryComboBox();
+    comboBox.setEditable(true);
 
     return new DefaultCellEditor(comboBox);
   }
 
   public static DefaultCellEditor createExpenseCategoryCellEditor() {
-    JComboBox comboBox = createTableComboBox();
-
-    for (ExpenseCategory category : ExpenseCategory.values()) {
-      comboBox.addItem(category.toString());
-    }
+    JComboBox comboBox = new ExpenseCategoryComboBox();
+    comboBox.setEditable(true);
 
     return new DefaultCellEditor(comboBox);
   }

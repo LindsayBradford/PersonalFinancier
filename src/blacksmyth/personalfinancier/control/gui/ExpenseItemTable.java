@@ -110,6 +110,11 @@ public class ExpenseItemTable extends JTable {
     DefaultCellEditor editor = WidgetFactory.createExpenseCategoryCellEditor();    
     getColFromEnum(EXPENSE_ITEM_COLUMNS.Category).setCellEditor(editor);
 
+    this.getExpenseItemTableModel().addModelObserver(
+        (Observer) editor.getComponent()
+    );
+
+    
     SwingUtilities.lockColumnWidth(
         getColFromEnum(EXPENSE_ITEM_COLUMNS.Category),
         (int) editor.getComponent().getPreferredSize().getWidth()
