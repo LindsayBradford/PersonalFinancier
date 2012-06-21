@@ -12,6 +12,7 @@ import java.awt.Component;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 
+import javax.swing.CellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.InputVerifier;

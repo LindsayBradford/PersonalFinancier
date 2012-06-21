@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.util.Observable;
 
 import javax.swing.JComboBox;
+import javax.swing.JTextField;
 
 import blacksmyth.personalfinancier.control.IBudgetObserver;
 import blacksmyth.personalfinancier.model.budget.BudgetEvent;
@@ -17,6 +18,8 @@ public class IncomeCategoryComboBox extends JComboBox implements IBudgetObserver
     if (this.model == null) {
       this.model = (BudgetModel) budgetModel;
       addActionListener(this);
+      ((JTextField) getEditor().getEditorComponent()).setHorizontalAlignment(JTextField.CENTER);
+
     }
     
     BudgetEvent event = (BudgetEvent) modelArgs;
@@ -35,7 +38,7 @@ public class IncomeCategoryComboBox extends JComboBox implements IBudgetObserver
   }
   
   public void actionPerformed(ActionEvent e) {
-    if (e.getSource() == this) {
+    if (e.getActionCommand().equals("comboBoxEdited")) {
       String newSelection = (String) this.getSelectedItem();
       if (!model.getIncomeCategories().contains(newSelection)) {
         model.addIncomeCategory(newSelection);
