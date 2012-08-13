@@ -43,59 +43,66 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 public class PersonalFinancierUIFactory {
   
+  
   public static JFrame createJFrame() {
+    UIComponents.budgetModel = new BudgetModel();
     
-    final BudgetModel  budgetModel = new BudgetModel();
     RunnableQueueThread.getInstance().start();
     
-    JFrame frame = new JFrame("Personal Financier");
+    UIComponents.windowFrame  = new JFrame("Personal Financier");
     
-    frame.setDefaultCloseOperation(
+    UIComponents.windowFrame.setDefaultCloseOperation(
         WindowConstants.EXIT_ON_CLOSE
     );
     
     Toolkit.getDefaultToolkit().setDynamicLayout(false);
     
-    frame.setJMenuBar(
+    UIComponents.windowFrame.setJMenuBar(
         createMenu()
     );
     
-    frame.getContentPane().add(
-        createMainToolbar(frame, budgetModel),
+    UIComponents.windowFrame.getContentPane().add(
+        createMainToolbar(),
         BorderLayout.PAGE_START
     );
     
-    frame.getContentPane().add(
-        createContentPane(budgetModel), 
+    UIComponents.windowFrame.getContentPane().add(
+        createContentPane(), 
         BorderLayout.CENTER
     );
     
-    frame.getContentPane().add(
+    UIComponents.windowFrame.getContentPane().add(
       createMessageBar(),
       BorderLayout.PAGE_END
     );
    
-    frame.setBounds(
+    UIComponents.windowFrame.setBounds(
         Toolkit.getDefaultToolkit().getScreenSize().width/8, 
         Toolkit.getDefaultToolkit().getScreenSize().height/8, 
         Toolkit.getDefaultToolkit().getScreenSize().width/4*3, 
         Toolkit.getDefaultToolkit().getScreenSize().height/4*3
     );
     
-    return frame;
+    return UIComponents.windowFrame;
   }
   
-  private static Component createMainToolbar(final JFrame baseFrame, final BudgetModel model) {
+  private static Component createMainToolbar() {
     JToolBar toolbar = new JToolBar();
     
-    final BudgetFileController fileController = new BudgetFileController(model);
+    final BudgetFileController fileController = new BudgetFileController(UIComponents.budgetModel);
     
     toolbar.add(
-        createLoadButton(baseFrame, fileController)
+        createLoadButton(
+            UIComponents.windowFrame, 
+            fileController
+        )
     );
 
     toolbar.add(
-        createSaveButton(baseFrame, fileController)    
+        createSaveButton(
+            UIComponents.windowFrame, 
+            fileController
+        )    
     );
 
     toolbar.addSeparator();
@@ -107,7 +114,7 @@ public class PersonalFinancierUIFactory {
     toolbar.addSeparator();
     
     toolbar.add(
-        createAboutButton(baseFrame)
+        createAboutButton(UIComponents.windowFrame)
     );
     
     return toolbar;
@@ -226,13 +233,13 @@ public class PersonalFinancierUIFactory {
     return button;
   }
 
-  private static JComponent createContentPane(BudgetModel model) {
+  private static JComponent createContentPane() {
     JTabbedPane pane = new JTabbedPane();
     pane.setBorder(new EmptyBorder(5,5,5,5));
     
     pane.addTab(
         "Budget", 
-        BudgetUIFactory.createBudgetComponent(model)
+        BudgetUIFactory.createBudgetComponent()
     );
     
     pane.addTab(

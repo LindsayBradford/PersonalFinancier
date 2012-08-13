@@ -133,7 +133,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     BudgetItem removedItem = this.incomeItems.remove(index);
     this.changeAndNotifyObservers(
-        BudgetEvent.ItemType.ExpenseItems
+        BudgetEvent.ItemType.IncomeItems
     );
     return removedItem;
   }

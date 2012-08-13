@@ -40,15 +40,14 @@ import blacksmyth.personalfinancier.control.gui.IncomeItemTable;
 import blacksmyth.personalfinancier.control.gui.JUndoListeningButton;
 import blacksmyth.personalfinancier.control.gui.WidgetFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
-import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 class BudgetUIFactory {
   
-  public static JComponent createBudgetComponent(BudgetModel model) {
+  public static JComponent createBudgetComponent() {
     JSplitPane splitPane = new JSplitPane(
         JSplitPane.VERTICAL_SPLIT,
-        createBudgetItemPanel(model), 
-        createBudgetSummaryPanel(model)
+        createBudgetItemPanel(), 
+        createBudgetSummaryPanel()
     );
     
     splitPane.setOneTouchExpandable(true);
@@ -57,31 +56,31 @@ class BudgetUIFactory {
     return splitPane;
   }
   
-  private static JComponent createBudgetItemPanel(BudgetModel model) {
+  private static JComponent createBudgetItemPanel() {
     JPanel panel = new JPanel(new BorderLayout());
     
-    IncomeItemTable incomeItemTable = new IncomeItemTable(model);
+    UIComponents.incomeTable = new IncomeItemTable(UIComponents.budgetModel);
 
-    ExpenseItemTable expenseItemTable = new ExpenseItemTable(model);
+    UIComponents.expenseTable = new ExpenseItemTable(UIComponents.budgetModel);
 
     panel.add(
-        createBudgetItemToolbar(expenseItemTable, incomeItemTable, model),
+        createBudgetItemToolbar(),
         BorderLayout.PAGE_START
     );
     
     panel.add(
-        createBudgetItemsTablePanel(expenseItemTable, incomeItemTable),
+        createBudgetItemsTablePanel(),
         BorderLayout.CENTER
     );
 
     return panel;    
   }
   
-  private static JSplitPane createBudgetItemsTablePanel(final ExpenseItemTable expenseItemTable, final IncomeItemTable incomeItemTable) {
+  private static JSplitPane createBudgetItemsTablePanel() {
     JSplitPane splitPane = new JSplitPane(
         JSplitPane.VERTICAL_SPLIT,
-        createIncomeItemsTablePanel(incomeItemTable),
-        createExpenseItemsTablePanel(expenseItemTable)
+        createIncomeItemsTablePanel(),
+        createExpenseItemsTablePanel()
     );
     
     splitPane.setOneTouchExpandable(true);
@@ -90,7 +89,7 @@ class BudgetUIFactory {
     return splitPane;
   }
 
-  private static JPanel createExpenseItemsTablePanel(final ExpenseItemTable expenseItemTable) {
+  private static JPanel createExpenseItemsTablePanel() {
     JPanel panel = new JPanel(new BorderLayout());
 
     panel.setBorder(
@@ -104,12 +103,11 @@ class BudgetUIFactory {
     );
     
     panel.add(
-        createExpenseItemToolbar(expenseItemTable),
+        createExpenseItemToolbar(),
         BorderLayout.PAGE_START
     );
 
-    JScrollPane tableScrollPane =  new JScrollPane(expenseItemTable);
-    
+    JScrollPane tableScrollPane =  new JScrollPane(UIComponents.expenseTable);
     
     panel.add(
         tableScrollPane,
@@ -119,7 +117,7 @@ class BudgetUIFactory {
     return panel;
   }
 
-  private static JPanel createIncomeItemsTablePanel(final IncomeItemTable incomeItemTable) {
+  private static JPanel createIncomeItemsTablePanel() {
     JPanel panel = new JPanel(new BorderLayout());
 
     panel.setBorder(
@@ -133,12 +131,12 @@ class BudgetUIFactory {
     );
 
     panel.add(
-        createIncomeItemToolbar(incomeItemTable),
+        createIncomeItemToolbar(),
         BorderLayout.PAGE_START
     );
 
     panel.add(
-        new JScrollPane(incomeItemTable),
+        new JScrollPane(UIComponents.incomeTable),
         BorderLayout.CENTER
     );
     
@@ -146,7 +144,7 @@ class BudgetUIFactory {
   }
   
   @SuppressWarnings("serial")
-  private static JToolBar createExpenseItemToolbar(final ExpenseItemTable expenseItemTable) {
+  private static JToolBar createExpenseItemToolbar() {
     JToolBar toolbar = new JToolBar();
     
     JButton addItemButton = new JButton();
@@ -167,7 +165,7 @@ class BudgetUIFactory {
     addItemButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
-            expenseItemTable.addBudgetItem();
+            UIComponents.expenseTable.addBudgetItem();
           }
         }
     );
@@ -192,7 +190,7 @@ class BudgetUIFactory {
     removeItemButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
-            expenseItemTable.removeBudgetItem();
+            UIComponents.expenseTable.removeBudgetItem();
           }
         }
     );
@@ -217,7 +215,7 @@ class BudgetUIFactory {
     moveItemDownButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
-            expenseItemTable.moveSelectedItemDown();
+            UIComponents.expenseTable.moveSelectedItemDown();
           }
         }
     );
@@ -240,7 +238,7 @@ class BudgetUIFactory {
     moveItemUpButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
-            expenseItemTable.moveSelectedItemUp();
+            UIComponents.expenseTable.moveSelectedItemUp();
           }
         }
     );
@@ -251,7 +249,7 @@ class BudgetUIFactory {
   }
 
   @SuppressWarnings("serial")
-  private static JToolBar createIncomeItemToolbar(final IncomeItemTable incomeItemTable) {
+  private static JToolBar createIncomeItemToolbar() {
     JToolBar toolbar = new JToolBar();
     
     JButton addItemButton = new JButton();
@@ -272,7 +270,7 @@ class BudgetUIFactory {
     addItemButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
-            incomeItemTable.addBudgetItem();
+            UIComponents.incomeTable.addBudgetItem();
           }
         }
     );
@@ -297,7 +295,7 @@ class BudgetUIFactory {
     removeItemButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
-            incomeItemTable.removeBudgetItem();
+            UIComponents.incomeTable.removeBudgetItem();
           }
         }
     );
@@ -322,7 +320,7 @@ class BudgetUIFactory {
     moveItemDownButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
-            incomeItemTable.moveSelectedItemDown();
+            UIComponents.incomeTable.moveSelectedItemDown();
           }
         }
     );
@@ -345,7 +343,7 @@ class BudgetUIFactory {
     moveItemUpButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
-            incomeItemTable.moveSelectedItemUp();
+            UIComponents.incomeTable.moveSelectedItemUp();
           }
         }
     );
@@ -356,10 +354,7 @@ class BudgetUIFactory {
   }
 
   @SuppressWarnings("serial")
-  private static JToolBar createBudgetItemToolbar(
-      final ExpenseItemTable expenseItemTable, 
-      final IncomeItemTable incomeItemTable, 
-      final BudgetModel model) {
+  private static JToolBar createBudgetItemToolbar() {
 
     JToolBar toolbar = new JToolBar();
 
@@ -374,16 +369,13 @@ class BudgetUIFactory {
     toolbar.addSeparator();
     
     toolbar.add(
-        createDerivedColumnsVisibileButton(
-            expenseItemTable, 
-            incomeItemTable
-        )
+        createDerivedColumnsVisibileButton()
     );
 
     toolbar.addSeparator();
 
     toolbar.add(
-        createResetItemsButton(model)
+        createResetItemsButton()
     );
     
     toolbar.addSeparator();
@@ -391,9 +383,7 @@ class BudgetUIFactory {
     return toolbar;
   }
   
-  private static JToggleButton createDerivedColumnsVisibileButton(
-      final ExpenseItemTable expenseTable, 
-      final IncomeItemTable incomeTable) {
+  private static JToggleButton createDerivedColumnsVisibileButton() {
 
     return new JToggleButton() {
       { // begin: instance initializer
@@ -405,8 +395,8 @@ class BudgetUIFactory {
         this.addActionListener(
             new ActionListener() {
               public void actionPerformed(ActionEvent arg0) {
-                incomeTable.toggleDerivedColumnView();
-                expenseTable.toggleDerivedColumnView();
+                UIComponents.incomeTable.toggleDerivedColumnView();
+                UIComponents.expenseTable.toggleDerivedColumnView();
               }
             }
         );  
@@ -421,11 +411,13 @@ class BudgetUIFactory {
     };
   }
 
-  private static JButton createResetItemsButton(final BudgetModel model) {
+  private static JButton createResetItemsButton() {
     AbstractAction resetItemsAction = new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
         BudgetUndoManager.getInstance().addEdit(
-            ResetBudgetItemsCommand.doCmd(model)
+            ResetBudgetItemsCommand.doCmd(
+                UIComponents.budgetModel
+            )
         );
       }
     };
@@ -544,7 +536,7 @@ class BudgetUIFactory {
     return button;
   }
   
-  private static JComponent createBudgetSummaryPanel(BudgetModel model) {
+  private static JComponent createBudgetSummaryPanel() {
     JPanel panel  = new JPanel(new GridLayout(1,2));
 
     panel.setBorder(
@@ -559,35 +551,39 @@ class BudgetUIFactory {
 
     panel.add(
         WidgetFactory.createGraphTablePane(
-          new CashFlowPieChart(model),
-          createAccountSummaryTable(model) 
+          new CashFlowPieChart(UIComponents.budgetModel),
+          createAccountSummaryTable() 
         )
     );
 
     panel.add(
         WidgetFactory.createGraphTablePane(
-          createCategoryPieChart(model),
-          createCategorySummaryTable(model) 
+          createCategoryPieChart(),
+          createCategorySummaryTable() 
         )
     );
 
     return panel;    
   }
 
-  private static JComponent createCategorySummaryTable(BudgetModel model) {
+  private static JComponent createCategorySummaryTable() {
     return new JScrollPane(
-        new BudgetCategorySummaryTable(model)
+        new BudgetCategorySummaryTable(
+            UIComponents.budgetModel
+        )
     );
   }
   
-  private static JComponent createAccountSummaryTable(BudgetModel model) {
+  private static JComponent createAccountSummaryTable() {
     return new JScrollPane(
-        new BudgetCashFlowSummaryTable(model)
+        new BudgetCashFlowSummaryTable(
+            UIComponents.budgetModel
+        )
     );
   }
   
-  private static JComponent createCategoryPieChart(BudgetModel model) {
-    return new CategoryPieChart(model);
+  private static JComponent createCategoryPieChart() {
+    return new CategoryPieChart(UIComponents.budgetModel);
   }
 
 }
