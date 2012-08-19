@@ -8,6 +8,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.TableModelEvent;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -103,21 +104,24 @@ public class ExpenseItemTable extends JTable {
   }
 
   private void setupCategoryCol() {
+    DefaultTableCellRenderer renderer = WidgetFactory.createTableCellRenderer(JTextField.CENTER); 
+
     getColFromEnum(EXPENSE_ITEM_COLUMNS.Category).setCellRenderer(
-        WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
+           renderer
     );
 
-    DefaultCellEditor editor = WidgetFactory.createExpenseCategoryCellEditor();    
+    DefaultCellEditor editor = WidgetFactory.createExpenseCategoryCellEditor(
+        getExpenseItemTableModel().getBudgetModel()
+    );    
     getColFromEnum(EXPENSE_ITEM_COLUMNS.Category).setCellEditor(editor);
 
     this.getExpenseItemTableModel().addModelObserver(
         (Observer) editor.getComponent()
     );
-
     
     SwingUtilities.lockColumnWidth(
         getColFromEnum(EXPENSE_ITEM_COLUMNS.Category),
-        (int) editor.getComponent().getPreferredSize().getWidth()
+        SwingUtilities.getTextWidth(" Variable Essential ")
     );
   }
 

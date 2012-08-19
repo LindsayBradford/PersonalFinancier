@@ -1,6 +1,5 @@
 package blacksmyth.personalfinancier.control.gui;
 
-import java.awt.event.ActionEvent;
 import java.util.Observable;
 
 import javax.swing.JComboBox;
@@ -12,20 +11,18 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 @SuppressWarnings("serial")
 public class ExpenseCategoryComboBox extends JComboBox implements IBudgetObserver {
-  private BudgetModel model;
+  
+  {
+    ((JTextField) getEditor().getEditorComponent()).setHorizontalAlignment(
+        JTextField.CENTER
+    );
+  }
 
   public void update(Observable budgetModel, Object modelArgs) {
-    if (this.model == null) {
-      this.model = (BudgetModel) budgetModel;
-      addActionListener(this);
-      ((JTextField) getEditor().getEditorComponent()).setHorizontalAlignment(
-          JTextField.CENTER
-      );
-    }
     BudgetEvent event = (BudgetEvent) modelArgs;
     if (event.getItemType() == BudgetEvent.ItemType.expenseCategories || 
         event.getItemType() == BudgetEvent.ItemType.AllItems) {
-      buildItemList(model);
+      buildItemList((BudgetModel) budgetModel);
     }
   }
   
@@ -37,12 +34,4 @@ public class ExpenseCategoryComboBox extends JComboBox implements IBudgetObserve
     }
   }
   
-  public void actionPerformed(ActionEvent e) {
-    if (e.getActionCommand().equals("comboBoxEdited")) {
-      String newSelection = (String) this.getSelectedItem();
-      if (!model.getExpenseCategories().contains(newSelection)) {
-        model.addExpenseCategory(newSelection);
-      }
-    }
-  }
 }

@@ -1,6 +1,5 @@
 package blacksmyth.personalfinancier.control.gui;
 
-import java.awt.event.ActionEvent;
 import java.util.Observable;
 
 import javax.swing.JComboBox;
@@ -12,37 +11,28 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 @SuppressWarnings("serial")
 public class IncomeCategoryComboBox extends JComboBox implements IBudgetObserver {
-  private BudgetModel model;
-
+  
+  {
+    ((JTextField) getEditor().getEditorComponent()).setHorizontalAlignment(
+        JTextField.CENTER
+    );
+  }
+  
   public void update(Observable budgetModel, Object modelArgs) {
-    if (this.model == null) {
-      this.model = (BudgetModel) budgetModel;
-      addActionListener(this);
-      ((JTextField) getEditor().getEditorComponent()).setHorizontalAlignment(JTextField.CENTER);
-
-    }
     
     BudgetEvent event = (BudgetEvent) modelArgs;
     if (event.getItemType() == BudgetEvent.ItemType.incomeCategories || 
         event.getItemType() == BudgetEvent.ItemType.AllItems) {
-      buildItemList(model);
+      buildItemList((BudgetModel) budgetModel);
     }
   }
   
-  private void buildItemList(BudgetModel budgetModel) {
+  private void buildItemList(BudgetModel model) {
     this.removeAllItems();
 
-    for (String incomeCategory : budgetModel.getIncomeCategories()) {
+    for (String incomeCategory : model.getIncomeCategories()) {
       this.addItem(incomeCategory);
     }
   }
   
-  public void actionPerformed(ActionEvent e) {
-    if (e.getActionCommand().equals("comboBoxEdited")) {
-      String newSelection = (String) this.getSelectedItem();
-      if (!model.getIncomeCategories().contains(newSelection)) {
-        model.addIncomeCategory(newSelection);
-      }
-    }
-  }
 }

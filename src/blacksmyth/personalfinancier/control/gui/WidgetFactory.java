@@ -70,15 +70,17 @@ public final class WidgetFactory {
   }
 
   public static DefaultCellEditor createIncomeCategoryCellEditor(BudgetModel model) {
-    JComboBox comboBox = new IncomeCategoryComboBox();
-    comboBox.setEditable(true);
+    IncomeCategoryComboBox comboBox = new IncomeCategoryComboBox();
+
+    model.addObserver(comboBox);
 
     return new DefaultCellEditor(comboBox);
   }
 
-  public static DefaultCellEditor createExpenseCategoryCellEditor() {
-    JComboBox comboBox = new ExpenseCategoryComboBox();
-    comboBox.setEditable(true);
+  public static DefaultCellEditor createExpenseCategoryCellEditor(BudgetModel model) {
+    ExpenseCategoryComboBox comboBox = new ExpenseCategoryComboBox();
+    
+    model.addObserver(comboBox);
 
     return new DefaultCellEditor(comboBox);
   }

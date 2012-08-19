@@ -310,10 +310,11 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
   }
   
   public void addExpenseCategory(String newCategory) {
-    this.expenseCategories.add(newCategory);
-    this.changeAndNotifyObservers(
-        BudgetEvent.ItemType.expenseCategories
-    );
+    if (this.expenseCategories.add(newCategory)) {
+      this.changeAndNotifyObservers(
+          BudgetEvent.ItemType.expenseCategories
+      );
+    }
   }
   
   public HashSet<String> getIncomeCategories() {
@@ -328,10 +329,12 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
   }
   
   public void addIncomeCategory(String newCategory) {
-    this.incomeCategories.add(newCategory);
-    this.changeAndNotifyObservers(
-        BudgetEvent.ItemType.incomeCategories
-    );
+    System.out.println("Adding Income Category: " + newCategory);
+    if (this.incomeCategories.add(newCategory)) {
+      this.changeAndNotifyObservers(
+          BudgetEvent.ItemType.incomeCategories
+      );
+    }
   }
   
   public ArrayList<AccountSummary> getCashFlowSummaries() {
@@ -479,13 +482,13 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
   }
 
   public void changeAndNotifyObservers(BudgetEvent.ItemType itemType) {
-    this.updateDerivedData();
     this.setChanged();
     this.notifyObservers(
         new BudgetEvent(
             itemType
         )
     );
+    this.updateDerivedData();
   }
   
   
