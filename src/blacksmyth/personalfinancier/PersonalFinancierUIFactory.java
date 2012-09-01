@@ -89,20 +89,14 @@ public class PersonalFinancierUIFactory {
   private static Component createMainToolbar() {
     JToolBar toolbar = new JToolBar();
     
-    final BudgetFileController fileController = new BudgetFileController(UIComponents.budgetModel);
+    UIComponents.budgetFileController = new BudgetFileController(UIComponents.budgetModel);
     
     toolbar.add(
-        createLoadButton(
-            UIComponents.windowFrame, 
-            fileController
-        )
+        createLoadButton()
     );
 
     toolbar.add(
-        createSaveButton(
-            UIComponents.windowFrame, 
-            fileController
-        )    
+        createSaveButton()    
     );
 
     toolbar.addSeparator();
@@ -168,15 +162,9 @@ public class PersonalFinancierUIFactory {
     return button;
   }
 
-  private static JButton createSaveButton(final JFrame baseFrame, final BudgetFileController controller) {
-    AbstractAction saveAction = new AbstractAction() {
-      public void actionPerformed(ActionEvent e) {
-        BudgetUndoManager.getInstance().discardAllEdits();
-        controller.save(baseFrame);
-      }
-    };
+  private static JButton createSaveButton() {
     
-    JButton button = new JButton(saveAction);
+    JButton button = new JButton(UIComponents.SaveBudgetAction);
 
     button.setForeground(Color.GREEN.darker());
 
@@ -186,7 +174,7 @@ public class PersonalFinancierUIFactory {
             KeyEvent.VK_S, 
             Event.CTRL_MASK
         ), 
-        saveAction
+        UIComponents.SaveBudgetAction
     );
     
     button.setMnemonic(KeyEvent.VK_S);
@@ -200,15 +188,11 @@ public class PersonalFinancierUIFactory {
     return button;
   }
 
-  private static JButton createLoadButton(final JFrame baseFrame, final BudgetFileController controller) {
-    AbstractAction loadAction = new AbstractAction() {
-      public void actionPerformed(ActionEvent e) {
-        BudgetUndoManager.getInstance().discardAllEdits();
-        controller.load(baseFrame);
-      }
-    };
+  private static JButton createLoadButton() {
     
-    JButton button = new JButton(loadAction);
+    JButton button = new JButton(
+        UIComponents.LoadBudgetAction
+    );
     
     SwingUtilities.bindKeyStrokeToAction(
         button, 
@@ -216,7 +200,7 @@ public class PersonalFinancierUIFactory {
             KeyEvent.VK_O, 
             Event.CTRL_MASK
         ), 
-        loadAction
+        UIComponents.LoadBudgetAction
     );
     
     button.setMnemonic(KeyEvent.VK_O);
@@ -273,6 +257,54 @@ public class PersonalFinancierUIFactory {
     JMenuBar menuBar = new JMenuBar();
   
     JMenu fileMenu = new JMenu("File");
+
+    UIComponents.LoadBudgetAction = new AbstractAction("Load...") {
+      public void actionPerformed(ActionEvent e) {
+        BudgetUndoManager.getInstance().discardAllEdits();
+        UIComponents.budgetFileController.load(
+            UIComponents.windowFrame
+        );
+      }
+    };
+    
+    fileMenu.add(
+        new JMenuItem(
+          UIComponents.LoadBudgetAction    
+        )
+    );
+
+    UIComponents.SaveBudgetAction = new AbstractAction("Save") {
+      public void actionPerformed(ActionEvent e) {
+        BudgetUndoManager.getInstance().discardAllEdits();
+        UIComponents.budgetFileController.save(
+            UIComponents.windowFrame
+        );
+      }
+    };
+
+    fileMenu.add(
+        new JMenuItem(
+          UIComponents.SaveBudgetAction    
+        )
+    );
+
+    UIComponents.SaveAsBudgetAction = new AbstractAction("Save As...") {
+      public void actionPerformed(ActionEvent e) {
+        BudgetUndoManager.getInstance().discardAllEdits();
+        UIComponents.budgetFileController.saveAs(
+            UIComponents.windowFrame
+        );
+      }
+    };
+
+    fileMenu.add(
+        new JMenuItem(
+          UIComponents.SaveAsBudgetAction    
+        )
+    );
+    
+    fileMenu.addSeparator();
+    
     fileMenu.add(new JMenuItem("Preferences"));
   
     menuBar.add(fileMenu);

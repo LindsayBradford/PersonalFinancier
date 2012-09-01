@@ -47,31 +47,27 @@ public class BudgetFileController implements Observer, IBudgetController, IBudge
 
   public void save(JFrame parentFrame) {
     if (currentFileName == null) {
-      
-      fileChooser.setCurrentDirectory(
-          new File(
-              PreferencesModel.getInstance().getLastUsedFilePath()
-          )    
-      );
-      
-      int response = fileChooser.showSaveDialog(parentFrame);
-
-      if (response == JFileChooser.APPROVE_OPTION) {
-        setCurrentFileName(
-            parentFrame,
-            fileChooser.getSelectedFile().getAbsolutePath()
+      if (promptForFilename(parentFrame)) {
+        save(currentFileName);
+        
+        PreferencesModel.getInstance().setLastUsedFilePath(
+            fileChooser.getSelectedFile().getPath()
         );
       }
     }
-
-    save(currentFileName);
-    
-    PreferencesModel.getInstance().setLastUsedFilePath(
-        fileChooser.getSelectedFile().getPath()
-    );
-
   }
-  
+
+  public void saveAs(JFrame parentFrame) {
+
+    if (promptForFilename(parentFrame)) {
+      save(currentFileName);
+      
+      PreferencesModel.getInstance().setLastUsedFilePath(
+          fileChooser.getSelectedFile().getPath()
+      );
+    }
+  }
+
   private void save(String fileName) {
     FileUtilities.saveTextFile(
         fileName, 
@@ -80,6 +76,26 @@ public class BudgetFileController implements Observer, IBudgetController, IBudge
         )
     );
   }
+
+  private boolean promptForFilename(JFrame parentFrame) {
+    fileChooser.setCurrentDirectory(
+        new File(
+            PreferencesModel.getInstance().getLastUsedFilePath()
+        )    
+    );
+      
+    int response = fileChooser.showSaveDialog(parentFrame);
+
+    if (response == JFileChooser.APPROVE_OPTION) {
+      setCurrentFileName(
+          parentFrame,
+          fileChooser.getSelectedFile().getAbsolutePath()
+      );
+      return true;
+    }
+    return false;
+  }
+  
   
   public void load(JFrame parentFrame) {
     fileChooser.setCurrentDirectory(

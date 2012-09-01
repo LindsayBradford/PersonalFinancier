@@ -10,7 +10,7 @@ package blacksmyth.general;
 import java.awt.FontMetrics;
 import java.util.UUID;
 
-import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.InputMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -87,7 +87,7 @@ public final class SwingUtilities {
    */
   public static void bindKeyStrokeToAction(JComponent component, 
                                            KeyStroke keyStroke, 
-                                           AbstractAction actionToPerform) {
+                                           Action actionToPerform) {
     bindKeyStrokeToAction(
         component, 
         UUID.randomUUID().toString(),  // just use a random (semi-)unique label we don't need to track
@@ -112,7 +112,7 @@ public final class SwingUtilities {
   public static void bindKeyStrokeToAction(JComponent component, 
                                            String keyStrokeLabel, 
                                            KeyStroke keyStroke, 
-                                           AbstractAction actionToPerform) {
+                                           Action actionToPerform) {
     
     InputMap inputMap = component.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
     
