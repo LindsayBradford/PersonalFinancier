@@ -194,15 +194,6 @@ public class PersonalFinancierUIFactory {
         UIComponents.LoadBudgetAction
     );
     
-    SwingUtilities.bindKeyStrokeToAction(
-        button, 
-        KeyStroke.getKeyStroke(
-            KeyEvent.VK_O, 
-            Event.CTRL_MASK
-        ), 
-        UIComponents.LoadBudgetAction
-    );
-    
     button.setMnemonic(KeyEvent.VK_O);
     
     FontIconProvider.getInstance().setGlyphAsText(
@@ -258,7 +249,38 @@ public class PersonalFinancierUIFactory {
   
     JMenu fileMenu = new JMenu("File");
 
-    UIComponents.LoadBudgetAction = new AbstractAction("Load...") {
+    fileMenu.add(
+        createLoadMenuItem()
+    );
+
+    fileMenu.add(
+        createSaveMenuItem()
+    );
+
+    fileMenu.add(
+        createSaveAsMenuItem()
+    );
+    
+    fileMenu.addSeparator();
+    
+    fileMenu.add(
+        new JMenuItem("Preferences")
+    );
+
+    fileMenu.addSeparator();
+
+    fileMenu.add(
+        createExitMenuItem()
+    );
+    
+    menuBar.add(fileMenu);
+  
+    return menuBar;
+  }
+  
+  private static JMenuItem createLoadMenuItem() {
+    UIComponents.LoadBudgetAction = new AbstractAction("Open...") {
+      
       public void actionPerformed(ActionEvent e) {
         BudgetUndoManager.getInstance().discardAllEdits();
         UIComponents.budgetFileController.load(
@@ -267,12 +289,24 @@ public class PersonalFinancierUIFactory {
       }
     };
     
-    fileMenu.add(
-        new JMenuItem(
+   JMenuItem menuItem = new JMenuItem(
           UIComponents.LoadBudgetAction    
-        )
+   );
+
+    SwingUtilities.bindKeyStrokeToAction(
+        menuItem, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_O, 
+            Event.CTRL_MASK
+        ), 
+        UIComponents.LoadBudgetAction
     );
 
+    return menuItem;
+  }
+  
+  private static JMenuItem createSaveMenuItem() {
+    
     UIComponents.SaveBudgetAction = new AbstractAction("Save") {
       public void actionPerformed(ActionEvent e) {
         BudgetUndoManager.getInstance().discardAllEdits();
@@ -282,12 +316,23 @@ public class PersonalFinancierUIFactory {
       }
     };
 
-    fileMenu.add(
-        new JMenuItem(
-          UIComponents.SaveBudgetAction    
-        )
+    JMenuItem menuItem = new JMenuItem(
+        UIComponents.SaveBudgetAction    
     );
 
+    SwingUtilities.bindKeyStrokeToAction(
+        menuItem, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_S, 
+            Event.CTRL_MASK
+        ), 
+        UIComponents.SaveBudgetAction
+    );
+
+    return menuItem;
+  }
+  
+  private static JMenuItem createSaveAsMenuItem() {
     UIComponents.SaveAsBudgetAction = new AbstractAction("Save As...") {
       public void actionPerformed(ActionEvent e) {
         BudgetUndoManager.getInstance().discardAllEdits();
@@ -296,20 +341,48 @@ public class PersonalFinancierUIFactory {
         );
       }
     };
-
-    fileMenu.add(
-        new JMenuItem(
-          UIComponents.SaveAsBudgetAction    
-        )
+    
+    JMenuItem menuItem = new JMenuItem(
+        UIComponents.SaveAsBudgetAction    
     );
-    
-    fileMenu.addSeparator();
-    
-    fileMenu.add(new JMenuItem("Preferences"));
+
+    SwingUtilities.bindKeyStrokeToAction(
+        menuItem, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_A, 
+            Event.CTRL_MASK
+        ), 
+        UIComponents.SaveAsBudgetAction
+    );
+
+    return menuItem;
+  }
   
-    menuBar.add(fileMenu);
-  
-    return menuBar;
+  private static JMenuItem createExitMenuItem() {
+    UIComponents.ExitAction = new AbstractAction("Exit") {
+      public void actionPerformed(ActionEvent e) {
+        BudgetUndoManager.getInstance().discardAllEdits();
+        UIComponents.budgetFileController.save(
+            UIComponents.windowFrame
+        );
+        System.exit(0);
+      }
+    };
+    
+    JMenuItem menuItem = new JMenuItem(
+        UIComponents.ExitAction    
+    );
+
+    SwingUtilities.bindKeyStrokeToAction(
+        menuItem, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_X, 
+            Event.CTRL_MASK
+        ), 
+        UIComponents.ExitAction
+    );
+
+    return menuItem;
   }
 }
 

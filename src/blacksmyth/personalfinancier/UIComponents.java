@@ -21,5 +21,6 @@ public class UIComponents {
   public static Action LoadBudgetAction;
   public static Action SaveBudgetAction;
   public static Action SaveAsBudgetAction;
+  public static Action ExitAction;
 
 }
