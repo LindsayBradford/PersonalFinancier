@@ -26,6 +26,7 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.SwingUtilities;
@@ -37,6 +38,7 @@ import blacksmyth.personalfinancier.control.gui.CashFlowPieChart;
 import blacksmyth.personalfinancier.control.gui.CategoryPieChart;
 import blacksmyth.personalfinancier.control.gui.ExpenseItemTable;
 import blacksmyth.personalfinancier.control.gui.IncomeItemTable;
+import blacksmyth.personalfinancier.control.gui.JTableListeningButton;
 import blacksmyth.personalfinancier.control.gui.JUndoListeningButton;
 import blacksmyth.personalfinancier.control.gui.WidgetFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
@@ -147,7 +149,7 @@ class BudgetUIFactory {
   private static JToolBar createExpenseItemToolbar() {
     JToolBar toolbar = new JToolBar();
     
-    JButton addItemButton = new JButton();
+JButton addItemButton = new JButton();
     
     FontIconProvider.getInstance().setGlyphAsText(
         addItemButton, 
@@ -172,7 +174,7 @@ class BudgetUIFactory {
 
     toolbar.add(addItemButton);
 
-    JButton removeItemButton = new JButton();
+    JButton removeItemButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.expenseTable);
 
     removeItemButton.setForeground(
         Color.RED.brighter()
@@ -198,8 +200,8 @@ class BudgetUIFactory {
     toolbar.add(removeItemButton);
     
     toolbar.addSeparator();
-    
-    JButton moveItemDownButton = new JButton();
+
+    JButton moveItemDownButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.expenseTable);
     
     FontIconProvider.getInstance().setGlyphAsText(
         moveItemDownButton, 
@@ -222,8 +224,8 @@ class BudgetUIFactory {
 
     toolbar.add(moveItemDownButton);
 
-    JButton moveItemUpButton = new JButton();
-    
+    JButton moveItemUpButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.expenseTable);
+
     FontIconProvider.getInstance().setGlyphAsText(
         moveItemUpButton, 
         FontIconProvider.icon_arrow_up
@@ -277,7 +279,7 @@ class BudgetUIFactory {
 
     toolbar.add(addItemButton);
 
-    JButton removeItemButton = new JButton();
+    JButton removeItemButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.incomeTable);
 
     removeItemButton.setForeground(
         Color.RED.brighter()
@@ -303,8 +305,8 @@ class BudgetUIFactory {
     toolbar.add(removeItemButton);
     
     toolbar.addSeparator();
-    
-    JButton moveItemDownButton = new JButton();
+
+    JButton moveItemDownButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.incomeTable);
     
     FontIconProvider.getInstance().setGlyphAsText(
         moveItemDownButton, 
@@ -317,6 +319,7 @@ class BudgetUIFactory {
     
     moveItemDownButton.setForeground(Color.GREEN);
     
+    
     moveItemDownButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
@@ -327,7 +330,7 @@ class BudgetUIFactory {
 
     toolbar.add(moveItemDownButton);
 
-    JButton moveItemUpButton = new JButton();
+    JButton moveItemUpButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.incomeTable);
     
     FontIconProvider.getInstance().setGlyphAsText(
         moveItemUpButton, 

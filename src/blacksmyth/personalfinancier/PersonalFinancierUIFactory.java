@@ -290,7 +290,8 @@ public class PersonalFinancierUIFactory {
     };
     
    JMenuItem menuItem = new JMenuItem(
-          UIComponents.LoadBudgetAction    
+          UIComponents.LoadBudgetAction
+          
    );
 
     SwingUtilities.bindKeyStrokeToAction(

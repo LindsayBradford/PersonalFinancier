@@ -15,6 +15,7 @@ import java.text.ParseException;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.InputVerifier;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
@@ -24,6 +25,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
@@ -33,6 +35,7 @@ import javax.swing.text.DocumentFilter;
 
 
 import blacksmyth.general.FontIconProvider;
+import blacksmyth.personalfinancier.UIComponents;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
@@ -239,6 +242,25 @@ public final class WidgetFactory {
     );
     
     return pane;
+  }
+  
+  /**
+   * Creates a JButton that is enabled only when a single row of the specified
+   * JTable is selected.
+   * @param table
+   * @return
+   */
+  public static JButton createOneSelectedtRowEnabledButton(JTable table) {
+    JTableListeningButton theButton = new JTableListeningButton(table) {
+      public void valueChanged(ListSelectionEvent event) {
+        if (this.selectedTableRows() != 1) {
+          this.setEnabled(false);
+        } else {
+          this.setEnabled(true);
+        }
+      }
+    };
+    return theButton;
   }
 }
 
