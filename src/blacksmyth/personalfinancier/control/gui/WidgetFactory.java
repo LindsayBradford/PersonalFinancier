@@ -1,9 +1,9 @@
 /**
- * PersonalFinancier by Lindsay Bradford is licensed under a 
- * Creative Commons Attribution-ShareAlike 3.0 Unported License.
- *
- * Year: 2012 
+ * (c) 2012, Lindsay Bradford. licensed under a 
+ * Creative Commons Attribution-ShareAlike 3.0 
+ * Unported License.
  */
+
 
 package blacksmyth.personalfinancier.control.gui;
 

@@ -1,3 +1,9 @@
+/**
+ * (c) 2012, Lindsay Bradford. licensed under a 
+ * Creative Commons Attribution-ShareAlike 3.0 
+ * Unported License.
+ */
+
 package blacksmyth.personalfinancier.control.gui;
 
 import java.util.Observable;

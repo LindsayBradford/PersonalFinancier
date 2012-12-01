@@ -1,8 +1,7 @@
 /**
- * PersonalFinancier by Lindsay Bradford is licensed under a 
- * Creative Commons Attribution-ShareAlike 3.0 Unported License.
- *
- * Year: 2012 
+ * (c) 2012, Lindsay Bradford. licensed under a 
+ * Creative Commons Attribution-ShareAlike 3.0 
+ * Unported License.
  */
 
 package blacksmyth.personalfinancier;
@@ -26,7 +25,6 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.SwingUtilities;
@@ -38,7 +36,6 @@ import blacksmyth.personalfinancier.control.gui.CashFlowPieChart;
 import blacksmyth.personalfinancier.control.gui.CategoryPieChart;
 import blacksmyth.personalfinancier.control.gui.ExpenseItemTable;
 import blacksmyth.personalfinancier.control.gui.IncomeItemTable;
-import blacksmyth.personalfinancier.control.gui.JTableListeningButton;
 import blacksmyth.personalfinancier.control.gui.JUndoListeningButton;
 import blacksmyth.personalfinancier.control.gui.WidgetFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;

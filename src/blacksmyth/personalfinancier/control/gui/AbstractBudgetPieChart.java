@@ -58,6 +58,10 @@ public abstract class AbstractBudgetPieChart extends JPanel implements IBudgetOb
 
   @Override
   public void update(Observable arg0, Object arg1) {
+    forceUpdate();
+  }
+ 
+  private void forceUpdate() {
     displayPiePlot(
         createPiePlot(
             createTitleText(),
