@@ -198,12 +198,10 @@ public class ExpenseItemTable extends JTable {
     );
   }
   
-  public void removeBudgetItem() {
-    int row = this.getSelectedRow();
-    if (row < 0) return; // nothing to do
-
-    this.getExpenseItemTableModel().removeItem(row);
-    this.selectionModel.setSelectionInterval(row, row);
+  public void removeBudgetItems() {
+    this.getExpenseItemTableModel().removeItems(
+      this.getSelectedRows()
+    );
   }
 
   public void moveSelectedItemDown() {

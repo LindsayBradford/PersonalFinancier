@@ -1,8 +1,11 @@
 package blacksmyth.personalfinancier.control.gui;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
+
+import javax.swing.undo.CompoundEdit;
 
 import blacksmyth.personalfinancier.control.BudgetUndoManager;
 import blacksmyth.personalfinancier.control.command.AddIncomeItemCommand;
@@ -13,6 +16,7 @@ import blacksmyth.personalfinancier.control.command.ChangeIncomeDescriptionComma
 import blacksmyth.personalfinancier.control.command.ChangeIncomeFrequencyCommand;
 import blacksmyth.personalfinancier.control.command.MoveIncomeItemDownCommand;
 import blacksmyth.personalfinancier.control.command.MoveIncomeItemUpCommand;
+import blacksmyth.personalfinancier.control.command.RemoveExpenseItemCommand;
 import blacksmyth.personalfinancier.control.command.RemoveIncomeItemCommand;
 import blacksmyth.personalfinancier.model.BigDecimalFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
@@ -193,6 +197,26 @@ class IncomeItemTableModel extends AbstractBudgetTableModel<INCOME_ITEM_COLUMNS>
         )
     );
   }
+  
+  public void removeItems(int[] rows) {
+    CompoundEdit removeItemsEdit = new CompoundEdit();
+	  
+	Arrays.sort(rows);  // guarantee we're iterating over the rows in correct order.
+	
+	for(int rowIdx = rows.length - 1; rowIdx > -1; rowIdx--) {
+	  removeItemsEdit.addEdit(
+		  RemoveIncomeItemCommand.doCmd(
+		    getBudgetModel(),
+			rows[rowIdx]
+		  )
+	   );
+	  }
+	  removeItemsEdit.end();
+	  
+	  BudgetUndoManager.getInstance().addEdit(removeItemsEdit);
+  }
+
+  
   
   public void moveIncomeItemDown(int row) {
     BudgetUndoManager.getInstance().addEdit(

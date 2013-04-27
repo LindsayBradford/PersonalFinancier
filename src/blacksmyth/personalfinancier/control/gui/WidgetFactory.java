@@ -35,7 +35,6 @@ import javax.swing.text.DocumentFilter;
 
 
 import blacksmyth.general.FontIconProvider;
-import blacksmyth.personalfinancier.UIComponents;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
@@ -262,6 +261,26 @@ public final class WidgetFactory {
     };
     return theButton;
   }
+  
+  /**
+   * Creates a JButton that is enabled when one or more row of the specified
+   * JTable is selected.
+   * @param table
+   * @return
+   */
+  public static JButton createMultiSelectedtRowEnabledButton(JTable table) {
+    JTableListeningButton theButton = new JTableListeningButton(table) {
+      public void valueChanged(ListSelectionEvent event) {
+        if (this.selectedTableRows() == 0) {
+          this.setEnabled(false);
+        } else {
+          this.setEnabled(true);
+        }
+      }
+    };
+    return theButton;
+  }
+
 }
 
 class FormatVerifier extends InputVerifier {

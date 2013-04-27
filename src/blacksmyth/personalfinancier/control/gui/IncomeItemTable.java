@@ -197,13 +197,10 @@ public class IncomeItemTable extends JTable {
     );
   }
   
-  public void removeBudgetItem() {
-    int row = this.getSelectedRow();
-    
-    if (row < 0) return; // nothing to do
-
-    this.getIncomeItemTableModel().removeItem(row);
-    this.selectionModel.setSelectionInterval(row, row);
+  public void removeBudgetItems() {
+    this.getIncomeItemTableModel().removeItems(
+	  this.getSelectedRows()
+	);
   }
 
   public void moveSelectedItemDown() {

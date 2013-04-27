@@ -1,8 +1,12 @@
 package blacksmyth.personalfinancier.control.gui;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
+
+import javax.swing.undo.CompoundEdit;
 
 import blacksmyth.personalfinancier.control.BudgetUndoManager;
 import blacksmyth.personalfinancier.control.command.AddExpenseItemCommand;
@@ -184,14 +188,23 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
       )
     );
   }
-
-  public void removeItem(int row) {
-    BudgetUndoManager.getInstance().addEdit(
-        RemoveExpenseItemCommand.doCmd(
-            getBudgetModel(),
-            row
-        )
-    );
+  
+  public void removeItems(int[] rows) {
+    CompoundEdit removeItemsEdit = new CompoundEdit();
+	  
+	Arrays.sort(rows);  // guarantee we're iterating over the rows in correct order.
+	  
+	for(int rowIdx = rows.length - 1; rowIdx > -1; rowIdx--) {
+	  removeItemsEdit.addEdit(
+	    RemoveExpenseItemCommand.doCmd(
+		  getBudgetModel(),
+		  rows[rowIdx]
+		)
+      );
+	}
+	removeItemsEdit.end();
+	  
+	BudgetUndoManager.getInstance().addEdit(removeItemsEdit);
   }
   
   public void moveExpenseItemDown(int row) {

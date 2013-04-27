@@ -8,7 +8,7 @@ import blacksmyth.personalfinancier.model.budget.BudgetItem;
 
 public class AddIncomeItemCommand extends AbstractBudgetCommand {
   
-  private BudgetModel model;
+  private BudgetModel budgetModel;
   private BudgetItem postCommandItem;
   
   public static AddIncomeItemCommand doCmd(BudgetModel model) {
@@ -16,17 +16,17 @@ public class AddIncomeItemCommand extends AbstractBudgetCommand {
   }
   
   protected AddIncomeItemCommand(BudgetModel model) {
-    this.model = model;
+    this.budgetModel = model;
     this.postCommandItem = model.addIncomeItem();
   }
 
   @Override
   public void redo() throws CannotRedoException {
-    model.addIncomeItem(this.postCommandItem);
+    budgetModel.addIncomeItem(this.postCommandItem);
   }
 
   @Override
   public void undo() throws CannotUndoException {
-    model.removeIncomeItem(this.postCommandItem);
+    budgetModel.removeIncomeItem(this.postCommandItem);
   }
 }

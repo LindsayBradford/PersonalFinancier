@@ -146,7 +146,7 @@ class BudgetUIFactory {
   private static JToolBar createExpenseItemToolbar() {
     JToolBar toolbar = new JToolBar();
     
-JButton addItemButton = new JButton();
+    JButton addItemButton = new JButton();
     
     FontIconProvider.getInstance().setGlyphAsText(
         addItemButton, 
@@ -171,30 +171,30 @@ JButton addItemButton = new JButton();
 
     toolbar.add(addItemButton);
 
-    JButton removeItemButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.expenseTable);
+    JButton removeItemsButton = WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.expenseTable);
 
-    removeItemButton.setForeground(
+    removeItemsButton.setForeground(
         Color.RED.brighter()
    );
     
     FontIconProvider.getInstance().setGlyphAsText(
-        removeItemButton, 
+        removeItemsButton, 
         FontIconProvider.icon_minus
     );
 
-    removeItemButton.setToolTipText(
+    removeItemsButton.setToolTipText(
         "Remove selected expense item"
     );
     
-    removeItemButton.addActionListener(
+    removeItemsButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
-            UIComponents.expenseTable.removeBudgetItem();
+            UIComponents.expenseTable.removeBudgetItems();
           }
         }
     );
 
-    toolbar.add(removeItemButton);
+    toolbar.add(removeItemsButton);
     
     toolbar.addSeparator();
 
@@ -276,30 +276,30 @@ JButton addItemButton = new JButton();
 
     toolbar.add(addItemButton);
 
-    JButton removeItemButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.incomeTable);
+    JButton removeItemsButton = WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.incomeTable);
 
-    removeItemButton.setForeground(
+    removeItemsButton.setForeground(
         Color.RED.brighter()
    );
     
     FontIconProvider.getInstance().setGlyphAsText(
-        removeItemButton, 
+        removeItemsButton, 
         FontIconProvider.icon_minus
     );
 
-    removeItemButton.setToolTipText(
+    removeItemsButton.setToolTipText(
         "Remove selected income item"
     );
     
-    removeItemButton.addActionListener(
+    removeItemsButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
-            UIComponents.incomeTable.removeBudgetItem();
+            UIComponents.incomeTable.removeBudgetItems();
           }
         }
     );
 
-    toolbar.add(removeItemButton);
+    toolbar.add(removeItemsButton);
     
     toolbar.addSeparator();
 
