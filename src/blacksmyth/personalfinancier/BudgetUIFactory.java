@@ -312,7 +312,7 @@ class BudgetUIFactory {
 
     moveItemDownButton.setToolTipText(
         " Move item down in list "
-    );
+    );	
     
     moveItemDownButton.setForeground(Color.GREEN);
     

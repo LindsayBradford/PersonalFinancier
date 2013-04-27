@@ -198,7 +198,7 @@ public class PersonalFinancierUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_download_alt
+        FontIconProvider.icon_folder_open_alt
     );
     
     button.setForeground(Color.GREEN.darker());
