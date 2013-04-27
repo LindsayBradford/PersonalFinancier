@@ -60,14 +60,14 @@ public final class SwingUtilities {
    * @param comboBox
    * @return
    */
-  public static String getWidestTextInComboBox(JComboBox comboBox) {
+  public static String getWidestTextInComboBox(JComboBox<String> comboBox) {
     
     String longestFoundString = "";
 
     for(int i = 0; i < comboBox.getItemCount(); i++) {
       assert (comboBox.getItemAt(i).getClass().equals(String.class));
     
-      String item = (String) comboBox.getItemAt(i);
+      String item = comboBox.getItemAt(i);
       if (item.length() > longestFoundString.length()) {
         longestFoundString = item;
       }

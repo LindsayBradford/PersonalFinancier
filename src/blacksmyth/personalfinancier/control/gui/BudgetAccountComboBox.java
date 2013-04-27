@@ -9,7 +9,7 @@ import blacksmyth.personalfinancier.model.Account;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 @SuppressWarnings("serial")
-public class BudgetAccountComboBox extends JComboBox implements IBudgetObserver {
+public class BudgetAccountComboBox extends JComboBox<String> implements IBudgetObserver {
 
   public void update(Observable budgetModel, Object modelArgs) {
     buildItemList((BudgetModel) budgetModel);

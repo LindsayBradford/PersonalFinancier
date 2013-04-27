@@ -88,7 +88,7 @@ public final class WidgetFactory {
   }
   
   public static DefaultCellEditor createCashFlowFrequencyCellEditor() {
-    JComboBox comboBox = createTableComboBox();
+    JComboBox<String> comboBox = createTableComboBox();
     
     for (CashFlowFrequency frequency : CashFlowFrequency.values()) {
       comboBox.addItem(frequency.toString());
@@ -170,7 +170,7 @@ public final class WidgetFactory {
    * in budgetting.
    * @return JComboBox
    */
-  public static JComboBox createBudgetAccountComboBox() {
+  public static JComboBox<String> createBudgetAccountComboBox() {
     BudgetAccountComboBox comboBox = new BudgetAccountComboBox();  
     
     DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
@@ -188,8 +188,8 @@ public final class WidgetFactory {
    * a static enumeration.
    * @return JComboBox
    */
-  public static JComboBox createTableComboBox() {
-    JComboBox comboBox = new JComboBox();
+  public static JComboBox<String> createTableComboBox() {
+    JComboBox<String> comboBox = new JComboBox<String>();
 
     DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
     dlcr.setHorizontalAlignment(DefaultListCellRenderer.CENTER);

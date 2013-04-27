@@ -10,7 +10,7 @@ import blacksmyth.personalfinancier.model.budget.BudgetEvent;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 @SuppressWarnings("serial")
-public class IncomeCategoryComboBox extends JComboBox implements IBudgetObserver {
+public class IncomeCategoryComboBox extends JComboBox<String> implements IBudgetObserver {
   
   {
     ((JTextField) getEditor().getEditorComponent()).setHorizontalAlignment(

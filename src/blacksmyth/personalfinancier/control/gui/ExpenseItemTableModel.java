@@ -2,7 +2,6 @@ package blacksmyth.personalfinancier.control.gui;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
 

@@ -16,7 +16,6 @@ import blacksmyth.personalfinancier.control.command.ChangeIncomeDescriptionComma
 import blacksmyth.personalfinancier.control.command.ChangeIncomeFrequencyCommand;
 import blacksmyth.personalfinancier.control.command.MoveIncomeItemDownCommand;
 import blacksmyth.personalfinancier.control.command.MoveIncomeItemUpCommand;
-import blacksmyth.personalfinancier.control.command.RemoveExpenseItemCommand;
 import blacksmyth.personalfinancier.control.command.RemoveIncomeItemCommand;
 import blacksmyth.personalfinancier.model.BigDecimalFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
