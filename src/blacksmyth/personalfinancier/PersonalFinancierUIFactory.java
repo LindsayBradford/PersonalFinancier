@@ -14,6 +14,8 @@ import java.awt.Event;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
@@ -39,6 +41,7 @@ import blacksmyth.general.SwingUtilities;
 import blacksmyth.personalfinancier.control.BudgetFileController;
 import blacksmyth.personalfinancier.control.BudgetUndoManager;
 import blacksmyth.personalfinancier.control.gui.RunnableQueueThread;
+import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 public class PersonalFinancierUIFactory {
@@ -75,12 +78,28 @@ public class PersonalFinancierUIFactory {
       createMessageBar(),
       BorderLayout.PAGE_END
     );
-   
+    
     UIComponents.windowFrame.setBounds(
-        Toolkit.getDefaultToolkit().getScreenSize().width/8, 
-        Toolkit.getDefaultToolkit().getScreenSize().height/8, 
-        Toolkit.getDefaultToolkit().getScreenSize().width/4*3, 
-        Toolkit.getDefaultToolkit().getScreenSize().height/4*3
+      PreferencesModel.getInstance().getWindowBounds()
+    );
+    
+    UIComponents.windowFrame.getRootPane().addComponentListener(
+      new ComponentAdapter() {
+        public void componentResized(ComponentEvent e) {
+          updatePreferences();
+        }
+        
+        public void componentMoved(ComponentEvent e) {
+          updatePreferences();
+        }
+        
+        private void updatePreferences() {
+      	  PreferencesModel.getInstance().setWindowBounds(
+      		UIComponents.windowFrame.getBounds()
+          );
+        }
+
+      }
     );
     
     return UIComponents.windowFrame;

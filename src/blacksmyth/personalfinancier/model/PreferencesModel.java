@@ -8,6 +8,8 @@
 package blacksmyth.personalfinancier.model;
 
 import java.awt.Color;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Currency;
@@ -322,4 +324,46 @@ public class PreferencesModel extends Observable {
     );
     this.setChangeAndNotifyObservers();
   }
+  
+  private static final int DEFAULT_WINDOW_BOUNDS_X = Toolkit.getDefaultToolkit().getScreenSize().width/8;
+  private static final int DEFAULT_WINDOW_BOUNDS_Y = Toolkit.getDefaultToolkit().getScreenSize().height/8;
+  private static final int DEFAULT_WINDOW_BOUNDS_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width/4*3;
+  private static final int DEFAULT_WINDOW_BOUNDS_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height/4*3;
+  
+  private static final String WINDOW_BOUNDS_X = "WindowBounds-X";
+  private static final String WINDOW_BOUNDS_Y = "WindowBounds-Y";
+  private static final String WINDOW_BOUNDS_WIDTH = "WindowBounds-Width";
+  private static final String WINDOW_BOUNDS_HEIGHT = "WindowBounds-Height";
+
+  public Rectangle getWindowBounds() {
+	int x      =  this.prefs.getInt(WINDOW_BOUNDS_X, DEFAULT_WINDOW_BOUNDS_X); 
+	int y      =  this.prefs.getInt(WINDOW_BOUNDS_Y, DEFAULT_WINDOW_BOUNDS_Y); 
+	int width  =  this.prefs.getInt(WINDOW_BOUNDS_WIDTH, DEFAULT_WINDOW_BOUNDS_WIDTH); 
+	int height =  this.prefs.getInt(WINDOW_BOUNDS_HEIGHT, DEFAULT_WINDOW_BOUNDS_HEIGHT);
+	
+	return new Rectangle(x,y,width,height);
+  }
+	  
+  public void setWindowBounds(Rectangle bounds) {
+	this.prefs.putInt(
+	  WINDOW_BOUNDS_X,
+	  bounds.x
+	);
+	this.prefs.putInt(
+	  WINDOW_BOUNDS_Y,
+	  bounds.y
+    );
+	this.prefs.putInt(
+	  WINDOW_BOUNDS_WIDTH,
+	  bounds.width
+    );
+	this.prefs.putInt(
+	  WINDOW_BOUNDS_HEIGHT,
+	  bounds.height
+    );
+	
+	this.setChangeAndNotifyObservers();
+  }
+
+  
 }
