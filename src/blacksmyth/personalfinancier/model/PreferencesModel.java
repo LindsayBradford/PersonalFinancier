@@ -42,6 +42,11 @@ public class PreferencesModel extends Observable {
      }
      return instance;
   }
+
+  private void setChangeAndNotifyObservers() {
+    this.setChanged();
+    this.notifyObservers();
+  }
   
   public Currency getPreferredCurrency() {
     return Currency.getInstance(
@@ -54,7 +59,7 @@ public class PreferencesModel extends Observable {
         CURRENCY_CODE_KEY, 
         currency.getCurrencyCode()
     );
-    this.notifyObservers();
+    this.setChangeAndNotifyObservers();
   }
   
   private String getPreferredCurrencyCode() {
@@ -83,7 +88,7 @@ public class PreferencesModel extends Observable {
         roundingMode.toString()
     );
     updatePreferredMathContext();
-    this.notifyObservers();
+    this.setChangeAndNotifyObservers();
   }
 
   
@@ -104,7 +109,7 @@ public class PreferencesModel extends Observable {
         precision
     );
     updatePreferredMathContext();
-    this.notifyObservers();
+    this.setChangeAndNotifyObservers();
   }
 
   private void updatePreferredMathContext() {
@@ -120,8 +125,7 @@ public class PreferencesModel extends Observable {
     }
     return preferredMathContext;
   }
-  
-  
+
   // TODO: Build out Account support.
   @SuppressWarnings("unused")
   private static final String DEFAULT_BUDGET_ACCOUNT = "Default";
@@ -264,10 +268,6 @@ public class PreferencesModel extends Observable {
     this.setChangeAndNotifyObservers();
   }
   
-  private void setChangeAndNotifyObservers() {
-    this.setChanged();
-    this.notifyObservers();
-  }
   
   private static final int DEFAULT_SELECTED_CELL_COLOR = Color.GRAY.darker().getRGB();
   private static final String SELECTED_CELL_COLOR_KEY = "SelectedCellColor";
@@ -301,5 +301,25 @@ public class PreferencesModel extends Observable {
         LAST_USED_FILE_PATH,
         lastUsedPath
     );
+    this.setChangeAndNotifyObservers();
+  }
+
+  private static final boolean DEFAULT_DERIVED_BUDGET_COLUMNS_VISIBLE = true;
+  private static final String DERIVED_BUDGET_COLUMNS_VISIBLE = "DerivedBudgetColumnsVisible";
+  
+  public boolean getDerivedBudgetColumsVisibility() {
+    return this.prefs.getBoolean(
+      DERIVED_BUDGET_COLUMNS_VISIBLE, 
+      DEFAULT_DERIVED_BUDGET_COLUMNS_VISIBLE
+    );
+  }
+  
+  public void toggleDerivedBudgetColumsVisibility() {
+	boolean currentValue = this.getDerivedBudgetColumsVisibility();
+    this.prefs.putBoolean(
+    	DERIVED_BUDGET_COLUMNS_VISIBLE,
+        !currentValue
+    );
+    this.setChangeAndNotifyObservers();
   }
 }

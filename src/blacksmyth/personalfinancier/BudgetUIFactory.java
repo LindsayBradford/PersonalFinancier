@@ -13,6 +13,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -39,6 +41,7 @@ import blacksmyth.personalfinancier.control.gui.IncomeItemTable;
 import blacksmyth.personalfinancier.control.gui.JUndoListeningButton;
 import blacksmyth.personalfinancier.control.gui.WidgetFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
+import blacksmyth.personalfinancier.model.PreferencesModel;
 
 class BudgetUIFactory {
   
@@ -384,22 +387,22 @@ class BudgetUIFactory {
   }
   
   private static JToggleButton createDerivedColumnsVisibileButton() {
-
-    return new JToggleButton() {
+	  
+	  final JToggleButton button = new JToggleButton() {
       { // begin: instance initializer
         
         this.setSelected(false);
         this.setForeground(Color.GREEN);
         setIconGlyph(FontIconProvider.icon_filter);
-
+        
         this.addActionListener(
             new ActionListener() {
               public void actionPerformed(ActionEvent arg0) {
-                UIComponents.incomeTable.toggleDerivedColumnView();
-                UIComponents.expenseTable.toggleDerivedColumnView();
+            	PreferencesModel.getInstance().toggleDerivedBudgetColumsVisibility();
               }
             }
-        );  
+        );
+        
       } // end: instance initializer
       
       private void setIconGlyph(char glyph) {
@@ -409,6 +412,33 @@ class BudgetUIFactory {
         );
       }
     };
+    
+    final Observer derivedColumnController = 
+       new Observer() { 
+         {
+           this.updateViewers();
+         } 
+            
+         private void updateViewers() {
+           boolean visibleBudgetColumnsState = PreferencesModel.getInstance().getDerivedBudgetColumsVisibility();
+           button.setSelected(visibleBudgetColumnsState);
+
+           if (UIComponents.incomeTable.isShowDerivedColumns() != visibleBudgetColumnsState) {
+             UIComponents.incomeTable.toggleDerivedColumnView();
+             UIComponents.expenseTable.toggleDerivedColumnView();
+           }
+         } 
+          	
+         public void update(Observable arg0, Object arg1) {
+           updateViewers();
+         }
+    };
+     
+    PreferencesModel.getInstance().addObserver(
+      derivedColumnController 	 
+    );
+    
+    return button;
   }
 
   private static JButton createResetItemsButton() {
