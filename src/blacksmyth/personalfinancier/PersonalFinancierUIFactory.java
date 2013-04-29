@@ -37,10 +37,10 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
+import blacksmyth.general.RunnableQueueThread;
 import blacksmyth.general.SwingUtilities;
-import blacksmyth.personalfinancier.control.BudgetFileController;
-import blacksmyth.personalfinancier.control.BudgetUndoManager;
-import blacksmyth.personalfinancier.control.gui.RunnableQueueThread;
+import blacksmyth.personalfinancier.control.budget.BudgetFileController;
+import blacksmyth.personalfinancier.control.budget.BudgetUndoManager;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 

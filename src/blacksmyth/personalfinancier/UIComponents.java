@@ -9,10 +9,10 @@ package blacksmyth.personalfinancier;
 import javax.swing.Action;
 import javax.swing.JFrame;
 
-import blacksmyth.personalfinancier.control.BudgetFileController;
-import blacksmyth.personalfinancier.control.gui.ExpenseItemTable;
-import blacksmyth.personalfinancier.control.gui.IncomeItemTable;
+import blacksmyth.personalfinancier.control.budget.BudgetFileController;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
+import blacksmyth.personalfinancier.view.budget.ExpenseItemTable;
+import blacksmyth.personalfinancier.view.budget.IncomeItemTable;
 
 public class UIComponents {
   public static JFrame      windowFrame;

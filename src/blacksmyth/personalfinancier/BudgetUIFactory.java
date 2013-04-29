@@ -30,18 +30,18 @@ import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.SwingUtilities;
-import blacksmyth.personalfinancier.control.BudgetUndoManager;
-import blacksmyth.personalfinancier.control.command.ResetBudgetItemsCommand;
-import blacksmyth.personalfinancier.control.gui.BudgetCashFlowSummaryTable;
-import blacksmyth.personalfinancier.control.gui.BudgetCategorySummaryTable;
-import blacksmyth.personalfinancier.control.gui.CashFlowPieChart;
-import blacksmyth.personalfinancier.control.gui.CategoryPieChart;
-import blacksmyth.personalfinancier.control.gui.ExpenseItemTable;
-import blacksmyth.personalfinancier.control.gui.IncomeItemTable;
-import blacksmyth.personalfinancier.control.gui.JUndoListeningButton;
-import blacksmyth.personalfinancier.control.gui.WidgetFactory;
+import blacksmyth.personalfinancier.control.budget.BudgetUndoManager;
+import blacksmyth.personalfinancier.control.budget.command.ResetBudgetItemsCommand;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
+import blacksmyth.personalfinancier.view.JUndoListeningButton;
+import blacksmyth.personalfinancier.view.WidgetFactory;
+import blacksmyth.personalfinancier.view.budget.BudgetCashFlowSummaryTable;
+import blacksmyth.personalfinancier.view.budget.BudgetCategorySummaryTable;
+import blacksmyth.personalfinancier.view.budget.CashFlowPieChart;
+import blacksmyth.personalfinancier.view.budget.CategoryPieChart;
+import blacksmyth.personalfinancier.view.budget.ExpenseItemTable;
+import blacksmyth.personalfinancier.view.budget.IncomeItemTable;
 
 class BudgetUIFactory {
   

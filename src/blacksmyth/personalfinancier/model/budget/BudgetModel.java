@@ -15,8 +15,8 @@ import java.util.Observer;
 
 import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.general.SortedArrayList;
-import blacksmyth.personalfinancier.control.IBudgetController;
-import blacksmyth.personalfinancier.control.IBudgetObserver;
+import blacksmyth.personalfinancier.control.budget.IBudgetController;
+import blacksmyth.personalfinancier.control.budget.IBudgetObserver;
 import blacksmyth.personalfinancier.model.Account;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
