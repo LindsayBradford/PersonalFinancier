@@ -95,7 +95,7 @@ public class PersonalFinancierUIFactory {
         
         private void updatePreferences() {
       	  PreferencesModel.getInstance().setWindowBounds(
-      		UIComponents.windowFrame.getBounds()
+      		  UIComponents.windowFrame.getBounds()
           );
         }
 
@@ -237,8 +237,8 @@ public class PersonalFinancierUIFactory {
     );
     
     pane.addTab(
-        "Ledgers", 
-        LedgersUIFactory.createLedgersComponent()
+        "Inflation", 
+        InflationUIFactory.createInflationComponent()
     );
     
     return pane;

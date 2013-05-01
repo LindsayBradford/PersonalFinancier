@@ -87,4 +87,22 @@ public final class ReflectionUtilities {
     
     return totalInterfaces;
   }
+  
+  public static Class<?> getParamatisedTypeOfGenericClass(Class<?> theClass) {
+    // TODO: Is there a more elegant way of automatically deriving T's class?
+    String genericSuperclass = theClass.getGenericSuperclass().toString();
+
+    String classNameOfT  = genericSuperclass.substring(
+        genericSuperclass.indexOf('<') + 1,
+        genericSuperclass.indexOf('>')
+    );
+
+    try {
+      return Class.forName(classNameOfT);
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
 }

@@ -21,4 +21,12 @@ public class SortedArrayList<T> extends ArrayList<T> {
             set(i+1, tmp);
         }
     }
+    
+    public T first() {
+      return this.get(0);
+    }
+    
+    public T last() {
+      return this.get(this.size() - 1);
+    }
 }

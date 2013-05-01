@@ -33,4 +33,12 @@ public class MoneyFactory {
          new BigDecimal(amount)
      );
    }
+   
+   public static Money copy(Money originalMoney) {
+     return new Money(
+         originalMoney.getCurrency(),
+         originalMoney.getRounding(),
+         originalMoney.getTotal()
+     );
+   }
 }
