@@ -35,6 +35,8 @@ import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.RunnableQueueThread;
@@ -239,6 +241,24 @@ public class PersonalFinancierUIFactory {
     pane.addTab(
         "Inflation", 
         InflationUIFactory.createInflationComponent()
+    );
+    
+    final Color selectedColor = Color.green.darker().darker().darker();
+    
+    pane.setBackgroundAt(0, selectedColor);
+    
+    pane.addChangeListener(
+        new ChangeListener() {
+          public void stateChanged(ChangeEvent changeEvent) {
+            JTabbedPane sourcePane = (JTabbedPane) changeEvent.getSource();
+            int index = sourcePane.getSelectedIndex();
+            
+            for (int tabIndex = 0; tabIndex < sourcePane.getTabCount(); tabIndex++) {
+              sourcePane.setBackgroundAt(tabIndex, sourcePane.getBackground());
+            }
+            sourcePane.setBackgroundAt(index, selectedColor);
+          }
+        }
     );
     
     return pane;
