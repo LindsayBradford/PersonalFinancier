@@ -136,7 +136,7 @@ public class IncomeItemTable extends JTable {
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
 
-    DefaultCellEditor editor = WidgetFactory.createCashFlowFrequencyCellEditor();    
+    DefaultCellEditor editor = BudgetWidgetFactory.createCashFlowFrequencyCellEditor();    
     getColFromEnum(INCOME_ITEM_COLUMNS.Frequency).setCellEditor(editor);
 
     SwingUtilities.lockColumnWidth(

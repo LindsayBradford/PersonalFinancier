@@ -4,8 +4,10 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 
+import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
+import blacksmyth.personalfinancier.view.WidgetFactory;
 
 public class BudgetWidgetFactory {
   
@@ -47,6 +49,16 @@ public class BudgetWidgetFactory {
     comboBox.setRenderer(dlcr);
 
     return comboBox;
+  }
+
+  public static DefaultCellEditor createCashFlowFrequencyCellEditor() {
+    JComboBox<String> comboBox = WidgetFactory.createTableComboBox();
+    
+    for (CashFlowFrequency frequency : CashFlowFrequency.values()) {
+      comboBox.addItem(frequency.toString());
+    }
+    
+    return new DefaultCellEditor(comboBox);
   }
 
 }

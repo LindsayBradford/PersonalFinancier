@@ -85,10 +85,10 @@ public class InflationTable extends JTable {
     );
 
     getColFromEnum(COLUMNS.CPI).setCellRenderer(
-        WidgetFactory.createAmountCellRenderer()    
+        InflationWidgetFactory.createCPIValueCellRenderer()    
     );
     getColFromEnum(COLUMNS.CPI).setCellEditor(
-        WidgetFactory.createAmountCellEditor()    
+        InflationWidgetFactory.createCPIValueCellEditor()    
     );
   }
   

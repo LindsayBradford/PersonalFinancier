@@ -35,9 +35,7 @@ import javax.swing.text.BadLocationException;
 
 import javax.swing.text.DocumentFilter;
 
-
 import blacksmyth.general.FontIconProvider;
-import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 
 /**
@@ -66,14 +64,19 @@ public final class WidgetFactory {
 
   @SuppressWarnings("serial")
   public static DefaultTableCellRenderer createAmountCellRenderer() {
+    return createDecimalCellRenderer(JTextField.RIGHT);
+  }
+  
+  @SuppressWarnings("serial")
+  public static DefaultTableCellRenderer createDecimalCellRenderer(final int alignment) {
     return new DefaultTableCellRenderer() {
       public void setValue(Object value) {
-        this.setHorizontalAlignment(JTextField.RIGHT);
+        this.setHorizontalAlignment(alignment);
         this.setText((value == null) ? "" : DECIMAL_FORMAT.format(value));            
       }
     };
   }
-
+  
   public static DefaultTableCellRenderer createDateCellRenderer() {
     return new DefaultTableCellRenderer() {
       public void setValue(Object value) {
@@ -81,16 +84,6 @@ public final class WidgetFactory {
         this.setText((value == null) ? "" : DATE_FORMAT.format(value));            
       }
     };
-  }
-  
-  public static DefaultCellEditor createCashFlowFrequencyCellEditor() {
-    JComboBox<String> comboBox = createTableComboBox();
-    
-    for (CashFlowFrequency frequency : CashFlowFrequency.values()) {
-      comboBox.addItem(frequency.toString());
-    }
-    
-    return new DefaultCellEditor(comboBox);
   }
   
   public static DefaultCellEditor createAmountCellEditor() {
@@ -139,12 +132,28 @@ public final class WidgetFactory {
       );
     }
   }
+
+  /**
+   * Create a {@link JFormattedTextField} configured to edit decimal numbers in an application-specific way.
+   * @return
+   */
+  public static JFormattedTextField createCentredDecimalTextField() {
+    return createDecimalTextField(JTextField.CENTER);
+  }
   
   /**
    * Create a {@link JFormattedTextField} configured to edit decimal numbers in an application-specific way.
    * @return
    */
   public static JFormattedTextField createAmountTextField() {
+    return createDecimalTextField(JTextField.RIGHT);
+  }
+
+  /**
+   * Create a {@link JFormattedTextField} configured to edit decimal numbers in an application-specific way.
+   * @return
+   */
+  public static JFormattedTextField createDecimalTextField(int alignment) {
     JFormattedTextField field = new JFormattedTextField();
     
     field.setInputVerifier(new FormatVerifier());
@@ -156,11 +165,12 @@ public final class WidgetFactory {
     field.setForeground(
         PreferencesModel.getInstance().getPreferredEditableCellColor()
     );
-    field.setHorizontalAlignment(JTextField.RIGHT);
+    field.setHorizontalAlignment(alignment);
     
     return field;
   }
 
+  
   /**
    * Create a {@link JFormattedTextField} configured to edit dates in an application-specific way.
    * @return
