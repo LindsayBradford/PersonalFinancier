@@ -27,6 +27,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.text.AbstractDocument;
@@ -247,6 +249,24 @@ public final class WidgetFactory {
     FontIconProvider.getInstance().setGlyphAsTitle(
         pane, currTabIndex, 
         FontIconProvider.icon_bar_chart
+    );
+    
+    final Color selectedColor = Color.green.darker().darker().darker();
+    
+    pane.setBackgroundAt(0, selectedColor);
+    
+    pane.addChangeListener(
+        new ChangeListener() {
+          public void stateChanged(ChangeEvent changeEvent) {
+            JTabbedPane sourcePane = (JTabbedPane) changeEvent.getSource();
+            int index = sourcePane.getSelectedIndex();
+            
+            for (int tabIndex = 0; tabIndex < sourcePane.getTabCount(); tabIndex++) {
+              sourcePane.setBackgroundAt(tabIndex, sourcePane.getBackground());
+            }
+            sourcePane.setBackgroundAt(index, selectedColor);
+          }
+        }
     );
     
     return pane;
