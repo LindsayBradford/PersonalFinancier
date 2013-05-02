@@ -27,8 +27,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
-import blacksmyth.general.SwingUtilities;
-import blacksmyth.personalfinancier.control.budget.BudgetUndoManager;
+import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.personalfinancier.control.inflation.InflationFileController;
 import blacksmyth.personalfinancier.control.inflation.InflationUndoManager;
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
@@ -152,7 +151,7 @@ class InflationUIFactory {
 
     button.setForeground(Color.GREEN.darker());
 
-    SwingUtilities.bindKeyStrokeToAction(
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
         button, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_S, 
@@ -177,6 +176,8 @@ class InflationUIFactory {
     JButton removeInflationEntriesButton = 
         WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.inflationTable);
 
+    removeInflationEntriesButton.setMnemonic(KeyEvent.VK_DELETE);
+    
     removeInflationEntriesButton.setForeground(
         Color.RED.brighter()
    );
@@ -194,6 +195,7 @@ class InflationUIFactory {
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
             UIComponents.inflationTable.removeInflationEntries();
+            UIComponents.inflationTable.requestFocus();
           }
         }
     );
@@ -204,6 +206,8 @@ class InflationUIFactory {
   private static JButton createAddInflationButton() {
     JButton addInflationEntryButton = new JButton();
     
+    addInflationEntryButton.setMnemonic(KeyEvent.VK_INSERT);
+
     FontIconProvider.getInstance().setGlyphAsText(
         addInflationEntryButton, 
         FontIconProvider.icon_plus
@@ -221,6 +225,7 @@ class InflationUIFactory {
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
             UIComponents.inflationTable.addInflationEntry();
+            UIComponents.inflationTable.requestFocus();
           }
         }
     );
@@ -255,7 +260,7 @@ class InflationUIFactory {
         FontIconProvider.icon_undo
     );
     
-    SwingUtilities.bindKeyStrokeToAction(
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
         button, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_Z, 
@@ -298,7 +303,7 @@ class InflationUIFactory {
         FontIconProvider.icon_repeat
     );
 
-    SwingUtilities.bindKeyStrokeToAction(
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
         button, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_Y, 

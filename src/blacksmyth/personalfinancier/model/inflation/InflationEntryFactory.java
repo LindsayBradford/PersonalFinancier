@@ -13,6 +13,15 @@ public class InflationEntryFactory {
         ""
       );
   }
+
+  public static InflationEntry createEntry(InflationEntry previousEntry) {
+    return createEntry(
+        (Calendar) previousEntry.getDate().clone(),
+        previousEntry.getCPIValue(),
+        previousEntry.getNotes()
+      );
+  }
+
   
   public static InflationEntry createEntry(Calendar date, double value, String notes) {
     return  new InflationEntry(

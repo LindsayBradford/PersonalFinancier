@@ -17,7 +17,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import blacksmyth.general.SwingUtilities;
+import blacksmyth.general.BlacksmythSwingUtilities;
 
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
@@ -88,16 +88,16 @@ public class IncomeItemTable extends JTable {
         (Observer) editor.getComponent()
     );
     
-    SwingUtilities.lockColumnWidth(
+    BlacksmythSwingUtilities.lockColumnWidth(
         getColFromEnum(INCOME_ITEM_COLUMNS.Account),
         (int) editor.getComponent().getPreferredSize().getWidth()
     );
   }
 
   private void setupAmountCol(INCOME_ITEM_COLUMNS thisColumn) {
-    SwingUtilities.lockColumnWidth(
+    BlacksmythSwingUtilities.lockColumnWidth(
         getColFromEnum(thisColumn),
-        SwingUtilities.getTextWidth(
+        BlacksmythSwingUtilities.getTextWidth(
             WidgetFactory.DECIMAL_FORMAT_PATTERN
         ) + CELL_BUFFER
     );
@@ -125,9 +125,9 @@ public class IncomeItemTable extends JTable {
 
     getColFromEnum(INCOME_ITEM_COLUMNS.Category).setCellEditor(editor);
 
-    SwingUtilities.lockColumnWidth(
+    BlacksmythSwingUtilities.lockColumnWidth(
         getColFromEnum(INCOME_ITEM_COLUMNS.Category),
-        SwingUtilities.getTextWidth(" Variable Essential ")
+        BlacksmythSwingUtilities.getTextWidth(" Variable Essential ")
     );
   }
 
@@ -139,7 +139,7 @@ public class IncomeItemTable extends JTable {
     DefaultCellEditor editor = BudgetWidgetFactory.createCashFlowFrequencyCellEditor();    
     getColFromEnum(INCOME_ITEM_COLUMNS.Frequency).setCellEditor(editor);
 
-    SwingUtilities.lockColumnWidth(
+    BlacksmythSwingUtilities.lockColumnWidth(
         getColFromEnum(INCOME_ITEM_COLUMNS.Frequency),
         (int) editor.getComponent().getPreferredSize().getWidth()
     );
@@ -193,7 +193,7 @@ public class IncomeItemTable extends JTable {
   public void addBudgetItem() {
     this.getIncomeItemTableModel().addIncomeItem();
 
-    SwingUtilities.scrollRowToVisible(
+    BlacksmythSwingUtilities.scrollRowToVisible(
         this, 
         this.getRowCount() - 1
     );
@@ -217,7 +217,7 @@ public class IncomeItemTable extends JTable {
     
     this.getIncomeItemTableModel().moveIncomeItemDown(row);
     this.selectionModel.setSelectionInterval(row + 1, row + 1);
-    SwingUtilities.scrollRowToVisible(this, row + 1);
+    BlacksmythSwingUtilities.scrollRowToVisible(this, row + 1);
   }
 
   public void moveSelectedItemUp() {
@@ -227,7 +227,7 @@ public class IncomeItemTable extends JTable {
 
     this.getIncomeItemTableModel().moveIncomeItemUp(row);
     this.selectionModel.setSelectionInterval(row - 1, row - 1);
-    SwingUtilities.scrollRowToVisible(this, row - 1);
+    BlacksmythSwingUtilities.scrollRowToVisible(this, row - 1);
   }
   
   public void toggleDerivedColumnView() {

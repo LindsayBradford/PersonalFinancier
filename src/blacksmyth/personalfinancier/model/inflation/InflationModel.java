@@ -12,7 +12,6 @@ import java.util.Observable;
 
 import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.general.SortedArrayList;
-import blacksmyth.personalfinancier.control.budget.IBudgetController;
 import blacksmyth.personalfinancier.control.inflation.IInflationController;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
@@ -127,7 +126,7 @@ public class InflationModel extends Observable implements InflationProvider {
   
   public InflationEntry addEntry() {
     assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
-    InflationEntry newItem = InflationEntryFactory.createEntry();
+    InflationEntry newItem = InflationEntryFactory.createEntry(inflationList.last());
     this.addEntry(newItem);
     return newItem;
   }

@@ -15,7 +15,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import blacksmyth.general.SwingUtilities;
+import blacksmyth.general.BlacksmythSwingUtilities;
 
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
 import blacksmyth.personalfinancier.view.WidgetFactory;
@@ -57,9 +57,9 @@ public class InflationTable extends JTable {
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
 
-    SwingUtilities.lockColumnWidth(
+    BlacksmythSwingUtilities.lockColumnWidth(
         getColFromEnum(COLUMNS.Date),
-        SwingUtilities.getTextWidth(
+        BlacksmythSwingUtilities.getTextWidth(
             WidgetFactory.DATE_FORMAT_PATTERN
         ) + CELL_BUFFER
     );
@@ -77,9 +77,9 @@ public class InflationTable extends JTable {
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
 
-    SwingUtilities.lockColumnWidth(
+    BlacksmythSwingUtilities.lockColumnWidth(
         getColFromEnum(COLUMNS.CPI),
-        SwingUtilities.getTextWidth(
+        BlacksmythSwingUtilities.getTextWidth(
             WidgetFactory.DECIMAL_FORMAT_PATTERN
         ) + CELL_BUFFER
     );
@@ -123,7 +123,7 @@ public class InflationTable extends JTable {
   public void addInflationEntry() {
     this.getInflationTableModel().addEntry();
 
-    SwingUtilities.scrollRowToVisible(
+    BlacksmythSwingUtilities.scrollRowToVisible(
         this, 
         this.getRowCount() - 1
     );

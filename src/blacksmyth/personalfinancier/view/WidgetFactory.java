@@ -9,6 +9,7 @@ package blacksmyth.personalfinancier.view;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.FocusAdapter;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -26,6 +27,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -164,6 +166,8 @@ public final class WidgetFactory {
     
     field.setInputVerifier(new FormatVerifier());
     
+    ensureTextFieldSelectsAllOnFocus(field);
+    
     ((AbstractDocument) field.getDocument()).setDocumentFilter(
         new DecimalCharFilter()
     );
@@ -175,6 +179,22 @@ public final class WidgetFactory {
     
     return field;
   }
+  
+  public static void ensureTextFieldSelectsAllOnFocus(final JTextField field) {
+    field.addFocusListener(
+        new FocusAdapter() {
+          public void focusGained(java.awt.event.FocusEvent evt) {
+            SwingUtilities.invokeLater( 
+                new Runnable() {
+
+                @Override
+                public void run() {
+                field.selectAll();    
+              }
+           });
+        }
+    });
+  }
 
   
   /**
@@ -182,9 +202,11 @@ public final class WidgetFactory {
    * @return
    */
   public static JFormattedTextField createDateTextField() {
-    JFormattedTextField field = new JFormattedTextField();
+    final JFormattedTextField field = new JFormattedTextField();
     
     field.setInputVerifier(new FormatVerifier());
+    
+    ensureTextFieldSelectsAllOnFocus(field);
     
     ((AbstractDocument) field.getDocument()).setDocumentFilter(
         new DateCharFilter()
@@ -193,7 +215,7 @@ public final class WidgetFactory {
     field.setForeground(
         PreferencesModel.getInstance().getPreferredEditableCellColor()
     );
-    field.setHorizontalAlignment(JTextField.RIGHT);
+    field.setHorizontalAlignment(JTextField.CENTER);
     
     return field;
   }

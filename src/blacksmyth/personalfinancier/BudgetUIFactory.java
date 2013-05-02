@@ -29,7 +29,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
-import blacksmyth.general.SwingUtilities;
+import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.personalfinancier.control.budget.BudgetUndoManager;
 import blacksmyth.personalfinancier.control.budget.command.ResetBudgetItemsCommand;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
@@ -469,7 +469,7 @@ class BudgetUIFactory {
     
     resetItemsButton.setForeground(Color.RED);
     
-    SwingUtilities.bindKeyStrokeToAction(
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
         resetItemsButton, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_DELETE, 
@@ -507,7 +507,7 @@ class BudgetUIFactory {
         FontIconProvider.icon_undo
     );
     
-    SwingUtilities.bindKeyStrokeToAction(
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
         button, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_Z, 
@@ -550,7 +550,7 @@ class BudgetUIFactory {
         FontIconProvider.icon_repeat
     );
 
-    SwingUtilities.bindKeyStrokeToAction(
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
         button, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_Y, 

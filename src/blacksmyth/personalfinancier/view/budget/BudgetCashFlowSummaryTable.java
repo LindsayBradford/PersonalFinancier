@@ -13,7 +13,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import blacksmyth.general.SwingUtilities;
+import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.view.WidgetFactory;
 
@@ -62,9 +62,9 @@ public class BudgetCashFlowSummaryTable extends JTable {
   }
   
   private void setupBudgettedCol() {
-    SwingUtilities.lockColumnWidth(
+    BlacksmythSwingUtilities.lockColumnWidth(
         getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.CashFlow),
-        SwingUtilities.getTextWidth(
+        BlacksmythSwingUtilities.getTextWidth(
             WidgetFactory.DECIMAL_FORMAT_PATTERN
         ) + CELL_BUFFER
     );

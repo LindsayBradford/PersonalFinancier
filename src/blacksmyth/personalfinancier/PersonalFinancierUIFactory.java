@@ -38,7 +38,7 @@ import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.RunnableQueueThread;
-import blacksmyth.general.SwingUtilities;
+import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.personalfinancier.control.budget.BudgetFileController;
 import blacksmyth.personalfinancier.control.budget.BudgetUndoManager;
 import blacksmyth.personalfinancier.model.PreferencesModel;
@@ -186,7 +186,7 @@ public class PersonalFinancierUIFactory {
 
     button.setForeground(Color.GREEN.darker());
 
-    SwingUtilities.bindKeyStrokeToAction(
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
         button, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_S, 
@@ -314,7 +314,7 @@ public class PersonalFinancierUIFactory {
           
    );
 
-    SwingUtilities.bindKeyStrokeToAction(
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
         menuItem, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_O, 
@@ -341,7 +341,7 @@ public class PersonalFinancierUIFactory {
         UIComponents.SaveBudgetAction    
     );
 
-    SwingUtilities.bindKeyStrokeToAction(
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
         menuItem, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_S, 
@@ -367,7 +367,7 @@ public class PersonalFinancierUIFactory {
         UIComponents.SaveAsBudgetAction    
     );
 
-    SwingUtilities.bindKeyStrokeToAction(
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
         menuItem, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_A, 
@@ -394,7 +394,7 @@ public class PersonalFinancierUIFactory {
         UIComponents.ExitAction    
     );
 
-    SwingUtilities.bindKeyStrokeToAction(
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
         menuItem, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_X, 
