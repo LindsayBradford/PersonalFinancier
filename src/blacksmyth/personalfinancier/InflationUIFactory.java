@@ -28,6 +28,8 @@ import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.SwingUtilities;
+import blacksmyth.personalfinancier.control.budget.BudgetUndoManager;
+import blacksmyth.personalfinancier.control.inflation.InflationFileController;
 import blacksmyth.personalfinancier.control.inflation.InflationUndoManager;
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
 import blacksmyth.personalfinancier.view.JUndoListeningButton;
@@ -54,7 +56,9 @@ class InflationUIFactory {
     
     UIComponents.inflationModel = new InflationModel();
     UIComponents.inflationTable = new InflationTable(UIComponents.inflationModel);
-    
+
+    UIComponents.inflationFileController = new InflationFileController(UIComponents.inflationModel);
+
     panel.add(
         createInflationToolbar(),
         BorderLayout.PAGE_START
@@ -72,6 +76,132 @@ class InflationUIFactory {
     
     JToolBar toolbar = new JToolBar();
     
+    toolbar.add(
+        createLoadButton()
+    );
+
+    toolbar.add(
+        createSaveButton()    
+    );
+
+    toolbar.addSeparator();
+
+    toolbar.add(
+        createAddInflationButton()
+    );
+
+    toolbar.add(
+        createRemoveInflationEntriesButton()
+    );
+
+    toolbar.addSeparator();
+    
+    toolbar.add(
+        createUndoButton()    
+    );
+
+    toolbar.add(
+        createRedoButton()    
+    );
+
+    return toolbar;
+  }
+  
+  private static JButton createLoadButton() {
+    UIComponents.LoadInflationAction = new AbstractAction("Open Inflation Data...") {
+      
+      public void actionPerformed(ActionEvent e) {
+        InflationUndoManager.getInstance().discardAllEdits();
+        UIComponents.inflationFileController.load(
+            UIComponents.windowFrame
+        );
+      }
+    };
+    
+    JButton button = new JButton(
+        UIComponents.LoadInflationAction
+    );
+    
+    //TODO: assign non-conflicting mnemonic
+    button.setMnemonic(KeyEvent.VK_O);
+    
+    FontIconProvider.getInstance().setGlyphAsText(
+        button, 
+        FontIconProvider.icon_folder_open_alt
+    );
+    
+    button.setForeground(Color.GREEN.darker());
+    
+    button.setToolTipText(" Load Inflation Data");
+    
+    return button;
+  }
+
+  private static JButton createSaveButton() {
+    
+    UIComponents.SaveInflationAction = new AbstractAction("Save Inflation Data") {
+      public void actionPerformed(ActionEvent e) {
+        InflationUndoManager.getInstance().discardAllEdits();
+        UIComponents.inflationFileController.save(
+            UIComponents.windowFrame
+        );
+      }
+    };
+    
+    JButton button = new JButton(UIComponents.SaveInflationAction);
+
+    button.setForeground(Color.GREEN.darker());
+
+    SwingUtilities.bindKeyStrokeToAction(
+        button, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_S, 
+            Event.CTRL_MASK
+        ), 
+        UIComponents.SaveInflationAction
+    );
+
+    //TODO: assign non-conflicting mnemonic
+    button.setMnemonic(KeyEvent.VK_S);
+
+    FontIconProvider.getInstance().setGlyphAsText(
+        button, 
+        FontIconProvider.icon_save
+    );
+
+    button.setToolTipText(" Save the inflation data ");
+    return button;
+  }
+
+  private static JButton createRemoveInflationEntriesButton() {
+    JButton removeInflationEntriesButton = 
+        WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.inflationTable);
+
+    removeInflationEntriesButton.setForeground(
+        Color.RED.brighter()
+   );
+    
+    FontIconProvider.getInstance().setGlyphAsText(
+        removeInflationEntriesButton, 
+        FontIconProvider.icon_minus
+    );
+
+    removeInflationEntriesButton.setToolTipText(
+        "Remove selected inflation entry"
+    );
+    
+    removeInflationEntriesButton.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+            UIComponents.inflationTable.removeInflationEntries();
+          }
+        }
+    );
+    
+    return removeInflationEntriesButton;
+  }
+
+  private static JButton createAddInflationButton() {
     JButton addInflationEntryButton = new JButton();
     
     FontIconProvider.getInstance().setGlyphAsText(
@@ -95,48 +225,9 @@ class InflationUIFactory {
         }
     );
 
-    toolbar.add(addInflationEntryButton);
-
-    JButton removeInflationEntriesButton = 
-        WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.inflationTable);
-
-    removeInflationEntriesButton.setForeground(
-        Color.RED.brighter()
-   );
-    
-    FontIconProvider.getInstance().setGlyphAsText(
-        removeInflationEntriesButton, 
-        FontIconProvider.icon_minus
-    );
-
-    removeInflationEntriesButton.setToolTipText(
-        "Remove selected income item"
-    );
-    
-    removeInflationEntriesButton.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
-            UIComponents.inflationTable.removeInflationEntries();
-          }
-        }
-    );
-
-    toolbar.add(removeInflationEntriesButton);
-
-    toolbar.addSeparator();
-    
-    toolbar.add(
-        createUndoButton()    
-    );
-
-    toolbar.add(
-        createRedoButton()    
-    );
-
-
-    return toolbar;
+    return addInflationEntryButton;
   }
-  
+
   private static JButton createUndoButton() {
     AbstractAction undoAction = new AbstractAction() {
       public void actionPerformed(ActionEvent e) {

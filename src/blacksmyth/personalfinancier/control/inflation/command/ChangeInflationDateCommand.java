@@ -1,6 +1,6 @@
 package blacksmyth.personalfinancier.control.inflation.command;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
@@ -12,11 +12,11 @@ public class ChangeInflationDateCommand extends AbstractInflationCommand {
   
   private InflationModel model;
   private int inflationEntryIndex;
-  private Date preCommandDate;
-  private Date postCommandDate;
+  private Calendar preCommandDate;
+  private Calendar postCommandDate;
   
   public static ChangeInflationDateCommand doCmd(InflationModel model, int inflationEntryIndex, 
-                                                  Date postCommandDate) {
+                                                 Calendar postCommandDate) {
     
     ChangeInflationDateCommand command = new ChangeInflationDateCommand(
         model, 
@@ -31,7 +31,7 @@ public class ChangeInflationDateCommand extends AbstractInflationCommand {
   }
   
   protected ChangeInflationDateCommand(InflationModel model, int inflationEntryIndex, 
-                                       Date preCommandDate, Date postCommandDate) {
+                                       Calendar preCommandDate, Calendar postCommandDate) {
     this.model = model;
     this.inflationEntryIndex = inflationEntryIndex;
     this.preCommandDate = preCommandDate;

@@ -6,7 +6,7 @@
 
 package blacksmyth.personalfinancier.model.inflation;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -17,10 +17,10 @@ import blacksmyth.personalfinancier.model.MoneyFactory;
 public class InflationConversionModel extends Observable implements Observer {
   
   private Money initialValue;
-  private Date initialDate;
+  private Calendar initialDate;
 
   private Money conversionValue;
-  private Date conversionDate;
+  private Calendar conversionDate;
   
   private double inflationOverPeriod;
   private double inflationPerAnnum;
@@ -60,11 +60,11 @@ public class InflationConversionModel extends Observable implements Observer {
     changeAndNotifyObservers();
   }
 
-  public Date getInitialDate() {
+  public Calendar getInitialDate() {
     return initialDate;
   }
 
-  public void setInitialDate(Date initialDate) {
+  public void setInitialDate(Calendar initialDate) {
     this.initialDate = initialDate;
 
     updateConversionValue();
@@ -93,11 +93,11 @@ public class InflationConversionModel extends Observable implements Observer {
     changeAndNotifyObservers();
   }
 
-  public Date getConversionDate() {
+  public Calendar getConversionDate() {
     return conversionDate;
   }
 
-  public void setConversionDate(Date conversionDate) {
+  public void setConversionDate(Calendar conversionDate) {
     this.conversionDate = conversionDate;
 
     updateInitialValue();

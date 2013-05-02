@@ -6,18 +6,26 @@
 
 package blacksmyth.personalfinancier.model.inflation;
 
-import java.util.Date;
+import java.util.Calendar;
 
 public class InflationEntry {
   
+  private Calendar Date;
   private double CPIValue;
-  private Date Date;
   private String Notes;
   
-  public InflationEntry(Date date, double value, String notes) {
+  public InflationEntry(Calendar date, double value, String notes) {
     this.Date = date;
     this.CPIValue = value;
     this.Notes = notes;
+  }
+
+  public Calendar getDate() {
+    return Date;
+  }
+
+  public void setDate(Calendar date) {
+    this.Date = date;
   }
 
   public double getCPIValue() {
@@ -26,14 +34,6 @@ public class InflationEntry {
   
   public void setCPIValue(double figure) {
     this.CPIValue = figure;
-  }
-
-  public Date getDate() {
-    return Date;
-  }
-
-  public void setDate(Date date) {
-    this.Date = date;
   }
 
   public String getNotes() {

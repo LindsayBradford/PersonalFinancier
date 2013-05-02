@@ -7,7 +7,7 @@
 package blacksmyth.personalfinancier.model.inflation;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Observable;
 
 import blacksmyth.general.ReflectionUtilities;
@@ -39,8 +39,8 @@ public class InflationModel extends Observable implements InflationProvider {
 
   @Override
   public Money computeComparisonValue(Money originalValue,
-                                      Date originalDate, 
-                                      Date comparisonDate) {
+                                      Calendar originalDate, 
+                                      Calendar comparisonDate) {
 
     Money returnValue = MoneyFactory.copy(originalValue);
 
@@ -60,7 +60,7 @@ public class InflationModel extends Observable implements InflationProvider {
   }
 
   @Override
-  public double getCPIFigureForDate(Date date) {
+  public double getCPIFigureForDate(Calendar date) {
     if (date.before(getEarliestDate())) {
       return getCPIFigureForDate(getEarliestDate());
     }
@@ -70,11 +70,11 @@ public class InflationModel extends Observable implements InflationProvider {
     return getCPIFigureFromList(date);
   }
   
-  public double getCPIFigureFromList(Date date) {
+  public double getCPIFigureFromList(Calendar date) {
     double cpiFigure = inflationList.last().getCPIValue();
     
     for(InflationEntry entry : inflationList) {
-      Date applicableFromDate = entry.getDate();
+      Calendar applicableFromDate = entry.getDate();
 
       if (applicableFromDate.before(date)) {
         break;
@@ -87,8 +87,8 @@ public class InflationModel extends Observable implements InflationProvider {
   }
 
   @Override
-  public double getInflationForDateRange(Date earlierDate,
-                                         Date laterDate) {
+  public double getInflationForDateRange(Calendar earlierDate,
+                                         Calendar laterDate) {
 
     if (laterDate.before(earlierDate)) {
       return getInflationForDateRange(laterDate, earlierDate);
@@ -97,8 +97,8 @@ public class InflationModel extends Observable implements InflationProvider {
   }
 
   @Override
-  public double getInflationPerAnnum(Date firstDate,
-                                     Date secondDate) {
+  public double getInflationPerAnnum(Calendar firstDate,
+                                     Calendar secondDate) {
     if (secondDate.before(firstDate)) {
       return getInflationPerAnnum(secondDate, firstDate);
     } 
@@ -106,27 +106,27 @@ public class InflationModel extends Observable implements InflationProvider {
            getTimeDiffInYears(firstDate, secondDate);
   }
   
-  private double getTimeDiffInYears(Date earlierDate, 
-                                    Date laterDate) {
+  private double getTimeDiffInYears(Calendar earlierDate, 
+                                    Calendar laterDate) {
     final long   MILLISECONDS_PER_DAY = 86400000;
     final double DAYS_PER_YEAR =  MILLISECONDS_PER_DAY * 365.25;
 
     
-    return (laterDate.getTime() - earlierDate.getTime()) / DAYS_PER_YEAR;
+    return (laterDate.getTimeInMillis() - earlierDate.getTimeInMillis()) / DAYS_PER_YEAR;
   }
 
   @Override
-  public Date getEarliestDate() {
+  public Calendar getEarliestDate() {
     return inflationList.first().getDate();
   }
   
   @Override
-  public Date getLatestDate() {
+  public Calendar getLatestDate() {
     return inflationList.last().getDate();
   }
   
   public InflationEntry addEntry() {
-    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
     InflationEntry newItem = InflationEntryFactory.createEntry();
     this.addEntry(newItem);
     return newItem;
@@ -173,7 +173,7 @@ public class InflationModel extends Observable implements InflationProvider {
     this.changeAndNotifyObservers();
   }
 
-  public void setInflationEntryDate(int index, Date date) {
+  public void setInflationEntryDate(int index, Calendar date) {
     assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
     assert (index >= 0 && index < inflationList.size());
     inflationList.get(index).setDate(date);
@@ -183,5 +183,28 @@ public class InflationModel extends Observable implements InflationProvider {
   public void changeAndNotifyObservers() {
     this.setChanged();
     this.notifyObservers();
+  }
+  
+  public InflationModel.SerializableState getState() {
+    return new InflationModel.SerializableState(
+        inflationList
+    );
+  }
+
+  public void setState(InflationModel.SerializableState state) {
+    assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
+    inflationList = state.inflationList;
+    
+    this.changeAndNotifyObservers();
+  }
+  
+  public class SerializableState {
+    
+    private SortedArrayList<InflationEntry> inflationList;
+    
+    public SerializableState(SortedArrayList<InflationEntry> state) {
+
+      this.inflationList = state;
+    }
   }
 }

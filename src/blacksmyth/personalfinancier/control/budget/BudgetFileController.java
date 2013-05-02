@@ -49,10 +49,16 @@ public class BudgetFileController implements Observer, IBudgetController, IBudge
       if (promptForFilename(parentFrame)) {
         save(currentFileName);
         
-        PreferencesModel.getInstance().setLastUsedFilePath(
+        PreferencesModel.getInstance().setLastUsedBudgetFilePath(
             fileChooser.getSelectedFile().getPath()
         );
       }
+    } else {
+      save(currentFileName);
+      
+      PreferencesModel.getInstance().setLastUsedBudgetFilePath(
+          fileChooser.getSelectedFile().getPath()
+      );
     }
   }
 
@@ -61,7 +67,7 @@ public class BudgetFileController implements Observer, IBudgetController, IBudge
     if (promptForFilename(parentFrame)) {
       save(currentFileName);
       
-      PreferencesModel.getInstance().setLastUsedFilePath(
+      PreferencesModel.getInstance().setLastUsedBudgetFilePath(
           fileChooser.getSelectedFile().getPath()
       );
     }
@@ -79,7 +85,7 @@ public class BudgetFileController implements Observer, IBudgetController, IBudge
   private boolean promptForFilename(JFrame parentFrame) {
     fileChooser.setCurrentDirectory(
         new File(
-            PreferencesModel.getInstance().getLastUsedFilePath()
+            PreferencesModel.getInstance().getLastUsedBudgetFilePath()
         )    
     );
       
@@ -99,7 +105,7 @@ public class BudgetFileController implements Observer, IBudgetController, IBudge
   public void load(JFrame parentFrame) {
     fileChooser.setCurrentDirectory(
         new File(
-            PreferencesModel.getInstance().getLastUsedFilePath()
+            PreferencesModel.getInstance().getLastUsedBudgetFilePath()
         )    
     );
 
@@ -108,7 +114,7 @@ public class BudgetFileController implements Observer, IBudgetController, IBudge
     if (response == JFileChooser.APPROVE_OPTION) {
       load(fileChooser.getSelectedFile());
       
-      PreferencesModel.getInstance().setLastUsedFilePath(
+      PreferencesModel.getInstance().setLastUsedBudgetFilePath(
           fileChooser.getSelectedFile().getPath()
       );
 

@@ -7,7 +7,7 @@
 
 package blacksmyth.personalfinancier.model.inflation;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import blacksmyth.personalfinancier.model.Money;
 
@@ -15,22 +15,22 @@ public interface InflationProvider {
 
   public abstract Money computeComparisonValue(
       Money originalValue, 
-      Date  origianlDate, 
-      Date  comparisonDate
+      Calendar origianlDate, 
+      Calendar comparisonDate
    );
 
-  public abstract double getCPIFigureForDate(Date date);                                             
+  public abstract double getCPIFigureForDate(Calendar date);                                             
 
   public abstract double getInflationForDateRange(
-      Date earlierDate, 
-      Date laterDate
+      Calendar earlierDate, 
+      Calendar laterDate
   );                                             
 
   public abstract double getInflationPerAnnum(
-      Date firstDate, 
-      Date secondDate
+      Calendar firstDate, 
+      Calendar secondDate
   );
 
-  public abstract Date getEarliestDate();
-  public abstract Date getLatestDate();
+  public abstract Calendar getEarliestDate();
+  public abstract Calendar getLatestDate();
 }

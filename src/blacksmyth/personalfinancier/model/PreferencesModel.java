@@ -291,16 +291,37 @@ public class PreferencesModel extends Observable {
     this.setChangeAndNotifyObservers();
   }
 
-  private static final String DEFAULT_LAST_USED_FILE_PATH = ".";
-  private static final String LAST_USED_FILE_PATH = "LastUsedFilePath";
+  private static final String DEFAULT_LAST_USED_BUDGET_FILE_PATH = ".";
+  private static final String LAST_USED_BUDGET_FILE_PATH = "LastUsedBudgetFilePath";
 
-  public String getLastUsedFilePath() {
-    return this.prefs.get(LAST_USED_FILE_PATH, DEFAULT_LAST_USED_FILE_PATH);
+  public String getLastUsedBudgetFilePath() {
+    return this.prefs.get(
+        LAST_USED_BUDGET_FILE_PATH, 
+        DEFAULT_LAST_USED_BUDGET_FILE_PATH
+    );
   }
   
-  public void setLastUsedFilePath(String lastUsedPath) {
+  public void setLastUsedBudgetFilePath(String lastUsedPath) {
     this.prefs.put(
-        LAST_USED_FILE_PATH,
+        LAST_USED_BUDGET_FILE_PATH,
+        lastUsedPath
+    );
+    this.setChangeAndNotifyObservers();
+  }
+
+  private static final String DEFAULT_LAST_USED_INFLATION_FILE_PATH = ".";
+  private static final String LAST_USED_INFLATION_FILE_PATH = "LastUsedInflationFilePath";
+
+  public String getLastUsedInflationFilePath() {
+    return this.prefs.get(
+        LAST_USED_INFLATION_FILE_PATH, 
+        DEFAULT_LAST_USED_INFLATION_FILE_PATH
+    );
+  }
+  
+  public void setLastUsedInflationFilePath(String lastUsedPath) {
+    this.prefs.put(
+        LAST_USED_INFLATION_FILE_PATH,
         lastUsedPath
     );
     this.setChangeAndNotifyObservers();

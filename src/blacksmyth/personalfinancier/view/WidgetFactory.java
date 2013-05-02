@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListCellRenderer;
@@ -82,6 +83,9 @@ public final class WidgetFactory {
   public static DefaultTableCellRenderer createDateCellRenderer() {
     return new DefaultTableCellRenderer() {
       public void setValue(Object value) {
+        if (value.getClass().equals(GregorianCalendar.class)) {
+          value = ((GregorianCalendar) value).getTime();
+        }
         this.setHorizontalAlignment(JTextField.CENTER);
         this.setText((value == null) ? "" : DATE_FORMAT.format(value));            
       }

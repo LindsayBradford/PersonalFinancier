@@ -335,6 +335,30 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
       );
     }
   }
+
+  public void moveExpenseItemDown(int itemIndex) {
+    BudgetItem movingExpense = this.removeExpenseItem(itemIndex);
+    this.addExpenseItem(itemIndex + 1, movingExpense);
+  }
+  
+  public void moveExpenseItemUp(int itemIndex) {
+    BudgetItem movingExpense = this.removeExpenseItem(itemIndex);
+    this.addExpenseItem(itemIndex - 1, movingExpense);
+  }
+
+  public void moveIncomeItemDown(int itemIndex) {
+    BudgetItem movingIncome = this.removeIncomeItem(itemIndex);
+    this.addIncomeItem(itemIndex + 1, movingIncome);
+  }
+  
+  public void moveIncomeItemUp(int itemIndex) {
+    BudgetItem movingIncome = this.removeIncomeItem(itemIndex);
+    this.addIncomeItem(itemIndex - 1, movingIncome);
+  }
+
+  public Money getNetCashFlow() {
+    return this.netCashFlow;
+  }
   
   public ArrayList<AccountSummary> getCashFlowSummaries() {
     return this.cashFlowSummaries;
@@ -539,29 +563,4 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
       this.expenseItems = expenseItems;
     }
   }
-
-  public void moveExpenseItemDown(int itemIndex) {
-    BudgetItem movingExpense = this.removeExpenseItem(itemIndex);
-    this.addExpenseItem(itemIndex + 1, movingExpense);
-  }
-  
-  public void moveExpenseItemUp(int itemIndex) {
-    BudgetItem movingExpense = this.removeExpenseItem(itemIndex);
-    this.addExpenseItem(itemIndex - 1, movingExpense);
-  }
-
-  public void moveIncomeItemDown(int itemIndex) {
-    BudgetItem movingIncome = this.removeIncomeItem(itemIndex);
-    this.addIncomeItem(itemIndex + 1, movingIncome);
-  }
-  
-  public void moveIncomeItemUp(int itemIndex) {
-    BudgetItem movingIncome = this.removeIncomeItem(itemIndex);
-    this.addIncomeItem(itemIndex - 1, movingIncome);
-  }
-
-  public Money getNetCashFlow() {
-    return this.netCashFlow;
-  }
-
 }

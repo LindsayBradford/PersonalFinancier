@@ -7,7 +7,9 @@
 package blacksmyth.personalfinancier.view.inflation;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Observer;
 
 import javax.swing.undo.CompoundEdit;
@@ -72,7 +74,7 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
 
     switch (this.getColumnEnumValueAt(colNum)) {
       case Date:
-        return Date.class;
+        return Calendar.class;
       case CPI:
         return Double.class;
       case Notes: 
@@ -108,10 +110,14 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
     switch (this.getColumnEnumValueAt(colNum)) {
     case Date:
       
-      Date valueAsDate = new Date();
+      GregorianCalendar valueAsDate = new GregorianCalendar();
       try {
-        valueAsDate = WidgetFactory.DATE_FORMAT.parse((String) value);
-      } catch (Exception e) {}
+        valueAsDate.setTime(
+            WidgetFactory.DATE_FORMAT.parse((String) value)
+        );
+      } catch (Exception e) {
+        valueAsDate.setTime(new Date());
+      }
        
       InflationUndoManager.getInstance().addEdit(
           ChangeInflationDateCommand.doCmd(
