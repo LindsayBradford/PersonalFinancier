@@ -35,8 +35,6 @@ import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.RunnableQueueThread;
@@ -45,9 +43,9 @@ import blacksmyth.personalfinancier.control.budget.BudgetFileController;
 import blacksmyth.personalfinancier.control.budget.BudgetUndoManager;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
+import blacksmyth.personalfinancier.view.WidgetFactory;
 
 public class PersonalFinancierUIFactory {
-  
   
   public static JFrame createJFrame() {
     UIComponents.budgetModel = new BudgetModel();
@@ -85,7 +83,7 @@ public class PersonalFinancierUIFactory {
       PreferencesModel.getInstance().getWindowBounds()
     );
     
-    UIComponents.windowFrame.getRootPane().addComponentListener(
+    UIComponents.windowFrame.addComponentListener(
       new ComponentAdapter() {
         public void componentResized(ComponentEvent e) {
           updatePreferences();
@@ -100,7 +98,6 @@ public class PersonalFinancierUIFactory {
       		  UIComponents.windowFrame.getBounds()
           );
         }
-
       }
     );
     
@@ -243,23 +240,7 @@ public class PersonalFinancierUIFactory {
         InflationUIFactory.createInflationComponent()
     );
     
-    final Color selectedColor = Color.green.darker().darker().darker();
-    
-    pane.setBackgroundAt(0, selectedColor);
-    
-    pane.addChangeListener(
-        new ChangeListener() {
-          public void stateChanged(ChangeEvent changeEvent) {
-            JTabbedPane sourcePane = (JTabbedPane) changeEvent.getSource();
-            int index = sourcePane.getSelectedIndex();
-            
-            for (int tabIndex = 0; tabIndex < sourcePane.getTabCount(); tabIndex++) {
-              sourcePane.setBackgroundAt(tabIndex, sourcePane.getBackground());
-            }
-            sourcePane.setBackgroundAt(index, selectedColor);
-          }
-        }
-    );
+    WidgetFactory.enableSelectionHilightedTabPane(pane);
     
     return pane;
   }

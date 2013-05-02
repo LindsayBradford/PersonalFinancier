@@ -363,7 +363,7 @@ public class PreferencesModel extends Observable {
 	this.prefs.putInt(
 	  WINDOW_BOUNDS_HEIGHT,
 	  bounds.height
-    );
+  );
 	
 	this.setChangeAndNotifyObservers();
   }

@@ -251,6 +251,13 @@ public final class WidgetFactory {
         FontIconProvider.icon_bar_chart
     );
     
+    enableSelectionHilightedTabPane(pane);
+    
+    return pane;
+  }
+  
+  public static void enableSelectionHilightedTabPane(JTabbedPane pane) {
+
     final Color selectedColor = Color.green.darker().darker().darker();
     
     pane.setBackgroundAt(0, selectedColor);
@@ -268,8 +275,6 @@ public final class WidgetFactory {
           }
         }
     );
-    
-    return pane;
   }
   
   /**
