@@ -7,7 +7,6 @@
 package blacksmyth.personalfinancier.model.inflation;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -50,24 +49,24 @@ public class InflationModel extends Observable implements InflationProvider {
 
     Money returnValue = MoneyFactory.copy(originalValue);
 
-    //  return originalValue * (getCPIFigureForDate(comparisonDate) / 
-    //      getCPIFigureForDate(originalDate));
-
     BigDecimal originalCPIForDate = new BigDecimal(getCPIFigureForDate(originalDate));
     BigDecimal comparsionCPIForDate = new BigDecimal(getCPIFigureForDate(comparisonDate));
-
-    System.out.println("originalCPIForDate: " + originalCPIForDate.doubleValue());
-    System.out.println("comparisonCPIForDate: " + comparsionCPIForDate.doubleValue());
     
-    returnValue.setTotal(
-      originalValue.getTotal().multiply(
-          comparsionCPIForDate.divide(
-              originalCPIForDate,
-              PreferencesModel.getInstance().getPreferredPrecision(), 
-              PreferencesModel.getInstance().getPreferredRoundingMode()
-          )
-      )    
-    );
+   if (getCPIFigureForDate(comparisonDate) == 0) {
+     returnValue.setTotal(
+         new BigDecimal(0)
+     );
+   } else {
+     returnValue.setTotal(
+         originalValue.getTotal().multiply(
+             comparsionCPIForDate.divide(
+                 originalCPIForDate,
+                 PreferencesModel.getInstance().getPreferredPrecision(), 
+                 PreferencesModel.getInstance().getPreferredRoundingMode()
+             )
+         )    
+       );
+   }
     
     return returnValue;
   }
@@ -163,7 +162,7 @@ public class InflationModel extends Observable implements InflationProvider {
   
   public InflationEntry addEntry() {
     assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
-    InflationEntry newItem = InflationEntryFactory.createEntry(inflationList.last());
+    InflationEntry newItem = InflationEntryFactory.createEntry(inflationList);
     this.addEntry(newItem);
     return newItem;
   }
