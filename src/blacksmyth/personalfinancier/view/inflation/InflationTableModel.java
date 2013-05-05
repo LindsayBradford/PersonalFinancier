@@ -14,7 +14,7 @@ import java.util.Observer;
 
 import javax.swing.undo.CompoundEdit;
 
-import blacksmyth.personalfinancier.control.inflation.InflationUndoManager;
+import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.control.inflation.command.AddInflationEntryCommand;
 import blacksmyth.personalfinancier.control.inflation.command.ChangeInflationDateCommand;
 import blacksmyth.personalfinancier.control.inflation.command.ChangeInflationNotesCommand;
@@ -119,7 +119,7 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
         valueAsDate.setTime(new Date());
       }
        
-      InflationUndoManager.getInstance().addEdit(
+      UndoManagers.INFLATION_UNDO_MANAGER.addEdit(
           ChangeInflationDateCommand.doCmd(
               getInflationModel(), 
               rowNum, 
@@ -128,7 +128,7 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
       );
       break;
     case CPI:
-      InflationUndoManager.getInstance().addEdit(
+      UndoManagers.INFLATION_UNDO_MANAGER.addEdit(
           ChangeInflationValueCommand.doCmd(
               getInflationModel(), 
               rowNum, 
@@ -137,7 +137,7 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
       );
       break;
     case Notes:
-      InflationUndoManager.getInstance().addEdit(
+      UndoManagers.INFLATION_UNDO_MANAGER.addEdit(
           ChangeInflationNotesCommand.doCmd(
               getInflationModel(), 
               rowNum, 
@@ -149,7 +149,7 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
   }
 
   public void addEntry() {
-    InflationUndoManager.getInstance().addEdit(
+    UndoManagers.INFLATION_UNDO_MANAGER.addEdit(
         AddInflationEntryCommand.doCmd(
             getInflationModel()
         )
@@ -171,7 +171,7 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
     }
     removeItemsEdit.end();
     
-    InflationUndoManager.getInstance().addEdit(removeItemsEdit);
+    UndoManagers.INFLATION_UNDO_MANAGER.addEdit(removeItemsEdit);
   }
 
 

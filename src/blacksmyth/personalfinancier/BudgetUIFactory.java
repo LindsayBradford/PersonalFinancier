@@ -30,7 +30,7 @@ import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.BlacksmythSwingUtilities;
-import blacksmyth.personalfinancier.control.budget.BudgetUndoManager;
+import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.control.budget.command.ResetBudgetItemsCommand;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
@@ -444,7 +444,7 @@ class BudgetUIFactory {
   private static JButton createResetItemsButton() {
     AbstractAction resetItemsAction = new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
-        BudgetUndoManager.getInstance().addEdit(
+        UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
             ResetBudgetItemsCommand.doCmd(
                 UIComponents.budgetModel
             )
@@ -483,8 +483,8 @@ class BudgetUIFactory {
   private static JButton createUndoButton() {
     AbstractAction undoAction = new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
-        if (BudgetUndoManager.getInstance().canUndo()) {
-           BudgetUndoManager.getInstance().undo();
+        if (UndoManagers.BUDGET_UNDO_MANAGER.canUndo()) {
+          UndoManagers.BUDGET_UNDO_MANAGER.undo();
         }
       }
     };
@@ -500,7 +500,7 @@ class BudgetUIFactory {
       }
     };
     
-    BudgetUndoManager.getInstance().addObserver(button);
+    UndoManagers.BUDGET_UNDO_MANAGER.addObserver(button);
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
@@ -526,8 +526,8 @@ class BudgetUIFactory {
   private static JButton createRedoButton() {
     AbstractAction redoAction = new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
-        if (BudgetUndoManager.getInstance().canRedo()) {
-           BudgetUndoManager.getInstance().redo();
+        if (UndoManagers.BUDGET_UNDO_MANAGER.canRedo()) {
+          UndoManagers.BUDGET_UNDO_MANAGER.redo();
         }
       }
     };
@@ -543,7 +543,7 @@ class BudgetUIFactory {
       }
     };
     
-    BudgetUndoManager.getInstance().addObserver(button);
+    UndoManagers.BUDGET_UNDO_MANAGER.addObserver(button);
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 

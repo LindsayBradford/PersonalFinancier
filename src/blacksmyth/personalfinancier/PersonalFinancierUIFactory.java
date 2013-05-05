@@ -39,8 +39,8 @@ import javax.swing.border.EmptyBorder;
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.RunnableQueueThread;
 import blacksmyth.general.BlacksmythSwingUtilities;
+import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.control.budget.BudgetFileController;
-import blacksmyth.personalfinancier.control.budget.BudgetUndoManager;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.view.WidgetFactory;
@@ -302,7 +302,7 @@ public class PersonalFinancierUIFactory {
     UIComponents.LoadBudgetAction = new AbstractAction("Open...") {
       
       public void actionPerformed(ActionEvent e) {
-        BudgetUndoManager.getInstance().discardAllEdits();
+        UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
         UIComponents.budgetFileController.load(
             UIComponents.windowFrame
         );
@@ -330,7 +330,7 @@ public class PersonalFinancierUIFactory {
     
     UIComponents.SaveBudgetAction = new AbstractAction("Save") {
       public void actionPerformed(ActionEvent e) {
-        BudgetUndoManager.getInstance().discardAllEdits();
+        UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
         UIComponents.budgetFileController.save(
             UIComponents.windowFrame
         );
@@ -356,7 +356,7 @@ public class PersonalFinancierUIFactory {
   private static JMenuItem createSaveAsMenuItem() {
     UIComponents.SaveAsBudgetAction = new AbstractAction("Save As...") {
       public void actionPerformed(ActionEvent e) {
-        BudgetUndoManager.getInstance().discardAllEdits();
+        UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
         UIComponents.budgetFileController.saveAs(
             UIComponents.windowFrame
         );
@@ -382,7 +382,7 @@ public class PersonalFinancierUIFactory {
   private static JMenuItem createExitMenuItem() {
     UIComponents.ExitAction = new AbstractAction("Exit") {
       public void actionPerformed(ActionEvent e) {
-        BudgetUndoManager.getInstance().discardAllEdits();
+        UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
         UIComponents.budgetFileController.save(
             UIComponents.windowFrame
         );

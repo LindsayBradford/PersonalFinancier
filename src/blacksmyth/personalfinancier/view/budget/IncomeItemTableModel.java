@@ -12,7 +12,7 @@ import java.util.Observer;
 
 import javax.swing.undo.CompoundEdit;
 
-import blacksmyth.personalfinancier.control.budget.BudgetUndoManager;
+import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.control.budget.command.AddIncomeItemCommand;
 import blacksmyth.personalfinancier.control.budget.command.ChangeIncomeAccountCommand;
 import blacksmyth.personalfinancier.control.budget.command.ChangeIncomeAmountCommand;
@@ -120,7 +120,7 @@ class IncomeItemTableModel extends AbstractBudgetTableModel<INCOME_ITEM_COLUMNS>
   public void setValueAt(Object value, int rowNum, int colNum) {
     switch (this.getColumnEnumValueAt(colNum)) {
     case Category:
-      BudgetUndoManager.getInstance().addEdit(
+      UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
           ChangeIncomeCategoryCommand.doCmd(
               getBudgetModel(), 
               rowNum, 
@@ -129,7 +129,7 @@ class IncomeItemTableModel extends AbstractBudgetTableModel<INCOME_ITEM_COLUMNS>
       );
       break;
     case Description:
-      BudgetUndoManager.getInstance().addEdit(
+      UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
           ChangeIncomeDescriptionCommand.doCmd(
               getBudgetModel(), 
               rowNum, 
@@ -138,7 +138,7 @@ class IncomeItemTableModel extends AbstractBudgetTableModel<INCOME_ITEM_COLUMNS>
       );
       break;
     case Amount:
-      BudgetUndoManager.getInstance().addEdit(
+      UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
           ChangeIncomeAmountCommand.doCmd(
               getBudgetModel(), 
               rowNum, 
@@ -147,7 +147,7 @@ class IncomeItemTableModel extends AbstractBudgetTableModel<INCOME_ITEM_COLUMNS>
       );
       break;
     case Frequency:
-      BudgetUndoManager.getInstance().addEdit(
+      UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
           ChangeIncomeFrequencyCommand.doCmd(
               getBudgetModel(), 
               rowNum, 
@@ -156,7 +156,7 @@ class IncomeItemTableModel extends AbstractBudgetTableModel<INCOME_ITEM_COLUMNS>
       );
       break;
     case Account:
-      BudgetUndoManager.getInstance().addEdit(
+      UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
           ChangeIncomeAccountCommand.doCmd(
               getBudgetModel(), 
               rowNum, 
@@ -186,7 +186,7 @@ class IncomeItemTableModel extends AbstractBudgetTableModel<INCOME_ITEM_COLUMNS>
   }
 
   public void addIncomeItem() {
-    BudgetUndoManager.getInstance().addEdit(
+    UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
         AddIncomeItemCommand.doCmd(
             getBudgetModel()
         )
@@ -208,13 +208,13 @@ class IncomeItemTableModel extends AbstractBudgetTableModel<INCOME_ITEM_COLUMNS>
 	  }
 	  removeItemsEdit.end();
 	  
-	  BudgetUndoManager.getInstance().addEdit(removeItemsEdit);
+	  UndoManagers.BUDGET_UNDO_MANAGER.addEdit(removeItemsEdit);
   }
 
   
   
   public void moveIncomeItemDown(int row) {
-    BudgetUndoManager.getInstance().addEdit(
+    UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
         MoveIncomeItemDownCommand.doCmd(
             getBudgetModel(),
             row
@@ -223,7 +223,7 @@ class IncomeItemTableModel extends AbstractBudgetTableModel<INCOME_ITEM_COLUMNS>
   }
 
   public void moveIncomeItemUp(int row) {
-    BudgetUndoManager.getInstance().addEdit(
+    UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
         MoveIncomeItemUpCommand.doCmd(
             getBudgetModel(),
             row

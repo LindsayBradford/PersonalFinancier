@@ -1,4 +1,10 @@
-package blacksmyth.personalfinancier.control.budget;
+/**
+ * (c) 2013, Lindsay Bradford. licensed under a 
+ * Creative Commons Attribution-ShareAlike 3.0 
+ * Unported License.
+ */
+
+package blacksmyth.personalfinancier.control;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -7,18 +13,16 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
-public class BudgetUndoManager extends UndoManager {
+public class FinancierUndoManager extends UndoManager {
   
-  private static BudgetUndoManager instance;
-
   /**
-   * The BudgetUndoManager is observable indirectly by
+   * The FinancierUndoManager is observable indirectly by
    * relying on all Observable behaviour, delegated to
    * <tt>observableDelegate</tt>
    */
   private Observable observableDelegate;
 
-  protected BudgetUndoManager() {
+  public FinancierUndoManager() {
     super();
     this.observableDelegate = new Observable() {
       @Override
@@ -29,13 +33,6 @@ public class BudgetUndoManager extends UndoManager {
         super.notifyObservers(arg);
       }
     };
-  }
-  
-  public static BudgetUndoManager getInstance() {
-    if (instance == null) {
-      instance = new BudgetUndoManager();
-    }
-    return instance;
   }
   
   public void addObserver(Observer o) {
@@ -69,5 +66,4 @@ public class BudgetUndoManager extends UndoManager {
     super.undoableEditHappened(e);
     this.observableDelegate.notifyObservers(this);
   }
-
 }
