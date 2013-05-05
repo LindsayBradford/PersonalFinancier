@@ -10,6 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Event;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -28,16 +29,22 @@ import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.BlacksmythSwingUtilities;
+import blacksmyth.personalfinancier.control.inflation.InflationConversionController;
 import blacksmyth.personalfinancier.control.inflation.InflationFileController;
 import blacksmyth.personalfinancier.control.inflation.InflationUndoManager;
+import blacksmyth.personalfinancier.model.inflation.InflationConversionModel;
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
 import blacksmyth.personalfinancier.view.JUndoListeningButton;
 import blacksmyth.personalfinancier.view.WidgetFactory;
+import blacksmyth.personalfinancier.view.inflation.InflationConversionPanel;
 import blacksmyth.personalfinancier.view.inflation.InflationTable;
 
 class InflationUIFactory {
 
   public static JComponent createInflationComponent() {
+
+    UIComponents.inflationModel = new InflationModel();
+    
     JSplitPane splitPane = new JSplitPane(
         JSplitPane.VERTICAL_SPLIT,
         createInflationItemPanel(), 
@@ -53,9 +60,7 @@ class InflationUIFactory {
   private static JComponent createInflationItemPanel() {
     JPanel panel = new JPanel(new BorderLayout());
     
-    UIComponents.inflationModel = new InflationModel();
     UIComponents.inflationTable = new InflationTable(UIComponents.inflationModel);
-
     UIComponents.inflationFileController = new InflationFileController(UIComponents.inflationModel);
 
     panel.add(
@@ -318,8 +323,6 @@ class InflationUIFactory {
 
     return button;
   }
-
-
   
   private static Component createInflationTablePanel() {
     JPanel panel = new JPanel(new BorderLayout());
@@ -334,11 +337,6 @@ class InflationUIFactory {
         )
     );
 
-//    panel.add(
-//        createIncomeItemToolbar(),
-//        BorderLayout.PAGE_START
-//    );
-
     panel.add(
         new JScrollPane(UIComponents.inflationTable),
         BorderLayout.CENTER
@@ -348,14 +346,72 @@ class InflationUIFactory {
   }
 
   private static JComponent createInflationSummaryPanel() {
-    JPanel panel = new JPanel(new BorderLayout());
+    JPanel panel  = new JPanel(new GridLayout(1,2));
     
     panel.add(
-        new JLabel("Inflation Summary Widgets goes here."),
-        BorderLayout.CENTER
+        createInflationConversionPanel()
+    );
+
+    panel.add(
+        createInflationGraphPanel()
     );
 
     return panel;    
+  }
+
+  private static Component createInflationConversionPanel() {
+    JPanel panel = new JPanel(new BorderLayout());
+
+    panel.setBorder(
+        new CompoundBorder(
+            WidgetFactory.createColoredTitledBorder(
+                " Value Conversion ",
+                Color.GRAY.brighter()
+            ),
+            new EmptyBorder(0,3,5,4)
+        )
+    );
+
+    final InflationConversionModel conversionModel = new InflationConversionModel(
+        UIComponents.inflationModel    
+    );
+
+    final InflationConversionPanel conversionPanel = 
+        new InflationConversionPanel(
+            new InflationConversionController(
+                conversionModel
+            )       
+    );
+    
+    conversionModel.addObserver(conversionPanel);
+
+    panel.add(
+        new JScrollPane(conversionPanel),
+        BorderLayout.CENTER
+    );
+    
+    return panel;
+  }
+
+  private static Component createInflationGraphPanel() {
+    JPanel panel = new JPanel(new BorderLayout());
+
+    panel.setBorder(
+        new CompoundBorder(
+            WidgetFactory.createColoredTitledBorder(
+                " Inflation Graph ",
+                Color.GRAY.brighter()
+            ),
+            new EmptyBorder(0,3,5,4)
+        )
+    );
+    
+    panel.add(
+        new JLabel("A pretty graph goes here!"),
+        BorderLayout.CENTER
+    );
+    
+    return panel;
   }
 
 }

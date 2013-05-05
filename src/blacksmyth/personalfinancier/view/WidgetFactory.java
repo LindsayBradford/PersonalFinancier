@@ -9,6 +9,7 @@ package blacksmyth.personalfinancier.view;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.FocusAdapter;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -40,6 +41,7 @@ import javax.swing.text.BadLocationException;
 
 import javax.swing.text.DocumentFilter;
 
+import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 
@@ -50,8 +52,11 @@ import blacksmyth.personalfinancier.model.PreferencesModel;
  *
  */
 public final class WidgetFactory {
+
+  public static final String PERCENT_FORMAT_PATTERN = "###,##0.00%";
+  public static final DecimalFormat PERCENT_FORMAT = new DecimalFormat(PERCENT_FORMAT_PATTERN);
   
-  public static final String DECIMAL_FORMAT_PATTERN = "###,##0.00";
+  public static final String DECIMAL_FORMAT_PATTERN = "###,###,##0.00";
   public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat(DECIMAL_FORMAT_PATTERN);
 
   public static final String DATE_FORMAT_PATTERN = "dd/MM/yyyy";
@@ -161,8 +166,24 @@ public final class WidgetFactory {
    * Create a {@link JFormattedTextField} configured to edit decimal numbers in an application-specific way.
    * @return
    */
+  public static JFormattedTextField createPercentTextField() {
+    return createPercentTextField(JTextField.RIGHT);
+  }
+
+  
+  /**
+   * Create a {@link JFormattedTextField} configured to edit decimal numbers in an application-specific way.
+   * @return
+   */
   public static JFormattedTextField createDecimalTextField(int alignment) {
     JFormattedTextField field = new JFormattedTextField();
+    
+    field.setPreferredSize(
+        new Dimension(
+            BlacksmythSwingUtilities.getTextWidth(DECIMAL_FORMAT_PATTERN),
+            (int) field.getPreferredSize().getHeight()
+        )
+    );
     
     field.setInputVerifier(new FormatVerifier());
     
@@ -179,6 +200,37 @@ public final class WidgetFactory {
     
     return field;
   }
+
+  /**
+   * Create a {@link JFormattedTextField} configured to edit decimal numbers in an application-specific way.
+   * @return
+   */
+  public static JFormattedTextField createPercentTextField(int alignment) {
+    JFormattedTextField field = new JFormattedTextField();
+    
+    field.setPreferredSize(
+        new Dimension(
+            BlacksmythSwingUtilities.getTextWidth(PERCENT_FORMAT_PATTERN),
+            (int) field.getPreferredSize().getHeight()
+        )
+    );
+    
+    field.setInputVerifier(new FormatVerifier());
+    
+    ensureTextFieldSelectsAllOnFocus(field);
+    
+    ((AbstractDocument) field.getDocument()).setDocumentFilter(
+        new PercentCharFilter()
+    );
+    
+    field.setForeground(
+        PreferencesModel.getInstance().getPreferredEditableCellColor()
+    );
+    field.setHorizontalAlignment(alignment);
+    
+    return field;
+  }
+
   
   public static void ensureTextFieldSelectsAllOnFocus(final JTextField field) {
     field.addFocusListener(
@@ -203,6 +255,13 @@ public final class WidgetFactory {
    */
   public static JFormattedTextField createDateTextField() {
     final JFormattedTextField field = new JFormattedTextField();
+    
+    field.setPreferredSize(
+        new Dimension(
+            BlacksmythSwingUtilities.getTextWidth(DATE_FORMAT_PATTERN),
+            (int) field.getPreferredSize().getHeight()
+        )
+    );
     
     field.setInputVerifier(new FormatVerifier());
     
@@ -363,6 +422,42 @@ class FormatVerifier extends InputVerifier {
   
   public boolean shouldYieldFocus(JComponent input) {
     return verify(input);
+  }
+}
+
+class PercentCharFilter extends DocumentFilter {
+  private static PercentCharFilter instance;
+  
+  private static final String VALID_CHARS = "0123456789.,%";
+  
+  protected PercentCharFilter() {
+    super();
+  }
+  
+  public static PercentCharFilter getInstance() {
+    if (instance == null) {
+      instance = new PercentCharFilter();
+    }
+    return instance;
+  }
+  
+  public void insertString(DocumentFilter.FilterBypass bypass, int offset, String string, AttributeSet attr) 
+      throws BadLocationException {
+    if (isValidText(string)) bypass.insertString(offset, string,attr);
+  }
+  
+  public void replace(DocumentFilter.FilterBypass bypass, int offset, int length, String text, AttributeSet attributes) 
+      throws BadLocationException {
+    if (isValidText(text)) bypass.replace(offset,length,text,attributes);
+  }
+
+  protected boolean isValidText(String text) {
+    for (int i = 0; i < text.length(); i++) {
+      if (VALID_CHARS.indexOf(text.charAt(i)) == -1) {
+        return false;
+      }
+    }
+    return true;
   }
 }
 

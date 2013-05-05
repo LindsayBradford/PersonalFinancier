@@ -7,7 +7,9 @@
 
 package blacksmyth.general;
 
+import java.awt.Dimension;
 import java.awt.FontMetrics;
+import java.util.List;
 import java.util.UUID;
 
 import javax.swing.Action;
@@ -134,4 +136,34 @@ public final class BlacksmythSwingUtilities {
         )
     );
   }
+  
+  public static void equalizeComponentSizes(List<JComponent> components) {
+    Dimension  maxComponentSize = new Dimension(0,0);
+    for (int i = 0; i < components.size(); ++i) {
+      setMaximumSize(
+          maxComponentSize, 
+          components.get(i)
+      );
+    }
+    for (int i = 0; i < components.size(); ++i) {
+      resize(
+          components.get(i), 
+          maxComponentSize
+      );
+    }
+  } 
+
+  private static void setMaximumSize(Dimension maxComponentSize, JComponent component) {
+    final Dimension componentSize   = component.getPreferredSize();
+    maxComponentSize.width  = Math.max(maxComponentSize.width,  (int)componentSize.getWidth());
+    maxComponentSize.height = Math.max(maxComponentSize.height, (int)componentSize.getHeight());
+  }
+
+  private static void resize(JComponent component, Dimension size) {
+    component.setPreferredSize(size);
+    component.setMaximumSize(size);
+    component.setMinimumSize(size);
+  }
+
+
 }

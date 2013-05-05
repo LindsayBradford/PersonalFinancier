@@ -7,7 +7,10 @@
 package blacksmyth.personalfinancier.model.inflation;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Observable;
 
 import blacksmyth.general.ReflectionUtilities;
@@ -15,17 +18,20 @@ import blacksmyth.general.SortedArrayList;
 import blacksmyth.personalfinancier.control.inflation.IInflationController;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
+import blacksmyth.personalfinancier.model.PreferencesModel;
 
 public class InflationModel extends Observable implements InflationProvider {
+  
+  private static GregorianCalendar TODAY;
   
   private static final String CONTROLLER_ASSERT_MSG = "Caller does not implement IInflationController.";
   private static final String VIEWER_ASSERT_MSG = "Caller does not implement IInflationObserver.";
   
   //Note: SortedSet of CPIEntries are to be sorted earliest to latest in date order.
-  private static SortedArrayList<InflationEntry> inflationList;
+  private static SortedArrayList<InflationEntry> inflationList = new SortedArrayList<InflationEntry>();
 
   public InflationModel() {
-    inflationList = new SortedArrayList<InflationEntry>();
+    TODAY = new GregorianCalendar(); TODAY.setTime(new Date());
   }
   
   public SortedArrayList<InflationEntry> getInflationList() {
@@ -34,6 +40,7 @@ public class InflationModel extends Observable implements InflationProvider {
   
   public void setInflationList(SortedArrayList<InflationEntry> list) {
     InflationModel.inflationList = list;
+    this.changeAndNotifyObservers();
   }
 
   @Override
@@ -49,9 +56,16 @@ public class InflationModel extends Observable implements InflationProvider {
     BigDecimal originalCPIForDate = new BigDecimal(getCPIFigureForDate(originalDate));
     BigDecimal comparsionCPIForDate = new BigDecimal(getCPIFigureForDate(comparisonDate));
 
+    System.out.println("originalCPIForDate: " + originalCPIForDate.doubleValue());
+    System.out.println("comparisonCPIForDate: " + comparsionCPIForDate.doubleValue());
+    
     returnValue.setTotal(
       originalValue.getTotal().multiply(
-          comparsionCPIForDate.divide(originalCPIForDate)
+          comparsionCPIForDate.divide(
+              originalCPIForDate,
+              PreferencesModel.getInstance().getPreferredPrecision(), 
+              PreferencesModel.getInstance().getPreferredRoundingMode()
+          )
       )    
     );
     
@@ -70,16 +84,20 @@ public class InflationModel extends Observable implements InflationProvider {
   }
   
   public double getCPIFigureFromList(Calendar date) {
+    
+    if (inflationList.size() == 0) {
+      return 0;
+    }
+    
     double cpiFigure = inflationList.last().getCPIValue();
     
-    for(InflationEntry entry : inflationList) {
-      Calendar applicableFromDate = entry.getDate();
+    for(int i = inflationList.size() - 1; i >= 0; i--) {
+      Calendar applicableFromDate = inflationList.get(i).getDate();
+      cpiFigure = inflationList.get(i).getCPIValue();
 
-      if (applicableFromDate.before(date)) {
+      if (applicableFromDate.before(date) || applicableFromDate.equals(date)) {
         break;
       }
-
-      cpiFigure = entry.getCPIValue();
     }
 
     return cpiFigure;
@@ -89,6 +107,10 @@ public class InflationModel extends Observable implements InflationProvider {
   public double getInflationForDateRange(Calendar earlierDate,
                                          Calendar laterDate) {
 
+    if (inflationList.size() == 0) {
+      return 0;
+    }
+    
     if (laterDate.before(earlierDate)) {
       return getInflationForDateRange(laterDate, earlierDate);
     } 
@@ -98,29 +120,44 @@ public class InflationModel extends Observable implements InflationProvider {
   @Override
   public double getInflationPerAnnum(Calendar firstDate,
                                      Calendar secondDate) {
+    if (inflationList.size() == 0) {
+      return 0;
+    }
+    
     if (secondDate.before(firstDate)) {
       return getInflationPerAnnum(secondDate, firstDate);
     } 
-    return getInflationForDateRange(firstDate, secondDate) / 
-           getTimeDiffInYears(firstDate, secondDate);
+    
+    double inflationOverDateRange = getInflationForDateRange(firstDate, secondDate);
+    if (inflationOverDateRange != 0) {
+      return  inflationOverDateRange / getTimeDiffInYears(firstDate, secondDate);
+    }
+    return 0;
   }
   
   private double getTimeDiffInYears(Calendar earlierDate, 
                                     Calendar laterDate) {
     final long   MILLISECONDS_PER_DAY = 86400000;
     final double DAYS_PER_YEAR =  MILLISECONDS_PER_DAY * 365.25;
-
     
     return (laterDate.getTimeInMillis() - earlierDate.getTimeInMillis()) / DAYS_PER_YEAR;
   }
 
   @Override
   public Calendar getEarliestDate() {
+    if (inflationList.size() == 0) {
+      return TODAY;
+    }
+
     return inflationList.first().getDate();
   }
   
   @Override
   public Calendar getLatestDate() {
+    if (inflationList.size() == 0) {
+      return TODAY;
+    }
+
     return inflationList.last().getDate();
   }
   

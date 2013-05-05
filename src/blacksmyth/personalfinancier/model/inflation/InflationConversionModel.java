@@ -10,7 +10,6 @@ import java.util.Calendar;
 import java.util.Observable;
 import java.util.Observer;
 
-import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
 
@@ -29,21 +28,21 @@ public class InflationConversionModel extends Observable implements Observer {
 
   public void setInflationProvider(InflationProvider inflationProvider) {
     this.inflationProvider = inflationProvider;
-    if (ReflectionUtilities.classImplements(inflationProvider.getClass(), Observable.class)) {
-      Observable providerAsObservable = (Observable) inflationProvider;
-      providerAsObservable.addObserver(this);
-    }
+
+    Observable providerAsObservable = (Observable) inflationProvider;
+    providerAsObservable.addObserver(this);
   }
   
-  public InflationConversionModel() {
-    this.setInitialValue(MoneyFactory.createAmount(0));
-    this.setInitialDate(inflationProvider.getEarliestDate());
+  public InflationConversionModel(InflationProvider provider) {
+    this.setInflationProvider(provider);
+    this.initialValue = MoneyFactory.createAmount(0);
+    this.initialDate = inflationProvider.getEarliestDate();
     
-    this.setConversionValue(MoneyFactory.createAmount(0));
-    this.setConversionDate(inflationProvider.getLatestDate());
+    this.conversionValue = MoneyFactory.createAmount(0);
+    this.conversionDate = inflationProvider.getLatestDate();
 
-    this.setInflationOverPeriod(0);
-    this.setInflationPerAnnum(0);
+    this.inflationOverPeriod = 0;
+    this.inflationPerAnnum = 0;
 
     this.changeAndNotifyObservers();
   }
@@ -157,6 +156,13 @@ public class InflationConversionModel extends Observable implements Observer {
             this.getConversionDate()
         )
     );
+  }
+  
+  public Calendar getEarliestDate() {
+    return inflationProvider.getEarliestDate();
+  }
+  public Calendar getLatestLatestDate() {
+    return inflationProvider.getLatestDate();
   }
 
   @Override
