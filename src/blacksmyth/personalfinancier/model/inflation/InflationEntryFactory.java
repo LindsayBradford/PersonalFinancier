@@ -1,3 +1,9 @@
+/**
+ * (c) 2013, Lindsay Bradford. licensed under a 
+ * Creative Commons Attribution-ShareAlike 3.0 
+ * Unported License.
+ */
+
 package blacksmyth.personalfinancier.model.inflation;
 
 import java.util.Calendar;

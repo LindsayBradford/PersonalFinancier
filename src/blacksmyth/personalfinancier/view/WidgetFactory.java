@@ -36,10 +36,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-
-import javax.swing.text.DocumentFilter;
 
 import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.general.FontIconProvider;
@@ -190,7 +186,7 @@ public final class WidgetFactory {
     ensureTextFieldSelectsAllOnFocus(field);
     
     ((AbstractDocument) field.getDocument()).setDocumentFilter(
-        new DecimalCharFilter()
+        DocumentFilterFactory.getDecimalFilter()
     );
     
     field.setForeground(
@@ -220,7 +216,7 @@ public final class WidgetFactory {
     ensureTextFieldSelectsAllOnFocus(field);
     
     ((AbstractDocument) field.getDocument()).setDocumentFilter(
-        new PercentCharFilter()
+        DocumentFilterFactory.getPercentFilter()
     );
     
     field.setForeground(
@@ -230,7 +226,6 @@ public final class WidgetFactory {
     
     return field;
   }
-
   
   public static void ensureTextFieldSelectsAllOnFocus(final JTextField field) {
     field.addFocusListener(
@@ -268,7 +263,7 @@ public final class WidgetFactory {
     ensureTextFieldSelectsAllOnFocus(field);
     
     ((AbstractDocument) field.getDocument()).setDocumentFilter(
-        new DateCharFilter()
+        DocumentFilterFactory.getDateFilter()
     );
     
     field.setForeground(
@@ -422,113 +417,5 @@ class FormatVerifier extends InputVerifier {
   
   public boolean shouldYieldFocus(JComponent input) {
     return verify(input);
-  }
-}
-
-class PercentCharFilter extends DocumentFilter {
-  private static PercentCharFilter instance;
-  
-  private static final String VALID_CHARS = "0123456789.,%";
-  
-  protected PercentCharFilter() {
-    super();
-  }
-  
-  public static PercentCharFilter getInstance() {
-    if (instance == null) {
-      instance = new PercentCharFilter();
-    }
-    return instance;
-  }
-  
-  public void insertString(DocumentFilter.FilterBypass bypass, int offset, String string, AttributeSet attr) 
-      throws BadLocationException {
-    if (isValidText(string)) bypass.insertString(offset, string,attr);
-  }
-  
-  public void replace(DocumentFilter.FilterBypass bypass, int offset, int length, String text, AttributeSet attributes) 
-      throws BadLocationException {
-    if (isValidText(text)) bypass.replace(offset,length,text,attributes);
-  }
-
-  protected boolean isValidText(String text) {
-    for (int i = 0; i < text.length(); i++) {
-      if (VALID_CHARS.indexOf(text.charAt(i)) == -1) {
-        return false;
-      }
-    }
-    return true;
-  }
-}
-
-class DecimalCharFilter extends DocumentFilter {
-  private static DecimalCharFilter instance;
-  
-  private static final String VALID_CHARS = "0123456789.,";
-  
-  protected DecimalCharFilter() {
-    super();
-  }
-  
-  public static DecimalCharFilter getInstance() {
-    if (instance == null) {
-      instance = new DecimalCharFilter();
-    }
-    return instance;
-  }
-  
-  public void insertString(DocumentFilter.FilterBypass bypass, int offset, String string, AttributeSet attr) 
-      throws BadLocationException {
-    if (isValidText(string)) bypass.insertString(offset, string,attr);
-  }
-  
-  public void replace(DocumentFilter.FilterBypass bypass, int offset, int length, String text, AttributeSet attributes) 
-      throws BadLocationException {
-    if (isValidText(text)) bypass.replace(offset,length,text,attributes);
-  }
-
-  protected boolean isValidText(String text) {
-    for (int i = 0; i < text.length(); i++) {
-      if (VALID_CHARS.indexOf(text.charAt(i)) == -1) {
-        return false;
-      }
-    }
-    return true;
-  }
-}
-
-class DateCharFilter extends DocumentFilter {
-  private static DateCharFilter instance;
-  
-  private static final String VALID_CHARS = "0123456789/";
-  
-  protected DateCharFilter() {
-    super();
-  }
-  
-  public static DateCharFilter getInstance() {
-    if (instance == null) {
-      instance = new DateCharFilter();
-    }
-    return instance;
-  }
-  
-  public void insertString(DocumentFilter.FilterBypass bypass, int offset, String string, AttributeSet attr) 
-      throws BadLocationException {
-    if (isValidText(string)) bypass.insertString(offset, string,attr);
-  }
-  
-  public void replace(DocumentFilter.FilterBypass bypass, int offset, int length, String text, AttributeSet attributes) 
-      throws BadLocationException {
-    if (isValidText(text)) bypass.replace(offset,length,text,attributes);
-  }
-
-  protected boolean isValidText(String text) {
-    for (int i = 0; i < text.length(); i++) {
-      if (VALID_CHARS.indexOf(text.charAt(i)) == -1) {
-        return false;
-      }
-    }
-    return true;
   }
 }
