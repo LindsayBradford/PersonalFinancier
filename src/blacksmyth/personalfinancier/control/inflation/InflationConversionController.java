@@ -20,8 +20,15 @@ public class InflationConversionController  {
   public void setInitialValue(String initialValueAsString) {
     Money initialValue = model.getInitialValue();
     
-    BigDecimal newInitialValue= BigDecimal.valueOf(
-        Double.valueOf(initialValueAsString)
+    Number valueAsDouble = 0;
+    try {
+      valueAsDouble = WidgetFactory.DECIMAL_FORMAT.parse(initialValueAsString);
+    } catch (ParseException e) {
+      // deliberately do nothing.
+    }
+    
+    BigDecimal newInitialValue = BigDecimal.valueOf(
+        valueAsDouble.doubleValue()
     );
     
     initialValue.setTotal(
@@ -53,12 +60,19 @@ public class InflationConversionController  {
   public void setConversionValue(String conversionValueAsString) {
     Money conversionValue = model.getConversionValue();
     
-    BigDecimal newConversionValue= BigDecimal.valueOf(
-        Double.valueOf(conversionValueAsString)
+    Number valueAsDouble = 0;
+    try {
+      valueAsDouble = WidgetFactory.DECIMAL_FORMAT.parse(conversionValueAsString);
+    } catch (ParseException e) {
+      // deliberately do nothing.
+    }
+    
+    BigDecimal newValue = BigDecimal.valueOf(
+        valueAsDouble.doubleValue()
     );
     
     conversionValue.setTotal(
-        newConversionValue
+        newValue
     );
     
     model.setConversionValue(conversionValue);

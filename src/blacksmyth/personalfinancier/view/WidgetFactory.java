@@ -11,6 +11,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -25,7 +29,6 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTabbedPane;
-import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -35,7 +38,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.text.AbstractDocument;
 
 import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.general.FontIconProvider;
@@ -49,7 +51,7 @@ import blacksmyth.personalfinancier.model.PreferencesModel;
  */
 public final class WidgetFactory {
 
-  public static final String PERCENT_FORMAT_PATTERN = "###,##0.00%";
+  public static final String PERCENT_FORMAT_PATTERN = "###,##0.00 %";
   public static final DecimalFormat PERCENT_FORMAT = new DecimalFormat(PERCENT_FORMAT_PATTERN);
   
   public static final String DECIMAL_FORMAT_PATTERN = "###,###,##0.00";
@@ -57,7 +59,7 @@ public final class WidgetFactory {
 
   public static final String DATE_FORMAT_PATTERN = "dd/MM/yyyy";
   public static final DateFormat DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT_PATTERN);
-
+  
   @SuppressWarnings("serial")
   public static DefaultTableCellRenderer createTableCellRenderer(final int alignment) {
     return new DefaultTableCellRenderer() {
@@ -165,35 +167,24 @@ public final class WidgetFactory {
   public static JFormattedTextField createPercentTextField() {
     return createPercentTextField(JTextField.RIGHT);
   }
-
   
   /**
    * Create a {@link JFormattedTextField} configured to edit decimal numbers in an application-specific way.
    * @return
    */
   public static JFormattedTextField createDecimalTextField(int alignment) {
-    JFormattedTextField field = new JFormattedTextField();
-    
-    field.setPreferredSize(
+    JFormattedTextField field = new JFormattedTextField(DECIMAL_FORMAT);
+
+    configureGenericTextFieldBehaviour(
+        field,
+        alignment,
         new Dimension(
             BlacksmythSwingUtilities.getTextWidth(DECIMAL_FORMAT_PATTERN),
             (int) field.getPreferredSize().getHeight()
-        )
+        ),
+        "0123456789.,"
     );
-    
-    field.setInputVerifier(new FormatVerifier());
-    
-    ensureTextFieldSelectsAllOnFocus(field);
-    
-    ((AbstractDocument) field.getDocument()).setDocumentFilter(
-        DocumentFilterFactory.getDecimalFilter()
-    );
-    
-    field.setForeground(
-        PreferencesModel.getInstance().getPreferredEditableCellColor()
-    );
-    field.setHorizontalAlignment(alignment);
-    
+
     return field;
   }
 
@@ -202,76 +193,98 @@ public final class WidgetFactory {
    * @return
    */
   public static JFormattedTextField createPercentTextField(int alignment) {
-    JFormattedTextField field = new JFormattedTextField();
-    
-    field.setPreferredSize(
+    JFormattedTextField field = new JFormattedTextField(PERCENT_FORMAT);
+
+    configureGenericTextFieldBehaviour(
+        field,
+        alignment,
         new Dimension(
             BlacksmythSwingUtilities.getTextWidth(PERCENT_FORMAT_PATTERN),
             (int) field.getPreferredSize().getHeight()
-        )
+        ),
+        "0123456789.,%"
     );
-    
-    field.setInputVerifier(new FormatVerifier());
-    
-    ensureTextFieldSelectsAllOnFocus(field);
-    
-    ((AbstractDocument) field.getDocument()).setDocumentFilter(
-        DocumentFilterFactory.getPercentFilter()
-    );
-    
-    field.setForeground(
-        PreferencesModel.getInstance().getPreferredEditableCellColor()
-    );
-    field.setHorizontalAlignment(alignment);
     
     return field;
   }
-  
-  public static void ensureTextFieldSelectsAllOnFocus(final JTextField field) {
-    field.addFocusListener(
-        new FocusAdapter() {
-          public void focusGained(java.awt.event.FocusEvent evt) {
-            SwingUtilities.invokeLater( 
-                new Runnable() {
 
-                @Override
-                public void run() {
-                field.selectAll();    
-              }
-           });
-        }
-    });
-  }
-
-  
   /**
    * Create a {@link JFormattedTextField} configured to edit dates in an application-specific way.
    * @return
    */
   public static JFormattedTextField createDateTextField() {
-    final JFormattedTextField field = new JFormattedTextField();
     
-    field.setPreferredSize(
+    final JFormattedTextField field = new JFormattedTextField(DATE_FORMAT);
+    
+    configureGenericTextFieldBehaviour(
+        field,
+        JTextField.CENTER,
         new Dimension(
             BlacksmythSwingUtilities.getTextWidth(DATE_FORMAT_PATTERN),
             (int) field.getPreferredSize().getHeight()
-        )
+        ),
+        "0123456789/"
     );
+
+    return field;
+  }
+  
+  private static void configureGenericTextFieldBehaviour(final JFormattedTextField field, 
+                                                         final int alignment, 
+                                                         final Dimension preferredSize,
+                                                         final String allowedCharacters) {
+
+    field.setPreferredSize(preferredSize);
     
-    field.setInputVerifier(new FormatVerifier());
-    
-    ensureTextFieldSelectsAllOnFocus(field);
-    
-    ((AbstractDocument) field.getDocument()).setDocumentFilter(
-        DocumentFilterFactory.getDateFilter()
+    field.setInputVerifier(
+        new FormatVerifier()
     );
     
     field.setForeground(
         PreferencesModel.getInstance().getPreferredEditableCellColor()
     );
-    field.setHorizontalAlignment(JTextField.CENTER);
     
-    return field;
+    field.setHorizontalAlignment(alignment);
+    
+    field.addKeyListener(new KeyAdapter() {
+      public void keyTyped(KeyEvent e) {
+         char c = e.getKeyChar();
+         if (allowedCharacters.indexOf(c) == -1) {
+            e.consume();  // ignore event
+         }
+      }
+   });
+    
+    field.addFocusListener(new FocusListener() {
+      @Override
+      public void focusGained(FocusEvent arg0) {
+        SwingUtilities.invokeLater( 
+            new Runnable() {
+
+            @Override
+            public void run() {
+              field.selectAll();    
+          }
+       });
+      }
+
+      @Override
+      public void focusLost(FocusEvent arg0) {
+        SwingUtilities.invokeLater( 
+          new Runnable() {
+
+              @Override
+              public void run() {
+                try {
+                  field.commitEdit();
+                  field.postActionEvent();
+                } catch (ParseException e) {
+                  field.requestFocus();
+                }
+              }
+          });
+      }
+    });
   }
 
   /**
@@ -394,28 +407,20 @@ public final class WidgetFactory {
     };
     return theButton;
   }
-
+  
 }
 
 class FormatVerifier extends InputVerifier {
+
+  @Override
   public boolean verify(JComponent input) {
-    if (input instanceof JFormattedTextField) {
-        JFormattedTextField ftf = (JFormattedTextField) input;
-        AbstractFormatter formatter = ftf.getFormatter();
-        if (formatter != null) {
-            String text = ftf.getText();
-            try {
-                 formatter.stringToValue(text);
-                 return true;
-             } catch (ParseException pe) {
-                 return false;
-             }
-         }
-     }
-     return true;
-  }
-  
-  public boolean shouldYieldFocus(JComponent input) {
-    return verify(input);
-  }
+    try {
+      JFormattedTextField ftf = (JFormattedTextField) input;
+      String text = ftf.getText();
+      ftf.getFormatter().stringToValue(text);
+      return true;
+    } catch (Exception e) {
+      return false;
+    } 
+ }
 }

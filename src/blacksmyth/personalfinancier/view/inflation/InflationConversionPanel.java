@@ -38,8 +38,8 @@ public class InflationConversionPanel extends JPanel implements Observer {
   private JFormattedTextField conversionDateField = WidgetFactory.createDateTextField();
   private JFormattedTextField  conversionValueField = WidgetFactory.createAmountTextField();
   
-  private JFormattedTextField  inflationOverPeriodField = WidgetFactory.createAmountTextField();
-  private JFormattedTextField  inflationPerAnnumField = WidgetFactory.createAmountTextField();
+  private JFormattedTextField  inflationOverPeriodField = WidgetFactory.createPercentTextField();
+  private JFormattedTextField  inflationPerAnnumField = WidgetFactory.createPercentTextField();
   
   private JLabel dateRangeLabel;
   
@@ -221,41 +221,27 @@ public class InflationConversionPanel extends JPanel implements Observer {
     InflationConversionModel model = (InflationConversionModel) o;
 
     this.initialDateField.setValue(
-        WidgetFactory.DATE_FORMAT.format(
-            model.getInitialDate().getTime()
-        )
+          model.getInitialDate().getTime()
     );
 
     this.initialValueField.setValue(
-        WidgetFactory.DECIMAL_FORMAT.format(
-            model.getInitialValue().getTotal().doubleValue()
-        )
+          model.getInitialValue().getTotal().doubleValue()
     );
 
     this.conversionDateField.setValue(
-        WidgetFactory.DATE_FORMAT.format(
-            model.getConversionDate().getTime()
-        )
+        model.getConversionDate().getTime()
     );
     
     this.conversionValueField.setValue(
-        WidgetFactory.DECIMAL_FORMAT.format(
-            model.getConversionValue().getTotal().doubleValue()
-        )
+          model.getConversionValue().getTotal().doubleValue()
     );
-    
-    
 
     this.inflationOverPeriodField.setValue(
-        WidgetFactory.DECIMAL_FORMAT.format(
-            model.getInflationOverPeriod() * 100
-        ) + " %"
+          model.getInflationOverPeriod()
     );
 
     this.inflationPerAnnumField.setValue(
-        WidgetFactory.DECIMAL_FORMAT.format(
-            model.getInflationPerAnnum() * 100
-        ) + " %"
+          model.getInflationPerAnnum()
     );
 
     this.earliestDate = (GregorianCalendar) model.getEarliestDate();
