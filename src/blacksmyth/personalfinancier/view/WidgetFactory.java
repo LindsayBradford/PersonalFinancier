@@ -341,7 +341,7 @@ public final class WidgetFactory {
     
     FontIconProvider.getInstance().setGlyphAsTitle(
         pane, currTabIndex, 
-        FontIconProvider.icon_bar_chart
+        FontIconProvider.icon_bar_chart_o
     );
     
     enableSelectionHilightedTabPane(pane);

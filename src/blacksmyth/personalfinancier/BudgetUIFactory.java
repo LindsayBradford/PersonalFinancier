@@ -460,7 +460,7 @@ class BudgetUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         resetItemsButton, 
-        FontIconProvider.icon_trash
+        FontIconProvider.icon_trash_o
     );
 
     resetItemsButton.setToolTipText(

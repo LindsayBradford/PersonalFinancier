@@ -139,7 +139,7 @@ public class PersonalFinancierUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_info_sign
+        FontIconProvider.icon_info_circle
     );
     
     button.setToolTipText(" About ");
@@ -216,7 +216,7 @@ public class PersonalFinancierUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_folder_open_alt
+        FontIconProvider.icon_folder_open_o
     );
     
     button.setForeground(Color.GREEN.darker());

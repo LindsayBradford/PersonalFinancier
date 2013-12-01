@@ -131,7 +131,7 @@ class InflationUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_folder_open_alt
+        FontIconProvider.icon_folder_open_o
     );
     
     button.setForeground(Color.GREEN.darker());
