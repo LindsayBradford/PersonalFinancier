@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
   compile 'jtattoo:JTattoo:1.6.10'
-  compile 'gson:gson:2.1'
+  compile 'gson:gson:2.2.4'
   compile 'gral-core:gral-core:0.9'
 }
 
