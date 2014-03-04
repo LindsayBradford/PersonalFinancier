@@ -18,6 +18,7 @@ public class AccountModel extends Observable {
     tmpAccounts.add(new Account("General", true));
     tmpAccounts.add(new Account("Bills", true));
     tmpAccounts.add(new Account("Savings", true));
+    tmpAccounts.add(new Account("Education", true));
     tmpAccounts.add(new Account("Super Fund", false));
     
     this.setAccounts(tmpAccounts);
