@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
-sourceCompatibility = '1.6'
-targetCompatibility = '1.6'
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
 
 project.group = "blacksmyth.personalfinancier"
 project.version = "0.1"
@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-  compile 'jtattoo:JTattoo:1.6.8'
+  compile 'jtattoo:JTattoo:1.6.10'
   compile 'gson:gson:2.1'
   compile 'gral-core:gral-core:0.9'
 }

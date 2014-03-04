@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="lib" path="libs/JTattoo-1.6.8.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/JTattoo-1.6.10.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/gson-2.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/gral-core-0.9.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
