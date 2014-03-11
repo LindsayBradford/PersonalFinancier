@@ -15,11 +15,46 @@ public class AccountModel extends Observable {
   private void mockAccounts() {
     ArrayList<Account> tmpAccounts = new ArrayList<Account>();
     tmpAccounts.add(Account.DEFAULT);
-    tmpAccounts.add(new Account("General", true));
-    tmpAccounts.add(new Account("Bills", true));
-    tmpAccounts.add(new Account("Savings", true));
-    tmpAccounts.add(new Account("Education", true));
-    tmpAccounts.add(new Account("Super Fund", false));
+
+    tmpAccounts.add(
+        new Account(
+            "General", 
+            "Here is a general account",
+            true
+        )
+    );
+
+    tmpAccounts.add(
+        new Account(
+            "Bills",
+            "This is a bills account",
+            true
+        )
+    );
+
+    tmpAccounts.add(
+        new Account(
+            "Savings",
+            "A dedicated savings account",
+            true
+        )
+    );
+
+    tmpAccounts.add(
+        new Account(
+            "Education",
+            "An account to set aside education costs",
+            true
+        )
+    );
+    
+    tmpAccounts.add(
+        new Account(
+            "Super Fund",
+            "My Superanuation Fund",
+            false
+        )
+    );
     
     this.setAccounts(tmpAccounts);
   }

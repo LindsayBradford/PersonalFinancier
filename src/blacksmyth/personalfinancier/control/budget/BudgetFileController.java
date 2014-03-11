@@ -1,7 +1,6 @@
 package blacksmyth.personalfinancier.control.budget;
 
 import java.io.File;
-import java.lang.reflect.Type;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -9,12 +8,11 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.google.gson.reflect.TypeToken;
-
 import blacksmyth.general.FileUtilities;
 import blacksmyth.general.JSonAdapter;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
+import blacksmyth.personalfinancier.model.budget.BudgetModelData;
   
 
 public class BudgetFileController implements Observer, IBudgetController, IBudgetObserver {
@@ -131,16 +129,14 @@ public class BudgetFileController implements Observer, IBudgetController, IBudge
   }
   
   public void load(File file) {
-    Type budgetItemsType = new TypeToken<BudgetModel.SerializableState>() {}.getType();
     this.getBudgetModel().setState(
-        (BudgetModel.SerializableState) this.loadJSon(file, budgetItemsType)
+        (BudgetModelData) this.loadJSon(file)
     );
   }
 
-  private Object loadJSon(File file, Type typeToExpect) {
+  private Object loadJSon(File file) {
     return JSonAdapter.getInstance().toObjectFromJSon(
-        FileUtilities.loadTextFile(file), 
-        typeToExpect
+        FileUtilities.loadTextFile(file)
     );
   }
   

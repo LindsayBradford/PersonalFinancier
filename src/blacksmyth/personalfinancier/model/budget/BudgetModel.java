@@ -58,7 +58,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     this.changeAndNotifyObservers();
   }
   
-  public BudgetModel(BudgetModel.SerializableState state) {
+  public BudgetModel(BudgetModelData state) {
     this.expenseCategories = state.expenseCategories;
     this.incomeCategories = state.incomeCategories;
     
@@ -526,16 +526,19 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     this.changeAndNotifyObservers();
   }
   
-  public BudgetModel.SerializableState getState() {
-    return new BudgetModel.SerializableState(
-        this.incomeCategories,
-        this.expenseCategories,
-        this.incomeItems, 
-        this.expenseItems
-    );
+  public BudgetModelData getState() {
+    BudgetModelData state = new BudgetModelData();
+    
+    state.incomeCategories = this.incomeCategories;
+    state.expenseCategories = this.expenseCategories;
+    
+    state.incomeItems = this.incomeItems;
+    state.expenseItems = this.expenseItems;
+    
+    return state;
   }
 
-  public void setState(BudgetModel.SerializableState state) {
+  public void setState(BudgetModelData state) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.incomeCategories = state.incomeCategories;
     this.expenseCategories = state.expenseCategories;
@@ -544,23 +547,5 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     this.expenseItems = state.expenseItems;
     
     this.changeAndNotifyObservers();
-  }
-  
-  public class SerializableState {
-    private HashSet<String> expenseCategories;
-    private HashSet<String> incomeCategories;
-    
-    private ArrayList<BudgetItem> incomeItems;
-    private ArrayList<BudgetItem> expenseItems;
-    
-    public SerializableState(HashSet<String> incomeCategories, HashSet<String> expenseCategories,
-                             ArrayList<BudgetItem> incomeItems, ArrayList<BudgetItem> expenseItems) {
-
-      this.incomeCategories = incomeCategories;
-      this.expenseCategories = expenseCategories;
-      
-      this.incomeItems = incomeItems;
-      this.expenseItems = expenseItems;
-    }
   }
 }

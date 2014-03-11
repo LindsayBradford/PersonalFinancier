@@ -1,10 +1,9 @@
 package blacksmyth.general;
 
-import java.lang.reflect.Type;
+import java.io.IOException;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
+import com.cedarsoftware.util.io.JsonReader;
+import com.cedarsoftware.util.io.JsonWriter;
 
 /**
  * An adapter through to a 3rd-party JSON Serialization library.
@@ -12,7 +11,6 @@ import com.google.gson.JsonSyntaxException;
  * @author linds
  */
 public class JSonAdapter {
-  private Gson gsonHandle;
   private static JSonAdapter instance;
   
   /**
@@ -28,9 +26,6 @@ public class JSonAdapter {
   }
   
   protected JSonAdapter() {
-    gsonHandle = new GsonBuilder()
-                      .setPrettyPrinting()
-                      .create();
   }
 
   /**
@@ -39,7 +34,13 @@ public class JSonAdapter {
    * @return
    */
   public String toJSonFromObject(Object object) {
-    return gsonHandle.toJson(object);
+    try {
+      return JsonWriter.formatJson(
+          JsonWriter.objectToJson(object)
+      );
+    } catch (IOException e) {
+      return null;
+    }
   }
 
   /**
@@ -50,10 +51,11 @@ public class JSonAdapter {
    * @return
    * @throws JsonSyntaxException
    */
-  public Object toObjectFromJSon(String jsonData, Type objectType) throws JsonSyntaxException {
-    return gsonHandle.fromJson(
-        jsonData.toString(), 
-        objectType
-    );
+  public Object toObjectFromJSon(String jsonData) {
+    try {
+      return JsonReader.jsonToJava(jsonData);
+    } catch (IOException e) {
+      return null;
+    }
   }
 }

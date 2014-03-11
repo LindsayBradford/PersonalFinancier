@@ -1,15 +1,12 @@
 package blacksmyth.personalfinancier.control.inflation;
 
 import java.io.File;
-import java.lang.reflect.Type;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import com.google.gson.reflect.TypeToken;
 
 import blacksmyth.general.FileUtilities;
 import blacksmyth.general.JSonAdapter;
@@ -129,16 +126,14 @@ public class InflationFileController implements Observer, IInflationController, 
   }
   
   public void load(File file) {
-    Type inflationStateType = new TypeToken<InflationModel.SerializableState>() {}.getType();
     this.getInflationModel().setState(
-        (InflationModel.SerializableState) this.loadJSon(file, inflationStateType)
+        (InflationModel.SerializableState) this.loadJSon(file)
     );
   }
 
-  private Object loadJSon(File file, Type typeToExpect) {
+  private Object loadJSon(File file) {
     return JSonAdapter.getInstance().toObjectFromJSon(
-        FileUtilities.loadTextFile(file), 
-        typeToExpect
+        FileUtilities.loadTextFile(file)
     );
   }
   

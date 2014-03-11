@@ -54,7 +54,7 @@ public final class WidgetFactory {
   public static final String PERCENT_FORMAT_PATTERN = "###,##0.00 %";
   public static final DecimalFormat PERCENT_FORMAT = new DecimalFormat(PERCENT_FORMAT_PATTERN);
   
-  public static final String DECIMAL_FORMAT_PATTERN = "###,###,##0.00";
+  public static final String DECIMAL_FORMAT_PATTERN = "#,###,##0.00";
   public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat(DECIMAL_FORMAT_PATTERN);
 
   public static final String DATE_FORMAT_PATTERN = "dd/MM/yyyy";

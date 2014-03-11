@@ -40,8 +40,7 @@ public class AccountSummary implements Comparable<AccountSummary> {
   }
   
   public String getAccountDetail() {
-    // TODO: pad out account detail
-    return budgetAccount.getNickname();
+    return budgetAccount.getDetail();
   }
 
   public CashFlowFrequency getBudgettedFrequency() {
