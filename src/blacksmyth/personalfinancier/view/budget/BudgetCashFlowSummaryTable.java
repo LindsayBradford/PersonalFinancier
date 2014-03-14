@@ -56,6 +56,13 @@ public class BudgetCashFlowSummaryTable extends JTable {
     getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.Account).setCellRenderer(
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
+    
+    BlacksmythSwingUtilities.lockColumnWidth(
+        getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.Account),
+        BlacksmythSwingUtilities.getTextWidth(
+            WidgetFactory.ACCOUNT_BUFFER
+        ) + CELL_BUFFER
+    );
 
     getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.Detail).setCellRenderer(
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
