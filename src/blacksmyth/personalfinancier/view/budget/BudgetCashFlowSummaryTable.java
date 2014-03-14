@@ -14,6 +14,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import blacksmyth.general.BlacksmythSwingUtilities;
+import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.view.WidgetFactory;
 
@@ -27,9 +28,9 @@ public class BudgetCashFlowSummaryTable extends JTable {
   
   private static final int ROW_LIMIT = 5;
   
-  public BudgetCashFlowSummaryTable(BudgetModel budgetModel) {
+  public BudgetCashFlowSummaryTable(BudgetModel budgetModel, AccountModel accountModel) {
     super(
-        new BudgetCashFlowSummaryTableModel(budgetModel)
+        new BudgetCashFlowSummaryTableModel(budgetModel, accountModel)
     );
     setupColumns();
 

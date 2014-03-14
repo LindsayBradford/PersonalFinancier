@@ -41,6 +41,7 @@ import blacksmyth.general.RunnableQueueThread;
 import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.control.budget.BudgetFileController;
+import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.view.WidgetFactory;
@@ -48,7 +49,8 @@ import blacksmyth.personalfinancier.view.WidgetFactory;
 public class PersonalFinancierUIFactory {
   
   public static JFrame createJFrame() {
-    UIComponents.budgetModel = new BudgetModel();
+    UIComponents.accountModel = new AccountModel();
+    UIComponents.budgetModel = new BudgetModel(UIComponents.accountModel);
     
     RunnableQueueThread.getInstance().start();
     

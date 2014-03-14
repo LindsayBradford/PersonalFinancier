@@ -607,7 +607,8 @@ class BudgetUIFactory {
   private static JComponent createAccountSummaryTable() {
     return new JScrollPane(
         new BudgetCashFlowSummaryTable(
-            UIComponents.budgetModel
+            UIComponents.budgetModel,
+            UIComponents.accountModel
         )
     );
   }

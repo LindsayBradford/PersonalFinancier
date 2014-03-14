@@ -2,6 +2,11 @@ package blacksmyth.personalfinancier.view.budget;
 
 import java.util.Observable;
 
+import blacksmyth.personalfinancier.control.UndoManagers;
+import blacksmyth.personalfinancier.control.budget.command.AddAccountCommand;
+import blacksmyth.personalfinancier.control.budget.command.ChangeAccountNicknameCommand;
+import blacksmyth.personalfinancier.control.budget.command.ChangeAccountDetailCommand;
+import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
@@ -14,9 +19,10 @@ enum ACCOUNT_SUMMARY_COLUMNS {
 @SuppressWarnings("serial")
 public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<ACCOUNT_SUMMARY_COLUMNS> {
 
-  public BudgetCashFlowSummaryTableModel(BudgetModel budgetModel) {
+  public BudgetCashFlowSummaryTableModel(BudgetModel budgetModel, AccountModel accountModel) {
     super();
     this.setBudgetModel(budgetModel);
+    this.setAccountModel(accountModel);
   }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -31,6 +37,46 @@ public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<AC
         return Money.class;
     }
     return Object.class;
+  }
+  
+  public boolean isCellEditable(int rowNum, int colNum) {
+    switch (this.getColumnEnumValueAt(colNum)) {
+      case Account: case Detail: 
+        return true;
+      default:
+        return false;
+    }
+  }
+  
+  public void setValueAt(Object value, int rowNum, int colNum) {
+    switch (this.getColumnEnumValueAt(colNum)) {
+    case Account:
+      UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
+          ChangeAccountNicknameCommand.doCmd(
+              getAccountModel(),
+              getAccountModel().getAccountIndex(
+                  getSummaryAtRow(rowNum).getAccountNickname()
+              ),
+              (String) value
+          )
+      );
+      break;
+    case Detail:
+      UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
+          ChangeAccountDetailCommand.doCmd(
+              getAccountModel(), 
+              getAccountModel().getAccountIndex(
+                  getSummaryAtRow(rowNum).getAccountNickname()
+              ),
+              (String) value
+          )
+      );
+      break;
+    }
+  }
+  
+  protected AccountSummary getSummaryAtRow(int rowNum) {
+    return getBudgetModel().getCashFlowSummaries().get(rowNum);
   }
 
   public int getRowCount() {
@@ -52,7 +98,7 @@ public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<AC
       }
     }
     
-    AccountSummary summary = getBudgetModel().getCashFlowSummaries().get(rowNum);
+    AccountSummary summary = getSummaryAtRow(rowNum);
 
     switch (this.getColumnEnumValueAt(colNum)) {
       case Account:
@@ -66,9 +112,38 @@ public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<AC
     }
   }
   
+  public void addAccount() {    
+    UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
+      AddAccountCommand.doCmd(
+          getAccountModel()
+      )
+    );
+  }
+  
   @Override
   public void update(Observable arg0, Object arg1) {
     this.fireTableDataChanged();
   }
+  
+  private AccountModel accountModel;
+
+  /**
+   * Returns a reference to the budget model this TableModel observers.
+   * @return
+   */
+  public final AccountModel getAccountModel() {
+    return this.accountModel;
+  }
+
+  /**
+   * Registers this TableModel as an observer of <tt>budgetModel</tt>
+   * and stores a reference to it.
+   * @param budgetModel
+   */
+  protected final void setAccountModel(AccountModel accountModel) {
+    accountModel.addObserver(this);
+    this.accountModel = accountModel;
+  }
+
 
 }

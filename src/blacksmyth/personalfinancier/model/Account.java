@@ -6,12 +6,18 @@ public class Account {
 
   private boolean isBudgetAccount;
 
-  //TODO: fill this out.
-
-  public static final Account DEFAULT = new Account("Default");
+  public static final Account DEFAULT = new Account("Bills", "Bills Account Detail");
+  
+  public static Account Create() {
+    return new Account("New Account", "New Account Detail");
+  }
 
   public Account(String nickname) {
     init(nickname, null, true);
+  }
+
+  public Account(String nickname, String detail) {
+    init(nickname, detail, true);
   }
   
   public Account(String nickname, boolean isBudgetAccount) {

@@ -4,58 +4,25 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import blacksmyth.general.ReflectionUtilities;
+import blacksmyth.personalfinancier.control.budget.IBudgetController;
+
 public class AccountModel extends Observable {
+  private static final String CONTROLLER_ASSERT_MSG = "Caller does not implement IBudgetController.";
+  private static final String VIEWER_ASSERT_MSG = "Caller does not implement IBudgetObserver.";
+  
   private ArrayList<Account> accounts;
   
   public AccountModel() {
     super();
-    mockAccounts();
+    addDefaultAccount();
   }
 
-  private void mockAccounts() {
+  private void addDefaultAccount() {
     ArrayList<Account> tmpAccounts = new ArrayList<Account>();
+
     tmpAccounts.add(Account.DEFAULT);
 
-    tmpAccounts.add(
-        new Account(
-            "General", 
-            "Here is a general account",
-            true
-        )
-    );
-
-    tmpAccounts.add(
-        new Account(
-            "Bills",
-            "This is a bills account",
-            true
-        )
-    );
-
-    tmpAccounts.add(
-        new Account(
-            "Savings",
-            "A dedicated savings account",
-            true
-        )
-    );
-
-    tmpAccounts.add(
-        new Account(
-            "Education",
-            "An account to set aside education costs",
-            true
-        )
-    );
-    
-    tmpAccounts.add(
-        new Account(
-            "Super Fund",
-            "My Superanuation Fund",
-            false
-        )
-    );
-    
     this.setAccounts(tmpAccounts);
   }
 
@@ -65,7 +32,7 @@ public class AccountModel extends Observable {
 
   public void setAccounts(ArrayList<Account> accounts) {
     this.accounts = accounts;
-    this.changeAndNotifyObservers();
+    // this.changeAndNotifyObservers();
   }
 
   public Account getBudgetAccount(String nickname) {
@@ -75,7 +42,6 @@ public class AccountModel extends Observable {
     }
     return Account.DEFAULT;
   }
-
   
   public Account getAccount(String nickname) {
     for (Account account : this.getAccounts()) {
@@ -85,10 +51,37 @@ public class AccountModel extends Observable {
     }
     return Account.DEFAULT;
   }
+  
+  public int getAccountIndex(String nickname) {
+    for (Account account : this.getAccounts()) {
+      if (account.getNickname().equals(nickname)) {
+        return accounts.indexOf(account);
+      }
+    }
+    return -1;
+  }
 
+  public Account getAccount(int index) {
+    return this.accounts.get(index);
+  }
+  
+  public void setAccountNickname(int index, String newNickname) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    assert (index >= 0 && index < this.accounts.size());
+    this.accounts.get(index).setNickname(newNickname);
+    this.changeAndNotifyObservers();
+  }
+
+  public void setAccountDetail(int index, String newDetail) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    assert (index >= 0 && index < this.accounts.size());
+    this.accounts.get(index).setDetail(newDetail);
+    this.changeAndNotifyObservers();
+  }
+  
   public ArrayList<Account> getBudgetAccounts() {
     ArrayList<Account> budgetAccounts = new ArrayList<Account>();
-    for (Account account : this.getAccounts()) {
+    for (Account account : this.accounts) {
       if (account.isBudgetAccount()) {
         budgetAccounts.add(account);
       }
@@ -96,6 +89,29 @@ public class AccountModel extends Observable {
     return budgetAccounts;
   }
 
+  public Account addAccount() {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    
+    Account newAccount = Account.Create();
+    
+    this.addAccount(newAccount);
+    
+    return newAccount;
+  }
+  
+  public void addAccount(Account account) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    this.accounts.add(account);
+    this.changeAndNotifyObservers();
+  }
+  
+  
+  public void removeAccount(Account account) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    this.accounts.remove(account);
+    this.changeAndNotifyObservers();
+  }
+  
   private void changeAndNotifyObservers() {
     this.setChanged();
     this.notifyObservers();

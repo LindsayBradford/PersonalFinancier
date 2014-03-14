@@ -43,7 +43,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
   
   private Money netCashFlow;
   
-  public BudgetModel() {
+  public BudgetModel(AccountModel accountModel) {
     this.expenseCategories = new HashSet<String>();
     this.incomeCategories = new HashSet<String>();
     
@@ -53,7 +53,8 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     this.cashFlowSummaries = new SortedArrayList<AccountSummary>();
     this.categorySummaries = new SortedArrayList<CategorySummary>();
 
-    this.accountModel = new AccountModel();
+    this.accountModel = accountModel;
+    this.accountModel.addObserver(this);
 
     this.changeAndNotifyObservers();
   }
@@ -391,12 +392,13 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     this.cashFlowSummaries = new SortedArrayList<AccountSummary>();
     
     netCashFlow = MoneyFactory.createAmount(0);
+    
+    for(Account account : this.accountModel.getBudgetAccounts()) {
+      AccountSummary newSummary = new AccountSummary(account);
+      summaryTable.put(account.getNickname(), newSummary);
+    }
 
     for(BudgetItem item : this.incomeItems) {
-      if (!summaryTable.containsKey(item.getBudgetAccount().getNickname())) {
-        AccountSummary newSummary = new AccountSummary(item.getBudgetAccount());
-        summaryTable.put(item.getBudgetAccount().getNickname(), newSummary);
-      }
       
       AccountSummary summary = summaryTable.get(item.getBudgetAccount().getNickname());
       
@@ -416,11 +418,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     }
     
     for(BudgetItem item : this.expenseItems) {
-      if (!summaryTable.containsKey(item.getBudgetAccount().getNickname())) {
-        AccountSummary newSummary = new AccountSummary(item.getBudgetAccount());
-        summaryTable.put(item.getBudgetAccount().getNickname(), newSummary);
-      }
-      
+
       AccountSummary summary = summaryTable.get(item.getBudgetAccount().getNickname());
       
       BigDecimal convertedBudgetAmount = MoneyUtilties.convertFrequencyAmount(
@@ -532,6 +530,8 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     state.incomeCategories = this.incomeCategories;
     state.expenseCategories = this.expenseCategories;
     
+    state.accounts = this.accountModel.getAccounts();
+    
     state.incomeItems = this.incomeItems;
     state.expenseItems = this.expenseItems;
     
@@ -542,6 +542,8 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.incomeCategories = state.incomeCategories;
     this.expenseCategories = state.expenseCategories;
+    
+    this.accountModel.setAccounts(state.accounts);
     
     this.incomeItems = state.incomeItems;
     this.expenseItems = state.expenseItems;

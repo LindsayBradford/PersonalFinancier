@@ -84,7 +84,9 @@ public class ExpenseItemTable extends JTable {
     
     BlacksmythSwingUtilities.lockColumnWidth(
         getColFromEnum(EXPENSE_ITEM_COLUMNS.Account),
-        (int) editor.getComponent().getPreferredSize().getWidth()
+        BlacksmythSwingUtilities.getTextWidth(
+            WidgetFactory.ACCOUNT_BUFFER
+        ) + CELL_BUFFER
     );
   }
 

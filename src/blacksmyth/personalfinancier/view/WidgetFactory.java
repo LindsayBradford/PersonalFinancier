@@ -10,7 +10,6 @@ package blacksmyth.personalfinancier.view;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -51,6 +50,8 @@ import blacksmyth.personalfinancier.model.PreferencesModel;
  */
 public final class WidgetFactory {
 
+  public static final String ACCOUNT_BUFFER = "                    ";
+  
   public static final String PERCENT_FORMAT_PATTERN = "###,##0.00 %";
   public static final DecimalFormat PERCENT_FORMAT = new DecimalFormat(PERCENT_FORMAT_PATTERN);
   

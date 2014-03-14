@@ -97,8 +97,11 @@ public class BudgetCategorySummaryTable extends JTable {
         cellRenderer.setForeground(Color.GREEN);
       }
     }
-    
      return cellRenderer;
+  }
+  
+  public BudgetCashFlowSummaryTableModel getTableModel() {
+    return (BudgetCashFlowSummaryTableModel) getModel();
   }
   
 }

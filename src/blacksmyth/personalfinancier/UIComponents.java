@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 
 import blacksmyth.personalfinancier.control.budget.BudgetFileController;
 import blacksmyth.personalfinancier.control.inflation.InflationFileController;
+import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
 import blacksmyth.personalfinancier.view.budget.ExpenseItemTable;
@@ -21,6 +22,7 @@ public class UIComponents {
   public static JFrame      windowFrame;
 
   public static BudgetModel budgetModel;
+  public static AccountModel accountModel;
   
   public static ExpenseItemTable expenseTable;
   public static IncomeItemTable incomeTable;

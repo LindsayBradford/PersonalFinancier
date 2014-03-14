@@ -39,7 +39,7 @@ public class BudgetWidgetFactory {
    * @return JComboBox
    */
   public static JComboBox<String> createBudgetAccountComboBox() {
-    BudgetAccountComboBox comboBox = new BudgetAccountComboBox();  
+    AccountComboBox comboBox = new AccountComboBox();  
     
     DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
     dlcr.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
