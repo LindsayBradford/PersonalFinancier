@@ -5,7 +5,7 @@ import java.util.HashSet;
 
 import blacksmyth.personalfinancier.model.Account;
 
-public class BudgetModelData {
+public class BudgetFileContent {
   public HashSet<String> expenseCategories;
   public HashSet<String> incomeCategories;
   public ArrayList<Account> accounts;

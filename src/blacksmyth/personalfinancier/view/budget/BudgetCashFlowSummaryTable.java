@@ -47,7 +47,7 @@ public class BudgetCashFlowSummaryTable extends JTable {
     super.tableChanged(e);
     this.setVisible(true);
   }
-
+  
   private void setupColumns() {
     this.tableHeader.setReorderingAllowed(false);
     this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);

@@ -9,9 +9,10 @@ package blacksmyth.personalfinancier;
 import javax.swing.Action;
 import javax.swing.JFrame;
 
-import blacksmyth.personalfinancier.control.budget.BudgetFileController;
+import blacksmyth.personalfinancier.control.FileHandler;
 import blacksmyth.personalfinancier.control.inflation.InflationFileController;
 import blacksmyth.personalfinancier.model.AccountModel;
+import blacksmyth.personalfinancier.model.budget.BudgetFileContent;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
 import blacksmyth.personalfinancier.view.budget.ExpenseItemTable;
@@ -27,7 +28,7 @@ public class UIComponents {
   public static ExpenseItemTable expenseTable;
   public static IncomeItemTable incomeTable;
   
-  public static BudgetFileController budgetFileController;
+  public static FileHandler<BudgetFileContent> budgetFileController;
   
   public static Action LoadBudgetAction;
   public static Action SaveBudgetAction;

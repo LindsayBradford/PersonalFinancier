@@ -39,11 +39,14 @@ import javax.swing.border.EmptyBorder;
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.RunnableQueueThread;
 import blacksmyth.general.BlacksmythSwingUtilities;
+import blacksmyth.personalfinancier.control.FileHandler;
 import blacksmyth.personalfinancier.control.UndoManagers;
-import blacksmyth.personalfinancier.control.budget.BudgetFileController;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
+import blacksmyth.personalfinancier.model.budget.BudgetFileContent;
+
+import blacksmyth.personalfinancier.view.FileHandlerView;
 import blacksmyth.personalfinancier.view.WidgetFactory;
 
 public class PersonalFinancierUIFactory {
@@ -109,7 +112,15 @@ public class PersonalFinancierUIFactory {
   private static Component createMainToolbar() {
     JToolBar toolbar = new JToolBar();
     
-    UIComponents.budgetFileController = new BudgetFileController(UIComponents.budgetModel);
+    UIComponents.budgetFileController = 
+        new FileHandler<BudgetFileContent>(
+            UIComponents.budgetModel,
+            new FileHandlerView(
+                UIComponents.windowFrame,
+                "JSon Files",
+                "json"
+            )
+        );
     
     toolbar.add(
         createLoadButton()
@@ -305,9 +316,7 @@ public class PersonalFinancierUIFactory {
       
       public void actionPerformed(ActionEvent e) {
         UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
-        UIComponents.budgetFileController.load(
-            UIComponents.windowFrame
-        );
+        UIComponents.budgetFileController.load();
       }
     };
     
@@ -333,9 +342,7 @@ public class PersonalFinancierUIFactory {
     UIComponents.SaveBudgetAction = new AbstractAction("Save") {
       public void actionPerformed(ActionEvent e) {
         UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
-        UIComponents.budgetFileController.save(
-            UIComponents.windowFrame
-        );
+        UIComponents.budgetFileController.save();
       }
     };
 
@@ -359,9 +366,7 @@ public class PersonalFinancierUIFactory {
     UIComponents.SaveAsBudgetAction = new AbstractAction("Save As...") {
       public void actionPerformed(ActionEvent e) {
         UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
-        UIComponents.budgetFileController.saveAs(
-            UIComponents.windowFrame
-        );
+        UIComponents.budgetFileController.saveAs();
       }
     };
     
@@ -385,9 +390,7 @@ public class PersonalFinancierUIFactory {
     UIComponents.ExitAction = new AbstractAction("Exit") {
       public void actionPerformed(ActionEvent e) {
         UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
-        UIComponents.budgetFileController.save(
-            UIComponents.windowFrame
-        );
+        UIComponents.budgetFileController.save();
         System.exit(0);
       }
     };

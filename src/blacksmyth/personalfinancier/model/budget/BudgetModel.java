@@ -20,12 +20,14 @@ import blacksmyth.personalfinancier.control.budget.IBudgetObserver;
 import blacksmyth.personalfinancier.model.Account;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
+import blacksmyth.personalfinancier.model.IFileHandlerModel;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
 import blacksmyth.personalfinancier.model.MoneyUtilties;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 
-public class BudgetModel extends Observable implements Observer, IBudgetController {
+public class BudgetModel extends Observable implements Observer, IBudgetController, 
+                                                       IFileHandlerModel<BudgetFileContent> {
   
   private static final String CONTROLLER_ASSERT_MSG = "Caller does not implement IBudgetController.";
   private static final String VIEWER_ASSERT_MSG = "Caller does not implement IBudgetObserver.";
@@ -59,7 +61,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     this.changeAndNotifyObservers();
   }
   
-  public BudgetModel(BudgetModelData state) {
+  public BudgetModel(BudgetFileContent state) {
     this.expenseCategories = state.expenseCategories;
     this.incomeCategories = state.incomeCategories;
     
@@ -524,8 +526,8 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     this.changeAndNotifyObservers();
   }
   
-  public BudgetModelData getState() {
-    BudgetModelData state = new BudgetModelData();
+  public BudgetFileContent toSerializable() {
+    BudgetFileContent state = new BudgetFileContent();
     
     state.incomeCategories = this.incomeCategories;
     state.expenseCategories = this.expenseCategories;
@@ -538,7 +540,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     return state;
   }
 
-  public void setState(BudgetModelData state) {
+  public void fromSerializable(BudgetFileContent state) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.incomeCategories = state.incomeCategories;
     this.expenseCategories = state.expenseCategories;
