@@ -10,10 +10,10 @@ import javax.swing.Action;
 import javax.swing.JFrame;
 
 import blacksmyth.personalfinancier.control.FileHandler;
-import blacksmyth.personalfinancier.control.inflation.InflationFileController;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.budget.BudgetFileContent;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
+import blacksmyth.personalfinancier.model.inflation.InflationFileContent;
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
 import blacksmyth.personalfinancier.view.budget.ExpenseItemTable;
 import blacksmyth.personalfinancier.view.budget.IncomeItemTable;
@@ -41,6 +41,6 @@ public class UIComponents {
   public static Action LoadInflationAction;
   public static Action SaveInflationAction;
 
-  public static InflationFileController inflationFileController;
+  public static FileHandler<InflationFileContent> inflationFileController;
 
 }

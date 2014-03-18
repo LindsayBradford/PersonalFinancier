@@ -292,7 +292,7 @@ public class PreferencesModel extends Observable {
   }
 
   private static final String DEFAULT_LAST_USED_BUDGET_FILE_PATH = ".";
-  private static final String LAST_USED_BUDGET_FILE_PATH = "LastUsedBudgetFilePath";
+  public static final String LAST_USED_BUDGET_FILE_PATH = "LastUsedBudgetFilePath";
 
   public String getLastUsedBudgetFilePath() {
     return this.prefs.get(
@@ -310,7 +310,7 @@ public class PreferencesModel extends Observable {
   }
 
   private static final String DEFAULT_LAST_USED_INFLATION_FILE_PATH = ".";
-  private static final String LAST_USED_INFLATION_FILE_PATH = "LastUsedInflationFilePath";
+  public  static final String LAST_USED_INFLATION_FILE_PATH = "LastUsedInflationFilePath";
 
   public String getLastUsedInflationFilePath() {
     return this.prefs.get(
@@ -389,5 +389,4 @@ public class PreferencesModel extends Observable {
 	this.setChangeAndNotifyObservers();
   }
 
-  
 }

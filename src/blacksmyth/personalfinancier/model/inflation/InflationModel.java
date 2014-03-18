@@ -15,11 +15,13 @@ import java.util.Observable;
 import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.general.SortedArrayList;
 import blacksmyth.personalfinancier.control.inflation.IInflationController;
+import blacksmyth.personalfinancier.model.IFileHandlerModel;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 
-public class InflationModel extends Observable implements InflationProvider {
+public class InflationModel extends Observable implements InflationProvider, 
+                                                          IFileHandlerModel<InflationFileContent> {
   
   private static GregorianCalendar TODAY;
   
@@ -219,27 +221,23 @@ public class InflationModel extends Observable implements InflationProvider {
     this.setChanged();
     this.notifyObservers();
   }
-  
-  public InflationModel.SerializableState getState() {
-    return new InflationModel.SerializableState(
-        inflationList
-    );
-  }
 
-  public void setState(InflationModel.SerializableState state) {
+  @Override
+  public void fromSerializable(InflationFileContent content) {
     assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
-    inflationList = state.inflationList;
+    inflationList = content.inflationList;
     
     this.changeAndNotifyObservers();
   }
-  
-  public class SerializableState {
-    
-    private SortedArrayList<InflationEntry> inflationList;
-    
-    public SerializableState(SortedArrayList<InflationEntry> state) {
 
-      this.inflationList = state;
-    }
+  @Override
+  public InflationFileContent toSerializable() {
+    InflationFileContent content = new InflationFileContent();
+    
+    content.inflationList = inflationList;
+    
+    return content;
   }
+  
+ 
 }

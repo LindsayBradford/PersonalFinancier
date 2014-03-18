@@ -29,11 +29,15 @@ import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.BlacksmythSwingUtilities;
+import blacksmyth.general.JSonFileAdapter;
+import blacksmyth.personalfinancier.control.FileHandler;
 import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.control.inflation.InflationConversionController;
-import blacksmyth.personalfinancier.control.inflation.InflationFileController;
+import blacksmyth.personalfinancier.model.PreferenceItemBuilder;
 import blacksmyth.personalfinancier.model.inflation.InflationConversionModel;
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
+import blacksmyth.personalfinancier.model.inflation.InflationFileContent;
+import blacksmyth.personalfinancier.view.FileHandlerView;
 import blacksmyth.personalfinancier.view.JUndoListeningButton;
 import blacksmyth.personalfinancier.view.WidgetFactory;
 import blacksmyth.personalfinancier.view.inflation.InflationConversionPanel;
@@ -61,7 +65,17 @@ class InflationUIFactory {
     JPanel panel = new JPanel(new BorderLayout());
     
     UIComponents.inflationTable = new InflationTable(UIComponents.inflationModel);
-    UIComponents.inflationFileController = new InflationFileController(UIComponents.inflationModel);
+    UIComponents.inflationFileController = 
+        new FileHandler<InflationFileContent>(
+            new FileHandlerView(
+                UIComponents.windowFrame,
+                "JSon Files",
+                "json"
+            ),
+            UIComponents.inflationModel,
+            new JSonFileAdapter<InflationFileContent>(),
+            PreferenceItemBuilder.buildInflationDirectoryPreferenceItem()
+        );
 
     panel.add(
         createInflationToolbar(),
@@ -116,9 +130,7 @@ class InflationUIFactory {
       
       public void actionPerformed(ActionEvent e) {
         UndoManagers.INFLATION_UNDO_MANAGER.discardAllEdits();
-        UIComponents.inflationFileController.load(
-            UIComponents.windowFrame
-        );
+        UIComponents.inflationFileController.load();
       }
     };
     
@@ -146,9 +158,7 @@ class InflationUIFactory {
     UIComponents.SaveInflationAction = new AbstractAction("Save Inflation Data") {
       public void actionPerformed(ActionEvent e) {
         UndoManagers.INFLATION_UNDO_MANAGER.discardAllEdits();
-        UIComponents.inflationFileController.save(
-            UIComponents.windowFrame
-        );
+        UIComponents.inflationFileController.save();
       }
     };
     

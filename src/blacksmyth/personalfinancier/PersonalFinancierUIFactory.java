@@ -37,11 +37,13 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
+import blacksmyth.general.JSonFileAdapter;
 import blacksmyth.general.RunnableQueueThread;
 import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.personalfinancier.control.FileHandler;
 import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.model.AccountModel;
+import blacksmyth.personalfinancier.model.PreferenceItemBuilder;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.model.budget.BudgetFileContent;
@@ -114,12 +116,14 @@ public class PersonalFinancierUIFactory {
     
     UIComponents.budgetFileController = 
         new FileHandler<BudgetFileContent>(
-            UIComponents.budgetModel,
             new FileHandlerView(
                 UIComponents.windowFrame,
                 "JSon Files",
                 "json"
-            )
+            ),
+            UIComponents.budgetModel,
+            new JSonFileAdapter<BudgetFileContent>(),
+            PreferenceItemBuilder.buildBudgetDirectoryPreferenceItem()
         );
     
     toolbar.add(

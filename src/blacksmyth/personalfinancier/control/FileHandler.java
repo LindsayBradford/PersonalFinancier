@@ -1,21 +1,25 @@
 package blacksmyth.personalfinancier.control;
 
-import java.io.File;
-
-import blacksmyth.general.FileUtilities;
-import blacksmyth.general.JSonAdapter;
+import blacksmyth.general.IPersonalFinancierFileAdapter;
 import blacksmyth.personalfinancier.model.IFileHandlerModel;
-import blacksmyth.personalfinancier.model.PreferencesModel;
+import blacksmyth.personalfinancier.model.IPreferenceItem;
 import blacksmyth.personalfinancier.view.IFileHandlerView;
 
 public class FileHandler<T> {
   
   private IFileHandlerModel<T> model;
   private IFileHandlerView     view;
+  
+  private IPersonalFinancierFileAdapter<T> fileAdapter;
+  private IPreferenceItem<String> filePathPreferenceItem;
 
-  public FileHandler (IFileHandlerModel<T> model, IFileHandlerView view) {
+  public FileHandler (IFileHandlerView view, IFileHandlerModel<T> model, 
+                      IPersonalFinancierFileAdapter<T> fileAdapter,
+                      IPreferenceItem<String> filepathPreferenceItem) {
     setModel(model);
     setView(view);
+    this.fileAdapter = fileAdapter;
+    this.filePathPreferenceItem = filepathPreferenceItem;
   }
   
   private void setView(IFileHandlerView view) {
@@ -35,14 +39,14 @@ public class FileHandler<T> {
       if (view.promptForSaveFilename()) {
         save(view.getFilename());
         
-        PreferencesModel.getInstance().setLastUsedBudgetFilePath(
+        filePathPreferenceItem.setPreference(
             view.getFilename()
         );
       }
     } else {
       save(view.getFilename());
       
-      PreferencesModel.getInstance().setLastUsedBudgetFilePath(
+      filePathPreferenceItem.setPreference(
           view.getFilename()
       );
     }
@@ -52,30 +56,28 @@ public class FileHandler<T> {
     if (view.promptForSaveFilename()) {
       save(view.getFilename());
       
-      PreferencesModel.getInstance().setLastUsedBudgetFilePath(
+      filePathPreferenceItem.setPreference(
           view.getFilename()
       );
     }
   }
 
   private void save(String fileName) {
-    FileUtilities.saveTextFile(
+    fileAdapter.toFileFromObject(
         fileName, 
-        JSonAdapter.getInstance().toJSonFromObject(
-            this.gettModel().toSerializable()
-        )
+        this.gettModel().toSerializable()
     );
   }
   
   public void load() {
     view.setPromptDirectory(
-        PreferencesModel.getInstance().getLastUsedBudgetFilePath()
+        filePathPreferenceItem.getPreference()
     );
 
     if (view.promptForLoadFilename()) {
       load(view.getFilename());
       
-      PreferencesModel.getInstance().setLastUsedBudgetFilePath(
+      filePathPreferenceItem.setPreference(
           view.getFilename()
       );
     }
@@ -83,16 +85,7 @@ public class FileHandler<T> {
   
   public void load(String filename) {
     this.gettModel().fromSerializable(
-        this.loadJSon(
-            new File(filename)
-        )
-    );
-  }
-
-  @SuppressWarnings("unchecked")
-  private T loadJSon(File file) {
-    return (T) JSonAdapter.getInstance().toObjectFromJSon(
-        FileUtilities.loadTextFile(file)
+        fileAdapter.toObjectFromFile(filename)
     );
   }
 }
