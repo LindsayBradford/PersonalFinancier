@@ -10,6 +10,7 @@ A budgetting and bookeeping application built to suit my way of doing household 
   * json-io (<https://code.google.com/p/json-io/>) for Java JSon Graph Serialisation
   * JTattoo (<http://www.jtattoo.net/>) for a radically different Swing Look & Feel
   * FontAwesome (<http://fortawesome.github.com/Font-Awesome>) for icon-friendly font glyphs 
+  * Legion of the Bouncy Castle (<https://www.bouncycastle.org/>) for file encryption. 
   * GRAL (<http://trac.erichseifert.de/gral/>) for charting. 
   
 ## Contact Detail:

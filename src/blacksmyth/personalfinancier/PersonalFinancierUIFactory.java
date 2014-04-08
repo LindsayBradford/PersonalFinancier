@@ -42,8 +42,8 @@ import javax.swing.border.EmptyBorder;
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.RunnableQueueThread;
 import blacksmyth.general.BlacksmythSwingUtilities;
+import blacksmyth.personalfinancier.control.EncryptedJSonFileAdapter;
 import blacksmyth.personalfinancier.control.FileHandler;
-import blacksmyth.personalfinancier.control.JSonFileAdapter;
 import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.PreferenceItemBuilder;
@@ -51,6 +51,7 @@ import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.model.budget.BudgetFileContent;
 import blacksmyth.personalfinancier.view.FileHandlerView;
+import blacksmyth.personalfinancier.view.PasswordPromptView;
 import blacksmyth.personalfinancier.view.WidgetFactory;
 
 public class PersonalFinancierUIFactory {
@@ -124,7 +125,9 @@ public class PersonalFinancierUIFactory {
                 "json"
             ),
             UIComponents.budgetModel,
-            new JSonFileAdapter<BudgetFileContent>(),
+            new EncryptedJSonFileAdapter<BudgetFileContent>(
+                new PasswordPromptView(UIComponents.windowFrame)
+            ),
             PreferenceItemBuilder.buildBudgetDirectoryPreferenceItem()
         );
     
