@@ -17,9 +17,9 @@ A budgetting and bookeeping application built to suit my way of doing household 
 - Twitter: http://twitter.com/hollowdreamer
 
 ##License
-The PersonalFinancier is licensed under CC BY 3.0:
-http://creativecommons.org/licenses/by/3.0/
-A mention of 'PersonalFinancier - https://github.com/LindsayBradford/PersonalFinancier'
-in human-readable source code is considered acceptable attribution (most common on the
-web). If human readable source code is not available to the end user, a mention in an 'About' 
-or 'Credits' screen is considered acceptable (most common in desktop or mobile software).
+This program and the accompanying materials are made available 
+under the terms of the BSD 3-Clause licence which accompanies 
+this distribution in the file LICENCE.md. 
+
+Further detai on the licence can be found at:
+(<http://opensource.org/licenses/BSD-3-Clause>)

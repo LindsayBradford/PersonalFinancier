@@ -8,10 +8,9 @@
  * http://opensource.org/licenses/BSD-3-Clause
  */
 
-package blacksmyth.personalfinancier.model;
+package blacksmyth.personalfinancier.control;
 
-public interface IFileHandlerModel<T> {
-  public void fromSerializable(T t);
-  
-  public T toSerializable();
+public interface IPersonalFinancierFileAdapter<T> {
+  void toFileFromObject(String filePath, T t); 
+  public T toObjectFromFile(String filePath);
 }

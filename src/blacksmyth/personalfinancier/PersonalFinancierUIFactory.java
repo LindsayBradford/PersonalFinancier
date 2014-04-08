@@ -1,9 +1,12 @@
 /**
- * (c) 2012, Lindsay Bradford. licensed under a 
- * Creative Commons Attribution-ShareAlike 3.0 
- * Unported License.
+ * Copyright (c) 2012, Lindsay Bradford and other Contributors.
+ * All rights reserved.
+ * 
+ * This program and the accompanying materials  are made available 
+ * under the terms of the BSD 3-Clause licence  which accompanies 
+ * this distribution, and is available at
+ * http://opensource.org/licenses/BSD-3-Clause
  */
-
 
 package blacksmyth.personalfinancier;
 
@@ -37,17 +40,16 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
-import blacksmyth.general.JSonFileAdapter;
 import blacksmyth.general.RunnableQueueThread;
 import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.personalfinancier.control.FileHandler;
+import blacksmyth.personalfinancier.control.JSonFileAdapter;
 import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.PreferenceItemBuilder;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.model.budget.BudgetFileContent;
-
 import blacksmyth.personalfinancier.view.FileHandlerView;
 import blacksmyth.personalfinancier.view.WidgetFactory;
 

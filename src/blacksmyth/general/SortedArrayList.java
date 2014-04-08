@@ -1,3 +1,16 @@
+/**
+ * Copyright (c) 2012, Lindsay Bradford and other Contributors.
+ * All rights reserved.
+ * 
+ * This program and the accompanying materials  are made available 
+ * under the terms of the BSD 3-Clause licence  which accompanies 
+ * this distribution, and is available at
+ * http://opensource.org/licenses/BSD-3-Clause
+ * 
+ * Note that this is predominately the code of another author, taken from
+ * a public form on software problem resolution. Detail below.
+ */
+
 package blacksmyth.general;
 
 import java.util.ArrayList;
