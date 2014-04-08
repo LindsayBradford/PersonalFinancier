@@ -10,43 +10,43 @@
 
 package blacksmyth.personalfinancier.control;
 
-import java.io.IOException;
-
 import blacksmyth.general.FileUtilities;
-
-import com.cedarsoftware.util.io.JsonReader;
-import com.cedarsoftware.util.io.JsonWriter;
+import blacksmyth.personalfinancier.dependencies.IJSonSerialisationBridge;
+import blacksmyth.personalfinancier.dependencies.JSonBridge;
 
 /**
- * An adapter through to a 3rd-party JSON Serialization library.
- * All access to JSson functionality should go through this adapter.
- * @author linds
+ * An adapter class that transfers state between instantiated objects and file-serialised
+ * object state via a 3rd-party JSON Serialization library.
  */
+
 public class JSonFileAdapter<T> implements IPersonalFinancierFileAdapter<T> {
+  
+  private IJSonSerialisationBridge<T> jsonBridge;
+  
+  public JSonFileAdapter() {
+    init(new JSonBridge<T>());
+  }
+
+  public JSonFileAdapter(IJSonSerialisationBridge<T> bridge) {
+    init(bridge);
+  }
+  
+  private void init(IJSonSerialisationBridge<T> bridge) {
+    this.jsonBridge = bridge;
+  }
   
   @Override
   public void toFileFromObject(String filePath, T t) {
-    try {
-      FileUtilities.saveTextFile(
-          filePath, 
-          JsonWriter.formatJson(
-              JsonWriter.objectToJson(t)
-          )
-      );
-
-    } catch (IOException e) {
-    }
+    FileUtilities.saveTextFile(
+        filePath, 
+        jsonBridge.toJSon(t)
+    );
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public T toObjectFromFile(String filePath) {
-    try {
-      return (T) JsonReader.jsonToJava(
-          FileUtilities.loadTextFile(filePath)
-      );
-    } catch (IOException e) {
-      return null;
-    }
+    return jsonBridge.fromJson(
+      FileUtilities.loadTextFile(filePath)
+    );
   }
 }
