@@ -7,7 +7,7 @@ A budgetting and bookeeping application built to suit my way of doing household 
 ![Architecture Layers](https://p.twimg.com/AsfwyrBCEAEoGza.png:large)
 
 ##This application depends on the following resources:
-  * GSson (<http://code.google.com/p/google-gson/>) for Java JSon serialisation
+  * json-io (<https://code.google.com/p/json-io/>) for Java JSon Graph Serialisation
   * JTattoo (<http://www.jtattoo.net/>) for a radically different Swing Look & Feel
   * FontAwesome (<http://fortawesome.github.com/Font-Awesome>) for icon-friendly font glyphs 
   * GRAL (<http://trac.erichseifert.de/gral/>) for charting. 
