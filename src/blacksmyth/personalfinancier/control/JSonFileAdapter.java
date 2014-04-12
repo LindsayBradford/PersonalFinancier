@@ -11,8 +11,8 @@
 package blacksmyth.personalfinancier.control;
 
 import blacksmyth.general.FileUtilities;
-import blacksmyth.personalfinancier.dependencies.IJSonSerialisationBridge;
-import blacksmyth.personalfinancier.dependencies.JSonBridge;
+import blacksmyth.personalfinancier.dependencies.json.IJSonSerialisationBridge;
+import blacksmyth.personalfinancier.dependencies.json.JSonBridge;
 
 /**
  * An adapter class that transfers state between instantiated objects and file-serialised

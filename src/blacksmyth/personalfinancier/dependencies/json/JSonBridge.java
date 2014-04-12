@@ -8,7 +8,7 @@
  * http://opensource.org/licenses/BSD-3-Clause
  */
 
-package blacksmyth.personalfinancier.dependencies;
+package blacksmyth.personalfinancier.dependencies.json;
 
 /**
  * A class implementing the 'refined abstraction class' of the Bridge pattern, allowing a 
@@ -18,7 +18,7 @@ package blacksmyth.personalfinancier.dependencies;
  * @param <T> The type of objects that this class will bridge JSON serialisation for.
  */
 
-public class JSonBridge<T> implements IJSonSerialisationBridge<T> {
+public final class JSonBridge<T> implements IJSonSerialisationBridge<T> {
   
   private IJSonSerialisationBridge<T> bridge; 
   

@@ -8,7 +8,7 @@
  * http://opensource.org/licenses/BSD-3-Clause
  */
 
-package blacksmyth.personalfinancier.dependencies;
+package blacksmyth.personalfinancier.dependencies.encryption;
 
 import java.nio.charset.Charset;
 
@@ -38,7 +38,7 @@ import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
  * BouncyCastle (https://www.bouncycastle.org/)
  */
 
-public final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
+final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
   
   private static PaddedBufferedBlockCipher CIPHER;
   private static Charset ENCODING = Charset.forName("UTF-8");
@@ -159,103 +159,103 @@ public final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
   private byte[] StringToBytes(String string) {
     return string.getBytes(ENCODING);
   }
+}
+
+/**
+ * Key salting and hashing based loosely on discussion here:
+ * https://crackstation.net/hashing-security.htm#javasourcecode
+ */
+final class AESBuilder {
+  private static SecureRandom RANDOM = new SecureRandom();
+
+  public static final int AES_BLOCK_BITS = 128;
+  public static final int AES_BLOCK_BYTES = AES_BLOCK_BITS / Byte.SIZE;
+  
+  public static final int AES_KEY_BITS = 256;
+  public static final int AES_KEY_BYTES = AES_KEY_BITS / Byte.SIZE;
+  
+  private static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA1";
+
+  public static final int SALT_BYTES = 32;
+  public static final int HASH_ITERATIONS = 5000;
+
+  /**
+   * Returns an AES block ciphers in CBC mode with padding
+   * @return AES padded buffered block cipher
+   */
+  public static PaddedBufferedBlockCipher buildCipher() {
+    return
+        new PaddedBufferedBlockCipher(
+            new CBCBlockCipher(
+                new AESEngine()
+            )
+      );
+  }
   
   /**
-   * Key salting and hashing based loosely on discussion here:
-   * https://crackstation.net/hashing-security.htm#javasourcecode
+   * Builds the various random elements needed for encrypting and decryypting
+   * content using AES encryption with a user-supplied password.
+   * @param password
+   * @return 
    */
-  private static final class AESBuilder {
-    private static SecureRandom RANDOM = new SecureRandom();
-
-    public static final int AES_BLOCK_BITS = 128;
-    public static final int AES_BLOCK_BYTES = AES_BLOCK_BITS / Byte.SIZE;
-    
-    public static final int AES_KEY_BITS = 256;
-    public static final int AES_KEY_BYTES = AES_KEY_BITS / Byte.SIZE;
-    
-    private static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA1";
-
-    public static final int SALT_BYTES = 16;
-    public static final int HASH_ITERATIONS = 1000;
-
-    /**
-     * Returns an AES block ciphers in CBC mode with padding
-     * @return AES padded buffered block cipher
-     */
-    public static PaddedBufferedBlockCipher buildCipher() {
-      return
-          new PaddedBufferedBlockCipher(
-              new CBCBlockCipher(
-                  new AESEngine()
-              )
-        );
-    }
-    
-    /**
-     * Builds the various random elements needed for encrypting and decryypting
-     * content using AES encryption with a user-supplied password.
-     * @param password
-     * @return 
-     */
-    public static AESElements buildElements(char[]  password) {
-      try {
-        AESElements elements = buildKeyAndSalt(password);
-        elements.iv = buildIV();
-        
-        return elements;
-      } catch (Exception e) {
-        return null;
-      }
-    }
-
-    private static AESElements buildKeyAndSalt(char[] password)
-        throws NoSuchAlgorithmException, InvalidKeySpecException {
+  public static AESElements buildElements(char[]  password) {
+    try {
+      AESElements elements = buildKeyAndSalt(password);
+      elements.iv = buildIV();
       
-      AESElements e = new AESElements();
-      
-      e.salt = buildSalt();
-      e.key = buildKey(password, e.salt);
-
-      return e;
+      return elements;
+    } catch (Exception e) {
+      return null;
     }
+  }
 
-    /**
-     * Builds a hashed key from the supplied password and salt.
-     * @param password
-     * @param salt
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException
-     */
-    public static byte[] buildKey(char[] password, byte[] salt)
-        throws NoSuchAlgorithmException, InvalidKeySpecException {
-        PBEKeySpec spec = new PBEKeySpec(password, salt, HASH_ITERATIONS, AES_KEY_BYTES * 8);
-        SecretKeyFactory skf = SecretKeyFactory.getInstance(PBKDF2_ALGORITHM);
-        return skf.generateSecret(spec).getEncoded();
-    }
-
-    private static byte[] buildIV() {
-      return buildRandomByteArray(AES_BLOCK_BYTES);
-    }
-
-    private static byte[] buildSalt() {
-      return buildRandomByteArray(SALT_BYTES);
-    }
+  private static AESElements buildKeyAndSalt(char[] password)
+      throws NoSuchAlgorithmException, InvalidKeySpecException {
     
-    private static byte[] buildRandomByteArray(int arraySize) {
-      byte[] array = new byte[arraySize];
-      
-      RANDOM.nextBytes(array);
-      
-      return array;
-    }
+    AESElements e = new AESElements();
+    
+    e.salt = buildSalt();
+    e.key = buildKey(password, e.salt);
+
+    return e;
+  }
+
+  /**
+   * Builds a hashed key from the supplied password and salt.
+   * @param password
+   * @param salt
+   * @return
+   * @throws NoSuchAlgorithmException
+   * @throws InvalidKeySpecException
+   */
+  public static byte[] buildKey(char[] password, byte[] salt)
+      throws NoSuchAlgorithmException, InvalidKeySpecException {
+      PBEKeySpec spec = new PBEKeySpec(password, salt, HASH_ITERATIONS, AES_KEY_BYTES * 8);
+      SecretKeyFactory skf = SecretKeyFactory.getInstance(PBKDF2_ALGORITHM);
+      return skf.generateSecret(spec).getEncoded();
+  }
+
+  private static byte[] buildIV() {
+    return buildRandomByteArray(AES_BLOCK_BYTES);
+  }
+
+  private static byte[] buildSalt() {
+    return buildRandomByteArray(SALT_BYTES);
+  }
+  
+  private static byte[] buildRandomByteArray(int arraySize) {
+    byte[] array = new byte[arraySize];
+    
+    RANDOM.nextBytes(array);
+    
+    return array;
   }
 }
 
 /**
  * Convenience state storage for all needed random AES elements.
  */
-class AESElements {
+final class AESElements {
   public byte[] salt;  // salt as byte-array used to hash a password. Said hash becomes the AES key.
   public byte[] key;   // AES key as byte-array
   public byte[] iv;    // AES Initialisation Vector as a byte-array

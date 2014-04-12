@@ -8,7 +8,7 @@
  * http://opensource.org/licenses/BSD-3-Clause
  */
 
-package blacksmyth.personalfinancier.dependencies;
+package blacksmyth.personalfinancier.dependencies.encryption;
 
 /**
  * A class implementing the 'refined abstraction class' of the Bridge pattern, allowing a bridge 

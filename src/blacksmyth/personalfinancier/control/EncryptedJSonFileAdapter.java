@@ -11,10 +11,10 @@
 package blacksmyth.personalfinancier.control;
 
 import blacksmyth.general.FileUtilities;
-import blacksmyth.personalfinancier.dependencies.EncryptionBridge;
-import blacksmyth.personalfinancier.dependencies.IEncryptionBridge;
-import blacksmyth.personalfinancier.dependencies.IJSonSerialisationBridge;
-import blacksmyth.personalfinancier.dependencies.JSonBridge;
+import blacksmyth.personalfinancier.dependencies.encryption.EncryptionBridge;
+import blacksmyth.personalfinancier.dependencies.encryption.IEncryptionBridge;
+import blacksmyth.personalfinancier.dependencies.json.IJSonSerialisationBridge;
+import blacksmyth.personalfinancier.dependencies.json.JSonBridge;
 import blacksmyth.personalfinancier.view.IPasswordPromptPresenter;
 import blacksmyth.personalfinancier.view.IPasswordPromptView;
 

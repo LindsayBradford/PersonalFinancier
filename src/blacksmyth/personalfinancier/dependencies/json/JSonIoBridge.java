@@ -8,7 +8,7 @@
  * http://opensource.org/licenses/BSD-3-Clause
  */
 
-package blacksmyth.personalfinancier.dependencies;
+package blacksmyth.personalfinancier.dependencies.json;
 
 import java.io.IOException;
 
@@ -23,7 +23,7 @@ import com.cedarsoftware.util.io.JsonReader;
  * @param <T> The type of objects that this class will bridge JSON serialisation for.
  */
 
-public class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
+final class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
 
   @Override
   public String toJSon(T object) {

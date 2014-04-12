@@ -25,8 +25,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
-
-
 public class PasswordPromptView extends JDialog implements IPasswordPromptView, ActionListener {
   private JFrame controllingFrame; 
   
