@@ -10,8 +10,6 @@
 
 package blacksmyth.personalfinancier.dependencies.encryption;
 
-import java.nio.charset.Charset;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.Security;
@@ -27,10 +25,10 @@ import org.bouncycastle.crypto.modes.CBCBlockCipher;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
+
+import blacksmyth.general.file.FileUtilities;
 
 /**
  * A class implementing the 'Concrete Implementor class' of the Bridge pattern, allowing a bridge 
@@ -41,7 +39,6 @@ import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
   
   private static PaddedBufferedBlockCipher CIPHER;
-  private static Charset ENCODING = Charset.forName("UTF-8");
   
   /**
    * Implemented as a singleton to ensure we register the BouncyCastle
@@ -67,15 +64,14 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
   
   @Override
   public String encrypt(char[] password, String content) {
-    
-    AESElements e = AESBuilder.buildElements(password);
-
-    byte[] encryptedContent = processEncryption(e, StringToBytes(content));
-    
-    return 
-        ByteUtils.toHexString(e.salt) + 
-        ByteUtils.toHexString(e.iv) + 
-        ByteUtils.toHexString(encryptedContent);
+    return ByteUtils.toHexString(
+        encrypt(
+            password, 
+            FileUtilities.StringToBytes(
+                content
+            )
+        )
+    );
   }
   
   @Override
@@ -84,8 +80,6 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
     AESElements e = AESBuilder.buildElements(password);
 
     byte[] encryptedContent = processEncryption(e, content);
-    
-    
     byte[] header = ByteUtils.concatenate(e.salt, e.iv);
     
     return ByteUtils.concatenate(header, encryptedContent);
@@ -108,29 +102,14 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
   
   @Override
   public String decrypt(char[] password, String content) {
-    
-    int IV_HEX_CHARS = AESBuilder.BLOCK_BYTES * 2;
-    int SALT_HEX_CHARS = AESBuilder.SALT_BYTES * 2;
-    
-    AESElements e = new AESElements();
-
-    e.salt = ByteUtils.fromHexString(content.substring(0, SALT_HEX_CHARS));
-    e.iv   = ByteUtils.fromHexString(content.substring(SALT_HEX_CHARS, IV_HEX_CHARS + SALT_HEX_CHARS));
-    byte[] encryptedContent = ByteUtils.fromHexString(content.substring(IV_HEX_CHARS + SALT_HEX_CHARS));
-    
-    try {
-      e.key = AESBuilder.buildKey(password, e.salt);
-    } catch (Exception ex) {
-      return null;
-    }
-
-    byte[] decryptedContent = processDecryption(e,encryptedContent);
-    
-    if (decryptedContent == null) {
-      return null;
-    } 
-     
-    return BytesToString(decryptedContent);
+    return FileUtilities.BytesToString(
+        decrypt(
+            password, 
+            ByteUtils.fromHexString(
+                content
+            )
+        )
+    );
   }
 
   @Override
@@ -154,7 +133,7 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
       return null;
     } 
      
-    return decryptedContent;
+    return FileUtilities.TrimBytes(decryptedContent);
   }
   
   private byte[] processDecryption(AESElements e, byte[] encryptedContent) {
@@ -188,14 +167,7 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
 
     return processedBytes;
   }
-  
-  private String BytesToString(byte[] bytes) {
-    return new String(bytes, ENCODING);
-  }
-  
-  private byte[] StringToBytes(String string) {
-    return string.getBytes(ENCODING);
-  }
+
 }
 
 /**

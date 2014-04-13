@@ -10,10 +10,9 @@
 
 package blacksmyth.personalfinancier.control;
 
-import java.nio.charset.Charset;
-
 import blacksmyth.general.file.FileUtilities;
 import blacksmyth.general.file.IObjectFileConverter;
+
 import blacksmyth.personalfinancier.dependencies.encryption.EncryptionBridge;
 import blacksmyth.personalfinancier.dependencies.encryption.IEncryptionBridge;
 import blacksmyth.personalfinancier.dependencies.json.IJSonSerialisationBridge;
@@ -26,8 +25,6 @@ import blacksmyth.personalfinancier.view.IPasswordPromptView;
  */
 
 public class EncryptedJSonFileAdapter<T> implements IObjectFileConverter<T>, IPasswordPromptPresenter {
-  
-  private static Charset ENCODING = Charset.forName("UTF-8");
   
   private IPasswordPromptView passwordView;
   
@@ -64,7 +61,7 @@ public class EncryptedJSonFileAdapter<T> implements IObjectFileConverter<T>, IPa
       return;
     }
     
-    byte[] contentAsBytes = StringToBytes(jsonBridge.toJSon(t));
+    byte[] contentAsBytes = FileUtilities.StringToBytes(jsonBridge.toJSon(t));
     
     FileUtilities.saveBinaryFile(
         filePath, 
@@ -95,7 +92,7 @@ public class EncryptedJSonFileAdapter<T> implements IObjectFileConverter<T>, IPa
     }
     
     T objectFromFile = jsonBridge.fromJson(
-        BytesToString(decryptedContent)
+        FileUtilities.BytesToString(decryptedContent)
     );
     
     passwordView.clearPassword();
@@ -106,13 +103,5 @@ public class EncryptedJSonFileAdapter<T> implements IObjectFileConverter<T>, IPa
   @Override
   public void setView(IPasswordPromptView view) {
     this.passwordView = view;
-  }
-  
-  private String BytesToString(byte[] bytes) {
-    return new String(bytes, ENCODING);
-  }
-  
-  private byte[] StringToBytes(String string) {
-    return string.getBytes(ENCODING);
   }
 }
