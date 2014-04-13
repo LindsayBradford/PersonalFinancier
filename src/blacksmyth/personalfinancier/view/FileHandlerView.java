@@ -20,7 +20,7 @@ import blacksmyth.general.file.IFileHandlerView;
 
 public class FileHandlerView implements IFileHandlerView {
 
-  private static final JFileChooser fileChooser = new JFileChooser();
+  private final JFileChooser fileChooser = new JFileChooser();
   private String currentFileName;
   
   private JFrame parentFrame;

@@ -21,17 +21,11 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Arrays;
 
 /**
  * A collection of general utilities for file handling.
- * @author linds
- *
  */
 public class FileUtilities {
-  
-  private static Charset ENCODING = Charset.forName("UTF-8");
   
   /**
    * Attempts to save the text <tt>content</tt> to <tt>fileName</tt>.
@@ -164,23 +158,6 @@ public class FileUtilities {
       return null;
     }
     return content;
-  }
-  
-  public static String BytesToString(byte[] bytes) {
-    return new String(bytes, ENCODING);
-  }
-  
-  public static byte[] StringToBytes(String string) {
-    return string.getBytes(ENCODING);
-  }
-  
-  public static byte[] TrimBytes(byte[] bytes)
-  {
-      int i = bytes.length - 1;
-      while (i >= 0 && bytes[i] == 0){
-          --i;
-      }
-      return Arrays.copyOf(bytes, i + 1);
   }
 
 }

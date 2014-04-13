@@ -10,9 +10,9 @@
 
 package blacksmyth.personalfinancier.control;
 
+import blacksmyth.general.ByteUtilities;
 import blacksmyth.general.file.FileUtilities;
 import blacksmyth.general.file.IObjectFileConverter;
-
 import blacksmyth.personalfinancier.dependencies.encryption.EncryptionBridge;
 import blacksmyth.personalfinancier.dependencies.encryption.IEncryptionBridge;
 import blacksmyth.personalfinancier.dependencies.json.IJSonSerialisationBridge;
@@ -61,7 +61,7 @@ public class EncryptedJSonFileAdapter<T> implements IObjectFileConverter<T>, IPa
       return;
     }
     
-    byte[] contentAsBytes = FileUtilities.StringToBytes(jsonBridge.toJSon(t));
+    byte[] contentAsBytes = ByteUtilities.StringToBytes(jsonBridge.toJSon(t));
     
     FileUtilities.saveBinaryFile(
         filePath, 
@@ -92,7 +92,7 @@ public class EncryptedJSonFileAdapter<T> implements IObjectFileConverter<T>, IPa
     }
     
     T objectFromFile = jsonBridge.fromJson(
-        FileUtilities.BytesToString(decryptedContent)
+        ByteUtilities.BytesToString(decryptedContent)
     );
     
     passwordView.clearPassword();

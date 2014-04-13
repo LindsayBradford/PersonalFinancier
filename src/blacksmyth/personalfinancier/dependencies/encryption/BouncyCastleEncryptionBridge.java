@@ -28,7 +28,7 @@ import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 
-import blacksmyth.general.file.FileUtilities;
+import blacksmyth.general.ByteUtilities;
 
 /**
  * A class implementing the 'Concrete Implementor class' of the Bridge pattern, allowing a bridge 
@@ -67,7 +67,7 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
     return ByteUtils.toHexString(
         encrypt(
             password, 
-            FileUtilities.StringToBytes(
+            ByteUtilities.StringToBytes(
                 content
             )
         )
@@ -102,7 +102,7 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
   
   @Override
   public String decrypt(char[] password, String content) {
-    return FileUtilities.BytesToString(
+    return ByteUtilities.BytesToString(
         decrypt(
             password, 
             ByteUtils.fromHexString(
@@ -133,7 +133,7 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
       return null;
     } 
      
-    return FileUtilities.TrimBytes(decryptedContent);
+    return ByteUtilities.TrimBytes(decryptedContent);
   }
   
   private byte[] processDecryption(AESElements e, byte[] encryptedContent) {

@@ -17,7 +17,7 @@ package blacksmyth.personalfinancier.dependencies.encryption;
 
 public interface IEncryptionBridge {
   /**
-   * Encrypts the content using supplied password. 
+   * Encrypts the string content using supplied password. 
    * @param password
    * @param content
    * @return AES-256 encrypted content.
@@ -25,7 +25,7 @@ public interface IEncryptionBridge {
   public String encrypt(char[] password, String content);
 
   /**
-   * Decrypts the content using the supplied password,
+   * Decrypts the string content using the supplied password,
    * @param password
    * @param salt
    * @param initialisationVector
@@ -35,7 +35,7 @@ public interface IEncryptionBridge {
   public String decrypt(char[] password, String content);
   
   /**
-   * Encrypts the content using supplied password. 
+   * Encrypts the binary content using supplied password. 
    * @param password
    * @param content
    * @return AES-256 encrypted content.
@@ -43,7 +43,7 @@ public interface IEncryptionBridge {
   public byte[] encrypt(char[] password, byte[] content);
 
   /**
-   * Decrypts the content using the supplied password,
+   * Decrypts the binary content using the supplied password,
    * @param password
    * @param salt
    * @param initialisationVector
