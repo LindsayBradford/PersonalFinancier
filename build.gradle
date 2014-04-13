@@ -14,11 +14,18 @@ repositories {
    }
 }
 
+List libsToMerge = [ "jtattoo:JTattoo:1.6.10", "json-io:json-io:2.5.1", "gral-core:gral-core:0.9" ]
+List libsToShip = [ "bcprov-jdk15on:bcprov-jdk15on:150" ]
+
+configurations {
+  mergeLibs
+  shipLibs
+}
+
 dependencies {
-  compile 'jtattoo:JTattoo:1.6.10'
-  compile 'json-io:json-io:2.5.1'
-  compile 'gral-core:gral-core:0.9'
-  compile 'bcprov:bcprov:1.50'
+  mergeLibs libsToMerge 
+  shipLibs libsToShip
+  compile libsToMerge, libsToShip 
 }
 
 // modify the sourceSets to match the layout of my java-only project.
@@ -27,12 +34,12 @@ sourceSets {
   main {
     java {
       srcDir 'src'
+      exclude '**/*Test.java'
     }
     resources {
       srcDir 'src/blacksmyth/resources'
     }
   }
-//  output.resourcesDir = 'build/classes/main/blacksmyth/resources'
 }
 
 // Sub-par.  How can I set this nicely from within sourceSets?
@@ -44,24 +51,34 @@ processResources {
 }
 
 jar {
-  // Merge jars we're dependent on into the executable jar.
+  // Merge libraries we're dependent on into the executable jar.
 
-  from { 
-    configurations.compile.collect { 
-      it.isDirectory() ? it : zipTree(it)
-    } 
+  from {
+    configurations.mergeLibs.collect { zipTree(it) }
   }
 
   manifest {
+    attributes 'Built-By':  System.getProperty("user.name")
     attributes 'Main-Class' : 'blacksmyth.personalfinancier.PersonalFinancier'
+    attributes 'CLass-Path' : configurations.shipLibs.collect{ it.getName() }.join(' ')
   }
 }
 
+// add the extra libaries we ship (not merge) as artifacts to deliver.
+// commented out for now - artifactPattern on flatDir repositories doesn't seem
+// possible, meaning I get my own project.version tacked on the end of the
+// artifact when I try adding it as an artifact to upload.
+//artifacts {
+//  configurations.shipLibs.collect {
+//    archives it
+//  }
+//}
 
-// upload the finalised archive (jar) to a single repository being the 
+// upload the finalised artifacts to a single repository being the 
 // flat directory 'dist'.
 
 uploadArchives {
+  uploadDescriptor = false 
   repositories {
     flatDir {
       dirs 'dist'
@@ -70,7 +87,7 @@ uploadArchives {
 }
 
 task dist {
-  dependsOn uploadArchives
+  dependsOn uploadArchives 
 }
 
 // the full task is the gradle equivalent of the ant script's 
