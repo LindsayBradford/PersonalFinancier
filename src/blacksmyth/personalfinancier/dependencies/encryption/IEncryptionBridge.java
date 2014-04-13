@@ -33,4 +33,22 @@ public interface IEncryptionBridge {
    * @return
    */
   public String decrypt(char[] password, String content);
+  
+  /**
+   * Encrypts the content using supplied password. 
+   * @param password
+   * @param content
+   * @return AES-256 encrypted content.
+   */
+  public byte[] encrypt(char[] password, byte[] content);
+
+  /**
+   * Decrypts the content using the supplied password,
+   * @param password
+   * @param salt
+   * @param initialisationVector
+   * @param content
+   * @return
+   */
+  public byte[] decrypt(char[] password, byte[] content);
 }

@@ -29,4 +29,14 @@ public final class EncryptionBridge implements IEncryptionBridge {
   public String decrypt(char[] password, String content) {
     return bridge.decrypt(password, content);
   }
+  
+  @Override
+  public byte[] encrypt(char[] password, byte[] content) {
+    return bridge.encrypt(password, content);
+  }
+
+  @Override
+  public byte[] decrypt(char[] password, byte[] content) {
+    return bridge.decrypt(password, content);
+  }
 }

@@ -10,7 +10,8 @@
 
 package blacksmyth.personalfinancier.control;
 
-import blacksmyth.general.FileUtilities;
+import blacksmyth.general.file.FileUtilities;
+import blacksmyth.general.file.IObjectFileConverter;
 import blacksmyth.personalfinancier.dependencies.json.IJSonSerialisationBridge;
 import blacksmyth.personalfinancier.dependencies.json.JSonBridge;
 
@@ -19,7 +20,7 @@ import blacksmyth.personalfinancier.dependencies.json.JSonBridge;
  * object state via a 3rd-party JSON Serialization library.
  */
 
-public class JSonFileAdapter<T> implements IPersonalFinancierFileAdapter<T> {
+public class JSonFileAdapter<T> implements IObjectFileConverter<T> {
   
   private IJSonSerialisationBridge<T> jsonBridge;
   

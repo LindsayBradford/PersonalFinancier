@@ -10,20 +10,21 @@
 
 package blacksmyth.personalfinancier.control;
 
-import blacksmyth.personalfinancier.model.IFileHandlerModel;
+import blacksmyth.general.file.IFileHandlerModel;
+import blacksmyth.general.file.IFileHandlerView;
+import blacksmyth.general.file.IObjectFileConverter;
 import blacksmyth.personalfinancier.model.IPreferenceItem;
-import blacksmyth.personalfinancier.view.IFileHandlerView;
 
 public class FileHandler<T> {
   
   private IFileHandlerModel<T> model;
   private IFileHandlerView     view;
   
-  private IPersonalFinancierFileAdapter<T> fileAdapter;
+  private IObjectFileConverter<T> fileAdapter;
   private IPreferenceItem<String> filePathPreferenceItem;
 
   public FileHandler (IFileHandlerView view, IFileHandlerModel<T> model, 
-                      IPersonalFinancierFileAdapter<T> fileAdapter,
+                      IObjectFileConverter<T> fileAdapter,
                       IPreferenceItem<String> filepathPreferenceItem) {
     setModel(model);
     setView(view);

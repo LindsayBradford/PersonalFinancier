@@ -8,11 +8,16 @@
  * http://opensource.org/licenses/BSD-3-Clause
  */
 
-package blacksmyth.general;
+package blacksmyth.general.file;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -54,9 +59,7 @@ public class FileUtilities {
       System.out.println(ioe);
     }
     
-    System.out.println(
-        fileHandle.getAbsolutePath() + " saved."
-    );
+    // System.out.println(fileHandle.getAbsolutePath() + " saved.");
   }
   
   /**
@@ -93,8 +96,69 @@ public class FileUtilities {
       System.out.println(ioe);
     }
     
-    System.out.println(fileHandle.getAbsolutePath() + " loaded.");
+    //System.out.println(fileHandle.getAbsolutePath() + " loaded.");
 
     return fileContent.toString();
+  }
+  
+  /**
+   * Attempts to save the byte array <tt>content</tt> to binary file <tt>fileName</tt>.
+   * @param fileName
+   * @param content
+   */
+  public static void saveBinaryFile(String fileName, byte[] content) {
+    saveBinaryFile(
+        new File(fileName), 
+        content
+    );
+  }
+
+  /**
+   * Attempts to save the byte array <tt>content</tt> to binary file <tt>fileHandle</tt>.
+   * @param fileName
+   * @param content
+   */
+  public static void saveBinaryFile(File fileHandle, byte[] content) {
+    DataOutputStream outputStream;
+    try {
+      outputStream = new DataOutputStream(new FileOutputStream(fileHandle));
+      outputStream.write(content);
+      outputStream.close();
+    } catch (FileNotFoundException fnfe) {
+      return;
+    } catch (IOException ioe) {
+      return;
+    }
+  }
+  
+  /**
+   * Returns the byte arrray content of in binary file <tt>fileName</tt>
+   * @param fileName
+   * @return
+   */
+  public static byte[] loadBinaryFile(String fileName) {
+    return loadBinaryFile(
+        new File(fileName)
+    );
+  }
+  
+  /**
+   * Returns the text content in <tt>fileHandle</tt>
+   * @param fileHandle
+   * @return
+   */
+  public static byte[] loadBinaryFile(File fileHandle) {
+    byte[] content = new byte[(int)fileHandle.length()];
+    DataInputStream inputStream;
+    try {
+      inputStream = new DataInputStream(new FileInputStream(fileHandle));
+      inputStream.readFully(content);
+      inputStream.close();
+    } catch (FileNotFoundException fnfe){
+      return null;
+    } catch (IOException ioe) {
+      return null;
+    }
+    return content;
   }
 }

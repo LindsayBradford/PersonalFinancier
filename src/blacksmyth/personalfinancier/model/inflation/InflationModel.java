@@ -18,8 +18,8 @@ import java.util.Observable;
 
 import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.general.SortedArrayList;
+import blacksmyth.general.file.IFileHandlerModel;
 import blacksmyth.personalfinancier.control.inflation.IInflationController;
-import blacksmyth.personalfinancier.model.IFileHandlerModel;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
 import blacksmyth.personalfinancier.model.PreferencesModel;

@@ -70,7 +70,7 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
     
     AESElements e = AESBuilder.buildElements(password);
 
-    byte[] encryptedContent = encrypt(e, StringToBytes(content));
+    byte[] encryptedContent = processEncryption(e, StringToBytes(content));
     
     return 
         ByteUtils.toHexString(e.salt) + 
@@ -78,7 +78,20 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
         ByteUtils.toHexString(encryptedContent);
   }
   
-  private byte[] encrypt(AESElements e, byte[] content) {
+  @Override
+  public byte[] encrypt(char[] password, byte[] content) {
+    
+    AESElements e = AESBuilder.buildElements(password);
+
+    byte[] encryptedContent = processEncryption(e, content);
+    
+    
+    byte[] header = ByteUtils.concatenate(e.salt, e.iv);
+    
+    return ByteUtils.concatenate(header, encryptedContent);
+  }
+
+  private byte[] processEncryption(AESElements e, byte[] content) {
     ParametersWithIV parameterIV =
         new ParametersWithIV(new KeyParameter(e.key),e.iv);
 
@@ -92,11 +105,11 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
 
     return processContent(content);
   }
-
+  
   @Override
   public String decrypt(char[] password, String content) {
     
-    int IV_HEX_CHARS = AESBuilder.AES_BLOCK_BYTES * 2;
+    int IV_HEX_CHARS = AESBuilder.BLOCK_BYTES * 2;
     int SALT_HEX_CHARS = AESBuilder.SALT_BYTES * 2;
     
     AESElements e = new AESElements();
@@ -111,7 +124,7 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
       return null;
     }
 
-    byte[] decryptedContent = decrypt(e,encryptedContent);
+    byte[] decryptedContent = processDecryption(e,encryptedContent);
     
     if (decryptedContent == null) {
       return null;
@@ -119,8 +132,32 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
      
     return BytesToString(decryptedContent);
   }
+
+  @Override
+  public byte[] decrypt(char[] password, byte[] content) {
+    
+    AESElements e = new AESElements();
+
+    e.salt = ByteUtils.subArray(content, 0, AESBuilder.SALT_BYTES);
+    e.iv   = ByteUtils.subArray(content, AESBuilder.SALT_BYTES, AESBuilder.SALT_BYTES + AESBuilder.IV_BYTES);
+    byte[] encryptedContent = ByteUtils.subArray(content, AESBuilder.SALT_BYTES + AESBuilder.IV_BYTES);
+    
+    try {
+      e.key = AESBuilder.buildKey(password, e.salt);
+    } catch (Exception ex) {
+      return null;
+    }
+
+    byte[] decryptedContent = processDecryption(e,encryptedContent);
+    
+    if (decryptedContent == null) {
+      return null;
+    } 
+     
+    return decryptedContent;
+  }
   
-  private byte[] decrypt(AESElements e, byte[] encryptedContent) {
+  private byte[] processDecryption(AESElements e, byte[] encryptedContent) {
     ParametersWithIV parameterIV =
         new ParametersWithIV(new KeyParameter(e.key),e.iv);
 
@@ -168,11 +205,13 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
 final class AESBuilder {
   private static SecureRandom RANDOM = new SecureRandom();
 
-  public static final int AES_BLOCK_BITS = 128;
-  public static final int AES_BLOCK_BYTES = AES_BLOCK_BITS / Byte.SIZE;
+  public static final int BLOCK_BITS = 128;
+  public static final int BLOCK_BYTES = BLOCK_BITS / Byte.SIZE;
   
-  public static final int AES_KEY_BITS = 256;
-  public static final int AES_KEY_BYTES = AES_KEY_BITS / Byte.SIZE;
+  public static final int IV_BYTES = BLOCK_BYTES;;
+  
+  public static final int KEY_BITS = 256;
+  public static final int KEY_BYTES = KEY_BITS / Byte.SIZE;
   
   private static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA1";
 
@@ -230,13 +269,13 @@ final class AESBuilder {
    */
   public static byte[] buildKey(char[] password, byte[] salt)
       throws NoSuchAlgorithmException, InvalidKeySpecException {
-      PBEKeySpec spec = new PBEKeySpec(password, salt, HASH_ITERATIONS, AES_KEY_BYTES * 8);
+      PBEKeySpec spec = new PBEKeySpec(password, salt, HASH_ITERATIONS, KEY_BYTES * 8);
       SecretKeyFactory skf = SecretKeyFactory.getInstance(PBKDF2_ALGORITHM);
       return skf.generateSecret(spec).getEncoded();
   }
 
   private static byte[] buildIV() {
-    return buildRandomByteArray(AES_BLOCK_BYTES);
+    return buildRandomByteArray(BLOCK_BYTES);
   }
 
   private static byte[] buildSalt() {

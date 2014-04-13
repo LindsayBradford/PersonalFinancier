@@ -8,8 +8,13 @@
  * http://opensource.org/licenses/BSD-3-Clause
  */
 
-package blacksmyth.personalfinancier.view;
+package blacksmyth.general.file;
 
-public interface IPasswordPromptPresenter {
-  void setView(IPasswordPromptView view);
+public interface IFileHandlerView {
+
+  public void setPromptDirectory(String directory);
+
+  public boolean promptForSaveFilename();
+  public boolean promptForLoadFilename();
+  public String getFilename();
 }

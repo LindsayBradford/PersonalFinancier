@@ -10,12 +10,14 @@
 
 package blacksmyth.personalfinancier.control;
 
-import blacksmyth.general.FileUtilities;
+import java.nio.charset.Charset;
+
+import blacksmyth.general.file.FileUtilities;
+import blacksmyth.general.file.IObjectFileConverter;
 import blacksmyth.personalfinancier.dependencies.encryption.EncryptionBridge;
 import blacksmyth.personalfinancier.dependencies.encryption.IEncryptionBridge;
 import blacksmyth.personalfinancier.dependencies.json.IJSonSerialisationBridge;
 import blacksmyth.personalfinancier.dependencies.json.JSonBridge;
-import blacksmyth.personalfinancier.view.IPasswordPromptPresenter;
 import blacksmyth.personalfinancier.view.IPasswordPromptView;
 
 /**
@@ -23,7 +25,9 @@ import blacksmyth.personalfinancier.view.IPasswordPromptView;
  * object state via a 3rd-party JSON Serialization library.
  */
 
-public class EncryptedJSonFileAdapter<T> implements IPersonalFinancierFileAdapter<T>, IPasswordPromptPresenter {
+public class EncryptedJSonFileAdapter<T> implements IObjectFileConverter<T>, IPasswordPromptPresenter {
+  
+  private static Charset ENCODING = Charset.forName("UTF-8");
   
   private IPasswordPromptView passwordView;
   
@@ -60,11 +64,13 @@ public class EncryptedJSonFileAdapter<T> implements IPersonalFinancierFileAdapte
       return;
     }
     
-    FileUtilities.saveTextFile(
+    byte[] contentAsBytes = StringToBytes(jsonBridge.toJSon(t));
+    
+    FileUtilities.saveBinaryFile(
         filePath, 
         encryptionBridge.encrypt(
-            passwordView.getPassword(), 
-            jsonBridge.toJSon(t)
+            passwordView.getPassword(),
+            contentAsBytes
         )
     );
 
@@ -79,12 +85,19 @@ public class EncryptedJSonFileAdapter<T> implements IPersonalFinancierFileAdapte
       return null;
     }
     
-    T objectFromFile = jsonBridge.fromJson(
-        encryptionBridge.decrypt(
-            passwordView.getPassword(), 
-            FileUtilities.loadTextFile(filePath)
-        )
+    byte[] decryptedContent = encryptionBridge.decrypt(
+        passwordView.getPassword(), 
+        FileUtilities.loadBinaryFile(filePath)
     );
+    
+    if (decryptedContent == null) {
+      return null;
+    }
+    
+    T objectFromFile = jsonBridge.fromJson(
+        BytesToString(decryptedContent)
+    );
+    
     passwordView.clearPassword();
 
     return objectFromFile;
@@ -93,5 +106,13 @@ public class EncryptedJSonFileAdapter<T> implements IPersonalFinancierFileAdapte
   @Override
   public void setView(IPasswordPromptView view) {
     this.passwordView = view;
+  }
+  
+  private String BytesToString(byte[] bytes) {
+    return new String(bytes, ENCODING);
+  }
+  
+  private byte[] StringToBytes(String string) {
+    return string.getBytes(ENCODING);
   }
 }

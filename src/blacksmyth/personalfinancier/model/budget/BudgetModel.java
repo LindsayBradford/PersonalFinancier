@@ -19,12 +19,12 @@ import java.util.Observer;
 
 import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.general.SortedArrayList;
+import blacksmyth.general.file.IFileHandlerModel;
 import blacksmyth.personalfinancier.control.budget.IBudgetController;
 import blacksmyth.personalfinancier.control.budget.IBudgetObserver;
 import blacksmyth.personalfinancier.model.Account;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
-import blacksmyth.personalfinancier.model.IFileHandlerModel;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
 import blacksmyth.personalfinancier.model.MoneyUtilties;

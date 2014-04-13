@@ -16,6 +16,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import blacksmyth.general.file.IFileHandlerView;
+
 public class FileHandlerView implements IFileHandlerView {
 
   private static final JFileChooser fileChooser = new JFileChooser();
