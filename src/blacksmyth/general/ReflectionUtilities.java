@@ -114,5 +114,14 @@ public final class ReflectionUtilities {
       return null;
     }
   }
-
+  
+  public static boolean classAvailable(String className) {
+    try {
+      if (Class.forName(className) != null) {
+        return true;
+      }
+    } catch (Exception e) {}
+    
+    return false;
+  }
 }

@@ -22,17 +22,11 @@ import blacksmyth.general.file.IObjectFileConverter;
  * @param <T>
  */
 public final class StrategicFileAdapter<T> implements IObjectFileConverter<T> {
-  
-  private HashMap<String, IObjectFileConverter<T>> adapterMap = new HashMap<String, IObjectFileConverter<T>>();
 
-  /**
-   * Adds the supplied adapter to it's internal map of adapters against which file extensions
-   * they process.
-   * @param fileExtension
-   * @param adapter
-   */
-  public void add(String fileExtension, IObjectFileConverter<T> adapter) {
-    adapterMap.put(fileExtension, adapter);
+  private HashMap<String, IObjectFileConverter<T>> adapterMap;
+  
+  public StrategicFileAdapter(HashMap<String, IObjectFileConverter<T>> inputMap) {
+    this.adapterMap = inputMap;
   }
 
   @Override

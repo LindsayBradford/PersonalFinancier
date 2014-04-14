@@ -10,12 +10,16 @@
 
 package blacksmyth.personalfinancier.control;
 
+import java.util.HashMap;
+
 import javax.swing.JFrame;
 
 import blacksmyth.general.file.IFileHandlerModel;
 import blacksmyth.general.file.IFileHandlerView;
 import blacksmyth.general.file.IObjectFileConverter;
+
 import blacksmyth.personalfinancier.UIComponents;
+import blacksmyth.personalfinancier.dependencies.encryption.EncryptionBridge;
 import blacksmyth.personalfinancier.model.IPreferenceItem;
 import blacksmyth.personalfinancier.model.PreferenceItemBuilder;
 import blacksmyth.personalfinancier.model.budget.BudgetFileContent;
@@ -27,19 +31,45 @@ public final class FileHandlerFactory {
   public static FileHandler<BudgetFileContent> buildBudgetHandler(
       JFrame parentFrame, IFileHandlerModel<BudgetFileContent> model) {
     
+    HashMap<String, IObjectFileConverter<BudgetFileContent>> availableAdapters = 
+        buildAvailableAdapters();
+    
     return new FileHandler<BudgetFileContent>(
-            buildBudgetView(parentFrame), 
+            buildBudgetView(parentFrame, availableAdapters), 
             model, 
-            buildFileAdapter(), 
+            buildFileAdapter(availableAdapters), 
             buildBudgetPreferenceItem()
         );
   }
   
-  private static IFileHandlerView buildBudgetView(JFrame parentFrame) {
+  private static HashMap<String, IObjectFileConverter<BudgetFileContent>> buildAvailableAdapters() {
+    HashMap<String, IObjectFileConverter<BudgetFileContent>> availableAdapters = 
+        new HashMap<String, IObjectFileConverter<BudgetFileContent>> ();
+    
+    availableAdapters.put("pf", new JSonFileAdapter<BudgetFileContent>());
+    
+    EncryptionBridge bridge = new EncryptionBridge();
+    
+    if (bridge.encryptionAvailable()) {
+      IObjectFileConverter<BudgetFileContent> encryptedAdapter = 
+          new EncryptedJSonFileAdapter<BudgetFileContent>(
+              new PasswordPromptView(UIComponents.windowFrame)
+          );
+
+      availableAdapters.put("epf", encryptedAdapter);
+    }
+    
+    return availableAdapters;
+  }
+  
+  private static IFileHandlerView buildBudgetView(
+      JFrame parentFrame, 
+      HashMap<String, IObjectFileConverter<BudgetFileContent>> availableAdapters) {
+
     return new FileHandlerView(
         parentFrame,
         "Personal Financier Files",
-        "pf", "epf"
+        availableAdapters.keySet().toArray(new String[0])  // new String[0] needed for valid typecast.
     );
   }
   
@@ -47,23 +77,9 @@ public final class FileHandlerFactory {
     return PreferenceItemBuilder.buildBudgetDirectoryPreferenceItem();
   }
   
-  private static IObjectFileConverter<BudgetFileContent> buildFileAdapter() {
-
-    IObjectFileConverter<BudgetFileContent> basicAdapter = 
-        new JSonFileAdapter<BudgetFileContent>();
-
-    IObjectFileConverter<BudgetFileContent> encryptedAdapter = 
-        new EncryptedJSonFileAdapter<BudgetFileContent>(
-            new PasswordPromptView(UIComponents.windowFrame)
-        );
-    
-    StrategicFileAdapter<BudgetFileContent> strategicAdapter  = 
-        new StrategicFileAdapter<BudgetFileContent>();
-
-    strategicAdapter.add("pf", basicAdapter);
-    strategicAdapter.add("epf", encryptedAdapter);
-
-    return strategicAdapter;
+  private static IObjectFileConverter<BudgetFileContent> buildFileAdapter(
+      HashMap<String, IObjectFileConverter<BudgetFileContent>> availableAdapters) {
+   
+    return new StrategicFileAdapter<BudgetFileContent>(availableAdapters);
   }
-
 }

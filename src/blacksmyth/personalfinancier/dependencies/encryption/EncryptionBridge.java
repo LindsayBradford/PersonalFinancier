@@ -10,6 +10,8 @@
 
 package blacksmyth.personalfinancier.dependencies.encryption;
 
+import blacksmyth.general.ReflectionUtilities;
+
 /**
  * A class implementing the 'refined abstraction class' of the Bridge pattern, allowing a bridge 
  * of all needed functionality between the application and the open-source security provider
@@ -18,25 +20,50 @@ package blacksmyth.personalfinancier.dependencies.encryption;
 
 public final class EncryptionBridge implements IEncryptionBridge {
   
-  private IEncryptionBridge bridge = BouncyCastleEncryptionBridge.getInstance();
-
+  
   @Override
   public String encrypt(char[] password, String content) {
-    return bridge.encrypt(password, content);
+    if (encryptionAvailable()) {
+      return getConcreteBridge().encrypt(password, content);
+    }
+    return content;
   }
 
   @Override
   public String decrypt(char[] password, String content) {
-    return bridge.decrypt(password, content);
+    if (encryptionAvailable()) {
+      return getConcreteBridge().decrypt(password, content);
+    }
+    return null;
   }
   
   @Override
   public byte[] encrypt(char[] password, byte[] content) {
-    return bridge.encrypt(password, content);
+    if (encryptionAvailable()) {
+      return getConcreteBridge().encrypt(password, content);
+    }
+    return content;
   }
 
   @Override
   public byte[] decrypt(char[] password, byte[] content) {
-    return bridge.decrypt(password, content);
+    if (encryptionAvailable()) {
+      return getConcreteBridge().decrypt(password, content);
+    }
+    return null;
+  }
+  
+  @Override
+  public boolean encryptionAvailable() {
+    return ReflectionUtilities.classAvailable(
+        "org.bouncycastle.jce.provider.BouncyCastleProvider"
+    );
+  }
+  
+  private IEncryptionBridge getConcreteBridge() {
+    if (encryptionAvailable()) {
+      return BouncyCastleEncryptionBridge.getInstance();
+    }
+    return null;
   }
 }

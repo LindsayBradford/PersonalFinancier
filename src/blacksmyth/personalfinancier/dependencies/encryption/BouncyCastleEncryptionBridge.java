@@ -168,6 +168,10 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
     return processedBytes;
   }
 
+  @Override
+  public boolean encryptionAvailable() {
+    return true;
+  }
 }
 
 /**
