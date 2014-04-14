@@ -64,15 +64,12 @@ jar {
   }
 }
 
-// add the extra libaries we ship (not merge) as artifacts to deliver.
-// commented out for now - artifactPattern on flatDir repositories doesn't seem
-// possible, meaning I get my own project.version tacked on the end of the
-// artifact when I try adding it as an artifact to upload.
-//artifacts {
-//  configurations.shipLibs.collect {
-//    archives it
-//  }
-//}
+task distributeShipLibs(type: Copy) {
+  configurations.shipLibs.collect {
+    from it
+  }
+  into 'dist'
+}
 
 // upload the finalised artifacts to a single repository being the 
 // flat directory 'dist'.
@@ -80,14 +77,12 @@ jar {
 uploadArchives {
   uploadDescriptor = false 
   repositories {
-    flatDir {
-      dirs 'dist'
-    }
+    flatDir(name: 'localRepository', dirs: 'dist')
   }
 }
 
 task dist {
-  dependsOn uploadArchives 
+  dependsOn distributeShipLibs, uploadArchives
 }
 
 // the full task is the gradle equivalent of the ant script's 
