@@ -17,12 +17,12 @@ import javax.swing.JFrame;
 import blacksmyth.general.file.IFileHandlerModel;
 import blacksmyth.general.file.IFileHandlerView;
 import blacksmyth.general.file.IObjectFileConverter;
-
 import blacksmyth.personalfinancier.UIComponents;
 import blacksmyth.personalfinancier.dependencies.encryption.EncryptionBridge;
 import blacksmyth.personalfinancier.model.IPreferenceItem;
 import blacksmyth.personalfinancier.model.PreferenceItemBuilder;
 import blacksmyth.personalfinancier.model.budget.BudgetFileContent;
+import blacksmyth.personalfinancier.model.inflation.InflationFileContent;
 import blacksmyth.personalfinancier.view.FileHandlerView;
 import blacksmyth.personalfinancier.view.PasswordPromptView;
 
@@ -37,7 +37,7 @@ public final class FileHandlerFactory {
     return new FileHandler<BudgetFileContent>(
             buildBudgetView(parentFrame, availableAdapters), 
             model, 
-            buildFileAdapter(availableAdapters), 
+            buildBudgetFileAdapter(availableAdapters), 
             buildBudgetPreferenceItem()
         );
   }
@@ -77,9 +77,37 @@ public final class FileHandlerFactory {
     return PreferenceItemBuilder.buildBudgetDirectoryPreferenceItem();
   }
   
-  private static IObjectFileConverter<BudgetFileContent> buildFileAdapter(
+  private static IObjectFileConverter<BudgetFileContent> buildBudgetFileAdapter(
       HashMap<String, IObjectFileConverter<BudgetFileContent>> availableAdapters) {
    
     return new StrategicFileAdapter<BudgetFileContent>(availableAdapters);
   }
+  
+  public static FileHandler<InflationFileContent> buildInflationHandler(
+      JFrame parentFrame, IFileHandlerModel<InflationFileContent> model) {
+    
+    return new FileHandler<InflationFileContent>(
+        buildInflationView(parentFrame),
+        model,
+        buildInflationFileAdapter(),
+        buildInflationPreferenceItem()
+    );
+  }
+  
+  private static FileHandlerView buildInflationView(JFrame parentFrame) {
+    return new FileHandlerView(
+        parentFrame,
+        "JSon Files",
+        "json"
+    );  
+  }
+  
+  private static IObjectFileConverter<InflationFileContent> buildInflationFileAdapter() {
+    return new JSonFileAdapter<InflationFileContent>(); 
+  }
+  
+  private static IPreferenceItem<String> buildInflationPreferenceItem() {
+    return PreferenceItemBuilder.buildInflationDirectoryPreferenceItem();
+  }
+
 }

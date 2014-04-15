@@ -34,6 +34,7 @@ import javax.swing.border.EmptyBorder;
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.personalfinancier.control.FileHandler;
+import blacksmyth.personalfinancier.control.FileHandlerFactory;
 import blacksmyth.personalfinancier.control.JSonFileAdapter;
 import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.control.inflation.InflationConversionController;
@@ -70,15 +71,9 @@ class InflationUIFactory {
     
     UIComponents.inflationTable = new InflationTable(UIComponents.inflationModel);
     UIComponents.inflationFileController = 
-        new FileHandler<InflationFileContent>(
-            new FileHandlerView(
-                UIComponents.windowFrame,
-                "JSon Files",
-                "json"
-            ),
-            UIComponents.inflationModel,
-            new JSonFileAdapter<InflationFileContent>(),
-            PreferenceItemBuilder.buildInflationDirectoryPreferenceItem()
+        FileHandlerFactory.buildInflationHandler(
+            UIComponents.windowFrame, 
+            UIComponents.inflationModel
         );
 
     panel.add(
