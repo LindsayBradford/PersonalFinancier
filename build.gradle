@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
-defaultTasks 'clean', 'dist'
+defaultTasks 'distribute'
 
 // Start Project configuration
 
@@ -14,11 +14,21 @@ project.version = "0.2"
 project.ext {
   title = "PersonalFinancier"
   contact = "Lindsay Willian Bradford (lindsay.w.bradford_at_gmail.com)"
+  libsDirectory = "libs"
+  distributionDirectory = "dist"
 }
 
 mainClassName = project.group + '.' + project.title
 
-// Storing all dependencies in a libs directory. 
+List libsToMerge = [ 
+  "com.jtattoo:JTattoo:1.6.10", 
+  "com.cedarsoftware:json-io:2.5.2", 
+  "de.erichseifert.gral:gral-core:0.9" 
+]
+
+List libsToShip = [ 
+  "org.bouncycastle:bcprov-jdk15on:1.50" 
+]
 
 repositories {
    mavenCentral()
@@ -26,15 +36,6 @@ repositories {
      url "http://mvn.erichseifert.de/maven2"
    } 
 }
-
-List libsToMerge = [ 
-  "com.jtattoo:JTattoo:1.6.10", 
-  "com.cedarsoftware:json-io:2.5.2", 
-  "de.erichseifert.gral:gral-core:0.9" 
-]
-List libsToShip = [ 
-  "org.bouncycastle:bcprov-jdk15on:1.50" 
-]
 
 configurations {
   mergeLibs
@@ -70,7 +71,6 @@ processResources {
 }
 
 jar {
-  // Merge libraries we're dependent on into the executable jar.
 
   from {
     configurations.mergeLibs.collect { zipTree(it) }
@@ -87,42 +87,38 @@ jar {
       'Class-Path' : configurations.shipLibs.collect{ it.getName() }.join(' '),
     )
   }
+  
+  doLast {
+    file(jar.archivePath).setExecutable(true)
+    println "$jar.archiveName created and is executable."
+  }
 }
 
-task libs(type: Sync) {
+task syncLibs(type: Sync) {
   from configurations.compile
-  into "libs"
-}
-
-task distributeShipLibs(type: Copy) {
-  dependsOn libs
-  configurations.shipLibs.collect {
-    from it
-  }
-  into 'dist'
-}
-
-// upload the finalised artifacts to a single repository being the 
-// flat directory 'dist'.
-
-uploadArchives {
-  uploadDescriptor = false 
-  repositories {
-    flatDir(name: 'localRepository', dirs: 'dist')
+  into project.libsDirectory
+  doLast {
+    println "Synchronised library dependencies into directory ($project.libsDirectory)."
   }
 }
 
-task dist {
-  dependsOn distributeShipLibs, uploadArchives
+task distribute(type: Copy) {
+  dependsOn jar, syncLibs
+  from jar 
+  from configurations.shipLibs
+  into project.distributionDirectory
+  doLast {
+    println "Distributed $project.title and support libraries to directory ($project.distributionDirectory)."
+  }
 }
 
-run {
-  dependsOn dist
+run << {
+  dependsOn distribute 
+  doLast {
+    println "Running $project.title"
+  }
 }
-
-// the full task is the gradle equivalent of the ant script's 
-// full target.
 
 task full {
-  dependsOn clean, dist
+  dependsOn clean, distribute 
 }
