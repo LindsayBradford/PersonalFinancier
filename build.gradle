@@ -1,4 +1,9 @@
 apply plugin: 'java'
+apply plugin: 'application'
+
+defaultTasks 'clean', 'dist'
+
+// Start Project configuration
 
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
@@ -6,16 +11,30 @@ targetCompatibility = '1.7'
 project.group = "blacksmyth.personalfinancier"
 project.version = "0.2"
 
+project.ext {
+  title = "PersonalFinancier"
+  contact = "Lindsay Willian Bradford (lindsay.w.bradford_at_gmail.com)"
+}
+
+mainClassName = project.group + '.' + project.title
+
 // Storing all dependencies in a libs directory. 
 
 repositories {
-   flatDir {
-     dirs 'libs'  
-   }
+   mavenCentral()
+   maven {
+     url "http://mvn.erichseifert.de/maven2"
+   } 
 }
 
-List libsToMerge = [ "jtattoo:JTattoo:1.6.10", "json-io:json-io:2.5.1", "gral-core:gral-core:0.9" ]
-List libsToShip = [ "bcprov-jdk15on:bcprov-jdk15on:150" ]
+List libsToMerge = [ 
+  "com.jtattoo:JTattoo:1.6.10", 
+  "com.cedarsoftware:json-io:2.5.2", 
+  "de.erichseifert.gral:gral-core:0.9" 
+]
+List libsToShip = [ 
+  "org.bouncycastle:bcprov-jdk15on:1.50" 
+]
 
 configurations {
   mergeLibs
@@ -58,13 +77,25 @@ jar {
   }
 
   manifest {
-    attributes 'Built-By':  System.getProperty("user.name")
-    attributes 'Main-Class' : 'blacksmyth.personalfinancier.PersonalFinancier'
-    attributes 'CLass-Path' : configurations.shipLibs.collect{ it.getName() }.join(' ')
+   attributes (
+      'Implementation-Title': project.title, 
+      'Implementation-Version': project.version,
+      'Contact':  project.contact,
+      'Built-With': "gradle-${project.getGradle().getGradleVersion()}, groovy-${GroovySystem.getVersion()}",
+      'Created-By': System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')',
+      'Main-Class' : mainClassName,
+      'Class-Path' : configurations.shipLibs.collect{ it.getName() }.join(' '),
+    )
   }
 }
 
+task libs(type: Sync) {
+  from configurations.compile
+  into "libs"
+}
+
 task distributeShipLibs(type: Copy) {
+  dependsOn libs
   configurations.shipLibs.collect {
     from it
   }
@@ -83,6 +114,10 @@ uploadArchives {
 
 task dist {
   dependsOn distributeShipLibs, uploadArchives
+}
+
+run {
+  dependsOn dist
 }
 
 // the full task is the gradle equivalent of the ant script's 

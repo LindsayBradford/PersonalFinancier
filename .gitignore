@@ -5,5 +5,6 @@ bin/*
 .gradle
 build/*
 dist/*
+libs/*
 javadocs/*
 .settings/*
