@@ -179,7 +179,7 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
  * https://crackstation.net/hashing-security.htm#javasourcecode
  */
 final class AESBuilder {
-  private static SecureRandom RANDOM = new SecureRandom();
+  private static SecureRandom RANDOM = generateRANDOM();
 
   public static final int BLOCK_BITS = 128;
   public static final int BLOCK_BYTES = BLOCK_BITS / Byte.SIZE;
@@ -193,6 +193,14 @@ final class AESBuilder {
 
   public static final int SALT_BYTES = 32;
   public static final int HASH_ITERATIONS = 5000;
+  
+  private static SecureRandom generateRANDOM() {
+    SecureRandom sr = new SecureRandom();
+    sr.setSeed(
+        System.currentTimeMillis()
+    );
+    return sr;
+  }
 
   /**
    * Returns an AES block ciphers in CBC mode with padding
