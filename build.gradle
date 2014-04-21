@@ -20,6 +20,10 @@ project.ext {
 
 mainClassName = project.group + '.' + project.title
 
+List testLibs = [
+  "junit:junit:4.11", 
+]
+
 List libsToMerge = [ 
   "com.jtattoo:JTattoo:1.6.10", 
   "com.cedarsoftware:json-io:2.5.2", 
@@ -45,29 +49,8 @@ configurations {
 dependencies {
   mergeLibs libsToMerge 
   shipLibs libsToShip
-  compile libsToMerge, libsToShip 
-}
-
-// modify the sourceSets to match the layout of my java-only project.
-
-sourceSets {
-  main {
-    java {
-      srcDir 'src'
-      exclude '**/*Test.java'
-    }
-    resources {
-      srcDir 'src/blacksmyth/resources'
-    }
-  }
-}
-
-// Sub-par.  How can I set this nicely from within sourceSets?
-// the sourceset command above is parsed, but doesn't seem to have
-// effect at processResources task execution time.
-
-processResources {
-  destinationDir = file('build/classes/main/blacksmyth/resources')
+  compile  libsToMerge, libsToShip 
+  testCompile testLibs
 }
 
 jar {
@@ -112,7 +95,20 @@ task distribute(type: Copy) {
   }
 }
 
-run << {
+// File: build.gradle
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+test {
+  testLogging {
+    events 'passed', 'skipped', 'failed'
+  }
+}
+
+run {
   dependsOn distribute 
   doLast {
     println "Running $project.title"
