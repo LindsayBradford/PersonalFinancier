@@ -21,7 +21,6 @@ public class BudgetItem {
   protected Money budgettedAmount;
   protected CashFlowFrequency frequency;
   protected Account budgetAccount;
-
   
   public BudgetItem(String category, String description, Money amount, 
                     CashFlowFrequency frequency, Account account) {

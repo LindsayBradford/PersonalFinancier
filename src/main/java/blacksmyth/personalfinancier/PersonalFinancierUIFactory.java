@@ -42,7 +42,7 @@ import javax.swing.border.EmptyBorder;
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.RunnableQueueThread;
 import blacksmyth.general.BlacksmythSwingUtilities;
-import blacksmyth.personalfinancier.control.FileHandlerFactory;
+import blacksmyth.personalfinancier.control.FileHandlerBuilder;
 import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.PreferencesModel;
@@ -113,7 +113,7 @@ public class PersonalFinancierUIFactory {
     JToolBar toolbar = new JToolBar();
     
     UIComponents.budgetFileController = 
-        FileHandlerFactory.buildBudgetHandler(
+        FileHandlerBuilder.buildBudgetHandler(
             UIComponents.windowFrame,
             UIComponents.budgetModel
         );

@@ -14,6 +14,8 @@ import java.util.HashMap;
 
 import javax.swing.JFrame;
 
+import blacksmyth.general.file.FileHandler;
+import blacksmyth.general.file.IFileHandler;
 import blacksmyth.general.file.IFileHandlerModel;
 import blacksmyth.general.file.IFileHandlerView;
 import blacksmyth.general.file.IObjectFileConverter;
@@ -26,20 +28,31 @@ import blacksmyth.personalfinancier.model.inflation.InflationFileContent;
 import blacksmyth.personalfinancier.view.FileHandlerView;
 import blacksmyth.personalfinancier.view.PasswordPromptView;
 
-public final class FileHandlerFactory {
+public final class FileHandlerBuilder {
   
-  public static FileHandler<BudgetFileContent> buildBudgetHandler(
+  public static IFileHandler<BudgetFileContent> buildBudgetHandler(
       JFrame parentFrame, IFileHandlerModel<BudgetFileContent> model) {
     
     HashMap<String, IObjectFileConverter<BudgetFileContent>> availableAdapters = 
         buildAvailableAdapters();
     
-    return new FileHandler<BudgetFileContent>(
-            buildBudgetView(parentFrame, availableAdapters), 
-            model, 
-            buildBudgetFileAdapter(availableAdapters), 
-            buildBudgetPreferenceItem()
-        );
+    IFileHandler<BudgetFileContent> handler = new FileHandler<BudgetFileContent>();
+    
+    handler.setModel(model);
+    
+    handler.setView(
+        buildBudgetView(parentFrame, availableAdapters)
+     );
+    
+    handler.setObjectFileConverter(
+        buildBudgetFileAdapter(availableAdapters)
+    );
+    
+    handler.setFilePathPreferenceItem(
+        buildBudgetPreferenceItem()
+    );
+    
+    return handler;
   }
   
   private static HashMap<String, IObjectFileConverter<BudgetFileContent>> buildAvailableAdapters() {
@@ -83,15 +96,26 @@ public final class FileHandlerFactory {
     return new StrategicFileAdapter<BudgetFileContent>(availableAdapters);
   }
   
-  public static FileHandler<InflationFileContent> buildInflationHandler(
+  public static IFileHandler<InflationFileContent> buildInflationHandler(
       JFrame parentFrame, IFileHandlerModel<InflationFileContent> model) {
     
-    return new FileHandler<InflationFileContent>(
-        buildInflationView(parentFrame),
-        model,
-        buildInflationFileAdapter(),
+    IFileHandler<InflationFileContent> handler = new FileHandler<InflationFileContent>();
+
+    handler.setModel(model);
+    
+    handler.setView(
+        buildInflationView(parentFrame)
+     );
+    
+    handler.setObjectFileConverter(
+        buildInflationFileAdapter()
+    );
+    
+    handler.setFilePathPreferenceItem(
         buildInflationPreferenceItem()
     );
+    
+    return handler;
   }
   
   private static FileHandlerView buildInflationView(JFrame parentFrame) {

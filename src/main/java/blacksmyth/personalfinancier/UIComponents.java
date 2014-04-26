@@ -13,7 +13,7 @@ package blacksmyth.personalfinancier;
 import javax.swing.Action;
 import javax.swing.JFrame;
 
-import blacksmyth.personalfinancier.control.FileHandler;
+import blacksmyth.general.file.IFileHandler;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.budget.BudgetFileContent;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
@@ -32,7 +32,7 @@ public class UIComponents {
   public static ExpenseItemTable expenseTable;
   public static IncomeItemTable incomeTable;
   
-  public static FileHandler<BudgetFileContent> budgetFileController;
+  public static IFileHandler<BudgetFileContent> budgetFileController;
   
   public static Action LoadBudgetAction;
   public static Action SaveBudgetAction;
@@ -45,6 +45,6 @@ public class UIComponents {
   public static Action LoadInflationAction;
   public static Action SaveInflationAction;
 
-  public static FileHandler<InflationFileContent> inflationFileController;
+  public static IFileHandler<InflationFileContent> inflationFileController;
 
 }

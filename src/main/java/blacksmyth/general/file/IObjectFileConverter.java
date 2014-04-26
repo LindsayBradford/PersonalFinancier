@@ -12,7 +12,8 @@ package blacksmyth.general.file;
 
 /**
  * An interface that all objects involved in converting objects to files (and vice-versa) should implement.
- * Note: this is to be considered looser than standard Java Serialization.
+ * Note: this is to be considered looser than standard Java Serialization for those converters that do not use
+ * the Java serialisation framework.
  * @param <T>
  */
 public interface IObjectFileConverter<T> {
