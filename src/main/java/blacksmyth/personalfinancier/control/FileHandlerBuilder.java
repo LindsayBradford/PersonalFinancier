@@ -31,7 +31,8 @@ import blacksmyth.personalfinancier.view.PasswordPromptView;
 public final class FileHandlerBuilder {
   
   public static IFileHandler<BudgetFileContent> buildBudgetHandler(
-      JFrame parentFrame, IFileHandlerModel<BudgetFileContent> model) {
+      JFrame parentFrame,
+      IFileHandlerModel<BudgetFileContent> model) {
     
     HashMap<String, IObjectFileConverter<BudgetFileContent>> availableAdapters = 
         buildAvailableAdapters();

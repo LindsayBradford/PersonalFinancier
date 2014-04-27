@@ -10,6 +10,8 @@
 
 package blacksmyth.general.file;
 
+import java.util.Observer;
+
 import blacksmyth.personalfinancier.model.IPreferenceItem;
 
 /**
@@ -63,5 +65,11 @@ public interface IFileHandler<T> {
    * Loads the state of the model from a file (always prompting for a filename) using the specified converter.
    */
   public abstract void load();
+  
+  /**
+   * Allows Observers to watch for updates.
+   * @param o
+   */
+  public void addObserver(Observer o);
 
 }

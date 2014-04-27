@@ -411,7 +411,6 @@ public final class WidgetFactory {
     };
     return theButton;
   }
-  
 }
 
 class FormatVerifier extends InputVerifier {

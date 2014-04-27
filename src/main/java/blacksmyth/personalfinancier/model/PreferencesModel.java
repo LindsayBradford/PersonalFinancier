@@ -391,5 +391,22 @@ public class PreferencesModel extends Observable {
 	
 	this.setChangeAndNotifyObservers();
   }
+  
+  private static final int DEFAULT_APP_MESSAGE_TIMEOUT = 2000; // 2 seconds
+  public static final String APP_MESSAGE_TIMEOUT = "AppMessageTimeout";
 
+  public int getAppMessageTimeout() {
+    return this.prefs.getInt(
+        APP_MESSAGE_TIMEOUT, 
+        DEFAULT_APP_MESSAGE_TIMEOUT
+    );
+  }
+  
+  public void setAppMessageTimeout(int timeout) {
+    this.prefs.putInt(
+        APP_MESSAGE_TIMEOUT,
+        timeout
+    );
+    this.setChangeAndNotifyObservers();
+  }
 }

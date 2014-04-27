@@ -10,6 +10,10 @@
 
 package blacksmyth.general.file;
 
+import java.util.Observer;
+
+import blacksmyth.general.ApplicationMessagePresenter;
+import blacksmyth.personalfinancier.control.IApplicationMessagePresenter;
 import blacksmyth.personalfinancier.model.IPreferenceItem;
 
 /**
@@ -25,6 +29,12 @@ public final class FileHandler<T> implements IFileHandler<T> {
   
   private IObjectFileConverter<T> objectFileConverter;
   private IPreferenceItem<String> filePathPreference;
+  
+  private IApplicationMessagePresenter messagePresenter;
+  
+  public FileHandler() {
+    this.messagePresenter = new ApplicationMessagePresenter();
+  }
   
   @Override
   public void setFilePathPreferenceItem(IPreferenceItem<String> preference) {
@@ -90,9 +100,17 @@ public final class FileHandler<T> implements IFileHandler<T> {
   private void save(String fileName) {
     assert hasValidConfig();
 
+    messagePresenter.setMessage(
+        "Saving file " + view.getFilename()
+    );
+
     objectFileConverter.toFileFromObject(
         fileName, 
         model.toSerializable()
+    );
+
+    messagePresenter.setMessage(
+        "File " + view.getFilename() + " saved."
     );
   }
   
@@ -116,8 +134,22 @@ public final class FileHandler<T> implements IFileHandler<T> {
   private void load(String filename) {
     assert hasValidConfig();
 
+    messagePresenter.setMessage(
+        "Loading file " + view.getFilename()
+    );
+
     model.fromSerializable(
         objectFileConverter.toObjectFromFile(filename)
     );
+    
+    messagePresenter.setMessage(
+        "File " + view.getFilename() + " loaded."
+    );
   }
+  
+  @Override
+  public void addObserver(Observer o) {
+    messagePresenter.addObserver(o);
+  }
+  
 }

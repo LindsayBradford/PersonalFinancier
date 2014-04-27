@@ -70,6 +70,11 @@ class InflationUIFactory {
             UIComponents.windowFrame, 
             UIComponents.inflationModel
         );
+    
+    UIComponents.inflationFileController.addObserver(
+        UIComponents.messageBar
+    );
+
 
     panel.add(
         createInflationToolbar(),

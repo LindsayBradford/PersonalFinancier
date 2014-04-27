@@ -1,0 +1,25 @@
+/**
+ * Copyright (c) 2012, Lindsay Bradford and other Contributors.
+ * All rights reserved.
+ * 
+ * This program and the accompanying materials  are made available 
+ * under the terms of the BSD 3-Clause licence  which accompanies 
+ * this distribution, and is available at
+ * http://opensource.org/licenses/BSD-3-Clause
+ */
+
+package blacksmyth.general;
+
+import java.util.Observable;
+
+import blacksmyth.personalfinancier.control.IApplicationMessagePresenter;
+
+public class ApplicationMessagePresenter extends Observable 
+            implements IApplicationMessagePresenter {
+
+  @Override
+  public void setMessage(String message) {
+    setChanged();
+    notifyObservers(message);
+  }
+}

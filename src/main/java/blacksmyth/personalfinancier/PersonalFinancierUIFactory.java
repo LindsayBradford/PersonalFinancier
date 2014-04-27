@@ -20,6 +20,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -30,14 +32,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.RunnableQueueThread;
@@ -47,6 +45,7 @@ import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
+import blacksmyth.personalfinancier.view.ApplicationMessageView;
 import blacksmyth.personalfinancier.view.WidgetFactory;
 
 public class PersonalFinancierUIFactory {
@@ -61,6 +60,13 @@ public class PersonalFinancierUIFactory {
     
     UIComponents.windowFrame.setDefaultCloseOperation(
         WindowConstants.EXIT_ON_CLOSE
+    );
+    
+    UIComponents.messageBar = createMessageBar();
+
+    UIComponents.windowFrame.getContentPane().add(
+        UIComponents.messageBar.getPanel(),
+      BorderLayout.PAGE_END
     );
     
     Toolkit.getDefaultToolkit().setDynamicLayout(false);
@@ -78,11 +84,7 @@ public class PersonalFinancierUIFactory {
         createContentPane(), 
         BorderLayout.CENTER
     );
-    
-    UIComponents.windowFrame.getContentPane().add(
-      createMessageBar(),
-      BorderLayout.PAGE_END
-    );
+        
     
     UIComponents.windowFrame.setBounds(
       PreferencesModel.getInstance().getWindowBounds()
@@ -117,6 +119,10 @@ public class PersonalFinancierUIFactory {
             UIComponents.windowFrame,
             UIComponents.budgetModel
         );
+    
+    UIComponents.budgetFileController.addObserver(
+        UIComponents.messageBar
+    );
     
     toolbar.add(
         createLoadButton()
@@ -153,6 +159,9 @@ public class PersonalFinancierUIFactory {
     
     button.setToolTipText(" About ");
     
+    button.putClientProperty("AppMessage", "About this application...");
+    UIComponents.messageBar.bindViewComponent(button);
+    
     button.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent arg0) {
@@ -186,6 +195,11 @@ public class PersonalFinancierUIFactory {
     );
     
     button.setToolTipText(" Preferences ");
+    
+    button.putClientProperty("AppMessage", "Set your preferences (not yet implemented)...");
+    UIComponents.messageBar.bindViewComponent(button);
+
+    
     return button;
   }
 
@@ -212,6 +226,10 @@ public class PersonalFinancierUIFactory {
     );
 
     button.setToolTipText(" Save the current budget ");
+    
+    button.putClientProperty("AppMessage", "Save your personal budget...");
+    UIComponents.messageBar.bindViewComponent(button);
+
     return button;
   }
 
@@ -231,46 +249,65 @@ public class PersonalFinancierUIFactory {
     button.setForeground(Color.GREEN.darker());
     
     button.setToolTipText(" Load a budget ");
+
+    button.putClientProperty("AppMessage", "Load your personal budget...");
+    UIComponents.messageBar.bindViewComponent(button);
     
     return button;
   }
 
   private static JComponent createContentPane() {
-    JTabbedPane pane = new JTabbedPane();
-    pane.setBorder(new EmptyBorder(5,5,5,5));
+    final JTabbedPane pane = new JTabbedPane();
+    final JComponent budgetComponent = BudgetUIFactory.createBudgetComponent();
     
     pane.addTab(
         "Budget", 
-        BudgetUIFactory.createBudgetComponent()
+        budgetComponent
+    );
+
+    budgetComponent.putClientProperty(
+        "AppMessage", 
+        "Manage your personal budget in this tab."
     );
     
+    final JComponent inflationComponent = InflationUIFactory.createInflationComponent();
+
+    inflationComponent.putClientProperty(
+        "AppMessage", 
+        "Explore money value changing with inflation in this tab."
+    );
+
     pane.addTab(
         "Inflation", 
-        InflationUIFactory.createInflationComponent()
+        inflationComponent
     );
+    
+    pane.addMouseMotionListener(
+        new MouseMotionAdapter() {
+          
+          @Override
+          public void mouseMoved(MouseEvent e) {
+            for (int i = 0; i < pane.getTabCount(); i++){
+              if (pane.getBoundsAt(i).contains(e.getPoint())) { 
+                JComponent component = (JComponent) pane.getComponentAt(i);
+               
+                UIComponents.messageBar.showMessage(
+                    (String) component.getClientProperty("AppMessage"),
+                    PreferencesModel.getInstance().getAppMessageTimeout()
+                );
+                
+              } // if event point is within tab's bounds
+            } // for all tab pane indices
+          }
+    });
     
     WidgetFactory.enableSelectionHilightedTabPane(pane);
     
     return pane;
   }
   
-  private static JComponent createMessageBar() {
-    
-    JPanel messagePanel = new JPanel(new BorderLayout());
-    messagePanel.setBorder(new EmptyBorder(2,5,5,5));
-    
-    JLabel messageLabel = new JLabel("test");
-   
-    messageLabel.setBorder(
-       new CompoundBorder(
-           new BevelBorder(BevelBorder.LOWERED),
-           new EmptyBorder(2,5,5,5)
-       )
-    );
-   
-    messagePanel.add(messageLabel, BorderLayout.CENTER);
-  
-    return messagePanel;
+  private static ApplicationMessageView createMessageBar() {
+    return new ApplicationMessageView();
   }
 
   private static JMenuBar createMenu() {
