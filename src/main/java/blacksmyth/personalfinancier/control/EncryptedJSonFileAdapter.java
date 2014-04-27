@@ -55,7 +55,7 @@ public class EncryptedJSonFileAdapter<T> implements IObjectFileConverter<T>, IPa
   
   @Override
   public void toFileFromObject(final String filePath, final T t) {
-    passwordView.display();
+    passwordView.displaySavePrompt();
     
     if (!passwordView.passwordSpecified()) {
       return;
@@ -76,7 +76,7 @@ public class EncryptedJSonFileAdapter<T> implements IObjectFileConverter<T>, IPa
 
   @Override
   public T toObjectFromFile(final String filePath) {
-    passwordView.display();
+    passwordView.displayLoadPrompt();
 
     if (!passwordView.passwordSpecified()) {
       return null;
@@ -86,8 +86,13 @@ public class EncryptedJSonFileAdapter<T> implements IObjectFileConverter<T>, IPa
         passwordView.getPassword(), 
         FileUtilities.loadBinaryFile(filePath)
     );
-    
+
+    passwordView.clearPassword();
+
     if (decryptedContent == null) {
+      passwordView.displayError(
+          "The password specified could not decrypt this file."
+      );
       return null;
     }
     
@@ -95,8 +100,6 @@ public class EncryptedJSonFileAdapter<T> implements IObjectFileConverter<T>, IPa
         ByteUtilities.BytesToString(decryptedContent)
     );
     
-    passwordView.clearPassword();
-
     return objectFromFile;
   }
   

@@ -17,9 +17,14 @@ package blacksmyth.personalfinancier.view;
  */
 public interface IPasswordPromptView  {
   /**
-   * Display the password prompt, and wait for a response.
+   * Display the password prompt for saving, and wait for a response.
    */
-  void display();
+  void displaySavePrompt();
+  
+  /**
+   * Display the password prompt for loading, and wait for a response.
+   */
+  void displayLoadPrompt();
   
   /**
    * reports on whether the user specified a password (true), or cancelled the operation (false).
@@ -35,4 +40,11 @@ public interface IPasswordPromptView  {
    * Clears the memory occupied by the password string once it's been processed.
    */
   void clearPassword();
+  
+  
+  /**
+   * Displays an error message around password prompting.
+   * @param errorMessage
+   */
+  void displayError(String errorMessage);
 }

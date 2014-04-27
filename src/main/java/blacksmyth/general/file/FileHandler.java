@@ -137,9 +137,18 @@ public final class FileHandler<T> implements IFileHandler<T> {
     messagePresenter.setMessage(
         "Loading file " + view.getFilename()
     );
+    
+    T objectFromFile = objectFileConverter.toObjectFromFile(filename);
+    
+    if (objectFromFile == null) {
+      messagePresenter.setMessage(
+          "File " + view.getFilename() + " failed to load."
+      );
+      return;
+    }
 
     model.fromSerializable(
-        objectFileConverter.toObjectFromFile(filename)
+        objectFromFile
     );
     
     messagePresenter.setMessage(
