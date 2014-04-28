@@ -8,11 +8,9 @@
  * http://opensource.org/licenses/BSD-3-Clause
  */
 
-package blacksmyth.personalfinancier.control;
+package blacksmyth.general.file;
 
 import java.util.HashMap;
-
-import blacksmyth.general.file.IObjectFileConverter;
 
 /**
  * This is a concrete implementation of IObjectFileConverter<T> that
@@ -21,11 +19,11 @@ import blacksmyth.general.file.IObjectFileConverter;
  * to delegate operations to.
  * @param <T>
  */
-public final class StrategicFileAdapter<T> implements IObjectFileConverter<T> {
+public class StrategicFileAdapter<T> implements IObjectFileConverter<T> {
 
   private HashMap<String, IObjectFileConverter<T>> adapterMap;
   
-  public StrategicFileAdapter(HashMap<String, IObjectFileConverter<T>> inputMap) {
+  public void setAdapterMap(HashMap<String, IObjectFileConverter<T>> inputMap) {
     this.adapterMap = inputMap;
   }
 

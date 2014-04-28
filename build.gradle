@@ -8,36 +8,37 @@ defaultTasks 'distribute'
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
 
-project.group = "blacksmyth.personalfinancier"
-project.version = "0.2"
+project.group = 'blacksmyth.personalfinancier'
+project.version = '0.2'
 
 project.ext {
-  title = "PersonalFinancier"
-  contact = "Lindsay Willian Bradford (lindsay.w.bradford_at_gmail.com)"
-  libsDirectory = "libs"
-  distributionDirectory = "dist"
+  title = 'PersonalFinancier'
+  contact = 'Lindsay Willian Bradford (lindsay.w.bradford_at_gmail.com)'
+  libsDirectory = 'libs'
+  distributionDirectory = 'dist'
 }
 
 mainClassName = project.group + '.' + project.title
 
 List testLibs = [
-  "junit:junit:4.11", 
+  'junit:junit:4.11', 
+  'org.mockito:mockito-all:1.9.5'
 ]
 
 List libsToMerge = [ 
-  "com.jtattoo:JTattoo:1.6.10", 
-  "com.cedarsoftware:json-io:2.5.2", 
-  "de.erichseifert.gral:gral-core:0.9" 
+  'com.jtattoo:JTattoo:1.6.10', 
+  'com.cedarsoftware:json-io:2.5.2', 
+  'de.erichseifert.gral:gral-core:0.9' 
 ]
 
 List libsToShip = [ 
-  "org.bouncycastle:bcprov-jdk15on:1.50" 
+  'org.bouncycastle:bcprov-jdk15on:1.50' 
 ]
 
 repositories {
    mavenCentral()
    maven {
-     url "http://mvn.erichseifert.de/maven2"
+     url 'http://mvn.erichseifert.de/maven2'
    } 
 }
 
@@ -78,7 +79,7 @@ jar {
 }
 
 task syncLibs(type: Sync) {
-  from configurations.compile
+  from configurations.compile, configurations.testCompile
   into project.libsDirectory
   doLast {
     println "Synchronised library dependencies into directory ($project.libsDirectory)."

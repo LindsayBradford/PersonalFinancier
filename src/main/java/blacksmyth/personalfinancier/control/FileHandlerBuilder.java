@@ -19,6 +19,7 @@ import blacksmyth.general.file.IFileHandler;
 import blacksmyth.general.file.IFileHandlerModel;
 import blacksmyth.general.file.IFileHandlerView;
 import blacksmyth.general.file.IObjectFileConverter;
+import blacksmyth.general.file.StrategicFileAdapter;
 import blacksmyth.personalfinancier.UIComponents;
 import blacksmyth.personalfinancier.dependencies.encryption.EncryptionBridge;
 import blacksmyth.personalfinancier.model.IPreferenceItem;
@@ -93,8 +94,13 @@ public final class FileHandlerBuilder {
   
   private static IObjectFileConverter<BudgetFileContent> buildBudgetFileAdapter(
       HashMap<String, IObjectFileConverter<BudgetFileContent>> availableAdapters) {
+    
+    StrategicFileAdapter<BudgetFileContent> adapter = 
+        new StrategicFileAdapter<BudgetFileContent>();
+
+    adapter.setAdapterMap(availableAdapters);
    
-    return new StrategicFileAdapter<BudgetFileContent>(availableAdapters);
+    return adapter;
   }
   
   public static IFileHandler<InflationFileContent> buildInflationHandler(
