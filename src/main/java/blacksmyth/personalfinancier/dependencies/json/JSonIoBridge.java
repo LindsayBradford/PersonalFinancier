@@ -38,7 +38,7 @@ final class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
 
   @SuppressWarnings("unchecked")
   @Override
-  public T fromJson(String jsonContent) {
+  public T fromJSon(String jsonContent) {
     if (jsonContent == null) {
       return null;
     }

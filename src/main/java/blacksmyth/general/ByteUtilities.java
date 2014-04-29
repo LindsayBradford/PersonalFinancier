@@ -26,6 +26,9 @@ public class ByteUtilities {
    * @return UTF-8 encoded string of the bytes supplied.
    */
   public static String BytesToString(byte[] bytes) {
+    if (bytes == null) {
+      return null;
+    }
     return new String(bytes, ENCODING);
   }
 

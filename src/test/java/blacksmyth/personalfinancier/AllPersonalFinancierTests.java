@@ -14,12 +14,19 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import blacksmyth.personalfinancier.control.EncryptedJSonFileConverterTest;
+import blacksmyth.personalfinancier.control.JSonObjectFileConverterTest;
 import blacksmyth.personalfinancier.dependencies.encryption.BouncyCastleEncryptionBridgeTest;
+import blacksmyth.personalfinancier.dependencies.json.JSonIoBridgeTest;
 
 @RunWith(Suite.class)
-@SuiteClasses(
-    { BouncyCastleEncryptionBridgeTest.class }
-)
+
+@SuiteClasses({ 
+  BouncyCastleEncryptionBridgeTest.class,
+  JSonIoBridgeTest.class,
+  JSonObjectFileConverterTest.class,
+  EncryptedJSonFileConverterTest.class
+})
 
 public class AllPersonalFinancierTests {
 

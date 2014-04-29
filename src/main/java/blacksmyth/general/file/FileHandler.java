@@ -12,7 +12,6 @@ package blacksmyth.general.file;
 
 import java.util.Observer;
 
-import blacksmyth.general.ApplicationMessagePresenter;
 import blacksmyth.personalfinancier.control.IApplicationMessagePresenter;
 import blacksmyth.personalfinancier.model.IPreferenceItem;
 
@@ -27,13 +26,13 @@ public final class FileHandler<T> implements IFileHandler<T> {
   private IFileHandlerView     view;
   private IFileHandlerModel<T> model;
   
-  private IObjectFileConverter<T> objectFileConverter;
+  private IObjectFileConverter<T> converter;
   private IPreferenceItem<String> filePathPreference;
   
-  private IApplicationMessagePresenter messagePresenter;
+  private IApplicationMessagePresenter appMessagePresenter;
   
-  public FileHandler() {
-    this.messagePresenter = new ApplicationMessagePresenter();
+  public void setAppMessagePresenter(IApplicationMessagePresenter presenter){
+    this.appMessagePresenter = presenter;
   }
   
   @Override
@@ -43,7 +42,7 @@ public final class FileHandler<T> implements IFileHandler<T> {
   
   @Override
   public void setObjectFileConverter(IObjectFileConverter<T> converter) {
-    this.objectFileConverter = converter;
+    this.converter = converter;
   }
   
   @Override
@@ -58,7 +57,7 @@ public final class FileHandler<T> implements IFileHandler<T> {
   
   private boolean hasValidConfig() {
     if (view == null || model == null || 
-        objectFileConverter == null || filePathPreference == null) return false;
+        converter == null || filePathPreference == null) return false;
     
     return true;
   }
@@ -100,16 +99,16 @@ public final class FileHandler<T> implements IFileHandler<T> {
   private void save(String fileName) {
     assert hasValidConfig();
 
-    messagePresenter.setMessage(
+    appMessagePresenter.setMessage(
         "Saving file " + view.getFilename()
     );
 
-    objectFileConverter.toFileFromObject(
+    converter.toFileFromObject(
         fileName, 
         model.toSerializable()
     );
 
-    messagePresenter.setMessage(
+    appMessagePresenter.setMessage(
         "File " + view.getFilename() + " saved."
     );
   }
@@ -134,14 +133,14 @@ public final class FileHandler<T> implements IFileHandler<T> {
   private void load(String filename) {
     assert hasValidConfig();
 
-    messagePresenter.setMessage(
+    appMessagePresenter.setMessage(
         "Loading file " + view.getFilename()
     );
     
-    T objectFromFile = objectFileConverter.toObjectFromFile(filename);
+    T objectFromFile = converter.toObjectFromFile(filename);
     
     if (objectFromFile == null) {
-      messagePresenter.setMessage(
+      appMessagePresenter.setMessage(
           "File " + view.getFilename() + " failed to load."
       );
       return;
@@ -151,14 +150,14 @@ public final class FileHandler<T> implements IFileHandler<T> {
         objectFromFile
     );
     
-    messagePresenter.setMessage(
+    appMessagePresenter.setMessage(
         "File " + view.getFilename() + " loaded."
     );
   }
   
   @Override
   public void addObserver(Observer o) {
-    messagePresenter.addObserver(o);
+    appMessagePresenter.addObserver(o);
   }
   
 }

@@ -32,7 +32,7 @@ public final class JSonBridge<T> implements IJSonSerialisationBridge<T> {
   }
 
   @Override
-  public T fromJson(String jsonContent) {
-    return bridge.fromJson(jsonContent);
+  public T fromJSon(String jsonContent) {
+    return bridge.fromJSon(jsonContent);
   }
 }

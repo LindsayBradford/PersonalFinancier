@@ -24,7 +24,8 @@ public class BouncyCastleEncryptionBridgeTest {
   final String STRING_CONTENT = "yippySkippy!";
   final byte[] BINARY_CONTENT = { 0,1,2,3,4,5,6,7 };
 
-  final char[] PASSWORD = "hereIsThePassword".toCharArray();
+  final char[] VALID_PASSWORD = "hereIsThePassword".toCharArray();
+  final char[] INVALID_PASSWORD = "hereIsTheBorkedPassword".toCharArray();
   
   @BeforeClass
   public static void testSetup() {
@@ -32,17 +33,17 @@ public class BouncyCastleEncryptionBridgeTest {
   }
   
   @Test
-  public void testEncryptDecryptString() {
+  public void EncryptDecrypt_StringContent_SuccessfulDecryption() {
     
     String encryptedContent = 
         testBridge.encrypt(
-            PASSWORD, 
+            VALID_PASSWORD, 
             STRING_CONTENT
         );
 
     String decryptedContent = 
         testBridge.decrypt(
-            PASSWORD, 
+            VALID_PASSWORD, 
             encryptedContent
          );
     
@@ -52,17 +53,17 @@ public class BouncyCastleEncryptionBridgeTest {
   }
   
   @Test
-  public void testEncryptDecryptBinary() {
+  public void EncryptDecrypt_BinaryContent_SuccessfulDecryption() {
 
     byte[] encryptedContent = 
         testBridge.encrypt(
-            PASSWORD, 
+            VALID_PASSWORD, 
             BINARY_CONTENT
         );
 
     byte[] decryptedContent = 
         testBridge.decrypt(
-            PASSWORD, 
+            VALID_PASSWORD, 
             encryptedContent
          );
     
@@ -73,5 +74,47 @@ public class BouncyCastleEncryptionBridgeTest {
         )
     );
   }
+  
+  @Test
+  public void EncryptDecrypt_StringContent_UnsuccessfulDecryption() {
+    
+    String encryptedContent = 
+        testBridge.encrypt(
+            VALID_PASSWORD, 
+            STRING_CONTENT
+        );
 
+    String decryptedContent = 
+        testBridge.decrypt(
+            INVALID_PASSWORD, 
+            encryptedContent
+         );
+    
+    assertNull(
+        decryptedContent
+    );
+  }
+  
+  @Test
+  public void EncryptDecrypt_BinaryContent_UnsuccessfulDecryption() {
+
+    byte[] encryptedContent = 
+        testBridge.encrypt(
+            VALID_PASSWORD, 
+            BINARY_CONTENT
+        );
+
+    byte[] decryptedContent = 
+        testBridge.decrypt(
+            INVALID_PASSWORD, 
+            encryptedContent
+         );
+    
+    assertTrue(
+        Arrays.equals(
+            decryptedContent, 
+            null
+        )
+    );
+  }
 }

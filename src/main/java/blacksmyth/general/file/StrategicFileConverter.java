@@ -19,7 +19,8 @@ import java.util.HashMap;
  * to delegate operations to.
  * @param <T>
  */
-public class StrategicFileAdapter<T> implements IObjectFileConverter<T> {
+
+public class StrategicFileConverter<T> implements IObjectFileConverter<T> {
 
   private HashMap<String, IObjectFileConverter<T>> adapterMap;
   
@@ -29,27 +30,25 @@ public class StrategicFileAdapter<T> implements IObjectFileConverter<T> {
 
   @Override
   public T toObjectFromFile(String filePath) {
-    IObjectFileConverter<T> adapter = getMatchingAdapter(filePath);
-    if (adapter != null) {
-      return adapter.toObjectFromFile(filePath);
-    }
-    return null;
+    IObjectFileConverter<T> converter = getMatchingConverter(filePath);
+    return converter.toObjectFromFile(filePath);
   }
 
   @Override
   public void toFileFromObject(String filePath, T t) {
-    IObjectFileConverter<T> adapter = getMatchingAdapter(filePath);
-    if (adapter != null) {
-      adapter.toFileFromObject(filePath, t);
-    }
+    IObjectFileConverter<T> converter = getMatchingConverter(filePath);
+    
+    converter.toFileFromObject(filePath, t);
   }
 
-  private IObjectFileConverter<T> getMatchingAdapter(String filePath) {
+  private IObjectFileConverter<T> getMatchingConverter(String filePath) {
     String fileExt = getFileExtension(filePath);
+
+    IObjectFileConverter<T> converter = adapterMap.get(fileExt);
     
-    IObjectFileConverter<T> adapter = adapterMap.get(fileExt);
-    
-    return adapter;
+    assert converter != null : "No converter maps to supplied file (" + filePath + ")";
+
+    return converter;
   }
   
   private String getFileExtension(String filePath) {

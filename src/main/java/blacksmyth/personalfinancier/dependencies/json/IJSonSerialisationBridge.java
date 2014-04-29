@@ -33,5 +33,5 @@ public interface IJSonSerialisationBridge<T> {
      * @param jsonContent
      * @return an object instantiated with the state encoded in jsonContent.
      */
-    public T fromJson(String jsonContent);
+    public T fromJSon(String jsonContent);
 }

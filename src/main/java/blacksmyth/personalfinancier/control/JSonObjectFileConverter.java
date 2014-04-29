@@ -10,35 +10,40 @@
 
 package blacksmyth.personalfinancier.control;
 
-import blacksmyth.general.file.FileUtilities;
+import blacksmyth.general.file.IFileSystemBridge;
 import blacksmyth.general.file.IObjectFileConverter;
 import blacksmyth.personalfinancier.dependencies.json.IJSonSerialisationBridge;
-import blacksmyth.personalfinancier.dependencies.json.JSonBridge;
 
 /**
  * An adapter class that transfers state between instantiated objects and file-serialised
  * object state via a 3rd-party JSON Serialization library.
  */
 
-public class JSonFileAdapter<T> implements IObjectFileConverter<T> {
+public class JSonObjectFileConverter<T> implements IObjectFileConverter<T> {
   
   private IJSonSerialisationBridge<T> jsonBridge;
+  private IFileSystemBridge fileSystemBridge;
   
-  public JSonFileAdapter() {
-    init(new JSonBridge<T>());
+  public void setJSonBridge(IJSonSerialisationBridge<T> bridge) {
+    this.jsonBridge = bridge;
   }
 
-  public JSonFileAdapter(IJSonSerialisationBridge<T> bridge) {
-    init(bridge);
+  public void setFileSystemBridge(IFileSystemBridge bridge) {
+    this.fileSystemBridge = bridge;
   }
   
-  private void init(IJSonSerialisationBridge<T> bridge) {
-    this.jsonBridge = bridge;
+  private boolean hasValidConfig() {
+    if (jsonBridge == null || fileSystemBridge == null) {
+      return false;
+    }
+    return true;
   }
   
   @Override
   public void toFileFromObject(String filePath, T t) {
-    FileUtilities.saveTextFile(
+    assert hasValidConfig();
+    
+    fileSystemBridge.saveTextFile(
         filePath, 
         jsonBridge.toJSon(t)
     );
@@ -46,8 +51,10 @@ public class JSonFileAdapter<T> implements IObjectFileConverter<T> {
 
   @Override
   public T toObjectFromFile(String filePath) {
-    return jsonBridge.fromJson(
-      FileUtilities.loadTextFile(filePath)
+    assert hasValidConfig();
+
+    return jsonBridge.fromJSon(
+      fileSystemBridge.loadTextFile(filePath)
     );
   }
 }

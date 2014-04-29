@@ -25,26 +25,18 @@ import java.io.IOException;
 /**
  * A collection of general utilities for file handling.
  */
-public class FileUtilities {
+public class FileSystemBridge implements IFileSystemBridge {
   
-  /**
-   * Attempts to save the text <tt>content</tt> to <tt>fileName</tt>.
-   * @param fileName
-   * @param content
-   */
-  public static void saveTextFile(String fileName, String content) {
+  @Override
+  public void saveTextFile(String fileName, String content) {
     saveTextFile(
         new File(fileName), 
         content
     );
   }
 
-  /**
-   * Attempts to save the text <tt>content</tt> to <tt>fileHandle</tt>.
-   * @param fileName
-   * @param content
-   */
-  public static void saveTextFile(File fileHandle, String content) {
+  @Override
+  public void saveTextFile(File fileHandle, String content) {
     BufferedWriter output = null;
 
     try {
@@ -60,23 +52,15 @@ public class FileUtilities {
     // System.out.println(fileHandle.getAbsolutePath() + " saved.");
   }
   
-  /**
-   * Returns the text content of in file <tt>fileName</tt>
-   * @param fileName
-   * @return
-   */
-  public static String loadTextFile(String fileName) {
+  @Override
+  public String loadTextFile(String fileName) {
     return loadTextFile(
         new File(fileName)
     );
   }
   
-  /**
-   * Returns the text content in <tt>fileHandle</tt>
-   * @param fileHandle
-   * @return
-   */
-  public static String loadTextFile(File fileHandle) {
+  @Override
+  public String loadTextFile(File fileHandle) {
     BufferedReader input = null;
 
     StringBuffer fileContent = new StringBuffer();
@@ -94,29 +78,19 @@ public class FileUtilities {
       System.out.println(ioe);
     }
     
-    //System.out.println(fileHandle.getAbsolutePath() + " loaded.");
-
     return fileContent.toString();
   }
   
-  /**
-   * Attempts to save the byte array <tt>content</tt> to binary file <tt>fileName</tt>.
-   * @param fileName
-   * @param content
-   */
-  public static void saveBinaryFile(String fileName, byte[] content) {
+  @Override
+  public void saveBinaryFile(String fileName, byte[] content) {
     saveBinaryFile(
         new File(fileName), 
         content
     );
   }
 
-  /**
-   * Attempts to save the byte array <tt>content</tt> to binary file <tt>fileHandle</tt>.
-   * @param fileName
-   * @param content
-   */
-  public static void saveBinaryFile(File fileHandle, byte[] content) {
+  @Override
+  public void saveBinaryFile(File fileHandle, byte[] content) {
     DataOutputStream outputStream;
     try {
       outputStream = new DataOutputStream(new FileOutputStream(fileHandle));
@@ -129,23 +103,15 @@ public class FileUtilities {
     }
   }
   
-  /**
-   * Returns the byte arrray content of in binary file <tt>fileName</tt>
-   * @param fileName
-   * @return
-   */
-  public static byte[] loadBinaryFile(String fileName) {
+  @Override
+  public byte[] loadBinaryFile(String fileName) {
     return loadBinaryFile(
         new File(fileName)
     );
   }
   
-  /**
-   * Returns the text content in <tt>fileHandle</tt>
-   * @param fileHandle
-   * @return
-   */
-  public static byte[] loadBinaryFile(File fileHandle) {
+  @Override
+  public byte[] loadBinaryFile(File fileHandle) {
     byte[] content = new byte[(int)fileHandle.length()];
     DataInputStream inputStream;
     try {
@@ -159,5 +125,4 @@ public class FileUtilities {
     }
     return content;
   }
-
 }

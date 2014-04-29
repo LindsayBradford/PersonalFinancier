@@ -11,12 +11,10 @@
 package blacksmyth.personalfinancier.control;
 
 import blacksmyth.general.ByteUtilities;
-import blacksmyth.general.file.FileUtilities;
+import blacksmyth.general.file.IFileSystemBridge;
 import blacksmyth.general.file.IObjectFileConverter;
-import blacksmyth.personalfinancier.dependencies.encryption.EncryptionBridge;
 import blacksmyth.personalfinancier.dependencies.encryption.IEncryptionBridge;
 import blacksmyth.personalfinancier.dependencies.json.IJSonSerialisationBridge;
-import blacksmyth.personalfinancier.dependencies.json.JSonBridge;
 import blacksmyth.personalfinancier.view.IPasswordPromptView;
 
 /**
@@ -24,37 +22,43 @@ import blacksmyth.personalfinancier.view.IPasswordPromptView;
  * object state via a 3rd-party JSON Serialization library.
  */
 
-public class EncryptedJSonFileAdapter<T> implements IObjectFileConverter<T>, IPasswordPromptPresenter {
+public class EncryptedJSonFileConverter<T> implements IObjectFileConverter<T>, IPasswordPromptPresenter {
   
   private IPasswordPromptView passwordView;
   
   private IJSonSerialisationBridge<T> jsonBridge;
   private IEncryptionBridge encryptionBridge;
+  private IFileSystemBridge fileSystemBridge;
+
+  @Override
+  public void setView(IPasswordPromptView view) {
+    this.passwordView = view;
+  }
   
-  public EncryptedJSonFileAdapter(IPasswordPromptView view) {
-    init(
-        new JSonBridge<T>(),
-        view,
-        new EncryptionBridge()
-    );
+  public void setEncryptionBridge(IEncryptionBridge bridge) {
+    this.encryptionBridge = bridge;
+  }
+  
+  public void setJSonBridge(IJSonSerialisationBridge<T> bridge) {
+    this.jsonBridge = bridge;
   }
 
-  public EncryptedJSonFileAdapter(IJSonSerialisationBridge<T> jsonBridge,
-                                  IPasswordPromptView view,
-                                  IEncryptionBridge encryptionBridge) {
-    init(jsonBridge, view, encryptionBridge);
+  public void setFileSystemBridge(IFileSystemBridge bridge) {
+    this.fileSystemBridge = bridge;
   }
   
-  private void init(IJSonSerialisationBridge<T> jsonBridge,
-                    IPasswordPromptView view,
-                    IEncryptionBridge encryptionBridge) {
-    this.jsonBridge = jsonBridge;
-    this.passwordView = view;
-    this.encryptionBridge = encryptionBridge;
+  private boolean hasValidConfig() {
+    if (passwordView == null || encryptionBridge == null || 
+        jsonBridge == null || fileSystemBridge == null) {
+      return false;
+    }
+    return true;
   }
   
   @Override
   public void toFileFromObject(final String filePath, final T t) {
+    assert hasValidConfig();
+    
     passwordView.displaySavePrompt();
     
     if (!passwordView.passwordSpecified()) {
@@ -63,7 +67,7 @@ public class EncryptedJSonFileAdapter<T> implements IObjectFileConverter<T>, IPa
     
     byte[] contentAsBytes = ByteUtilities.StringToBytes(jsonBridge.toJSon(t));
     
-    FileUtilities.saveBinaryFile(
+    fileSystemBridge.saveBinaryFile(
         filePath, 
         encryptionBridge.encrypt(
             passwordView.getPassword(),
@@ -76,6 +80,8 @@ public class EncryptedJSonFileAdapter<T> implements IObjectFileConverter<T>, IPa
 
   @Override
   public T toObjectFromFile(final String filePath) {
+    assert hasValidConfig();
+    
     passwordView.displayLoadPrompt();
 
     if (!passwordView.passwordSpecified()) {
@@ -84,7 +90,7 @@ public class EncryptedJSonFileAdapter<T> implements IObjectFileConverter<T>, IPa
     
     byte[] decryptedContent = encryptionBridge.decrypt(
         passwordView.getPassword(), 
-        FileUtilities.loadBinaryFile(filePath)
+        fileSystemBridge.loadBinaryFile(filePath)
     );
 
     passwordView.clearPassword();
@@ -96,15 +102,10 @@ public class EncryptedJSonFileAdapter<T> implements IObjectFileConverter<T>, IPa
       return null;
     }
     
-    T objectFromFile = jsonBridge.fromJson(
+    T objectFromFile = jsonBridge.fromJSon(
         ByteUtilities.BytesToString(decryptedContent)
     );
     
     return objectFromFile;
-  }
-  
-  @Override
-  public void setView(IPasswordPromptView view) {
-    this.passwordView = view;
   }
 }

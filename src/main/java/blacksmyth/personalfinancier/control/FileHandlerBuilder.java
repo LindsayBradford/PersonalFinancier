@@ -14,14 +14,17 @@ import java.util.HashMap;
 
 import javax.swing.JFrame;
 
+import blacksmyth.general.ApplicationMessagePresenter;
 import blacksmyth.general.file.FileHandler;
+import blacksmyth.general.file.FileSystemBridge;
 import blacksmyth.general.file.IFileHandler;
 import blacksmyth.general.file.IFileHandlerModel;
 import blacksmyth.general.file.IFileHandlerView;
 import blacksmyth.general.file.IObjectFileConverter;
-import blacksmyth.general.file.StrategicFileAdapter;
+import blacksmyth.general.file.StrategicFileConverter;
 import blacksmyth.personalfinancier.UIComponents;
 import blacksmyth.personalfinancier.dependencies.encryption.EncryptionBridge;
+import blacksmyth.personalfinancier.dependencies.json.JSonBridge;
 import blacksmyth.personalfinancier.model.IPreferenceItem;
 import blacksmyth.personalfinancier.model.PreferenceItemBuilder;
 import blacksmyth.personalfinancier.model.budget.BudgetFileContent;
@@ -31,11 +34,13 @@ import blacksmyth.personalfinancier.view.PasswordPromptView;
 
 public final class FileHandlerBuilder {
   
+  private static final ApplicationMessagePresenter MSG_PRESENTER = new ApplicationMessagePresenter();
+  
   public static IFileHandler<BudgetFileContent> buildBudgetHandler(
       JFrame parentFrame,
       IFileHandlerModel<BudgetFileContent> model) {
     
-    HashMap<String, IObjectFileConverter<BudgetFileContent>> availableAdapters = 
+    HashMap<String, IObjectFileConverter<BudgetFileContent>> availableConverters = 
         buildAvailableAdapters();
     
     IFileHandler<BudgetFileContent> handler = new FileHandler<BudgetFileContent>();
@@ -43,12 +48,14 @@ public final class FileHandlerBuilder {
     handler.setModel(model);
     
     handler.setView(
-        buildBudgetView(parentFrame, availableAdapters)
+        buildBudgetView(parentFrame, availableConverters)
      );
     
     handler.setObjectFileConverter(
-        buildBudgetFileAdapter(availableAdapters)
+        buildBudgetFileConverter(availableConverters)
     );
+    
+    handler.setAppMessagePresenter(MSG_PRESENTER);
     
     handler.setFilePathPreferenceItem(
         buildBudgetPreferenceItem()
@@ -58,33 +65,56 @@ public final class FileHandlerBuilder {
   }
   
   private static HashMap<String, IObjectFileConverter<BudgetFileContent>> buildAvailableAdapters() {
-    HashMap<String, IObjectFileConverter<BudgetFileContent>> availableAdapters = 
+    HashMap<String, IObjectFileConverter<BudgetFileContent>> availableConverters = 
         new HashMap<String, IObjectFileConverter<BudgetFileContent>> ();
     
-    availableAdapters.put("pf", new JSonFileAdapter<BudgetFileContent>());
+    JSonObjectFileConverter<BudgetFileContent> jsonConverter = 
+        new JSonObjectFileConverter<BudgetFileContent>();
+    
+    jsonConverter.setJSonBridge(
+        new JSonBridge<BudgetFileContent>()
+    );
+    
+    jsonConverter.setFileSystemBridge(
+        new FileSystemBridge()
+    );
+    
+    availableConverters.put("pf", jsonConverter);
     
     EncryptionBridge bridge = new EncryptionBridge();
     
     if (bridge.encryptionAvailable()) {
-      IObjectFileConverter<BudgetFileContent> encryptedAdapter = 
-          new EncryptedJSonFileAdapter<BudgetFileContent>(
-              new PasswordPromptView(UIComponents.windowFrame)
-          );
+      EncryptedJSonFileConverter<BudgetFileContent> encryptedConverter = 
+          new EncryptedJSonFileConverter<BudgetFileContent>();
+      
+      encryptedConverter.setView(
+          new PasswordPromptView(UIComponents.windowFrame)
+      );
+      
+      encryptedConverter.setEncryptionBridge(bridge);
 
-      availableAdapters.put("epf", encryptedAdapter);
+      encryptedConverter.setJSonBridge(
+          new JSonBridge<BudgetFileContent>()
+      );
+      
+      encryptedConverter.setFileSystemBridge(
+          new FileSystemBridge()
+      );
+
+      availableConverters.put("epf", encryptedConverter);
     }
     
-    return availableAdapters;
+    return availableConverters;
   }
   
   private static IFileHandlerView buildBudgetView(
       JFrame parentFrame, 
-      HashMap<String, IObjectFileConverter<BudgetFileContent>> availableAdapters) {
+      HashMap<String, IObjectFileConverter<BudgetFileContent>> converters) {
 
     return new FileHandlerView(
         parentFrame,
         "Personal Financier Files",
-        availableAdapters.keySet().toArray(new String[0])  // new String[0] needed for valid typecast.
+        converters.keySet().toArray(new String[0])  // new String[0] needed for valid typecast.
     );
   }
   
@@ -92,15 +122,15 @@ public final class FileHandlerBuilder {
     return PreferenceItemBuilder.buildBudgetDirectoryPreferenceItem();
   }
   
-  private static IObjectFileConverter<BudgetFileContent> buildBudgetFileAdapter(
-      HashMap<String, IObjectFileConverter<BudgetFileContent>> availableAdapters) {
+  private static IObjectFileConverter<BudgetFileContent> buildBudgetFileConverter(
+      HashMap<String, IObjectFileConverter<BudgetFileContent>> converters) {
     
-    StrategicFileAdapter<BudgetFileContent> adapter = 
-        new StrategicFileAdapter<BudgetFileContent>();
+    StrategicFileConverter<BudgetFileContent> strategicConverter = 
+        new StrategicFileConverter<BudgetFileContent>();
 
-    adapter.setAdapterMap(availableAdapters);
+    strategicConverter.setAdapterMap(converters);
    
-    return adapter;
+    return strategicConverter;
   }
   
   public static IFileHandler<InflationFileContent> buildInflationHandler(
@@ -118,6 +148,8 @@ public final class FileHandlerBuilder {
         buildInflationFileAdapter()
     );
     
+    handler.setAppMessagePresenter(MSG_PRESENTER);
+    
     handler.setFilePathPreferenceItem(
         buildInflationPreferenceItem()
     );
@@ -134,7 +166,19 @@ public final class FileHandlerBuilder {
   }
   
   private static IObjectFileConverter<InflationFileContent> buildInflationFileAdapter() {
-    return new JSonFileAdapter<InflationFileContent>(); 
+    
+    JSonObjectFileConverter<InflationFileContent> jsonConverter = 
+        new JSonObjectFileConverter<InflationFileContent>();
+    
+    jsonConverter.setJSonBridge(
+        new JSonBridge<InflationFileContent>()
+    );
+    
+    jsonConverter.setFileSystemBridge(
+        new FileSystemBridge()
+    );
+    
+    return jsonConverter; 
   }
   
   private static IPreferenceItem<String> buildInflationPreferenceItem() {
