@@ -28,7 +28,7 @@ List testLibs = [
 List libsToMerge = [ 
   'com.jtattoo:JTattoo:1.6.10', 
   'com.cedarsoftware:json-io:2.5.2', 
-  'de.erichseifert.gral:gral-core:0.9' 
+  'de.erichseifert.gral:gral-core:0.10' 
 ]
 
 List libsToShip = [ 

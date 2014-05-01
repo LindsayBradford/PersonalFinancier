@@ -5,10 +5,10 @@
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry exported="true" kind="lib" path="libs/json-io-2.5.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/bcprov-jdk15on-1.50.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/gral-core-0.9.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/JTattoo-1.6.10.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/junit-4.11.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/mockito-all-1.9.5.jar"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="libs/gral-core-0.10.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

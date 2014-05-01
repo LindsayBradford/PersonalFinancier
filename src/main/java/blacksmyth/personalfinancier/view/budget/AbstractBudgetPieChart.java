@@ -12,6 +12,7 @@ package blacksmyth.personalfinancier.view.budget;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.LinearGradientPaint;
 import java.awt.Shape;
 import java.util.Observable;
@@ -22,14 +23,11 @@ import javax.swing.border.EmptyBorder;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.PiePlot;
-import de.erichseifert.gral.plots.PlotArea;
 import de.erichseifert.gral.plots.PiePlot.PieSliceRenderer;
 import de.erichseifert.gral.plots.points.PointData;
-import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Location;
-
 import blacksmyth.personalfinancier.control.budget.IBudgetObserver;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
@@ -92,14 +90,14 @@ public abstract class AbstractBudgetPieChart extends JPanel implements IBudgetOb
         BorderLayout.CENTER
     );
     
-    this.validate();  // need to force a redraw
+//    this.validate();  // need to force a redraw
   }
   
   private PiePlot createPiePlot(String title, DataTable cashFlowData) {
     PiePlot plot = new PiePlot(cashFlowData);
-    
+
     configurePiePlot(plot, title);
-    
+
     plot.setPointRenderer(
         cashFlowData, 
         new DualSliceRenderer(
@@ -113,12 +111,15 @@ public abstract class AbstractBudgetPieChart extends JPanel implements IBudgetOb
   }
   
   private void configurePiePlot(PiePlot plot, String title) {
-    plot.setSetting(PiePlot.TITLE, title);
     
-    plot.getPlotArea().setSetting(PlotArea.BORDER,null);
+    //TODO: email info@erichseifert.de asking about small slices.
+    plot.getTitle().setText(title);
 
-    plot.setInsets(new Insets2D.Double(1.0, 1.0, 1.0, 1.0));
+    plot.getPlotArea().setBorderStroke(null);
+    plot.setRadius(0.6);
+    plot.setStart(180); //black on top
     
+    plot.setInsets(new Insets2D.Double(1.0, 1.0, 1.0, 1.0));
   }
   
   /**
@@ -151,22 +152,21 @@ public abstract class AbstractBudgetPieChart extends JPanel implements IBudgetOb
      */
     private PieSliceRenderer createPieSliceRenderer(Color color) {
       PieSliceRenderer renderer = new PieSliceRenderer(plot);
-      renderer.setSetting(PieSliceRenderer.GAP, 0.1);
+      renderer.setGap(0.1);
 
-      renderer.setSetting(
-          PointRenderer.COLOR,
+      renderer.setColor(
           new LinearGradientPaint(
               0f,0f, 0f,1f,
               new float[] { 0.0f, 1.0f },
               new Color[] { color, Color.GRAY }
           )
       );
-
-      renderer.setSetting(PointRenderer.VALUE_DISPLAYED, true);
-      renderer.setSetting(PointRenderer.VALUE_LOCATION, Location.NORTH);
-      
-      renderer.setSetting(PointRenderer.VALUE_COLUMN, LABEL_COLUMN);
-      renderer.setSetting(PointRenderer.VALUE_COLOR, color);
+      renderer.setValueVisible(true);
+      renderer.setValueLocation(Location.NORTH);
+      renderer.setValueDistance(1.2);
+      renderer.setValueColumn(LABEL_COLUMN);
+      renderer.setValueColor(color);
+      renderer.setValueFont(Font.decode(null).deriveFont(Font.BOLD));
       
       return renderer;
     }
@@ -187,6 +187,15 @@ public abstract class AbstractBudgetPieChart extends JPanel implements IBudgetOb
       }
       return positiveSliceRenderer.getPointShape(data);
     }
+
+    @Override
+    public Drawable getValue(PointData data,
+        java.awt.Shape shape) {
+      if (valueIsNegative(data)) {
+        return negativeSliceRenderer.getValue(data, shape);
+      }
+      return positiveSliceRenderer.getValue(data, shape);
+    }
     
     /**
      * Interrogates the current plot's data value
@@ -201,5 +210,7 @@ public abstract class AbstractBudgetPieChart extends JPanel implements IBudgetOb
           data.row.getIndex()
       );
     }
+    
+    
   }
 }
