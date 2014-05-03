@@ -24,7 +24,7 @@ import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 
-public class InflationModel extends Observable implements InflationProvider, 
+public class InflationModel extends Observable implements InflationProvider, IInflationController,
                                                           IFileHandlerModel<InflationFileContent> {
   
   private static GregorianCalendar TODAY;
@@ -228,7 +228,7 @@ public class InflationModel extends Observable implements InflationProvider,
 
   @Override
   public void fromSerializable(InflationFileContent content) {
-    assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
+     //assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
     inflationList = content.inflationList;
     
     this.changeAndNotifyObservers();

@@ -8,15 +8,16 @@
  * http://opensource.org/licenses/BSD-3-Clause
  */
 
-package blacksmyth.personalfinancier.view.inflation;
+package blacksmyth.personalfinancier.control.inflation.command;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
+import blacksmyth.personalfinancier.control.inflation.IInflationController;
 import blacksmyth.personalfinancier.control.inflation.UndoableInflationCommand;
 
-public abstract class AbstractInflationCommand implements UndoableInflationCommand {
+public abstract class AbstractInflationCommand implements UndoableInflationCommand, IInflationController {
 
   @Override
   public boolean addEdit(UndoableEdit arg0) {

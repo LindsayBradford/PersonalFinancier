@@ -11,6 +11,7 @@
 package blacksmyth.personalfinancier.model.inflation;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import blacksmyth.general.SortedArrayList;
@@ -19,8 +20,12 @@ public class InflationEntryFactory {
   // TODO: Expand to be more than just a nickname device.
 
   public static InflationEntry createEntry() {
+    Date now = new Date();
+    GregorianCalendar calendar = new GregorianCalendar();
+    calendar.setTime(now);
+    
     return createEntry(
-        new GregorianCalendar(),
+        calendar,
         0,
         ""
       );

@@ -15,7 +15,6 @@ import javax.swing.undo.CannotUndoException;
 
 import blacksmyth.personalfinancier.model.inflation.InflationEntry;
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
-import blacksmyth.personalfinancier.view.inflation.AbstractInflationCommand;
 
 public class AddInflationEntryCommand extends AbstractInflationCommand {
   

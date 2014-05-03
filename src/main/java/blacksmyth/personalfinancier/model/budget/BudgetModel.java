@@ -545,7 +545,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
   }
 
   public void fromSerializable(BudgetFileContent state) {
-    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    // assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     
     if (state == null) {
       return;

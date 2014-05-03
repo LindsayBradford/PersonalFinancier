@@ -14,7 +14,9 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
-public abstract class AbstractBudgetCommand implements UndoableBudgetCommand {
+import blacksmyth.personalfinancier.control.budget.IBudgetController;
+
+public abstract class AbstractBudgetCommand implements UndoableBudgetCommand, IBudgetController {
 
   @Override
   public boolean addEdit(UndoableEdit arg0) {

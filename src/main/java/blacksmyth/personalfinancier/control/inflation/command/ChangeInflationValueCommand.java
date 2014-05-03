@@ -14,7 +14,6 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
-import blacksmyth.personalfinancier.view.inflation.AbstractInflationCommand;
 
 public class ChangeInflationValueCommand extends AbstractInflationCommand {
   

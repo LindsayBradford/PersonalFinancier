@@ -17,6 +17,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Date;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -108,9 +109,38 @@ public final class WidgetFactory {
   }
 
   public static DefaultCellEditor createDateCellEditor() {
-    return new DefaultCellEditor(
-        createDateTextField()
-    );
+    return new DefaultCellEditor(createDateTextField()) {
+      @Override
+      public Component getTableCellEditorComponent(
+          JTable table, Object value,boolean isSelected,int row, int column ) {
+        
+          if (value.getClass() == GregorianCalendar.class) {
+            GregorianCalendar valueAsCalendar = (GregorianCalendar) value;
+
+            String formattedvalue = DATE_FORMAT.format(valueAsCalendar.getTime());
+            delegate.setValue(formattedvalue);
+            
+            return editorComponent;
+          }
+          
+          return super.getTableCellEditorComponent(table, value, isSelected, row, column);
+      }
+      
+      @Override 
+      public Object getCellEditorValue() {
+        String value = (String) delegate.getCellEditorValue();
+        GregorianCalendar valueAsCalendar;
+        try {
+          valueAsCalendar = new GregorianCalendar();
+          valueAsCalendar.setTime(
+              DATE_FORMAT.parse(value)
+          );
+        } catch (ParseException e) {
+          return super.getCellEditorValue();
+        }
+        return valueAsCalendar;
+      }
+    };
   }
   
   /**

@@ -78,7 +78,7 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
 
     switch (this.getColumnEnumValueAt(colNum)) {
       case Date:
-        return Calendar.class;
+        return GregorianCalendar.class;
       case CPI:
         return Double.class;
       case Notes: 
@@ -114,20 +114,13 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
     switch (this.getColumnEnumValueAt(colNum)) {
     case Date:
       
-      GregorianCalendar valueAsDate = new GregorianCalendar();
-      try {
-        valueAsDate.setTime(
-            WidgetFactory.DATE_FORMAT.parse((String) value)
-        );
-      } catch (Exception e) {
-        valueAsDate.setTime(new Date());
-      }
+      GregorianCalendar valueAsCalendar = (GregorianCalendar) value;
        
       UndoManagers.INFLATION_UNDO_MANAGER.addEdit(
           ChangeInflationDateCommand.doCmd(
               getInflationModel(), 
               rowNum, 
-              valueAsDate
+              valueAsCalendar
           )
       );
       break;

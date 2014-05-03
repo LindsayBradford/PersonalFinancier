@@ -43,10 +43,10 @@ public class InflationConversionPanel extends JPanel implements Observer {
   private Vector<JComponent> fields = new Vector<JComponent>();
   
   private JFormattedTextField initialDateField = WidgetFactory.createDateTextField();
-  private JFormattedTextField  initialValueField = WidgetFactory.createAmountTextField();
+  private JFormattedTextField initialValueField = WidgetFactory.createAmountTextField();
 
   private JFormattedTextField conversionDateField = WidgetFactory.createDateTextField();
-  private JFormattedTextField  conversionValueField = WidgetFactory.createAmountTextField();
+  private JFormattedTextField conversionValueField = WidgetFactory.createAmountTextField();
   
   private JFormattedTextField  inflationOverPeriodField = WidgetFactory.createPercentTextField();
   private JFormattedTextField  inflationPerAnnumField = WidgetFactory.createPercentTextField();

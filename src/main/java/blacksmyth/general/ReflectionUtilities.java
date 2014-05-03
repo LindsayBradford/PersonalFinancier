@@ -29,8 +29,9 @@ public final class ReflectionUtilities {
   public static boolean callerImplements(Class<?> theInterface) {
     
     StackTraceElement[] elements = new Throwable().getStackTrace(); 
-
-    String callerClassName = elements[2].getClassName(); 
+    
+    String callerClassName = elements[2].getClassName();
+    
     Class<?> callerClass = null;
     try {
       callerClass = Class.forName(callerClassName);
