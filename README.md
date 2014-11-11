@@ -2,16 +2,17 @@
 
 A budgetting and bookeeping application built to suit my way of doing household finances.
 
-![A recent image](https://p.twimg.com/At3ZX2hCAAESHzo.png:large) 
-
-![Architecture Layers](https://p.twimg.com/AsfwyrBCEAEoGza.png:large)
+![A recent image](http://goo.gl/qH1ofM) 
 
 ##This application depends on the following resources:
+  * Gradle (<http://www.gradle.org/>) for Project Object Model support.
   * json-io (<https://code.google.com/p/json-io/>) for Java JSon Graph Serialisation
   * JTattoo (<http://www.jtattoo.net/>) for a radically different Swing Look & Feel
   * FontAwesome (<http://fortawesome.github.com/Font-Awesome>) for icon-friendly font glyphs 
   * Legion of the Bouncy Castle (<https://www.bouncycastle.org/>) for file encryption. 
   * GRAL (<http://trac.erichseifert.de/gral/>) for charting. 
+  * JUnit (<http://junit.org/>) for unit testing.
+  * Mockito (<https://code.google.com/p/mockito/>) for mock object testing. 
   
 ## Contact Detail:
 - Email: lindsay.w.bradford@gmail.com
