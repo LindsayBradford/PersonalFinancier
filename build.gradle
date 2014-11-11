@@ -32,7 +32,7 @@ List libsToMerge = [
 ]
 
 List libsToShip = [ 
-  'org.bouncycastle:bcprov-jdk15on:1.50' 
+  'org.bouncycastle:bcprov-jdk15on:1.51' 
 ]
 
 repositories {
