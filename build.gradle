@@ -22,7 +22,7 @@ mainClassName = project.group + '.' + project.title
 
 List testLibs = [
   'junit:junit:4.11', 
-  'org.mockito:mockito-all:1.9.5'
+  'org.mockito:mockito-all:1.10.8'
 ]
 
 List libsToMerge = [ 
