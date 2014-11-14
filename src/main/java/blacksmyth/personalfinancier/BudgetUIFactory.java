@@ -157,7 +157,7 @@ class BudgetUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         addItemButton, 
-        FontIconProvider.icon_plus
+        FontIconProvider.fa_plus
     );
     
     addItemButton.setToolTipText(
@@ -186,7 +186,7 @@ class BudgetUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         removeItemsButton, 
-        FontIconProvider.icon_minus
+        FontIconProvider.fa_minus
     );
 
     removeItemsButton.setToolTipText(
@@ -209,7 +209,7 @@ class BudgetUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         moveItemDownButton, 
-        FontIconProvider.icon_arrow_down
+        FontIconProvider.fa_arrow_down
     );
     
     moveItemDownButton.setForeground(Color.GREEN);
@@ -232,7 +232,7 @@ class BudgetUIFactory {
 
     FontIconProvider.getInstance().setGlyphAsText(
         moveItemUpButton, 
-        FontIconProvider.icon_arrow_up
+        FontIconProvider.fa_arrow_up
     );
 
     moveItemUpButton.setToolTipText(
@@ -262,7 +262,7 @@ class BudgetUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         addItemButton, 
-        FontIconProvider.icon_plus
+        FontIconProvider.fa_plus
     );
     
     addItemButton.setToolTipText(
@@ -291,7 +291,7 @@ class BudgetUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         removeItemsButton, 
-        FontIconProvider.icon_minus
+        FontIconProvider.fa_minus
     );
 
     removeItemsButton.setToolTipText(
@@ -314,7 +314,7 @@ class BudgetUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         moveItemDownButton, 
-        FontIconProvider.icon_arrow_down
+        FontIconProvider.fa_arrow_down
     );
 
     moveItemDownButton.setToolTipText(
@@ -338,7 +338,7 @@ class BudgetUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         moveItemUpButton, 
-        FontIconProvider.icon_arrow_up
+        FontIconProvider.fa_arrow_up
     );
 
     moveItemUpButton.setToolTipText(
@@ -395,25 +395,41 @@ class BudgetUIFactory {
 	  final JToggleButton button = new JToggleButton() {
       { // begin: instance initializer
         
-        this.setSelected(false);
+        this.setSelected(
+            PreferencesModel.getInstance().getDerivedBudgetColumsVisibility()
+        );
         this.setForeground(Color.GREEN);
-        setIconGlyph(FontIconProvider.icon_filter);
+        changeSelectionRendering();
         
         this.addActionListener(
             new ActionListener() {
               public void actionPerformed(ActionEvent arg0) {
-            	PreferencesModel.getInstance().toggleDerivedBudgetColumsVisibility();
+                PreferencesModel.getInstance().toggleDerivedBudgetColumsVisibility();
+                changeSelectionRendering();
               }
             }
         );
         
       } // end: instance initializer
       
-      private void setIconGlyph(char glyph) {
-        FontIconProvider.getInstance().setGlyphAsText(
-            this, 
-            glyph
-        );
+      private void changeSelectionRendering() {
+        if (this.isSelected()) {
+          FontIconProvider.getInstance().setGlyphAsText(
+              this, 
+              FontIconProvider.fa_toggle_right
+          );
+          this.setToolTipText(
+              " Hide derived amount columns. "
+          );
+        } else {
+          FontIconProvider.getInstance().setGlyphAsText(
+              this, 
+              FontIconProvider.fa_toggle_left
+          );
+          this.setToolTipText(
+              " Show derived amount columns. "
+          );
+        }
       }
     };
     
@@ -464,7 +480,7 @@ class BudgetUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         resetItemsButton, 
-        FontIconProvider.icon_trash_o
+        FontIconProvider.fa_trash_o
     );
 
     resetItemsButton.setToolTipText(
@@ -508,7 +524,7 @@ class BudgetUIFactory {
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_undo
+        FontIconProvider.fa_undo
     );
     
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
@@ -551,7 +567,7 @@ class BudgetUIFactory {
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_repeat
+        FontIconProvider.fa_repeat
     );
 
     BlacksmythSwingUtilities.bindKeyStrokeToAction(

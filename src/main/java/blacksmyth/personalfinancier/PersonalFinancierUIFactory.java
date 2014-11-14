@@ -154,7 +154,7 @@ public class PersonalFinancierUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_info_circle
+        FontIconProvider.fa_info_circle
     );
     
     button.setToolTipText(" About ");
@@ -191,7 +191,7 @@ public class PersonalFinancierUIFactory {
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_cogs
+        FontIconProvider.fa_cogs
     );
     
     button.setToolTipText(" Preferences ");
@@ -222,7 +222,7 @@ public class PersonalFinancierUIFactory {
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_save
+        FontIconProvider.fa_save
     );
 
     button.setToolTipText(" Save the current budget ");
@@ -243,7 +243,7 @@ public class PersonalFinancierUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_folder_open_o
+        FontIconProvider.fa_folder_open_o
     );
     
     button.setForeground(Color.GREEN.darker());
@@ -281,7 +281,7 @@ public class PersonalFinancierUIFactory {
         "Inflation", 
         inflationComponent
     );
-    
+      
     pane.addMouseMotionListener(
         new MouseMotionAdapter() {
           

@@ -11,8 +11,6 @@
 package blacksmyth.personalfinancier.view.inflation;
 
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Observer;
 
@@ -27,7 +25,6 @@ import blacksmyth.personalfinancier.control.inflation.command.RemoveInflationEnt
 import blacksmyth.personalfinancier.model.inflation.InflationEntry;
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
 import blacksmyth.personalfinancier.view.AbstractFinancierTableModel;
-import blacksmyth.personalfinancier.view.WidgetFactory;
 
 /**
  * An abstract TableModel using generics for collecting all common behaviours of the Budget TableModels. An enumeration representing

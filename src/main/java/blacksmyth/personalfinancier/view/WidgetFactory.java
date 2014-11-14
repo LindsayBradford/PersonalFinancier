@@ -17,7 +17,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Date;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -365,7 +364,7 @@ public final class WidgetFactory {
 
     FontIconProvider.getInstance().setGlyphAsTitle(
         pane, currTabIndex, 
-        FontIconProvider.icon_table
+        FontIconProvider.fa_table
     );
 
     currTabIndex++;
@@ -375,7 +374,7 @@ public final class WidgetFactory {
     
     FontIconProvider.getInstance().setGlyphAsTitle(
         pane, currTabIndex, 
-        FontIconProvider.icon_bar_chart_o
+        FontIconProvider.fa_pie_chart
     );
     
     enableSelectionHilightedTabPane(pane);

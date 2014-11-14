@@ -142,7 +142,7 @@ class InflationUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_folder_open_o
+        FontIconProvider.fa_folder_open_o
     );
     
     button.setForeground(Color.GREEN.darker());
@@ -179,7 +179,7 @@ class InflationUIFactory {
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_save
+        FontIconProvider.fa_save
     );
 
     button.setToolTipText(" Save the inflation data ");
@@ -198,7 +198,7 @@ class InflationUIFactory {
     
     FontIconProvider.getInstance().setGlyphAsText(
         removeInflationEntriesButton, 
-        FontIconProvider.icon_minus
+        FontIconProvider.fa_minus
     );
 
     removeInflationEntriesButton.setToolTipText(
@@ -224,7 +224,7 @@ class InflationUIFactory {
 
     FontIconProvider.getInstance().setGlyphAsText(
         addInflationEntryButton, 
-        FontIconProvider.icon_plus
+        FontIconProvider.fa_plus
     );
     
     addInflationEntryButton.setToolTipText(
@@ -271,7 +271,7 @@ class InflationUIFactory {
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_undo
+        FontIconProvider.fa_undo
     );
     
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
@@ -314,7 +314,7 @@ class InflationUIFactory {
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
-        FontIconProvider.icon_repeat
+        FontIconProvider.fa_repeat
     );
 
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
