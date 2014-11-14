@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="libs/bcprov-jdk15on-1.51.jar"/>
-	<classpathentry kind="lib" path="libs/gral-core-0.10.jar"/>
-	<classpathentry kind="lib" path="libs/json-io-2.7.2.jar"/>
-	<classpathentry kind="lib" path="libs/JTattoo-1.6.11.jar"/>
-	<classpathentry kind="lib" path="libs/junit-4.11.jar"/>
-	<classpathentry kind="lib" path="libs/mockito-all-1.9.5.jar"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="libs/bcprov-jdk15on-1.51.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/gral-core-0.10.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/json-io-2.7.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/JTattoo-1.6.11.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/junit-4.11.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/mockito-all-1.9.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
