@@ -156,7 +156,6 @@ class InflationUIFactory {
     
     UIComponents.SaveInflationAction = new AbstractAction("Save Inflation Data") {
       public void actionPerformed(ActionEvent e) {
-        UndoManagers.INFLATION_UNDO_MANAGER.discardAllEdits();
         UIComponents.inflationFileController.save();
       }
     };

@@ -374,7 +374,6 @@ public class PersonalFinancierUIFactory {
     
     UIComponents.SaveBudgetAction = new AbstractAction("Save") {
       public void actionPerformed(ActionEvent e) {
-        UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
         UIComponents.budgetFileController.save();
       }
     };
@@ -398,7 +397,6 @@ public class PersonalFinancierUIFactory {
   private static JMenuItem createSaveAsMenuItem() {
     UIComponents.SaveAsBudgetAction = new AbstractAction("Save As...") {
       public void actionPerformed(ActionEvent e) {
-        UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
         UIComponents.budgetFileController.saveAs();
       }
     };
