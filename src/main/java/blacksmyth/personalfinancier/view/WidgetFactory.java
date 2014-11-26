@@ -13,6 +13,7 @@ package blacksmyth.personalfinancier.view;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -288,7 +289,8 @@ public final class WidgetFactory {
       }
    });
     
-    field.addFocusListener(new FocusListener() {
+    field.addFocusListener(new FocusAdapter() {
+      
       @Override
       public void focusGained(FocusEvent arg0) {
         SwingUtilities.invokeLater( 
