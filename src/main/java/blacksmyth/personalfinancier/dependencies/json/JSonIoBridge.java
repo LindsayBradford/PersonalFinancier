@@ -10,8 +10,7 @@
 
 package blacksmyth.personalfinancier.dependencies.json;
 
-import java.io.IOException;
-
+import com.cedarsoftware.util.io.JsonIoException;
 import com.cedarsoftware.util.io.JsonWriter;
 import com.cedarsoftware.util.io.JsonReader;
 
@@ -27,13 +26,9 @@ final class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
 
   @Override
   public String toJSon(T object) {
-    try {
-      return JsonWriter.formatJson(
-        JsonWriter.objectToJson(object)
-      );
-    } catch (IOException ioe) {
-      return null;
-    }
+    return JsonWriter.formatJson(
+      JsonWriter.objectToJson(object)
+    );
   }
 
   @SuppressWarnings("unchecked")
@@ -42,12 +37,11 @@ final class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
     if (jsonContent == null) {
       return null;
     }
-    
     try {
       return (T) JsonReader.jsonToJava(
           jsonContent
       );
-    } catch (IOException e) {
+    } catch (JsonIoException jioe) {
       return null;
     }
   }

@@ -9,7 +9,7 @@ sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
 
 project.group = 'blacksmyth.personalfinancier'
-project.version = '0.3'
+project.version = '0.4'
 
 project.ext {
   title = 'PersonalFinancier'
@@ -21,18 +21,18 @@ project.ext {
 mainClassName = project.group + '.' + project.title
 
 List testLibs = [
-  'junit:junit:4.11', 
-  'org.mockito:mockito-all:1.10.8'
+  'junit:junit:4.12', 
+  'org.mockito:mockito-all:1.10.19'
 ]
 
 List libsToMerge = [ 
   'com.jtattoo:JTattoo:1.6.11', 
-  'com.cedarsoftware:json-io:2.7.2', 
+  'com.cedarsoftware:json-io:3.0.1', 
   'de.erichseifert.gral:gral-core:0.10' 
 ]
 
 List libsToShip = [ 
-  'org.bouncycastle:bcprov-jdk15on:1.51' 
+  'org.bouncycastle:bcprov-jdk15on:1.52' 
 ]
 
 repositories {
@@ -87,7 +87,7 @@ task syncLibs(type: Sync) {
 }
 
 task distribute(type: Copy) {
-  dependsOn jar, syncLibs
+  dependsOn jar,syncLibs 
   from jar 
   from configurations.shipLibs
   into project.distributionDirectory
