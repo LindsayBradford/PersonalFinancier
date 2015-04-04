@@ -51,8 +51,42 @@ import blacksmyth.personalfinancier.view.budget.IncomeItemTable;
 class BudgetUIFactory {
   
   private static Action BudgetItemInsertAction;
+  private static Action BudgetItemDeleteAction;
   
   public static JComponent createBudgetComponent() {
+    
+    BudgetItemInsertAction = new AbstractAction("Insert Budget Item") {
+      public void actionPerformed(ActionEvent e) {
+        
+        JComponent expensePanel = (JComponent) UIComponents.expenseTable.getParent().getParent().getParent();
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(expensePanel)) {
+          UIComponents.expenseTable.addBudgetItem(); 
+          return;
+        }
+
+        JComponent incomePanel = (JComponent) UIComponents.incomeTable.getParent().getParent().getParent();
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomePanel)) {
+          UIComponents.incomeTable.addBudgetItem();
+        }
+      }
+    };
+    
+    BudgetItemDeleteAction = new AbstractAction("Delete Budget Item") {
+      public void actionPerformed(ActionEvent e) {
+        
+        JComponent expensePanel = (JComponent) UIComponents.expenseTable.getParent().getParent().getParent();
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(expensePanel)) {
+          UIComponents.expenseTable.removeBudgetItems();
+          return;
+        }
+
+        JComponent incomePanel = (JComponent) UIComponents.incomeTable.getParent().getParent().getParent();
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomePanel)) {
+          UIComponents.incomeTable.removeBudgetItems();
+        }
+      }
+    };
+    
     JSplitPane splitPane = new JSplitPane(
         JSplitPane.VERTICAL_SPLIT,
         createBudgetItemPanel(), 
@@ -67,11 +101,10 @@ class BudgetUIFactory {
   
   private static JComponent createBudgetItemPanel() {
     JPanel panel = new JPanel(new BorderLayout());
-    
-    UIComponents.incomeTable = new IncomeItemTable(UIComponents.budgetModel);
 
+    UIComponents.incomeTable  = new IncomeItemTable(UIComponents.budgetModel);
     UIComponents.expenseTable = new ExpenseItemTable(UIComponents.budgetModel);
-
+    
     panel.add(
         createBudgetItemToolbar(),
         BorderLayout.PAGE_START
@@ -158,23 +191,6 @@ class BudgetUIFactory {
     toolbar.setFloatable(false);
 
     final JButton addItemButton = new JButton();
-
-    BudgetItemInsertAction = new AbstractAction("Insert Budget Item") {
-      public void actionPerformed(ActionEvent e) {
-        //TODO: DRY violation with IncomeItem Action.
-        
-        JComponent expensePanel = (JComponent) UIComponents.expenseTable.getParent().getParent().getParent();
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(expensePanel)) {
-          UIComponents.expenseTable.addBudgetItem(); 
-          return;
-        }
-
-        JComponent incomePanel = (JComponent) UIComponents.incomeTable.getParent().getParent().getParent();
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomePanel)) {
-          UIComponents.incomeTable.addBudgetItem();
-        }
-      }
-    };
     
     addItemButton.setAction(BudgetItemInsertAction);
      
@@ -202,7 +218,19 @@ class BudgetUIFactory {
     toolbar.add(addItemButton);
 
     JButton removeItemsButton = WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.expenseTable);
-
+    
+    removeItemsButton.setAction(BudgetItemDeleteAction);
+     
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        removeItemsButton, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_DELETE, 0
+        ), 
+        BudgetItemDeleteAction
+    );
+    
+    removeItemsButton.setEnabled(false);
+    
     removeItemsButton.setForeground(
         Color.RED.brighter()
    );
@@ -216,14 +244,6 @@ class BudgetUIFactory {
         "Remove selected expense item"
     );
     
-    removeItemsButton.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
-            UIComponents.expenseTable.removeBudgetItems();
-          }
-        }
-    );
-
     toolbar.add(removeItemsButton);
     
     toolbar.addSeparator();
@@ -284,7 +304,6 @@ class BudgetUIFactory {
     
     final JButton addItemButton = new JButton();
 
-    addItemButton.setAction(BudgetItemInsertAction);
      
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
         addItemButton, 
@@ -294,6 +313,8 @@ class BudgetUIFactory {
         BudgetItemInsertAction
     );
 
+    addItemButton.setAction(BudgetItemInsertAction);
+    
     FontIconProvider.getInstance().setGlyphAsText(
         addItemButton, 
         FontIconProvider.fa_plus
@@ -311,6 +332,16 @@ class BudgetUIFactory {
 
     JButton removeItemsButton = WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.incomeTable);
 
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        removeItemsButton, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_DELETE, 0
+        ), 
+        BudgetItemDeleteAction
+    );
+
+    removeItemsButton.setEnabled(false);
+    
     removeItemsButton.setForeground(
         Color.RED.brighter()
    );
@@ -324,14 +355,6 @@ class BudgetUIFactory {
         "Remove selected income item"
     );
     
-    removeItemsButton.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
-            UIComponents.incomeTable.removeBudgetItems();
-          }
-        }
-    );
-
     toolbar.add(removeItemsButton);
     
     toolbar.addSeparator();

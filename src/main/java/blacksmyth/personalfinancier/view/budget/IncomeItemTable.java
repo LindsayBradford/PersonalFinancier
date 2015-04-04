@@ -17,12 +17,12 @@ import java.util.Observer;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import blacksmyth.general.BlacksmythSwingUtilities;
-
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
@@ -51,7 +51,14 @@ public class IncomeItemTable extends JTable {
     super(
         new IncomeItemTableModel(budgetModel)
     );
-    this.setRowSelectionAllowed(true);
+    
+    getSelectionModel().setSelectionMode(
+        ListSelectionModel.SINGLE_INTERVAL_SELECTION
+    );
+    
+    // Without disabling autoStartsEdit, the DELETE key binding for removing table rows fails.
+    this.putClientProperty("JTable.autoStartsEdit", Boolean.FALSE);
+    
     setupColumns();
     
     for(INCOME_ITEM_COLUMNS column : INCOME_ITEM_COLUMNS.values()) {
@@ -198,13 +205,20 @@ public class IncomeItemTable extends JTable {
 
   public void addBudgetItem() {
     int row = this.getSelectedRow();
+    
+    // if nothing selected, but there are entries, add entry at end.
+    
+    if (row == -1 && this.getRowCount() > 0) {
+      row = this.getRowCount() - 1;
+    }
+    
     this.getIncomeItemTableModel().addIncomeItem(row + 1);
 
     BlacksmythSwingUtilities.scrollRowToVisible(
         this, 
         row + 1
     );
-    
+   
     this.selectionModel.setSelectionInterval(
         row + 1, 
         row + 1
