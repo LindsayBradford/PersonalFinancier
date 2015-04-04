@@ -84,6 +84,31 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     return newItem;
   }
 
+  public BudgetItem addExpenseItem(int itemIndex) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+
+    BudgetItem newItem = BudgetItemFactory.createExpense();
+    
+    if (itemIndex - 1 >= 0) {
+      BudgetItem itemAtIndex = this.getExpenseItems().get(itemIndex - 1);
+
+      newItem.setBudgetAccount(
+          itemAtIndex.getBudgetAccount()
+      );
+      newItem.setCategory(
+          itemAtIndex.getCategory()
+      );
+      
+      newItem.setFrequency(
+          itemAtIndex.getFrequency()
+      );
+    }
+    
+    this.addExpenseItem(itemIndex, newItem);
+    return newItem;
+  }
+
+  
   public BudgetItem addIncomeItem() {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     
@@ -93,6 +118,32 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     
     return newItem;
   }
+
+  public BudgetItem addIncomeItem(int itemIndex) {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    
+    BudgetItem newItem = BudgetItemFactory.createIncome();
+    
+    if (itemIndex - 1 >= 0) {
+      BudgetItem itemAtIndex = this.getIncomeItems().get(itemIndex - 1);
+
+      newItem.setBudgetAccount(
+          itemAtIndex.getBudgetAccount()
+      );
+      newItem.setCategory(
+          itemAtIndex.getCategory()
+      );
+      
+      newItem.setFrequency(
+          itemAtIndex.getFrequency()
+      );
+    }
+    
+    this.addIncomeItem(itemIndex, newItem);
+    
+    return newItem;
+  }
+  
   
   public void addExpenseItem(BudgetItem item) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;

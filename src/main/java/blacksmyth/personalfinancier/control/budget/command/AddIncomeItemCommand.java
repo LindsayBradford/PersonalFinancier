@@ -20,23 +20,25 @@ public class AddIncomeItemCommand extends AbstractBudgetCommand {
   
   private BudgetModel budgetModel;
   private BudgetItem postCommandItem;
+  private int itemIndex;
   
-  public static AddIncomeItemCommand doCmd(BudgetModel model) {
-    return new AddIncomeItemCommand(model);
+  public static AddIncomeItemCommand doCmd(BudgetModel model, int itemIndex) {
+    return new AddIncomeItemCommand(model, itemIndex);
   }
   
-  protected AddIncomeItemCommand(BudgetModel model) {
+  protected AddIncomeItemCommand(BudgetModel model, int itemIndex) {
     this.budgetModel = model;
-    this.postCommandItem = model.addIncomeItem();
+    this.itemIndex = itemIndex;
+    this.postCommandItem = model.addIncomeItem(itemIndex);
   }
 
   @Override
   public void redo() throws CannotRedoException {
-    budgetModel.addIncomeItem(this.postCommandItem);
+    budgetModel.addIncomeItem(this.itemIndex, this.postCommandItem);
   }
 
   @Override
   public void undo() throws CannotUndoException {
-    budgetModel.removeIncomeItem(this.postCommandItem);
+    budgetModel.removeIncomeItem(this.itemIndex);
   }
 }

@@ -190,10 +190,11 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
     this.getBudgetModel().addObserver(observer);
   }
 
-  public void addExpenseItem() {    
+  public void addExpenseItem(int row) {    
     UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
       AddExpenseItemCommand.doCmd(
-          getBudgetModel()
+          getBudgetModel(),
+          row
       )
     );
   }

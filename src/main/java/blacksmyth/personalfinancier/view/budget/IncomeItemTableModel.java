@@ -190,10 +190,11 @@ class IncomeItemTableModel extends AbstractBudgetTableModel<INCOME_ITEM_COLUMNS>
     this.getBudgetModel().addObserver(observer);
   }
 
-  public void addIncomeItem() {
+  public void addIncomeItem(int row) {
     UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
         AddIncomeItemCommand.doCmd(
-            getBudgetModel()
+            getBudgetModel(),
+            row
         )
     );
   }
@@ -207,7 +208,7 @@ class IncomeItemTableModel extends AbstractBudgetTableModel<INCOME_ITEM_COLUMNS>
 	    removeItemsEdit.addEdit(
 		    RemoveIncomeItemCommand.doCmd(
 		      getBudgetModel(),
-			  rows[rowIdx]
+			    rows[rowIdx]
 		    )
 	    );
 	  }

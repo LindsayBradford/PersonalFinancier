@@ -19,7 +19,7 @@ public class BudgetItemFactory {
   // TODO: Expand to be more than just a nickname device.
 
   public static BudgetItem createExpense() {
-    return createExpense("");
+    return createExpense("<New Expense Budget Item>");
   }
   
   public static BudgetItem createExpense(String description) {
@@ -33,7 +33,7 @@ public class BudgetItemFactory {
   }
   
   public static BudgetItem createIncome() {
-    return createIncome("");
+    return createIncome("<New Income Budget Item>");
   }
   
   public static BudgetItem createIncome(String description) {

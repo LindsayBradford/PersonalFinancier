@@ -198,16 +198,17 @@ public class ExpenseItemTable extends JTable {
   }
 
   public void addBudgetItem() {
-    this.getExpenseItemTableModel().addExpenseItem();
+    int row = this.getSelectedRow();
+    this.getExpenseItemTableModel().addExpenseItem(row + 1);
 
     BlacksmythSwingUtilities.scrollRowToVisible(
         this, 
-        this.getRowCount() -1
+        row + 1
     );
-
+    
     this.selectionModel.setSelectionInterval(
-        this.getRowCount() - 1, 
-        this.getRowCount() - 1
+        row + 1, 
+        row + 1
     );
   }
   

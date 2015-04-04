@@ -20,23 +20,25 @@ public class AddExpenseItemCommand extends AbstractBudgetCommand {
   
   private BudgetModel model;
   private BudgetItem postCommandItem;
+  private int itemIndex;
   
-  public static AddExpenseItemCommand doCmd(BudgetModel model) {
-    return new AddExpenseItemCommand(model);
+  public static AddExpenseItemCommand doCmd(BudgetModel model, int itemIndex) {
+    return new AddExpenseItemCommand(model, itemIndex);
   }
   
-  protected AddExpenseItemCommand(BudgetModel model) {
+  protected AddExpenseItemCommand(BudgetModel model, int itemIndex) {
     this.model = model;
-    this.postCommandItem = model.addExpenseItem();
+    this.itemIndex = itemIndex;
+    this.postCommandItem = model.addExpenseItem(itemIndex);
   }
 
   @Override
   public void redo() throws CannotRedoException {
-    model.addExpenseItem(this.postCommandItem);
+    model.addExpenseItem(this.itemIndex, this.postCommandItem);
   }
 
   @Override
   public void undo() throws CannotUndoException {
-    model.removeExpenseItem(this.postCommandItem);
+    model.removeExpenseItem(this.itemIndex);
   }
 }

@@ -197,23 +197,24 @@ public class IncomeItemTable extends JTable {
   }
 
   public void addBudgetItem() {
-    this.getIncomeItemTableModel().addIncomeItem();
+    int row = this.getSelectedRow();
+    this.getIncomeItemTableModel().addIncomeItem(row + 1);
 
     BlacksmythSwingUtilities.scrollRowToVisible(
         this, 
-        this.getRowCount() - 1
+        row + 1
     );
     
     this.selectionModel.setSelectionInterval(
-        this.getRowCount() - 1, 
-        this.getRowCount() - 1
+        row + 1, 
+        row + 1
     );
   }
   
   public void removeBudgetItems() {
     this.getIncomeItemTableModel().removeItems(
-	  this.getSelectedRows()
-	);
+        this.getSelectedRows()
+    );
   }
 
   public void moveSelectedItemDown() {
