@@ -50,6 +50,8 @@ import blacksmyth.personalfinancier.view.budget.IncomeItemTable;
 
 class BudgetUIFactory {
   
+  private static Action BudgetItemInsertAction;
+  
   public static JComponent createBudgetComponent() {
     JSplitPane splitPane = new JSplitPane(
         JSplitPane.VERTICAL_SPLIT,
@@ -157,7 +159,7 @@ class BudgetUIFactory {
 
     final JButton addItemButton = new JButton();
 
-    Action insertAction = new AbstractAction("Insert Budget Item") {
+    BudgetItemInsertAction = new AbstractAction("Insert Budget Item") {
       public void actionPerformed(ActionEvent e) {
         //TODO: DRY violation with IncomeItem Action.
         
@@ -174,14 +176,14 @@ class BudgetUIFactory {
       }
     };
     
-    addItemButton.setAction(insertAction);
+    addItemButton.setAction(BudgetItemInsertAction);
      
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
         addItemButton, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_INSERT, 0
         ), 
-        insertAction
+        BudgetItemInsertAction
     );
     
     FontIconProvider.getInstance().setGlyphAsText(
@@ -282,31 +284,14 @@ class BudgetUIFactory {
     
     final JButton addItemButton = new JButton();
 
-    Action insertAction = new AbstractAction("Insert Budget Item") {
-      public void actionPerformed(ActionEvent e) {
-        //TODO: DRY violation with ExpenseItem Action.
-        
-        JComponent expensePanel = (JComponent) UIComponents.expenseTable.getParent().getParent().getParent();
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(expensePanel)) {
-          UIComponents.expenseTable.addBudgetItem(); 
-          return;
-        }
-
-        JComponent incomePanel = (JComponent) UIComponents.incomeTable.getParent().getParent().getParent();
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomePanel)) {
-          UIComponents.incomeTable.addBudgetItem();
-        }
-      }
-    };
-    
-    addItemButton.setAction(insertAction);
+    addItemButton.setAction(BudgetItemInsertAction);
      
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
         addItemButton, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_INSERT, 0
         ), 
-        insertAction
+        BudgetItemInsertAction
     );
 
     FontIconProvider.getInstance().setGlyphAsText(

@@ -134,6 +134,25 @@ public final class BlacksmythSwingUtilities {
     );
   }
   
+  /**
+   * Returns whether the mouse is currently located within the on-screen bounds of component.
+   * @param component
+   * @return true if mouse is over component, false otherwise.
+   */
+  
+  public static boolean mouseIsOverComponent(JComponent component) {
+    Point mousePoint = MouseInfo.getPointerInfo().getLocation();
+    Point componentPoint = component.getLocationOnScreen();
+    
+    if (mousePoint.x < componentPoint.x) return false;
+    if (mousePoint.x > componentPoint.x + component.getWidth()) return false;
+
+    if (mousePoint.y < componentPoint.y) return false;
+    if (mousePoint.y > componentPoint.y + component.getHeight()) return false;
+
+    return true;
+  }
+  
   public static void scrollRowToVisible(JTable table, int row) {
     table.scrollRectToVisible(
         table.getCellRect(
@@ -170,18 +189,4 @@ public final class BlacksmythSwingUtilities {
     component.setMinimumSize(size);
   }
   
-  public static boolean mouseIsOverComponent(JComponent component) {
-    Point mousePoint = MouseInfo.getPointerInfo().getLocation();
-    Point componentPoint = component.getLocationOnScreen();
-    
-    if (mousePoint.x < componentPoint.x) return false;
-    if (mousePoint.x > componentPoint.x + component.getWidth()) return false;
-
-    if (mousePoint.y < componentPoint.y) return false;
-    if (mousePoint.y > componentPoint.y + component.getHeight()) return false;
-
-    return true;
-  }
-
-
 }
