@@ -56,7 +56,6 @@ public class ExpenseItemTable extends JTable {
         ListSelectionModel.SINGLE_INTERVAL_SELECTION
     );
     
-    
     // Without disabling autoStartsEdit, the DELETE key binding for removing table rows fails.
     this.putClientProperty("JTable.autoStartsEdit", Boolean.FALSE);
     
@@ -67,6 +66,8 @@ public class ExpenseItemTable extends JTable {
           getColFromEnum(column)
       );
     }
+    
+    BlacksmythSwingUtilities.enableEnterKeyEditsInJTable(this);
    
     this.getExpenseItemTableModel().fireTableDataChanged();
   }
@@ -225,15 +226,20 @@ public class ExpenseItemTable extends JTable {
         row + 1, 
         row + 1
     );
+    this.requestFocus();
   }
   
   public void removeBudgetItems() {
+    if (this.getSelectedRowCount() == 0) return;
+
     this.getExpenseItemTableModel().removeItems(
       this.getSelectedRows()
     );
+    this.requestFocus();
   }
 
   public void moveSelectedItemDown() {
+
     int row = this.getSelectedRow();
     
     if (row < 0 || row == this.getRowCount() - 1) return; // nothing to do
@@ -241,6 +247,7 @@ public class ExpenseItemTable extends JTable {
     this.getExpenseItemTableModel().moveExpenseItemDown(row);
     this.selectionModel.setSelectionInterval(row + 1, row + 1);
     BlacksmythSwingUtilities.scrollRowToVisible(this, row + 1);
+    this.requestFocus();
   }
 
   public void moveSelectedItemUp() {
@@ -251,8 +258,8 @@ public class ExpenseItemTable extends JTable {
     this.getExpenseItemTableModel().moveExpenseItemUp(row);
     this.selectionModel.setSelectionInterval(row - 1, row - 1);
     BlacksmythSwingUtilities.scrollRowToVisible(this, row - 1);
+    this.requestFocus();
   }
-
 
   public void toggleDerivedColumnView() {
     this.setShowDerivedColumns(

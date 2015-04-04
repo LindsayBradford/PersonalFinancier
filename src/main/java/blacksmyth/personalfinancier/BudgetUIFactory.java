@@ -52,9 +52,26 @@ class BudgetUIFactory {
   
   private static Action BudgetItemInsertAction;
   private static Action BudgetItemDeleteAction;
+  private static Action BudgetItemUpAction;
+  private static Action BudgetItemDownAction;
   
   public static JComponent createBudgetComponent() {
     
+    createSharedBudgetTableActions();
+    
+    JSplitPane splitPane = new JSplitPane(
+        JSplitPane.VERTICAL_SPLIT,
+        createBudgetItemPanel(), 
+        createBudgetSummaryPanel()
+    );
+    
+    splitPane.setOneTouchExpandable(true);
+    splitPane.setResizeWeight(0.5);
+    
+    return splitPane;
+  }
+  
+  private static void createSharedBudgetTableActions() {
     BudgetItemInsertAction = new AbstractAction("Insert Budget Item") {
       public void actionPerformed(ActionEvent e) {
         
@@ -87,16 +104,37 @@ class BudgetUIFactory {
       }
     };
     
-    JSplitPane splitPane = new JSplitPane(
-        JSplitPane.VERTICAL_SPLIT,
-        createBudgetItemPanel(), 
-        createBudgetSummaryPanel()
-    );
-    
-    splitPane.setOneTouchExpandable(true);
-    splitPane.setResizeWeight(0.5);
-    
-    return splitPane;
+    BudgetItemUpAction = new AbstractAction("Move Budget Item Up") {
+      public void actionPerformed(ActionEvent e) {
+        
+        JComponent expensePanel = (JComponent) UIComponents.expenseTable.getParent().getParent().getParent();
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(expensePanel)) {
+          UIComponents.expenseTable.moveSelectedItemUp(); 
+          return;
+        }
+
+        JComponent incomePanel = (JComponent) UIComponents.incomeTable.getParent().getParent().getParent();
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomePanel)) {
+          UIComponents.incomeTable.moveSelectedItemUp();
+        }
+      }
+    };
+
+    BudgetItemDownAction = new AbstractAction("Move Budget Item Down") {
+      public void actionPerformed(ActionEvent e) {
+        
+        JComponent expensePanel = (JComponent) UIComponents.expenseTable.getParent().getParent().getParent();
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(expensePanel)) {
+          UIComponents.expenseTable.moveSelectedItemDown(); 
+          return;
+        }
+
+        JComponent incomePanel = (JComponent) UIComponents.incomeTable.getParent().getParent().getParent();
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomePanel)) {
+          UIComponents.incomeTable.moveSelectedItemDown();
+        }
+      }
+    };
   }
   
   private static JComponent createBudgetItemPanel() {
@@ -241,7 +279,7 @@ class BudgetUIFactory {
     );
 
     removeItemsButton.setToolTipText(
-        "Remove selected expense item"
+        "Delete selected expense item(s)"
     );
     
     toolbar.add(removeItemsButton);
@@ -249,6 +287,18 @@ class BudgetUIFactory {
     toolbar.addSeparator();
 
     JButton moveItemDownButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.expenseTable);
+
+    moveItemDownButton.setAction(BudgetItemDownAction);
+    
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        moveItemDownButton, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_DOWN, Event.ALT_MASK
+        ), 
+        BudgetItemDownAction
+    );
+    
+    moveItemDownButton.setEnabled(false);
     
     FontIconProvider.getInstance().setGlyphAsText(
         moveItemDownButton, 
@@ -261,18 +311,22 @@ class BudgetUIFactory {
         " Move item down in list "
     );
     
-    moveItemDownButton.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
-            UIComponents.expenseTable.moveSelectedItemDown();
-          }
-        }
-    );
-
     toolbar.add(moveItemDownButton);
 
     JButton moveItemUpButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.expenseTable);
 
+    moveItemUpButton.setAction(BudgetItemUpAction);
+    
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        moveItemUpButton, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_UP, Event.ALT_MASK
+        ), 
+        BudgetItemUpAction
+    );
+    
+    moveItemUpButton.setEnabled(false);
+    
     FontIconProvider.getInstance().setGlyphAsText(
         moveItemUpButton, 
         FontIconProvider.fa_arrow_up
@@ -283,14 +337,6 @@ class BudgetUIFactory {
     );
 
     moveItemUpButton.setForeground(Color.GREEN);
-
-    moveItemUpButton.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
-            UIComponents.expenseTable.moveSelectedItemUp();
-          }
-        }
-    );
 
     toolbar.add(moveItemUpButton);
     
@@ -354,7 +400,7 @@ class BudgetUIFactory {
     );
 
     removeItemsButton.setToolTipText(
-        "Remove selected income item"
+        "Delete selected income item(s)"
     );
     
     toolbar.add(removeItemsButton);
@@ -362,6 +408,18 @@ class BudgetUIFactory {
     toolbar.addSeparator();
 
     JButton moveItemDownButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.incomeTable);
+
+    moveItemDownButton.setAction(BudgetItemDownAction);
+    
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        moveItemDownButton, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_DOWN, Event.ALT_MASK
+        ), 
+        BudgetItemDownAction
+    );
+    
+    moveItemDownButton.setEnabled(false);
     
     FontIconProvider.getInstance().setGlyphAsText(
         moveItemDownButton, 
@@ -373,19 +431,22 @@ class BudgetUIFactory {
     );	
     
     moveItemDownButton.setForeground(Color.GREEN);
-    
-    
-    moveItemDownButton.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
-            UIComponents.incomeTable.moveSelectedItemDown();
-          }
-        }
-    );
 
     toolbar.add(moveItemDownButton);
 
     JButton moveItemUpButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.incomeTable);
+
+    moveItemUpButton.setAction(BudgetItemUpAction);
+    
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        moveItemUpButton, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_UP, Event.ALT_MASK
+        ), 
+        BudgetItemUpAction
+    );
+    
+    moveItemUpButton.setEnabled(false);
     
     FontIconProvider.getInstance().setGlyphAsText(
         moveItemUpButton, 
@@ -397,14 +458,6 @@ class BudgetUIFactory {
     );
 
     moveItemUpButton.setForeground(Color.GREEN);
-
-    moveItemUpButton.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
-            UIComponents.incomeTable.moveSelectedItemUp();
-          }
-        }
-    );
 
     toolbar.add(moveItemUpButton);
 
@@ -544,7 +597,7 @@ class BudgetUIFactory {
         resetItemsButton, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_DELETE, 
-            Event.CTRL_MASK
+            0
         ), 
         resetItemsAction
     );

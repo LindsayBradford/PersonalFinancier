@@ -67,6 +67,8 @@ public class IncomeItemTable extends JTable {
       );
     }
 
+    BlacksmythSwingUtilities.enableEnterKeyEditsInJTable(this);
+
     this.getIncomeItemTableModel().fireTableDataChanged();
   }
   
@@ -223,22 +225,27 @@ public class IncomeItemTable extends JTable {
         row + 1, 
         row + 1
     );
+    this.requestFocus();
   }
   
   public void removeBudgetItems() {
+    if (this.getSelectedRowCount() == 0) return;
+    
     this.getIncomeItemTableModel().removeItems(
         this.getSelectedRows()
     );
+    this.requestFocus();
   }
 
   public void moveSelectedItemDown() {
     int row = this.getSelectedRow();
     
     if (row < 0 || row == this.getRowCount() - 1) return; // nothing to do
-    
+
     this.getIncomeItemTableModel().moveIncomeItemDown(row);
     this.selectionModel.setSelectionInterval(row + 1, row + 1);
     BlacksmythSwingUtilities.scrollRowToVisible(this, row + 1);
+    this.requestFocus();
   }
 
   public void moveSelectedItemUp() {
@@ -249,6 +256,7 @@ public class IncomeItemTable extends JTable {
     this.getIncomeItemTableModel().moveIncomeItemUp(row);
     this.selectionModel.setSelectionInterval(row - 1, row - 1);
     BlacksmythSwingUtilities.scrollRowToVisible(this, row - 1);
+    this.requestFocus();
   }
   
   public void toggleDerivedColumnView() {

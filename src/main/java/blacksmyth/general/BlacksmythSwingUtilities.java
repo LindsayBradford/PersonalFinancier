@@ -14,10 +14,14 @@ import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.UUID;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -187,6 +191,25 @@ public final class BlacksmythSwingUtilities {
     component.setPreferredSize(size);
     component.setMaximumSize(size);
     component.setMinimumSize(size);
+  }
+  
+  public static void enableEnterKeyEditsInJTable(final JTable theTable) {
+    InputMap im = theTable.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+    ActionMap am = theTable.getActionMap();
+
+    KeyStroke enterKey = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+
+    im.put(enterKey, "Action.enter");
+    am.put("Action.enter", new AbstractAction() {
+        public void actionPerformed(ActionEvent evt) {
+          int row = theTable.getSelectedRow();
+          int column = theTable.getSelectedColumn();
+          
+          if (theTable.editCellAt(row, column)) {
+            theTable.getEditorComponent().requestFocusInWindow();
+          }
+        }
+    });
   }
   
 }
