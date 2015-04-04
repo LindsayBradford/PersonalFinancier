@@ -228,7 +228,6 @@ public class ExpenseItemTable extends JTable {
   }
   
   public void removeBudgetItems() {
-    BlacksmythSwingUtilities.stopTableEditing(this);
     this.getExpenseItemTableModel().removeItems(
       this.getSelectedRows()
     );

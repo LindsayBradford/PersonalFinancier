@@ -332,6 +332,8 @@ class BudgetUIFactory {
 
     JButton removeItemsButton = WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.incomeTable);
 
+    removeItemsButton.setAction(BudgetItemDeleteAction);
+    
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
         removeItemsButton, 
         KeyStroke.getKeyStroke(
