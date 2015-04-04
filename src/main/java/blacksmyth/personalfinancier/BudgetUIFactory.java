@@ -21,6 +21,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -152,8 +153,36 @@ class BudgetUIFactory {
   @SuppressWarnings("serial")
   private static JToolBar createExpenseItemToolbar() {
     JToolBar toolbar = new JToolBar();
+    toolbar.setFloatable(false);
+
+    final JButton addItemButton = new JButton();
+
+    Action insertAction = new AbstractAction("Insert Budget Item") {
+      public void actionPerformed(ActionEvent e) {
+        //TODO: DRY violation with IncomeItem Action.
+        
+        JComponent expensePanel = (JComponent) UIComponents.expenseTable.getParent().getParent().getParent();
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(expensePanel)) {
+          UIComponents.expenseTable.addBudgetItem(); 
+          return;
+        }
+
+        JComponent incomePanel = (JComponent) UIComponents.incomeTable.getParent().getParent().getParent();
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomePanel)) {
+          UIComponents.incomeTable.addBudgetItem();
+        }
+      }
+    };
     
-    JButton addItemButton = new JButton();
+    addItemButton.setAction(insertAction);
+     
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        addItemButton, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_INSERT, 0
+        ), 
+        insertAction
+    );
     
     FontIconProvider.getInstance().setGlyphAsText(
         addItemButton, 
@@ -168,14 +197,6 @@ class BudgetUIFactory {
         Color.GREEN.brighter()
    );
     
-    addItemButton.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
-            UIComponents.expenseTable.addBudgetItem();
-          }
-        }
-    );
-
     toolbar.add(addItemButton);
 
     JButton removeItemsButton = WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.expenseTable);
@@ -257,9 +278,37 @@ class BudgetUIFactory {
   @SuppressWarnings("serial")
   private static JToolBar createIncomeItemToolbar() {
     JToolBar toolbar = new JToolBar();
+    toolbar.setFloatable(false);
     
-    JButton addItemButton = new JButton();
+    final JButton addItemButton = new JButton();
+
+    Action insertAction = new AbstractAction("Insert Budget Item") {
+      public void actionPerformed(ActionEvent e) {
+        //TODO: DRY violation with ExpenseItem Action.
+        
+        JComponent expensePanel = (JComponent) UIComponents.expenseTable.getParent().getParent().getParent();
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(expensePanel)) {
+          UIComponents.expenseTable.addBudgetItem(); 
+          return;
+        }
+
+        JComponent incomePanel = (JComponent) UIComponents.incomeTable.getParent().getParent().getParent();
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomePanel)) {
+          UIComponents.incomeTable.addBudgetItem();
+        }
+      }
+    };
     
+    addItemButton.setAction(insertAction);
+     
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        addItemButton, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_INSERT, 0
+        ), 
+        insertAction
+    );
+
     FontIconProvider.getInstance().setGlyphAsText(
         addItemButton, 
         FontIconProvider.fa_plus
@@ -273,14 +322,6 @@ class BudgetUIFactory {
         Color.GREEN.brighter()
    );
     
-    addItemButton.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
-            UIComponents.incomeTable.addBudgetItem();
-          }
-        }
-    );
-
     toolbar.add(addItemButton);
 
     JButton removeItemsButton = WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.incomeTable);

@@ -12,6 +12,8 @@ package blacksmyth.general;
 
 import java.awt.Dimension;
 import java.awt.FontMetrics;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.util.List;
 import java.util.UUID;
 
@@ -166,6 +168,19 @@ public final class BlacksmythSwingUtilities {
     component.setPreferredSize(size);
     component.setMaximumSize(size);
     component.setMinimumSize(size);
+  }
+  
+  public static boolean mouseIsOverComponent(JComponent component) {
+    Point mousePoint = MouseInfo.getPointerInfo().getLocation();
+    Point componentPoint = component.getLocationOnScreen();
+    
+    if (mousePoint.x < componentPoint.x) return false;
+    if (mousePoint.x > componentPoint.x + component.getWidth()) return false;
+
+    if (mousePoint.y < componentPoint.y) return false;
+    if (mousePoint.y > componentPoint.y + component.getHeight()) return false;
+
+    return true;
   }
 
 
