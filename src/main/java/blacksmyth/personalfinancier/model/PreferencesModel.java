@@ -349,6 +349,26 @@ public class PreferencesModel extends Observable {
     this.setChangeAndNotifyObservers();
   }
   
+  private static final boolean DEFAULT_BUDGET_ITEM_BUTTONS_VISIBLE = true;
+  private static final String BUDGET_ITEM_BUTTONS_VISIBLE = "BudgetItemButtonsVisible";
+  
+  public boolean getBudgetItemButtonsVisibility() {
+    return this.prefs.getBoolean(
+        BUDGET_ITEM_BUTTONS_VISIBLE, 
+        DEFAULT_BUDGET_ITEM_BUTTONS_VISIBLE
+    );
+  }
+  
+  public void toggleBudgetItemButtonsVisibility() {
+  boolean currentValue = this.getBudgetItemButtonsVisibility();
+    this.prefs.putBoolean(
+        BUDGET_ITEM_BUTTONS_VISIBLE,
+        !currentValue
+    );
+    this.setChangeAndNotifyObservers();
+  }
+
+  
   private static final int DEFAULT_WINDOW_BOUNDS_X      = Toolkit.getDefaultToolkit().getScreenSize().width/8;
   private static final int DEFAULT_WINDOW_BOUNDS_Y      = Toolkit.getDefaultToolkit().getScreenSize().height/8;
   private static final int DEFAULT_WINDOW_BOUNDS_WIDTH  = Toolkit.getDefaultToolkit().getScreenSize().width/4*3;

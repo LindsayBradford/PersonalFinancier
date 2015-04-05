@@ -12,6 +12,7 @@ package blacksmyth.personalfinancier;
 
 import javax.swing.Action;
 import javax.swing.JFrame;
+import javax.swing.JToolBar;
 
 import blacksmyth.general.file.IFileHandler;
 import blacksmyth.personalfinancier.model.AccountModel;
@@ -32,8 +33,11 @@ public class UIComponents {
   public static BudgetModel budgetModel;
   public static AccountModel accountModel;
   
-  public static ExpenseItemTable expenseTable;
-  public static IncomeItemTable incomeTable;
+  public static JToolBar expenseItemToolbar;
+  public static ExpenseItemTable expenseItemTable;
+
+  public static JToolBar incomeItemToolbar;
+  public static IncomeItemTable incomeItemTable;
   
   public static IFileHandler<BudgetFileContent> budgetFileController;
   
