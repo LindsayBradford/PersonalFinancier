@@ -13,9 +13,9 @@ package blacksmyth.personalfinancier.model;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
-public final class MoneyUtilties {
+public final class CashFlowFrequencyUtility {
   
-  // TODO: make this an observer of the Preferences so we react correctly to context chages.
+  // TODO: make this an observer of the Preferences so we react correctly to context changes.
   private static final MathContext MATH_CONTEXT = PreferencesModel.getInstance().getPreferredMathContext();
   
   private static final BigDecimal MONTHS_PER_QUARTER = BigDecimalFactory.create(3);
@@ -26,9 +26,18 @@ public final class MoneyUtilties {
   private static final BigDecimal DAYS_PER_FORTNIGHT = BigDecimalFactory.create(14);
   private static final BigDecimal DAYS_PER_WEEK = BigDecimalFactory.create(7);
   
+  /**
+   * Converts <tt>initialAmount</tt> from a figure that recurs at <tt>initialFrequency</tt> to the equivalent amount
+   * that recurs at <tt>newFrequency</tt> and returns this converted amount.  
+   * @param initialAmount
+   * @param initialFrequency
+   * @param newFrequency
+   * @return the initial amount converted to the equivalent at a different cash flow frequency.
+   */
   public static BigDecimal convertFrequencyAmount(BigDecimal initialAmount, CashFlowFrequency initialFrequency, 
                                                                      CashFlowFrequency newFrequency) {
     
+    if (initialAmount == null) return null;
     if (initialFrequency == newFrequency) return initialAmount;
     
     // Convert initial amount to a monthly amount, then convert the monthly amount to 
@@ -47,7 +56,7 @@ public final class MoneyUtilties {
   }
   
   /**
-   * Converts an <tt>initialAmount</tt> with a cash-flow frequency of <tt>initialFreqnency</tt> to the equvalent
+   * Converts an <tt>initialAmount</tt> with a cash-flow frequency of <tt>initialFreqnency</tt> to the equivalent
    * amount at a monthly frequency.
    * @param initialAmount
    * @param initialFrequency

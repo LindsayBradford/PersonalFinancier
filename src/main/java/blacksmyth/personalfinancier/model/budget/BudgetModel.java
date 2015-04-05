@@ -27,7 +27,7 @@ import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
-import blacksmyth.personalfinancier.model.MoneyUtilties;
+import blacksmyth.personalfinancier.model.CashFlowFrequencyUtility;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 
 public class BudgetModel extends Observable implements Observer, IBudgetController, 
@@ -459,7 +459,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
       
       AccountSummary summary = summaryTable.get(item.getBudgetAccount().getNickname());
       
-      BigDecimal convertedBudgetAmount = MoneyUtilties.convertFrequencyAmount(
+      BigDecimal convertedBudgetAmount = CashFlowFrequencyUtility.convertFrequencyAmount(
               item.getBudgettedAmount().getTotal(), 
               item.getFrequency(), 
               summary.getBudgettedFrequency()
@@ -478,7 +478,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
 
       AccountSummary summary = summaryTable.get(item.getBudgetAccount().getNickname());
       
-      BigDecimal convertedBudgetAmount = MoneyUtilties.convertFrequencyAmount(
+      BigDecimal convertedBudgetAmount = CashFlowFrequencyUtility.convertFrequencyAmount(
               item.getBudgettedAmount().getTotal(), 
               item.getFrequency(), 
               summary.getBudgettedFrequency()
@@ -510,7 +510,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
       
       CategorySummary summary = summaryTable.get(item.getCategory().toString());
       
-      BigDecimal convertedBudgetAmount = MoneyUtilties.convertFrequencyAmount(
+      BigDecimal convertedBudgetAmount = CashFlowFrequencyUtility.convertFrequencyAmount(
               item.getBudgettedAmount().getTotal(), 
               item.getFrequency(), 
               summary.getBudgettedFrequency()
@@ -533,7 +533,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
       
       CategorySummary summary = summaryTable.get(item.getCategory().toString());
       
-      BigDecimal convertedBudgetAmount = MoneyUtilties.convertFrequencyAmount(
+      BigDecimal convertedBudgetAmount = CashFlowFrequencyUtility.convertFrequencyAmount(
               item.getBudgettedAmount().getTotal(), 
               item.getFrequency(), 
               summary.getBudgettedFrequency()

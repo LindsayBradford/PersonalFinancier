@@ -13,7 +13,7 @@ package blacksmyth.personalfinancier.model.budget;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
-import blacksmyth.personalfinancier.model.MoneyUtilties;
+import blacksmyth.personalfinancier.model.CashFlowFrequencyUtility;
 
 public class CategorySummary implements Comparable<CategorySummary> {
   
@@ -53,7 +53,7 @@ public class CategorySummary implements Comparable<CategorySummary> {
   }
 
   public Object getBudgettedAmountAtFrequency(CashFlowFrequency newFrequency) {
-    return MoneyUtilties.convertFrequencyAmount(
+    return CashFlowFrequencyUtility.convertFrequencyAmount(
         this.getBudgettedAmount().getTotal(), 
         getBudgettedFrequency(), 
         newFrequency

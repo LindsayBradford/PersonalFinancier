@@ -30,7 +30,7 @@ import blacksmyth.personalfinancier.control.budget.command.RemoveExpenseItemComm
 import blacksmyth.personalfinancier.model.BigDecimalFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
-import blacksmyth.personalfinancier.model.MoneyUtilties;
+import blacksmyth.personalfinancier.model.CashFlowFrequencyUtility;
 import blacksmyth.personalfinancier.model.budget.BudgetEvent;
 import blacksmyth.personalfinancier.model.budget.BudgetItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
@@ -115,7 +115,7 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
   }
   
   private BigDecimal convertAmount(BudgetItem item, CashFlowFrequency newFrequency) {
-    return MoneyUtilties.convertFrequencyAmount(
+    return CashFlowFrequencyUtility.convertFrequencyAmount(
         item.getBudgettedAmount().getTotal(), 
         item.getFrequency(), 
         newFrequency

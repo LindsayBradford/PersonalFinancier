@@ -18,6 +18,7 @@ import blacksmyth.personalfinancier.control.EncryptedJSonFileConverterTest;
 import blacksmyth.personalfinancier.control.JSonObjectFileConverterTest;
 import blacksmyth.personalfinancier.dependencies.encryption.BouncyCastleEncryptionBridgeTest;
 import blacksmyth.personalfinancier.dependencies.json.JSonIoBridgeTest;
+import blacksmyth.personalfinancier.model.CashFlowFrequencyUtilityTest;
 
 @RunWith(Suite.class)
 
@@ -25,7 +26,8 @@ import blacksmyth.personalfinancier.dependencies.json.JSonIoBridgeTest;
   BouncyCastleEncryptionBridgeTest.class,
   JSonIoBridgeTest.class,
   JSonObjectFileConverterTest.class,
-  EncryptedJSonFileConverterTest.class
+  EncryptedJSonFileConverterTest.class,
+  CashFlowFrequencyUtilityTest.class
 })
 
 public class AllPersonalFinancierTests {
