@@ -227,13 +227,35 @@ class BudgetUIFactory {
   private static JToolBar createExpenseItemToolbar() {
     JToolBar toolbar = new JToolBar();
     toolbar.setFloatable(false);
-
-    final JButton addItemButton = new JButton();
     
-    addItemButton.setAction(BudgetItemInsertAction);
+    toolbar.add(
+        createAddExpenseItemButton()
+    );
+    
+    toolbar.add(
+        createDeleteExpenseItemsButton()
+    );
+    
+    toolbar.addSeparator();
+    
+    toolbar.add(
+        createMoveExpenseItemDownButton()
+    );
+
+    toolbar.add(
+        createMoveExpenseItemUpButton()
+    );
+    
+    return toolbar;
+  }
+  
+  private static JButton createAddExpenseItemButton() {
+    final JButton newButton  = new JButton();
+    
+    newButton.setAction(BudgetItemInsertAction);
      
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        addItemButton, 
+        newButton, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_INSERT, 0
         ), 
@@ -241,227 +263,253 @@ class BudgetUIFactory {
     );
     
     FontIconProvider.getInstance().setGlyphAsText(
-        addItemButton, 
+        newButton, 
         FontIconProvider.fa_plus
     );
     
-    addItemButton.setToolTipText(
+    newButton.setToolTipText(
         "Add a new expense item"
     );
     
-    addItemButton.setForeground(
+    newButton.setForeground(
         Color.GREEN.brighter()
    );
     
-    toolbar.add(addItemButton);
-
-    JButton removeItemsButton = WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.expenseTable);
+    return newButton;
+  }
+  
+  private static JButton createDeleteExpenseItemsButton() {
+    JButton newButton = WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.expenseTable);
     
-    removeItemsButton.setAction(BudgetItemDeleteAction);
+    newButton.setAction(BudgetItemDeleteAction);
      
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        removeItemsButton, 
+        newButton, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_DELETE, 0
         ), 
         BudgetItemDeleteAction
     );
     
-    removeItemsButton.setEnabled(false);
+    newButton.setEnabled(false);
     
-    removeItemsButton.setForeground(
+    newButton.setForeground(
         Color.RED.brighter()
    );
     
     FontIconProvider.getInstance().setGlyphAsText(
-        removeItemsButton, 
+        newButton, 
         FontIconProvider.fa_minus
     );
 
-    removeItemsButton.setToolTipText(
+    newButton.setToolTipText(
         "Delete selected expense item(s)"
     );
     
-    toolbar.add(removeItemsButton);
-    
-    toolbar.addSeparator();
+    return newButton;
+  }
+  
+  private static JButton createMoveExpenseItemDownButton() {
+    JButton newButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.expenseTable);
 
-    JButton moveItemDownButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.expenseTable);
-
-    moveItemDownButton.setAction(BudgetItemDownAction);
+    newButton.setAction(BudgetItemDownAction);
     
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        moveItemDownButton, 
+        newButton, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_DOWN, Event.ALT_MASK
         ), 
         BudgetItemDownAction
     );
     
-    moveItemDownButton.setEnabled(false);
+    newButton.setEnabled(false);
     
     FontIconProvider.getInstance().setGlyphAsText(
-        moveItemDownButton, 
+        newButton, 
         FontIconProvider.fa_arrow_down
     );
     
-    moveItemDownButton.setForeground(Color.GREEN);
+    newButton.setForeground(Color.GREEN);
 
-    moveItemDownButton.setToolTipText(
+    newButton.setToolTipText(
         " Move item down in list "
     );
     
-    toolbar.add(moveItemDownButton);
+    return newButton;
+  }
+  
+  private static JButton createMoveExpenseItemUpButton() {
+    JButton newButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.expenseTable);
 
-    JButton moveItemUpButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.expenseTable);
-
-    moveItemUpButton.setAction(BudgetItemUpAction);
+    newButton.setAction(BudgetItemUpAction);
     
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        moveItemUpButton, 
+        newButton, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_UP, Event.ALT_MASK
         ), 
         BudgetItemUpAction
     );
     
-    moveItemUpButton.setEnabled(false);
+    newButton.setEnabled(false);
     
     FontIconProvider.getInstance().setGlyphAsText(
-        moveItemUpButton, 
+        newButton, 
         FontIconProvider.fa_arrow_up
     );
 
-    moveItemUpButton.setToolTipText(
+    newButton.setToolTipText(
         " Move item up in list "
     );
 
-    moveItemUpButton.setForeground(Color.GREEN);
+    newButton.setForeground(Color.GREEN);
 
-    toolbar.add(moveItemUpButton);
-    
-    return toolbar;
+    return newButton;
   }
+  
 
   @SuppressWarnings("serial")
   private static JToolBar createIncomeItemToolbar() {
     JToolBar toolbar = new JToolBar();
     toolbar.setFloatable(false);
     
-    final JButton addItemButton = new JButton();
+    toolbar.add(
+        createAddIncomeItemButton()
+    );
+    
+    toolbar.add(
+        createRemoveIncomeItemsButton()
+    );
+    
+    toolbar.addSeparator();
 
-     
+    toolbar.add(
+        createMoveIncomeItemDownButton()
+    );
+
+    toolbar.add(
+        createMoveIncomeItemUpButton()
+    );
+
+    return toolbar;
+  }
+  
+  private static JButton createAddIncomeItemButton() {
+    final JButton newButton = new JButton();
+    
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        addItemButton, 
+        newButton, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_INSERT, 0
         ), 
         BudgetItemInsertAction
     );
 
-    addItemButton.setAction(BudgetItemInsertAction);
+    newButton.setAction(BudgetItemInsertAction);
     
     FontIconProvider.getInstance().setGlyphAsText(
-        addItemButton, 
+        newButton, 
         FontIconProvider.fa_plus
     );
     
-    addItemButton.setToolTipText(
+    newButton.setToolTipText(
         "Add a new income item"
     );
     
-    addItemButton.setForeground(
+    newButton.setForeground(
         Color.GREEN.brighter()
    );
     
-    toolbar.add(addItemButton);
+    return newButton;
+  }
+  
+  private static JButton createRemoveIncomeItemsButton() {
+    JButton newButton = WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.incomeTable);
 
-    JButton removeItemsButton = WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.incomeTable);
-
-    removeItemsButton.setAction(BudgetItemDeleteAction);
+    newButton.setAction(BudgetItemDeleteAction);
     
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        removeItemsButton, 
+        newButton, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_DELETE, 0
         ), 
         BudgetItemDeleteAction
     );
 
-    removeItemsButton.setEnabled(false);
+    newButton.setEnabled(false);
     
-    removeItemsButton.setForeground(
+    newButton.setForeground(
         Color.RED.brighter()
    );
     
     FontIconProvider.getInstance().setGlyphAsText(
-        removeItemsButton, 
+        newButton, 
         FontIconProvider.fa_minus
     );
 
-    removeItemsButton.setToolTipText(
+    newButton.setToolTipText(
         "Delete selected income item(s)"
     );
     
-    toolbar.add(removeItemsButton);
-    
-    toolbar.addSeparator();
+    return newButton;
+  }
+  
+  private static JButton createMoveIncomeItemDownButton() {
+    JButton newButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.incomeTable);
 
-    JButton moveItemDownButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.incomeTable);
-
-    moveItemDownButton.setAction(BudgetItemDownAction);
+    newButton.setAction(BudgetItemDownAction);
     
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        moveItemDownButton, 
+        newButton, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_DOWN, Event.ALT_MASK
         ), 
         BudgetItemDownAction
     );
     
-    moveItemDownButton.setEnabled(false);
+    newButton.setEnabled(false);
     
     FontIconProvider.getInstance().setGlyphAsText(
-        moveItemDownButton, 
+        newButton, 
         FontIconProvider.fa_arrow_down
     );
 
-    moveItemDownButton.setToolTipText(
+    newButton.setToolTipText(
         " Move item down in list "
-    );	
+    );  
     
-    moveItemDownButton.setForeground(Color.GREEN);
+    newButton.setForeground(Color.GREEN);
 
-    toolbar.add(moveItemDownButton);
+    return newButton;
+  }
+  
+  private static JButton createMoveIncomeItemUpButton() {
+    JButton newButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.incomeTable);
 
-    JButton moveItemUpButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.incomeTable);
-
-    moveItemUpButton.setAction(BudgetItemUpAction);
+    newButton.setAction(BudgetItemUpAction);
     
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        moveItemUpButton, 
+        newButton, 
         KeyStroke.getKeyStroke(
             KeyEvent.VK_UP, Event.ALT_MASK
         ), 
         BudgetItemUpAction
     );
     
-    moveItemUpButton.setEnabled(false);
+    newButton.setEnabled(false);
     
     FontIconProvider.getInstance().setGlyphAsText(
-        moveItemUpButton, 
+        newButton, 
         FontIconProvider.fa_arrow_up
     );
 
-    moveItemUpButton.setToolTipText(
+    newButton.setToolTipText(
         " Move item up in list "
     );
 
-    moveItemUpButton.setForeground(Color.GREEN);
+    newButton.setForeground(Color.GREEN);
 
-    toolbar.add(moveItemUpButton);
-
-    return toolbar;
+    return newButton;
   }
 
   @SuppressWarnings("serial")
