@@ -35,11 +35,18 @@ import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.BlacksmythSwingUtilities;
+import blacksmyth.personalfinancier.control.FileHandlerBuilder;
 import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.control.budget.command.ResetBudgetItemsCommand;
+import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
+import blacksmyth.personalfinancier.model.budget.BudgetModel;
+import blacksmyth.personalfinancier.view.IApplicationMessageView;
+import blacksmyth.personalfinancier.view.IPersonalFinancierComponentView;
+import blacksmyth.personalfinancier.view.IPersonalFinancierView;
 import blacksmyth.personalfinancier.view.JUndoListeningButton;
+import blacksmyth.personalfinancier.view.PersonalFinancierView;
 import blacksmyth.personalfinancier.view.WidgetFactory;
 import blacksmyth.personalfinancier.view.budget.BudgetCashFlowSummaryTable;
 import blacksmyth.personalfinancier.view.budget.BudgetCategorySummaryTable;
@@ -55,23 +62,69 @@ class BudgetUIFactory {
   private static Action BudgetItemUpAction;
   private static Action BudgetItemDownAction;
   
-  public static JComponent createBudgetComponent() {
+  public static IPersonalFinancierComponentView createBudgetComponent(PersonalFinancierView view) {
+    
+    UIComponents.budgetModel = 
+        new BudgetModel(
+            new AccountModel()
+        );
+    
+    UIComponents.budgetFileController = 
+        FileHandlerBuilder.buildBudgetHandler(
+            view,
+            UIComponents.budgetModel
+        );
+    
+    UIComponents.budgetFileController.addObserver(
+        view.getMessageViewer()
+    );
     
     createSharedBudgetTableActions();
     
-    JSplitPane splitPane = new JSplitPane(
+    BudgetComponent newComponent = new BudgetComponent(
         JSplitPane.VERTICAL_SPLIT,
-        createBudgetItemPanel(), 
+        createBudgetItemPanel(view), 
         createBudgetSummaryPanel()
     );
     
-    splitPane.setOneTouchExpandable(true);
-    splitPane.setResizeWeight(0.5);
+    newComponent.putClientProperty(
+        "AppMessage", 
+        "Manage your personal budget in this tab."
+    );
     
-    return splitPane;
+    newComponent.putClientProperty(
+        "TabName", 
+        "Budget"
+    );
+    
+    newComponent.setOneTouchExpandable(true);
+    newComponent.setResizeWeight(0.5);
+    
+    return newComponent;
   }
   
   private static void createSharedBudgetTableActions() {
+
+    UIComponents.LoadBudgetAction = new AbstractAction("Open...") {
+      
+      public void actionPerformed(ActionEvent e) {
+        UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
+        UIComponents.budgetFileController.load();
+      }
+    };
+
+    UIComponents.SaveBudgetAction = new AbstractAction("Save") {
+      public void actionPerformed(ActionEvent e) {
+        UIComponents.budgetFileController.save();
+      }
+    };
+    
+    UIComponents.SaveAsBudgetAction = new AbstractAction("Save As...") {
+      public void actionPerformed(ActionEvent e) {
+        UIComponents.budgetFileController.saveAs();
+      }
+    };
+    
     BudgetItemInsertAction = new AbstractAction("Insert Budget Item") {
       public void actionPerformed(ActionEvent e) {
         
@@ -137,7 +190,105 @@ class BudgetUIFactory {
     };
   }
   
-  private static JComponent createBudgetItemPanel() {
+  private static JButton createSaveButton(IApplicationMessageView messageBar) {
+    
+    JButton button = new JButton(UIComponents.SaveBudgetAction);
+
+    button.setForeground(Color.GREEN.darker());
+
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        button, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_S, 
+            Event.CTRL_MASK
+        ), 
+        UIComponents.SaveBudgetAction
+    );
+    
+    button.setMnemonic(KeyEvent.VK_S);
+
+    FontIconProvider.getInstance().setGlyphAsText(
+        button, 
+        FontIconProvider.fa_save
+    );
+
+    button.setToolTipText(" Save the current budget ");
+    
+    button.putClientProperty("AppMessage", "Save your personal budget...");
+    messageBar.bindViewComponent(button);
+
+    return button;
+  }
+
+  private static JButton createSaveAsButton(IApplicationMessageView messageBar) {
+    
+    JButton button = new JButton(
+        UIComponents.SaveAsBudgetAction
+    );
+
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        button, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_A, 
+            Event.CTRL_MASK
+        ), 
+        UIComponents.SaveAsBudgetAction
+    );
+    
+    button.setMnemonic(KeyEvent.VK_A);
+    
+    FontIconProvider.getInstance().setGlyphAsText(
+        button, 
+        FontIconProvider.fa_save
+    );
+    
+    button.setForeground(Color.GREEN);
+    
+    button.setToolTipText(" Save the budget to another filename... ");
+
+    button.putClientProperty("AppMessage", "Save your personal budget as...");
+    messageBar.bindViewComponent(button);
+    
+    return button;
+  }
+
+  
+  private static JButton createLoadButton(IApplicationMessageView messageBar) {
+    
+    JButton button = new JButton(
+        UIComponents.LoadBudgetAction
+    );
+
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        button, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_L, 
+            Event.CTRL_MASK
+        ), 
+        UIComponents.LoadBudgetAction
+    );
+
+    
+    button.setMnemonic(KeyEvent.VK_L);
+    
+    FontIconProvider.getInstance().setGlyphAsText(
+        button, 
+        FontIconProvider.fa_folder_open_o
+    );
+    
+    button.setForeground(Color.GREEN.darker());
+    
+    button.setToolTipText(" Load a budget ");
+
+    button.putClientProperty("AppMessage", "Load your personal budget...");
+    messageBar.bindViewComponent(button);
+    
+    return button;
+  }
+
+
+  
+  private static JComponent createBudgetItemPanel(IPersonalFinancierView view) {
     JPanel panel = new JPanel(new BorderLayout());
 
     UIComponents.incomeItemTable  = new IncomeItemTable(UIComponents.budgetModel);
@@ -145,10 +296,9 @@ class BudgetUIFactory {
     
     UIComponents.expenseItemTable = new ExpenseItemTable(UIComponents.budgetModel);
     UIComponents.expenseItemToolbar = createExpenseItemToolbar();
-
     
     panel.add(
-        createBudgetItemToolbar(),
+        createBudgetItemToolbar(view),
         BorderLayout.PAGE_START
     );
     
@@ -517,10 +667,30 @@ class BudgetUIFactory {
   }
 
   @SuppressWarnings("serial")
-  private static JToolBar createBudgetItemToolbar() {
+  private static JToolBar createBudgetItemToolbar(IPersonalFinancierView view) {
 
     JToolBar toolbar = new JToolBar();
 
+    toolbar.add(
+        createLoadButton(
+            view.getMessageViewer()
+        )   
+    );
+
+    toolbar.add(
+        createSaveButton(
+            view.getMessageViewer()
+        )   
+    );
+
+    toolbar.add(
+        createSaveAsButton(
+            view.getMessageViewer()
+        )   
+    );
+
+    toolbar.addSeparator();
+    
     toolbar.add(
         createUndoButton()    
     );
@@ -860,8 +1030,7 @@ class BudgetUIFactory {
   private static JComponent createAccountSummaryTable() {
     return new JScrollPane(
         new BudgetCashFlowSummaryTable(
-            UIComponents.budgetModel,
-            UIComponents.accountModel
+            UIComponents.budgetModel
         )
     );
   }
@@ -869,5 +1038,11 @@ class BudgetUIFactory {
   private static JComponent createCategoryPieChart() {
     return new CategoryPieChart(UIComponents.budgetModel);
   }
+}
 
+final class BudgetComponent extends JSplitPane implements IPersonalFinancierComponentView {
+
+  public BudgetComponent(int verticalSplit, JComponent budgetItemPanel, JComponent budgetSummaryPanel) {
+    super(verticalSplit, budgetItemPanel, budgetSummaryPanel);
+  }
 }

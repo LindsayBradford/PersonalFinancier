@@ -38,41 +38,53 @@ import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.control.inflation.InflationConversionController;
 import blacksmyth.personalfinancier.model.inflation.InflationConversionModel;
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
+import blacksmyth.personalfinancier.view.IPersonalFinancierComponentView;
 import blacksmyth.personalfinancier.view.JUndoListeningButton;
+import blacksmyth.personalfinancier.view.PersonalFinancierView;
 import blacksmyth.personalfinancier.view.WidgetFactory;
 import blacksmyth.personalfinancier.view.inflation.InflationConversionPanel;
 import blacksmyth.personalfinancier.view.inflation.InflationTable;
 
 class InflationUIFactory {
 
-  public static JComponent createInflationComponent() {
+  public static IPersonalFinancierComponentView createInflationComponent(PersonalFinancierView view) {
 
     UIComponents.inflationModel = new InflationModel();
     
-    JSplitPane splitPane = new JSplitPane(
+    InflationComponent newComponent = new InflationComponent(
         JSplitPane.VERTICAL_SPLIT,
-        createInflationItemPanel(), 
+        createInflationItemPanel(view), 
         createInflationSummaryPanel()
     );
     
-    splitPane.setOneTouchExpandable(true);
-    splitPane.setResizeWeight(0.5);
+    newComponent.putClientProperty(
+        "AppMessage", 
+        "Explore money value changing with inflation in this tab."
+    );
     
-    return splitPane;
+    newComponent.putClientProperty(
+        "TabName", 
+        "Inflation"
+    );
+    
+    newComponent.setOneTouchExpandable(true);
+    newComponent.setResizeWeight(0.5);
+    
+    return newComponent;
   }
   
-  private static JComponent createInflationItemPanel() {
+  private static JComponent createInflationItemPanel(PersonalFinancierView view) {
     JPanel panel = new JPanel(new BorderLayout());
     
     UIComponents.inflationTable = new InflationTable(UIComponents.inflationModel);
     UIComponents.inflationFileController = 
         FileHandlerBuilder.buildInflationHandler(
-            UIComponents.windowFrame, 
+            view.getWindowFrame(), 
             UIComponents.inflationModel
         );
     
     UIComponents.inflationFileController.addObserver(
-        UIComponents.messageBar
+        view.getMessageViewer()
     );
 
 
@@ -421,5 +433,11 @@ class InflationUIFactory {
     
     return panel;
   }
+}
 
+final class InflationComponent extends JSplitPane implements IPersonalFinancierComponentView {
+
+  public InflationComponent(int verticalSplit, JComponent inflationItemPanel, JComponent inflationSummaryPanel) {
+    super(verticalSplit, inflationItemPanel, inflationSummaryPanel);
+  }
 }

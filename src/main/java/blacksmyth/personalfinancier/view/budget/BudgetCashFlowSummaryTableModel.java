@@ -29,10 +29,10 @@ enum ACCOUNT_SUMMARY_COLUMNS {
 @SuppressWarnings("serial")
 public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<ACCOUNT_SUMMARY_COLUMNS> {
 
-  public BudgetCashFlowSummaryTableModel(BudgetModel budgetModel, AccountModel accountModel) {
+  public BudgetCashFlowSummaryTableModel(BudgetModel budgetModel) {
     super();
     this.setBudgetModel(budgetModel);
-    this.setAccountModel(accountModel);
+    this.setAccountModel(budgetModel.getAccountModel());
   }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })

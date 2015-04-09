@@ -12,10 +12,14 @@ package blacksmyth.personalfinancier.view;
 
 import java.util.Observer;
 
+import javax.swing.JComponent;
+
 /**
  *  An interface for showing messages at an application level.
  */
 public interface IApplicationMessageView extends Observer {
+  
+  public void bindViewComponent(JComponent component);
   
   /**
    * Shows a message based on a notification from an Observable that 

@@ -11,27 +11,19 @@
 package blacksmyth.personalfinancier;
 
 import javax.swing.Action;
-import javax.swing.JFrame;
 import javax.swing.JToolBar;
 
 import blacksmyth.general.file.IFileHandler;
-import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.budget.BudgetFileContent;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.model.inflation.InflationFileContent;
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
-import blacksmyth.personalfinancier.view.ApplicationMessageView;
 import blacksmyth.personalfinancier.view.budget.ExpenseItemTable;
 import blacksmyth.personalfinancier.view.budget.IncomeItemTable;
 import blacksmyth.personalfinancier.view.inflation.InflationTable;
 
 public class UIComponents {
-  public static JFrame      windowFrame;
-  
-  public static ApplicationMessageView messageBar;
-
   public static BudgetModel budgetModel;
-  public static AccountModel accountModel;
   
   public static JToolBar expenseItemToolbar;
   public static ExpenseItemTable expenseItemTable;

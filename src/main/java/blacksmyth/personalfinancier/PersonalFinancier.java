@@ -13,6 +13,8 @@ package blacksmyth.personalfinancier;
 
 import javax.swing.UIManager;
 
+import blacksmyth.personalfinancier.control.PersonalFinancierPersenter;
+import blacksmyth.personalfinancier.view.PersonalFinancierView;
 
 import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
 
@@ -20,7 +22,6 @@ import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
  * The bootstrap "main" class for the PersonalFinancier.  It 
  * sets the application's look & feel, but delegates construction
  * of the application GUI dependency graph to the factory 
- * {@link PersonalFinancierUIFactory}.
  * @author linds
  */
 public final class PersonalFinancier {
@@ -41,7 +42,23 @@ public final class PersonalFinancier {
       e.printStackTrace();
     }
     
-    PersonalFinancierUIFactory.createJFrame().setVisible(true);
+    createView().display();
+  }
+  
+  private static PersonalFinancierView createView() {
+    final PersonalFinancierView view = new PersonalFinancierView();
+    
+    new PersonalFinancierPersenter(view);
+    
+    view.addComponent(
+        BudgetUIFactory.createBudgetComponent(view)
+    );
+
+    view.addComponent(
+        InflationUIFactory.createInflationComponent(view)
+      );
+    
+    return view;
   }
 }
 

@@ -387,7 +387,9 @@ public final class WidgetFactory {
 
     final Color selectedColor = Color.green.darker().darker().darker();
     
-    pane.setBackgroundAt(0, selectedColor);
+    if (pane.getTabCount() > 0) {
+      pane.setBackgroundAt(0, selectedColor);
+    }
     
     pane.addChangeListener(
         new ChangeListener() {

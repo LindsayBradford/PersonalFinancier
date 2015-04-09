@@ -65,6 +65,10 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
     this.changeAndNotifyObservers();
   }
   
+  public AccountModel getAccountModel() {
+    return this.accountModel;
+  }
+  
   public BudgetModel(BudgetFileContent state) {
     this.expenseCategories = state.expenseCategories;
     this.incomeCategories = state.incomeCategories;

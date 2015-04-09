@@ -43,9 +43,9 @@ public class PasswordPromptView extends JDialog implements IPasswordPromptView, 
   
   private boolean passwordSpecified = false;
   
-  public PasswordPromptView(JFrame f) {
-    super(f, true);
-    controllingFrame = f;
+  public PasswordPromptView(PersonalFinancierView view) {
+    super(view.getWindowFrame(), true);
+    controllingFrame = view.getWindowFrame();
     buildView();
 
     this.setSize(

@@ -22,7 +22,6 @@ import blacksmyth.general.file.IFileHandlerModel;
 import blacksmyth.general.file.IFileHandlerView;
 import blacksmyth.general.file.IObjectFileConverter;
 import blacksmyth.general.file.StrategicFileConverter;
-import blacksmyth.personalfinancier.UIComponents;
 import blacksmyth.personalfinancier.dependencies.encryption.EncryptionBridge;
 import blacksmyth.personalfinancier.dependencies.json.JSonBridge;
 import blacksmyth.personalfinancier.model.IPreferenceItem;
@@ -31,17 +30,18 @@ import blacksmyth.personalfinancier.model.budget.BudgetFileContent;
 import blacksmyth.personalfinancier.model.inflation.InflationFileContent;
 import blacksmyth.personalfinancier.view.FileHandlerView;
 import blacksmyth.personalfinancier.view.PasswordPromptView;
+import blacksmyth.personalfinancier.view.PersonalFinancierView;
 
 public final class FileHandlerBuilder {
   
   private static final ApplicationMessagePresenter MSG_PRESENTER = new ApplicationMessagePresenter();
   
   public static IFileHandler<BudgetFileContent> buildBudgetHandler(
-      JFrame parentFrame,
+      PersonalFinancierView parentFrame,
       IFileHandlerModel<BudgetFileContent> model) {
     
     HashMap<String, IObjectFileConverter<BudgetFileContent>> availableConverters = 
-        buildAvailableAdapters();
+        buildAvailableAdapters(parentFrame);
     
     IFileHandler<BudgetFileContent> handler = new FileHandler<BudgetFileContent>();
     
@@ -64,9 +64,11 @@ public final class FileHandlerBuilder {
     return handler;
   }
   
-  private static HashMap<String, IObjectFileConverter<BudgetFileContent>> buildAvailableAdapters() {
+  private static HashMap<String, IObjectFileConverter<BudgetFileContent>> 
+      buildAvailableAdapters(PersonalFinancierView parentView) {
+    
     HashMap<String, IObjectFileConverter<BudgetFileContent>> availableConverters = 
-        new HashMap<String, IObjectFileConverter<BudgetFileContent>> ();
+    new HashMap<String, IObjectFileConverter<BudgetFileContent>> ();
     
     JSonObjectFileConverter<BudgetFileContent> jsonConverter = 
         new JSonObjectFileConverter<BudgetFileContent>();
@@ -88,7 +90,7 @@ public final class FileHandlerBuilder {
           new EncryptedJSonFileConverter<BudgetFileContent>();
       
       encryptedConverter.setView(
-          new PasswordPromptView(UIComponents.windowFrame)
+          new PasswordPromptView(parentView)
       );
       
       encryptedConverter.setEncryptionBridge(bridge);
@@ -108,11 +110,11 @@ public final class FileHandlerBuilder {
   }
   
   private static IFileHandlerView buildBudgetView(
-      JFrame parentFrame, 
+      PersonalFinancierView parentView, 
       HashMap<String, IObjectFileConverter<BudgetFileContent>> converters) {
 
     return new FileHandlerView(
-        parentFrame,
+        parentView.getWindowFrame(),
         "Personal Financier Files",
         converters.keySet().toArray(new String[0])  // new String[0] needed for valid typecast.
     );
