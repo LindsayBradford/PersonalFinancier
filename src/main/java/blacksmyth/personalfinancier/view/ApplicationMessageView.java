@@ -28,7 +28,6 @@ import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.personalfinancier.control.IApplicationMessagePresenter;
-import blacksmyth.personalfinancier.model.PreferencesModel;
 
 public class ApplicationMessageView implements IApplicationMessageView {
   
@@ -124,7 +123,7 @@ public class ApplicationMessageView implements IApplicationMessageView {
           public void mouseEntered(MouseEvent e) {
             view.showMessage(
                 (String) component.getClientProperty("AppMessage"),
-                PreferencesModel.getInstance().getAppMessageTimeout()
+                2000 // 2 seconds.
             );
          }
     });

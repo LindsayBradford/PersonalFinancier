@@ -42,7 +42,6 @@ import javax.swing.WindowConstants;
 
 import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.general.FontIconProvider;
-import blacksmyth.personalfinancier.model.PreferencesModel;
 
 public class PersonalFinancierView extends Observable implements IPersonalFinancierView {
 
@@ -252,7 +251,7 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
                
                 getMessageViewer().showMessage(
                     (String) component.getClientProperty("AppMessage"),
-                    PreferencesModel.getInstance().getAppMessageTimeout()
+                    2000 // 2 seconds.
                 );
                 
               } // if event point is within tab's bounds
