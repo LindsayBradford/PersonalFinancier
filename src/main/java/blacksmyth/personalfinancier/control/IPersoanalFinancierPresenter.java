@@ -12,10 +12,11 @@ package blacksmyth.personalfinancier.control;
 import java.util.Observer;
 
 import blacksmyth.personalfinancier.view.IPersonalFinancierView;
+import blacksmyth.personalfinancier.view.IPersonalFinancierView.Events;
 
 public interface IPersoanalFinancierPresenter extends Observer {
   
-  public void setView(IPersonalFinancierView view);
-  public void processEvent(IPersonalFinancierView.Events event);
+  public void addView(IPersonalFinancierView view);
+  public void processEvent(IPersonalFinancierView view, Events event);
 
 }

@@ -27,6 +27,7 @@ import java.awt.event.WindowEvent;
 import java.util.Observable;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -41,10 +42,11 @@ import javax.swing.WindowConstants;
 
 import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.general.FontIconProvider;
-import blacksmyth.personalfinancier.UIComponents;
 import blacksmyth.personalfinancier.model.PreferencesModel;
 
 public class PersonalFinancierView extends Observable implements IPersonalFinancierView {
+
+  private static Action ExitAction;
 
   private JFrame frame;
   private JTabbedPane componentPane;
@@ -288,14 +290,14 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
   }
   
   private JMenuItem createExitMenuItem() {
-    UIComponents.ExitAction = new AbstractAction("Exit") {
+    ExitAction = new AbstractAction("Exit") {
       public void actionPerformed(ActionEvent e) {
         raiseEvent(Events.ExitRequested);
       }
     };
     
     JMenuItem menuItem = new JMenuItem(
-        UIComponents.ExitAction    
+        ExitAction    
     );
 
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
@@ -304,7 +306,7 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
             KeyEvent.VK_X, 
             Event.CTRL_MASK
         ), 
-        UIComponents.ExitAction
+        ExitAction
     );
 
     return menuItem;

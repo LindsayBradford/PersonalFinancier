@@ -20,6 +20,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -33,10 +34,12 @@ import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.BlacksmythSwingUtilities;
+import blacksmyth.general.file.IFileHandler;
 import blacksmyth.personalfinancier.control.FileHandlerBuilder;
 import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.control.inflation.InflationConversionController;
 import blacksmyth.personalfinancier.model.inflation.InflationConversionModel;
+import blacksmyth.personalfinancier.model.inflation.InflationFileContent;
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
 import blacksmyth.personalfinancier.view.IPersonalFinancierComponentView;
 import blacksmyth.personalfinancier.view.JUndoListeningButton;
@@ -46,10 +49,18 @@ import blacksmyth.personalfinancier.view.inflation.InflationConversionPanel;
 import blacksmyth.personalfinancier.view.inflation.InflationTable;
 
 class InflationUIFactory {
+  
+  private static InflationModel inflationModel;
+  private static InflationTable inflationTable;
+
+  private static Action LoadInflationAction;
+  private static Action SaveInflationAction;
+
+  private static IFileHandler<InflationFileContent> inflationFileController;
 
   public static IPersonalFinancierComponentView createInflationComponent(PersonalFinancierView view) {
 
-    UIComponents.inflationModel = new InflationModel();
+    inflationModel = new InflationModel();
     
     InflationComponent newComponent = new InflationComponent(
         JSplitPane.VERTICAL_SPLIT,
@@ -76,14 +87,14 @@ class InflationUIFactory {
   private static JComponent createInflationItemPanel(PersonalFinancierView view) {
     JPanel panel = new JPanel(new BorderLayout());
     
-    UIComponents.inflationTable = new InflationTable(UIComponents.inflationModel);
-    UIComponents.inflationFileController = 
+    inflationTable = new InflationTable(inflationModel);
+    inflationFileController = 
         FileHandlerBuilder.buildInflationHandler(
             view.getWindowFrame(), 
-            UIComponents.inflationModel
+            inflationModel
         );
     
-    UIComponents.inflationFileController.addObserver(
+    inflationFileController.addObserver(
         view.getMessageViewer()
     );
 
@@ -137,16 +148,16 @@ class InflationUIFactory {
   }
   
   private static JButton createLoadButton() {
-    UIComponents.LoadInflationAction = new AbstractAction("Open Inflation Data...") {
+    LoadInflationAction = new AbstractAction("Open Inflation Data...") {
       
       public void actionPerformed(ActionEvent e) {
         UndoManagers.INFLATION_UNDO_MANAGER.discardAllEdits();
-        UIComponents.inflationFileController.load();
+        inflationFileController.load();
       }
     };
     
     JButton button = new JButton(
-        UIComponents.LoadInflationAction
+        LoadInflationAction
     );
     
     //TODO: assign non-conflicting mnemonic
@@ -166,13 +177,13 @@ class InflationUIFactory {
 
   private static JButton createSaveButton() {
     
-    UIComponents.SaveInflationAction = new AbstractAction("Save Inflation Data") {
+    SaveInflationAction = new AbstractAction("Save Inflation Data") {
       public void actionPerformed(ActionEvent e) {
-        UIComponents.inflationFileController.save();
+        inflationFileController.save();
       }
     };
     
-    JButton button = new JButton(UIComponents.SaveInflationAction);
+    JButton button = new JButton(SaveInflationAction);
 
     button.setForeground(Color.GREEN.darker());
 
@@ -182,7 +193,7 @@ class InflationUIFactory {
             KeyEvent.VK_S, 
             Event.CTRL_MASK
         ), 
-        UIComponents.SaveInflationAction
+        SaveInflationAction
     );
 
     //TODO: assign non-conflicting mnemonic
@@ -199,7 +210,7 @@ class InflationUIFactory {
 
   private static JButton createRemoveInflationEntriesButton() {
     JButton removeInflationEntriesButton = 
-        WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.inflationTable);
+        WidgetFactory.createMultiSelectedtRowEnabledButton(inflationTable);
 
     removeInflationEntriesButton.setMnemonic(KeyEvent.VK_DELETE);
     
@@ -219,8 +230,8 @@ class InflationUIFactory {
     removeInflationEntriesButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
-            UIComponents.inflationTable.removeInflationEntries();
-            UIComponents.inflationTable.requestFocus();
+            inflationTable.removeInflationEntries();
+            inflationTable.requestFocus();
           }
         }
     );
@@ -249,8 +260,8 @@ class InflationUIFactory {
     addInflationEntryButton.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent event) {
-            UIComponents.inflationTable.addInflationEntry();
-            UIComponents.inflationTable.requestFocus();
+            inflationTable.addInflationEntry();
+            inflationTable.requestFocus();
           }
         }
     );
@@ -358,7 +369,7 @@ class InflationUIFactory {
     );
 
     panel.add(
-        new JScrollPane(UIComponents.inflationTable),
+        new JScrollPane(inflationTable),
         BorderLayout.CENTER
     );
     
@@ -393,7 +404,7 @@ class InflationUIFactory {
     );
 
     final InflationConversionModel conversionModel = new InflationConversionModel(
-        UIComponents.inflationModel    
+        inflationModel    
     );
 
     final InflationConversionPanel conversionPanel = 

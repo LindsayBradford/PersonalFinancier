@@ -9,22 +9,19 @@ import blacksmyth.personalfinancier.view.IPersonalFinancierView.Events;
 
 public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter {
   
-  private IPersonalFinancierView view;
-  
   public PersonalFinancierPersenter(IPersonalFinancierView view) {
     RunnableQueueThread.getInstance().start();
     
-    setView(view);
-    alignViewWithModel();
+    addView(view);
+    alignViewWithModel(view);
   }
   
   @Override
-  public void setView(IPersonalFinancierView view) {
+  public void addView(IPersonalFinancierView view) {
     ((Observable) view).addObserver(this);
-    this.view = view;
   }
   
-  private void alignViewWithModel() {
+  private void alignViewWithModel(IPersonalFinancierView view) {
     view.setBounds(
         PreferencesModel.getInstance().getWindowBounds()
     );
@@ -32,15 +29,17 @@ public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter 
   
   @Override
   public void update(Observable o, Object arg) {
-    processEvent((IPersonalFinancierView.Events) arg);
+    processEvent(
+        (IPersonalFinancierView) o,
+        (IPersonalFinancierView.Events) arg);
   }
 
   @Override
-  public void processEvent(Events event) {
+  public void processEvent(IPersonalFinancierView view, Events event) {
     switch(event) {
     
       case BoundsChanged:
-        processBoundsChanged();
+        processBoundsChanged(view);
         break;
 
       case ExitRequested:
@@ -49,7 +48,7 @@ public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter 
     }
   }
   
-  private void processBoundsChanged() {
+  private void processBoundsChanged(IPersonalFinancierView view) {
     PreferencesModel.getInstance().setWindowBounds(
         view.getBounds()
     );

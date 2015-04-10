@@ -35,12 +35,14 @@ import javax.swing.border.EmptyBorder;
 
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.BlacksmythSwingUtilities;
+import blacksmyth.general.file.IFileHandler;
 import blacksmyth.personalfinancier.control.FileHandlerBuilder;
 import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.control.budget.command.ResetBudgetItemsCommand;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.PreferencesModel;
+import blacksmyth.personalfinancier.model.budget.BudgetFileContent;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.view.IApplicationMessageView;
 import blacksmyth.personalfinancier.view.IPersonalFinancierComponentView;
@@ -57,6 +59,20 @@ import blacksmyth.personalfinancier.view.budget.IncomeItemTable;
 
 class BudgetUIFactory {
   
+  private static BudgetModel budgetModel;
+  
+  private static JToolBar expenseItemToolbar;
+  private static ExpenseItemTable expenseItemTable;
+
+  private static JToolBar incomeItemToolbar;
+  private static IncomeItemTable incomeItemTable;
+  
+  private static IFileHandler<BudgetFileContent> budgetFileController;
+  
+  private static Action LoadBudgetAction;
+  private static Action SaveBudgetAction;
+  private static Action SaveAsBudgetAction;
+  
   private static Action BudgetItemInsertAction;
   private static Action BudgetItemDeleteAction;
   private static Action BudgetItemUpAction;
@@ -64,18 +80,18 @@ class BudgetUIFactory {
   
   public static IPersonalFinancierComponentView createBudgetComponent(PersonalFinancierView view) {
     
-    UIComponents.budgetModel = 
+    budgetModel = 
         new BudgetModel(
             new AccountModel()
         );
     
-    UIComponents.budgetFileController = 
+    budgetFileController = 
         FileHandlerBuilder.buildBudgetHandler(
             view,
-            UIComponents.budgetModel
+            budgetModel
         );
     
-    UIComponents.budgetFileController.addObserver(
+    budgetFileController.addObserver(
         view.getMessageViewer()
     );
     
@@ -105,38 +121,38 @@ class BudgetUIFactory {
   
   private static void createSharedBudgetTableActions() {
 
-    UIComponents.LoadBudgetAction = new AbstractAction("Open...") {
+    LoadBudgetAction = new AbstractAction("Open...") {
       
       public void actionPerformed(ActionEvent e) {
         UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
-        UIComponents.budgetFileController.load();
+        budgetFileController.load();
       }
     };
 
-    UIComponents.SaveBudgetAction = new AbstractAction("Save") {
+    SaveBudgetAction = new AbstractAction("Save") {
       public void actionPerformed(ActionEvent e) {
-        UIComponents.budgetFileController.save();
+        budgetFileController.save();
       }
     };
     
-    UIComponents.SaveAsBudgetAction = new AbstractAction("Save As...") {
+    SaveAsBudgetAction = new AbstractAction("Save As...") {
       public void actionPerformed(ActionEvent e) {
-        UIComponents.budgetFileController.saveAs();
+        budgetFileController.saveAs();
       }
     };
     
     BudgetItemInsertAction = new AbstractAction("Insert Budget Item") {
       public void actionPerformed(ActionEvent e) {
         
-        JComponent expensePanel = (JComponent) UIComponents.expenseItemTable.getParent().getParent().getParent();
+        JComponent expensePanel = (JComponent) expenseItemTable.getParent().getParent().getParent();
         if (BlacksmythSwingUtilities.mouseIsOverComponent(expensePanel)) {
-          UIComponents.expenseItemTable.addBudgetItem(); 
+          expenseItemTable.addBudgetItem(); 
           return;
         }
 
-        JComponent incomePanel = (JComponent) UIComponents.incomeItemTable.getParent().getParent().getParent();
+        JComponent incomePanel = (JComponent) incomeItemTable.getParent().getParent().getParent();
         if (BlacksmythSwingUtilities.mouseIsOverComponent(incomePanel)) {
-          UIComponents.incomeItemTable.addBudgetItem();
+          incomeItemTable.addBudgetItem();
         }
       }
     };
@@ -144,15 +160,15 @@ class BudgetUIFactory {
     BudgetItemDeleteAction = new AbstractAction("Delete Budget Item") {
       public void actionPerformed(ActionEvent e) {
         
-        JComponent expensePanel = (JComponent) UIComponents.expenseItemTable.getParent().getParent().getParent();
+        JComponent expensePanel = (JComponent) expenseItemTable.getParent().getParent().getParent();
         if (BlacksmythSwingUtilities.mouseIsOverComponent(expensePanel)) {
-          UIComponents.expenseItemTable.removeBudgetItems();
+          expenseItemTable.removeBudgetItems();
           return;
         }
 
-        JComponent incomePanel = (JComponent) UIComponents.incomeItemTable.getParent().getParent().getParent();
+        JComponent incomePanel = (JComponent) incomeItemTable.getParent().getParent().getParent();
         if (BlacksmythSwingUtilities.mouseIsOverComponent(incomePanel)) {
-          UIComponents.incomeItemTable.removeBudgetItems();
+          incomeItemTable.removeBudgetItems();
         }
       }
     };
@@ -160,15 +176,15 @@ class BudgetUIFactory {
     BudgetItemUpAction = new AbstractAction("Move Budget Item Up") {
       public void actionPerformed(ActionEvent e) {
         
-        JComponent expensePanel = (JComponent) UIComponents.expenseItemTable.getParent().getParent().getParent();
+        JComponent expensePanel = (JComponent) expenseItemTable.getParent().getParent().getParent();
         if (BlacksmythSwingUtilities.mouseIsOverComponent(expensePanel)) {
-          UIComponents.expenseItemTable.moveSelectedItemUp(); 
+          expenseItemTable.moveSelectedItemUp(); 
           return;
         }
 
-        JComponent incomePanel = (JComponent) UIComponents.incomeItemTable.getParent().getParent().getParent();
+        JComponent incomePanel = (JComponent) incomeItemTable.getParent().getParent().getParent();
         if (BlacksmythSwingUtilities.mouseIsOverComponent(incomePanel)) {
-          UIComponents.incomeItemTable.moveSelectedItemUp();
+          incomeItemTable.moveSelectedItemUp();
         }
       }
     };
@@ -176,15 +192,15 @@ class BudgetUIFactory {
     BudgetItemDownAction = new AbstractAction("Move Budget Item Down") {
       public void actionPerformed(ActionEvent e) {
         
-        JComponent expensePanel = (JComponent) UIComponents.expenseItemTable.getParent().getParent().getParent();
+        JComponent expensePanel = (JComponent) expenseItemTable.getParent().getParent().getParent();
         if (BlacksmythSwingUtilities.mouseIsOverComponent(expensePanel)) {
-          UIComponents.expenseItemTable.moveSelectedItemDown(); 
+          expenseItemTable.moveSelectedItemDown(); 
           return;
         }
 
-        JComponent incomePanel = (JComponent) UIComponents.incomeItemTable.getParent().getParent().getParent();
+        JComponent incomePanel = (JComponent) incomeItemTable.getParent().getParent().getParent();
         if (BlacksmythSwingUtilities.mouseIsOverComponent(incomePanel)) {
-          UIComponents.incomeItemTable.moveSelectedItemDown();
+          incomeItemTable.moveSelectedItemDown();
         }
       }
     };
@@ -192,7 +208,7 @@ class BudgetUIFactory {
   
   private static JButton createSaveButton(IApplicationMessageView messageBar) {
     
-    JButton button = new JButton(UIComponents.SaveBudgetAction);
+    JButton button = new JButton(SaveBudgetAction);
 
     button.setForeground(Color.GREEN.darker());
 
@@ -202,7 +218,7 @@ class BudgetUIFactory {
             KeyEvent.VK_S, 
             Event.CTRL_MASK
         ), 
-        UIComponents.SaveBudgetAction
+        SaveBudgetAction
     );
     
     button.setMnemonic(KeyEvent.VK_S);
@@ -223,7 +239,7 @@ class BudgetUIFactory {
   private static JButton createSaveAsButton(IApplicationMessageView messageBar) {
     
     JButton button = new JButton(
-        UIComponents.SaveAsBudgetAction
+        SaveAsBudgetAction
     );
 
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
@@ -232,7 +248,7 @@ class BudgetUIFactory {
             KeyEvent.VK_A, 
             Event.CTRL_MASK
         ), 
-        UIComponents.SaveAsBudgetAction
+        SaveAsBudgetAction
     );
     
     button.setMnemonic(KeyEvent.VK_A);
@@ -256,7 +272,7 @@ class BudgetUIFactory {
   private static JButton createLoadButton(IApplicationMessageView messageBar) {
     
     JButton button = new JButton(
-        UIComponents.LoadBudgetAction
+        LoadBudgetAction
     );
 
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
@@ -265,7 +281,7 @@ class BudgetUIFactory {
             KeyEvent.VK_L, 
             Event.CTRL_MASK
         ), 
-        UIComponents.LoadBudgetAction
+        LoadBudgetAction
     );
 
     
@@ -291,11 +307,11 @@ class BudgetUIFactory {
   private static JComponent createBudgetItemPanel(IPersonalFinancierView view) {
     JPanel panel = new JPanel(new BorderLayout());
 
-    UIComponents.incomeItemTable  = new IncomeItemTable(UIComponents.budgetModel);
-    UIComponents.incomeItemToolbar = createIncomeItemToolbar();
+    incomeItemTable  = new IncomeItemTable(budgetModel);
+    incomeItemToolbar = createIncomeItemToolbar();
     
-    UIComponents.expenseItemTable = new ExpenseItemTable(UIComponents.budgetModel);
-    UIComponents.expenseItemToolbar = createExpenseItemToolbar();
+    expenseItemTable = new ExpenseItemTable(budgetModel);
+    expenseItemToolbar = createExpenseItemToolbar();
     
     panel.add(
         createBudgetItemToolbar(view),
@@ -337,11 +353,11 @@ class BudgetUIFactory {
     );
 
     panel.add(
-        UIComponents.expenseItemToolbar,
+        expenseItemToolbar,
         BorderLayout.PAGE_START
     );
 
-    JScrollPane tableScrollPane =  new JScrollPane(UIComponents.expenseItemTable);
+    JScrollPane tableScrollPane =  new JScrollPane(expenseItemTable);
     
     panel.add(
         tableScrollPane,
@@ -365,12 +381,12 @@ class BudgetUIFactory {
     );
     
     panel.add(
-        UIComponents.incomeItemToolbar,
+        incomeItemToolbar,
         BorderLayout.PAGE_START
     );
 
     panel.add(
-        new JScrollPane(UIComponents.incomeItemTable),
+        new JScrollPane(incomeItemTable),
         BorderLayout.CENTER
     );
     
@@ -433,7 +449,7 @@ class BudgetUIFactory {
   }
   
   private static JButton createDeleteExpenseItemsButton() {
-    JButton newButton = WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.expenseItemTable);
+    JButton newButton = WidgetFactory.createMultiSelectedtRowEnabledButton(expenseItemTable);
     
     newButton.setAction(BudgetItemDeleteAction);
      
@@ -464,7 +480,7 @@ class BudgetUIFactory {
   }
   
   private static JButton createMoveExpenseItemDownButton() {
-    JButton newButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.expenseItemTable);
+    JButton newButton = WidgetFactory.createOneSelectedtRowEnabledButton(expenseItemTable);
 
     newButton.setAction(BudgetItemDownAction);
     
@@ -493,7 +509,7 @@ class BudgetUIFactory {
   }
   
   private static JButton createMoveExpenseItemUpButton() {
-    JButton newButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.expenseItemTable);
+    JButton newButton = WidgetFactory.createOneSelectedtRowEnabledButton(expenseItemTable);
 
     newButton.setAction(BudgetItemUpAction);
     
@@ -578,7 +594,7 @@ class BudgetUIFactory {
   }
   
   private static JButton createRemoveIncomeItemsButton() {
-    JButton newButton = WidgetFactory.createMultiSelectedtRowEnabledButton(UIComponents.incomeItemTable);
+    JButton newButton = WidgetFactory.createMultiSelectedtRowEnabledButton(incomeItemTable);
 
     newButton.setAction(BudgetItemDeleteAction);
     
@@ -609,7 +625,7 @@ class BudgetUIFactory {
   }
   
   private static JButton createMoveIncomeItemDownButton() {
-    JButton newButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.incomeItemTable);
+    JButton newButton = WidgetFactory.createOneSelectedtRowEnabledButton(incomeItemTable);
 
     newButton.setAction(BudgetItemDownAction);
     
@@ -638,7 +654,7 @@ class BudgetUIFactory {
   }
   
   private static JButton createMoveIncomeItemUpButton() {
-    JButton newButton = WidgetFactory.createOneSelectedtRowEnabledButton(UIComponents.incomeItemTable);
+    JButton newButton = WidgetFactory.createOneSelectedtRowEnabledButton(incomeItemTable);
 
     newButton.setAction(BudgetItemUpAction);
     
@@ -773,10 +789,10 @@ class BudgetUIFactory {
            boolean visibleBudgetItemButtonsState = PreferencesModel.getInstance().getBudgetItemButtonsVisibility();
            button.setSelected(visibleBudgetItemButtonsState);
 
-           if (UIComponents.incomeItemToolbar.isVisible() != visibleBudgetItemButtonsState) {
-             boolean visibleFlag = !UIComponents.incomeItemToolbar.isVisible();
-             UIComponents.incomeItemToolbar.setVisible(visibleFlag);
-             UIComponents.expenseItemToolbar.setVisible(visibleFlag);
+           if (incomeItemToolbar.isVisible() != visibleBudgetItemButtonsState) {
+             boolean visibleFlag = !incomeItemToolbar.isVisible();
+             incomeItemToolbar.setVisible(visibleFlag);
+             expenseItemToolbar.setVisible(visibleFlag);
            }
          } 
             
@@ -846,9 +862,9 @@ class BudgetUIFactory {
            boolean visibleBudgetColumnsState = PreferencesModel.getInstance().getDerivedBudgetColumsVisibility();
            button.setSelected(visibleBudgetColumnsState);
 
-           if (UIComponents.incomeItemTable.isShowDerivedColumns() != visibleBudgetColumnsState) {
-             UIComponents.incomeItemTable.toggleDerivedColumnView();
-             UIComponents.expenseItemTable.toggleDerivedColumnView();
+           if (incomeItemTable.isShowDerivedColumns() != visibleBudgetColumnsState) {
+             incomeItemTable.toggleDerivedColumnView();
+             expenseItemTable.toggleDerivedColumnView();
            }
          } 
           	
@@ -869,7 +885,7 @@ class BudgetUIFactory {
       public void actionPerformed(ActionEvent e) {
         UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
             ResetBudgetItemsCommand.doCmd(
-                UIComponents.budgetModel
+                budgetModel
             )
         );
       }
@@ -1004,7 +1020,7 @@ class BudgetUIFactory {
 
     panel.add(
         WidgetFactory.createGraphTablePane(
-          new CashFlowPieChart(UIComponents.budgetModel),
+          new CashFlowPieChart(budgetModel),
           createAccountSummaryTable() 
         )
     );
@@ -1022,7 +1038,7 @@ class BudgetUIFactory {
   private static JComponent createCategorySummaryTable() {
     return new JScrollPane(
         new BudgetCategorySummaryTable(
-            UIComponents.budgetModel
+            budgetModel
         )
     );
   }
@@ -1030,13 +1046,13 @@ class BudgetUIFactory {
   private static JComponent createAccountSummaryTable() {
     return new JScrollPane(
         new BudgetCashFlowSummaryTable(
-            UIComponents.budgetModel
+            budgetModel
         )
     );
   }
   
   private static JComponent createCategoryPieChart() {
-    return new CategoryPieChart(UIComponents.budgetModel);
+    return new CategoryPieChart(budgetModel);
   }
 }
 
