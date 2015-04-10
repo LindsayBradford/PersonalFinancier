@@ -94,7 +94,7 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
   }
 
   @Override
-  public void addComponent(IPersonalFinancierComponentView componentView)  {
+  public void addComponentView(IPersonalFinancierComponentView componentView)  {
     
     JComponent swingComponent = (JComponent) componentView;
     

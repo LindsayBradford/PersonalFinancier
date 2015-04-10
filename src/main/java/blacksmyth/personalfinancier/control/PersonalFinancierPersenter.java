@@ -1,18 +1,28 @@
+/**
+ * Copyright (c) 2015, Lindsay Bradford and other Contributors.
+ * All rights reserved.
+ * 
+ * This program and the accompanying materials  are made available 
+ * under the terms of the BSD 3-Clause licence  which accompanies 
+ * this distribution, and is available at
+ * http://opensource.org/licenses/BSD-3-Clause
+ */
 package blacksmyth.personalfinancier.control;
 
 import java.util.Observable;
 
-import blacksmyth.general.RunnableQueueThread;
-import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.view.IPersonalFinancierView;
 import blacksmyth.personalfinancier.view.IPersonalFinancierView.Events;
 
+import blacksmyth.personalfinancier.model.IPersomalFinancierModel;
+
 public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter {
   
-  public PersonalFinancierPersenter(IPersonalFinancierView view) {
-    RunnableQueueThread.getInstance().start();
-    
+  private IPersomalFinancierModel model;
+  
+  public PersonalFinancierPersenter(IPersonalFinancierView view, IPersomalFinancierModel model) {
     addView(view);
+    setModel(model);
     alignViewWithModel(view);
   }
   
@@ -23,7 +33,7 @@ public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter 
   
   private void alignViewWithModel(IPersonalFinancierView view) {
     view.setBounds(
-        PreferencesModel.getInstance().getWindowBounds()
+        model.getBounds()
     );
   }
   
@@ -31,7 +41,8 @@ public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter 
   public void update(Observable o, Object arg) {
     processEvent(
         (IPersonalFinancierView) o,
-        (IPersonalFinancierView.Events) arg);
+        (IPersonalFinancierView.Events) arg
+    );
   }
 
   @Override
@@ -49,15 +60,21 @@ public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter 
   }
   
   private void processBoundsChanged(IPersonalFinancierView view) {
-    PreferencesModel.getInstance().setWindowBounds(
+    model.setBounds(
         view.getBounds()
     );
   }
   
   private void processExitRequest() {
+    // TODO: Move this out to the budget presenter.
     UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
-    //UIComponents.budgetFileController.save();
+    //budgetFileController.save();
     System.exit(0);
   }
 
+  @Override
+  public void setModel(IPersomalFinancierModel model) {
+    this.model = model;
+    
+  }
 }

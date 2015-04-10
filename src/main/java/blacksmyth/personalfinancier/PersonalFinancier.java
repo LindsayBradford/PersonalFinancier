@@ -14,6 +14,7 @@ package blacksmyth.personalfinancier;
 import javax.swing.UIManager;
 
 import blacksmyth.personalfinancier.control.PersonalFinancierPersenter;
+import blacksmyth.personalfinancier.model.PersonalFinancierModel;
 import blacksmyth.personalfinancier.view.PersonalFinancierView;
 
 import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
@@ -48,13 +49,16 @@ public final class PersonalFinancier {
   private static PersonalFinancierView createView() {
     final PersonalFinancierView view = new PersonalFinancierView();
     
-    new PersonalFinancierPersenter(view);
+    new PersonalFinancierPersenter(
+        view, 
+        new PersonalFinancierModel()
+    );
     
-    view.addComponent(
+    view.addComponentView(
         BudgetUIFactory.createBudgetComponent(view)
     );
 
-    view.addComponent(
+    view.addComponentView(
         InflationUIFactory.createInflationComponent(view)
       );
     
