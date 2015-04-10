@@ -16,15 +16,15 @@ import java.util.Observer;
 
 import javax.swing.undo.CompoundEdit;
 
-import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.control.inflation.command.AddInflationEntryCommand;
 import blacksmyth.personalfinancier.control.inflation.command.ChangeInflationDateCommand;
 import blacksmyth.personalfinancier.control.inflation.command.ChangeInflationNotesCommand;
 import blacksmyth.personalfinancier.control.inflation.command.ChangeInflationValueCommand;
 import blacksmyth.personalfinancier.control.inflation.command.RemoveInflationEntryCommand;
-import blacksmyth.personalfinancier.model.inflation.InflationEntry;
-import blacksmyth.personalfinancier.model.inflation.InflationModel;
+
 import blacksmyth.personalfinancier.view.AbstractFinancierTableModel;
+import blacksmyth.personalfinancier.model.inflation.InflationModel;
+import blacksmyth.personalfinancier.model.inflation.InflationEntry;
 
 /**
  * An abstract TableModel using generics for collecting all common behaviours of the Budget TableModels. An enumeration representing
@@ -67,7 +67,7 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
   }
   
   public void addModelObserver(Observer observer) {
-    this.getInflationModel().addObserver(observer);
+    inflationModel.addObserver(observer);
   }
   
   @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -85,7 +85,7 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
   }
 
   public int getRowCount() {
-    return getInflationModel().getInflationList().size();
+    return inflationModel.getInflationList().size();
   }
   
   public boolean isCellEditable(int rowNum, int colNum) {
@@ -93,7 +93,7 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
   }
 
   public Object getValueAt(int rowNum, int colNum) {
-    InflationEntry entry = getInflationModel().getInflationList().get(rowNum);
+    InflationEntry entry = inflationModel.getInflationList().get(rowNum);
     
     switch (this.getColumnEnumValueAt(colNum)) {
       case Date:
@@ -113,27 +113,27 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
       
       GregorianCalendar valueAsCalendar = (GregorianCalendar) value;
        
-      UndoManagers.INFLATION_UNDO_MANAGER.addEdit(
+      inflationModel.getUndoManager().addEdit(
           ChangeInflationDateCommand.doCmd(
-              getInflationModel(), 
+              inflationModel, 
               rowNum, 
               valueAsCalendar
           )
       );
       break;
     case CPI:
-      UndoManagers.INFLATION_UNDO_MANAGER.addEdit(
+      inflationModel.getUndoManager().addEdit(
           ChangeInflationValueCommand.doCmd(
-              getInflationModel(), 
+              inflationModel, 
               rowNum, 
               Double.parseDouble((String) value)
           )
       );
       break;
     case Notes:
-      UndoManagers.INFLATION_UNDO_MANAGER.addEdit(
+      inflationModel.getUndoManager().addEdit(
           ChangeInflationNotesCommand.doCmd(
-              getInflationModel(), 
+              inflationModel, 
               rowNum, 
               (String) value
           )
@@ -143,9 +143,9 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
   }
 
   public void addEntry() {
-    UndoManagers.INFLATION_UNDO_MANAGER.addEdit(
+    inflationModel.getUndoManager().addEdit(
         AddInflationEntryCommand.doCmd(
-            getInflationModel()
+            inflationModel
         )
     );
   }
@@ -158,14 +158,14 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
     for(int rowIdx = rows.length - 1; rowIdx > -1; rowIdx--) {
       removeItemsEdit.addEdit(
         RemoveInflationEntryCommand.doCmd(
-          getInflationModel(),
+          inflationModel,
           rows[rowIdx]
         )
       );
     }
     removeItemsEdit.end();
     
-    UndoManagers.INFLATION_UNDO_MANAGER.addEdit(removeItemsEdit);
+    inflationModel.getUndoManager().addEdit(removeItemsEdit);
   }
 
 

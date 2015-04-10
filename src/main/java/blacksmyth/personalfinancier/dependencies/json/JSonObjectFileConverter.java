@@ -8,11 +8,10 @@
  * http://opensource.org/licenses/BSD-3-Clause
  */
 
-package blacksmyth.personalfinancier.control;
+package blacksmyth.personalfinancier.dependencies.json;
 
 import blacksmyth.general.file.IFileSystemBridge;
 import blacksmyth.general.file.IObjectFileConverter;
-import blacksmyth.personalfinancier.dependencies.json.IJSonSerialisationBridge;
 
 /**
  * An adapter class that transfers state between instantiated objects and file-serialised

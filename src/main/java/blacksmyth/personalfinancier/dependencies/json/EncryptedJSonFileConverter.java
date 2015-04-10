@@ -8,13 +8,13 @@
  * http://opensource.org/licenses/BSD-3-Clause
  */
 
-package blacksmyth.personalfinancier.control;
+package blacksmyth.personalfinancier.dependencies.json;
 
 import blacksmyth.general.ByteUtilities;
 import blacksmyth.general.file.IFileSystemBridge;
 import blacksmyth.general.file.IObjectFileConverter;
+import blacksmyth.personalfinancier.control.IPasswordPromptPresenter;
 import blacksmyth.personalfinancier.dependencies.encryption.IEncryptionBridge;
-import blacksmyth.personalfinancier.dependencies.json.IJSonSerialisationBridge;
 import blacksmyth.personalfinancier.view.IPasswordPromptView;
 
 /**

@@ -36,7 +36,6 @@ import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.general.file.IFileHandler;
 import blacksmyth.personalfinancier.control.FileHandlerBuilder;
-import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.control.inflation.InflationConversionController;
 import blacksmyth.personalfinancier.model.inflation.InflationConversionModel;
 import blacksmyth.personalfinancier.model.inflation.InflationFileContent;
@@ -151,7 +150,7 @@ class InflationUIFactory {
     LoadInflationAction = new AbstractAction("Open Inflation Data...") {
       
       public void actionPerformed(ActionEvent e) {
-        UndoManagers.INFLATION_UNDO_MANAGER.discardAllEdits();
+        inflationModel.getUndoManager().discardAllEdits();
         inflationFileController.load();
       }
     };
@@ -272,8 +271,8 @@ class InflationUIFactory {
   private static JButton createUndoButton() {
     AbstractAction undoAction = new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
-        if (UndoManagers.INFLATION_UNDO_MANAGER.canUndo()) {
-          UndoManagers.INFLATION_UNDO_MANAGER.undo();
+        if (inflationModel.getUndoManager().canUndo()) {
+          inflationModel.getUndoManager().undo();
         }
       }
     };
@@ -289,7 +288,7 @@ class InflationUIFactory {
       }
     };
     
-    UndoManagers.INFLATION_UNDO_MANAGER.addObserver(button);
+    inflationModel.getUndoManager().addObserver(button);
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 
@@ -315,8 +314,8 @@ class InflationUIFactory {
   private static JButton createRedoButton() {
     AbstractAction redoAction = new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
-        if (UndoManagers.INFLATION_UNDO_MANAGER.canRedo()) {
-          UndoManagers.INFLATION_UNDO_MANAGER.redo();
+        if (inflationModel.getUndoManager().canRedo()) {
+          inflationModel.getUndoManager().redo();
         }
       }
     };
@@ -332,7 +331,7 @@ class InflationUIFactory {
       }
     };
     
-    UndoManagers.INFLATION_UNDO_MANAGER.addObserver(button);
+    inflationModel.getUndoManager().addObserver(button);
 
     FontIconProvider.getInstance().setGlyphAsText(
         button, 

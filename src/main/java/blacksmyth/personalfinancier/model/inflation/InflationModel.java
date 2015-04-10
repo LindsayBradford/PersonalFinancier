@@ -19,6 +19,7 @@ import java.util.Observable;
 import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.general.SortedArrayList;
 import blacksmyth.general.file.IFileHandlerModel;
+import blacksmyth.personalfinancier.control.FinancierUndoManager;
 import blacksmyth.personalfinancier.control.inflation.IInflationController;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
@@ -34,6 +35,8 @@ public class InflationModel extends Observable implements InflationProvider, IIn
   
   //Note: SortedSet of CPIEntries are to be sorted earliest to latest in date order.
   private static SortedArrayList<InflationEntry> inflationList = new SortedArrayList<InflationEntry>();
+  
+  private final FinancierUndoManager undoManager = new FinancierUndoManager();
 
   public InflationModel() {
     TODAY = new GregorianCalendar(); TODAY.setTime(new Date());
@@ -46,6 +49,10 @@ public class InflationModel extends Observable implements InflationProvider, IIn
   public void setInflationList(SortedArrayList<InflationEntry> list) {
     InflationModel.inflationList = list;
     this.changeAndNotifyObservers();
+  }
+  
+  public FinancierUndoManager getUndoManager() {
+    return undoManager;
   }
 
   @Override

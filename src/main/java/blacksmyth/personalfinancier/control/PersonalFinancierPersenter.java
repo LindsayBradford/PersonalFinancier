@@ -67,7 +67,7 @@ public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter 
   
   private void processExitRequest() {
     // TODO: Move this out to the budget presenter.
-    UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
+    //UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
     //budgetFileController.save();
     System.exit(0);
   }

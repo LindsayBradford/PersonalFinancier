@@ -22,7 +22,9 @@ import org.junit.Test;
 
 import blacksmyth.general.file.IFileSystemBridge;
 import blacksmyth.personalfinancier.dependencies.encryption.IEncryptionBridge;
+import blacksmyth.personalfinancier.dependencies.json.EncryptedJSonFileConverter;
 import blacksmyth.personalfinancier.dependencies.json.IJSonSerialisationBridge;
+import blacksmyth.personalfinancier.dependencies.json.JSonObjectFileConverter;
 import blacksmyth.personalfinancier.view.IPasswordPromptView;
 
 public class EncryptedJSonFileConverterTest {

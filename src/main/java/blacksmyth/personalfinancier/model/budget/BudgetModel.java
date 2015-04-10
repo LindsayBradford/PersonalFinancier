@@ -20,6 +20,7 @@ import java.util.Observer;
 import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.general.SortedArrayList;
 import blacksmyth.general.file.IFileHandlerModel;
+import blacksmyth.personalfinancier.control.FinancierUndoManager;
 import blacksmyth.personalfinancier.control.budget.IBudgetController;
 import blacksmyth.personalfinancier.control.budget.IBudgetObserver;
 import blacksmyth.personalfinancier.model.Account;
@@ -35,6 +36,8 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
   
   private static final String CONTROLLER_ASSERT_MSG = "Caller does not implement IBudgetController.";
   private static final String VIEWER_ASSERT_MSG = "Caller does not implement IBudgetObserver.";
+  
+  private final FinancierUndoManager undoManager = new FinancierUndoManager();
 
   private AccountModel accountModel;
 
@@ -67,6 +70,10 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
   
   public AccountModel getAccountModel() {
     return this.accountModel;
+  }
+  
+  public FinancierUndoManager getUndoManager() {
+   return undoManager; 
   }
   
   public BudgetModel(BudgetFileContent state) {

@@ -17,7 +17,6 @@ import java.util.Observer;
 
 import javax.swing.undo.CompoundEdit;
 
-import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.control.budget.command.AddExpenseItemCommand;
 import blacksmyth.personalfinancier.control.budget.command.ChangeExpenseAccountCommand;
 import blacksmyth.personalfinancier.control.budget.command.ChangeExpenseAmountCommand;
@@ -125,7 +124,7 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
   public void setValueAt(Object value, int rowNum, int colNum) {
     switch (this.getColumnEnumValueAt(colNum)) {
     case Category:
-      UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
+      getBudgetModel().getUndoManager().addEdit(
           ChangeExpenseCategoryCommand.doCmd(
               getBudgetModel(), 
               rowNum, 
@@ -134,7 +133,7 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
       );
       break;
     case Description:
-      UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
+      getBudgetModel().getUndoManager().addEdit(
           ChangeExpenseDescriptionCommand.doCmd(
               getBudgetModel(), 
               rowNum, 
@@ -143,7 +142,7 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
       );
       break;
     case Amount:
-      UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
+      getBudgetModel().getUndoManager().addEdit(
           ChangeExpenseAmountCommand.doCmd(
               getBudgetModel(), 
               rowNum, 
@@ -152,7 +151,7 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
       );
       break;
     case Frequency:
-      UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
+      getBudgetModel().getUndoManager().addEdit(
           ChangeExpenseFrequencyCommand.doCmd(
               getBudgetModel(), 
               rowNum, 
@@ -161,7 +160,7 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
       );
       break;
     case Account:
-      UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
+      getBudgetModel().getUndoManager().addEdit(
           ChangeExpenseAccountCommand.doCmd(
               getBudgetModel(), 
               rowNum, 
@@ -191,7 +190,7 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
   }
 
   public void addExpenseItem(int row) {    
-    UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
+    getBudgetModel().getUndoManager().addEdit(
       AddExpenseItemCommand.doCmd(
           getBudgetModel(),
           row
@@ -214,11 +213,11 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
 	  }
 	  removeItemsEdit.end();
 	  
-	  UndoManagers.BUDGET_UNDO_MANAGER.addEdit(removeItemsEdit);
+	  getBudgetModel().getUndoManager().addEdit(removeItemsEdit);
   }
   
   public void moveExpenseItemDown(int row) {
-    UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
+    getBudgetModel().getUndoManager().addEdit(
         MoveExpenseItemDownCommand.doCmd(
             getBudgetModel(),
             row
@@ -227,7 +226,7 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
   }
 
   public void moveExpenseItemUp(int row) {
-    UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
+    getBudgetModel().getUndoManager().addEdit(
         MoveExpenseItemUpCommand.doCmd(
             getBudgetModel(),
             row

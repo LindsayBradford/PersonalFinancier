@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import blacksmyth.general.file.IFileSystemBridge;
 import blacksmyth.personalfinancier.dependencies.json.IJSonSerialisationBridge;
+import blacksmyth.personalfinancier.dependencies.json.JSonObjectFileConverter;
 
 public class JSonObjectFileConverterTest {
   

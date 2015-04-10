@@ -12,7 +12,6 @@ package blacksmyth.personalfinancier.view.budget;
 
 import java.util.Observable;
 
-import blacksmyth.personalfinancier.control.UndoManagers;
 import blacksmyth.personalfinancier.control.budget.command.AddAccountCommand;
 import blacksmyth.personalfinancier.control.budget.command.ChangeAccountNicknameCommand;
 import blacksmyth.personalfinancier.control.budget.command.ChangeAccountDetailCommand;
@@ -61,7 +60,7 @@ public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<AC
   public void setValueAt(Object value, int rowNum, int colNum) {
     switch (this.getColumnEnumValueAt(colNum)) {
     case Account:
-      UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
+      getBudgetModel().getUndoManager().addEdit(
           ChangeAccountNicknameCommand.doCmd(
               getAccountModel(),
               getAccountModel().getAccountIndex(
@@ -72,7 +71,7 @@ public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<AC
       );
       break;
     case Detail:
-      UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
+      getBudgetModel().getUndoManager().addEdit(
           ChangeAccountDetailCommand.doCmd(
               getAccountModel(), 
               getAccountModel().getAccountIndex(
@@ -123,7 +122,7 @@ public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<AC
   }
   
   public void addAccount() {    
-    UndoManagers.BUDGET_UNDO_MANAGER.addEdit(
+    getBudgetModel().getUndoManager().addEdit(
       AddAccountCommand.doCmd(
           getAccountModel()
       )
