@@ -59,10 +59,12 @@ import blacksmyth.personalfinancier.view.budget.IncomeItemTable;
 class BudgetUIFactory {
   
   private static BudgetModel budgetModel;
-  
+
+  private static JPanel expenseItemPanel;
   private static JToolBar expenseItemToolbar;
   private static ExpenseItemTable expenseItemTable;
 
+  private static JPanel incomeItemPanel;
   private static JToolBar incomeItemToolbar;
   private static IncomeItemTable incomeItemTable;
   
@@ -143,14 +145,12 @@ class BudgetUIFactory {
     BudgetItemInsertAction = new AbstractAction("Insert Budget Item") {
       public void actionPerformed(ActionEvent e) {
         
-        JComponent expensePanel = (JComponent) expenseItemTable.getParent().getParent().getParent();
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(expensePanel)) {
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(expenseItemPanel)) {
           expenseItemTable.addBudgetItem(); 
           return;
         }
 
-        JComponent incomePanel = (JComponent) incomeItemTable.getParent().getParent().getParent();
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomePanel)) {
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomeItemPanel)) {
           incomeItemTable.addBudgetItem();
         }
       }
@@ -159,14 +159,12 @@ class BudgetUIFactory {
     BudgetItemDeleteAction = new AbstractAction("Delete Budget Item") {
       public void actionPerformed(ActionEvent e) {
         
-        JComponent expensePanel = (JComponent) expenseItemTable.getParent().getParent().getParent();
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(expensePanel)) {
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(expenseItemPanel)) {
           expenseItemTable.removeBudgetItems();
           return;
         }
 
-        JComponent incomePanel = (JComponent) incomeItemTable.getParent().getParent().getParent();
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomePanel)) {
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomeItemPanel)) {
           incomeItemTable.removeBudgetItems();
         }
       }
@@ -175,14 +173,12 @@ class BudgetUIFactory {
     BudgetItemUpAction = new AbstractAction("Move Budget Item Up") {
       public void actionPerformed(ActionEvent e) {
         
-        JComponent expensePanel = (JComponent) expenseItemTable.getParent().getParent().getParent();
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(expensePanel)) {
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(expenseItemPanel)) {
           expenseItemTable.moveSelectedItemUp(); 
           return;
         }
 
-        JComponent incomePanel = (JComponent) incomeItemTable.getParent().getParent().getParent();
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomePanel)) {
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(expenseItemPanel)) {
           incomeItemTable.moveSelectedItemUp();
         }
       }
@@ -191,14 +187,12 @@ class BudgetUIFactory {
     BudgetItemDownAction = new AbstractAction("Move Budget Item Down") {
       public void actionPerformed(ActionEvent e) {
         
-        JComponent expensePanel = (JComponent) expenseItemTable.getParent().getParent().getParent();
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(expensePanel)) {
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(expenseItemPanel)) {
           expenseItemTable.moveSelectedItemDown(); 
           return;
         }
 
-        JComponent incomePanel = (JComponent) incomeItemTable.getParent().getParent().getParent();
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomePanel)) {
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(expenseItemPanel)) {
           incomeItemTable.moveSelectedItemDown();
         }
       }
@@ -339,9 +333,9 @@ class BudgetUIFactory {
   }
 
   private static JPanel createExpenseItemsTablePanel() {
-    JPanel panel = new JPanel(new BorderLayout());
+    expenseItemPanel = new JPanel(new BorderLayout());
 
-    panel.setBorder(
+    expenseItemPanel.setBorder(
         new CompoundBorder(
             WidgetFactory.createColoredTitledBorder(
                 " Expense Items ",
@@ -351,25 +345,57 @@ class BudgetUIFactory {
         )
     );
 
-    panel.add(
+    expenseItemPanel.add(
         expenseItemToolbar,
-        BorderLayout.PAGE_START
+        BorderLayout.NORTH
     );
 
     JScrollPane tableScrollPane =  new JScrollPane(expenseItemTable);
     
-    panel.add(
+    expenseItemPanel.add(
         tableScrollPane,
         BorderLayout.CENTER
     );
+    
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        expenseItemPanel, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_INSERT, 0
+        ), 
+        BudgetItemInsertAction
+    );
+
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        expenseItemPanel, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_DELETE, 0
+        ), 
+        BudgetItemDeleteAction
+    );
+
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        expenseItemPanel, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_DOWN, Event.ALT_MASK
+        ), 
+        BudgetItemDownAction
+    );
+
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        expenseItemPanel, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_UP, Event.ALT_MASK
+        ), 
+        BudgetItemUpAction
+    );
   
-    return panel;
+    return expenseItemPanel;
   }
 
   private static JPanel createIncomeItemsTablePanel() {
-    JPanel panel = new JPanel(new BorderLayout());
+    incomeItemPanel = new JPanel(new BorderLayout());
 
-    panel.setBorder(
+    incomeItemPanel.setBorder(
         new CompoundBorder(
             WidgetFactory.createColoredTitledBorder(
                 " Income Items ",
@@ -379,17 +405,49 @@ class BudgetUIFactory {
         )
     );
     
-    panel.add(
+    incomeItemPanel.add(
         incomeItemToolbar,
-        BorderLayout.PAGE_START
+        BorderLayout.NORTH
     );
 
-    panel.add(
+    incomeItemPanel.add(
         new JScrollPane(incomeItemTable),
         BorderLayout.CENTER
     );
     
-    return panel;
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        incomeItemPanel, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_INSERT, 0
+        ), 
+        BudgetItemInsertAction
+    );
+
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        incomeItemPanel, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_DELETE, 0
+        ), 
+        BudgetItemDeleteAction
+    );
+    
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        incomeItemPanel, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_DOWN, Event.ALT_MASK
+        ), 
+        BudgetItemDownAction
+    );
+    
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        incomeItemPanel, 
+        KeyStroke.getKeyStroke(
+            KeyEvent.VK_UP, Event.ALT_MASK
+        ), 
+        BudgetItemUpAction
+    );
+    
+    return incomeItemPanel;
   }
   
   @SuppressWarnings("serial")
@@ -422,14 +480,6 @@ class BudgetUIFactory {
     final JButton newButton  = new JButton();
     
     newButton.setAction(BudgetItemInsertAction);
-     
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        newButton, 
-        KeyStroke.getKeyStroke(
-            KeyEvent.VK_INSERT, 0
-        ), 
-        BudgetItemInsertAction
-    );
     
     FontIconProvider.getInstance().setGlyphAsText(
         newButton, 
@@ -451,14 +501,6 @@ class BudgetUIFactory {
     JButton newButton = WidgetFactory.createMultiSelectedtRowEnabledButton(expenseItemTable);
     
     newButton.setAction(BudgetItemDeleteAction);
-     
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        newButton, 
-        KeyStroke.getKeyStroke(
-            KeyEvent.VK_DELETE, 0
-        ), 
-        BudgetItemDeleteAction
-    );
     
     newButton.setEnabled(false);
     
@@ -483,14 +525,6 @@ class BudgetUIFactory {
 
     newButton.setAction(BudgetItemDownAction);
     
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        newButton, 
-        KeyStroke.getKeyStroke(
-            KeyEvent.VK_DOWN, Event.ALT_MASK
-        ), 
-        BudgetItemDownAction
-    );
-    
     newButton.setEnabled(false);
     
     FontIconProvider.getInstance().setGlyphAsText(
@@ -511,14 +545,6 @@ class BudgetUIFactory {
     JButton newButton = WidgetFactory.createOneSelectedtRowEnabledButton(expenseItemTable);
 
     newButton.setAction(BudgetItemUpAction);
-    
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        newButton, 
-        KeyStroke.getKeyStroke(
-            KeyEvent.VK_UP, Event.ALT_MASK
-        ), 
-        BudgetItemUpAction
-    );
     
     newButton.setEnabled(false);
     
@@ -565,14 +591,6 @@ class BudgetUIFactory {
   
   private static JButton createAddIncomeItemButton() {
     final JButton newButton = new JButton();
-    
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        newButton, 
-        KeyStroke.getKeyStroke(
-            KeyEvent.VK_INSERT, 0
-        ), 
-        BudgetItemInsertAction
-    );
 
     newButton.setAction(BudgetItemInsertAction);
     
@@ -596,14 +614,6 @@ class BudgetUIFactory {
     JButton newButton = WidgetFactory.createMultiSelectedtRowEnabledButton(incomeItemTable);
 
     newButton.setAction(BudgetItemDeleteAction);
-    
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        newButton, 
-        KeyStroke.getKeyStroke(
-            KeyEvent.VK_DELETE, 0
-        ), 
-        BudgetItemDeleteAction
-    );
 
     newButton.setEnabled(false);
     
@@ -628,14 +638,6 @@ class BudgetUIFactory {
 
     newButton.setAction(BudgetItemDownAction);
     
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        newButton, 
-        KeyStroke.getKeyStroke(
-            KeyEvent.VK_DOWN, Event.ALT_MASK
-        ), 
-        BudgetItemDownAction
-    );
-    
     newButton.setEnabled(false);
     
     FontIconProvider.getInstance().setGlyphAsText(
@@ -656,14 +658,6 @@ class BudgetUIFactory {
     JButton newButton = WidgetFactory.createOneSelectedtRowEnabledButton(incomeItemTable);
 
     newButton.setAction(BudgetItemUpAction);
-    
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        newButton, 
-        KeyStroke.getKeyStroke(
-            KeyEvent.VK_UP, Event.ALT_MASK
-        ), 
-        BudgetItemUpAction
-    );
     
     newButton.setEnabled(false);
     
