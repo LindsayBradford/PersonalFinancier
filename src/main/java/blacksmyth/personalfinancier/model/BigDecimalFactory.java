@@ -16,21 +16,21 @@ public class BigDecimalFactory {
     public static BigDecimal create(int value) {
       return new BigDecimal(
           value, 
-          PreferencesModel.getInstance().getPreferredMathContext()
+          ModelPreferences.getInstance().getPreferredMathContext()
       );
     }
     
     public static BigDecimal create(double value) {
       return new BigDecimal(
           value, 
-          PreferencesModel.getInstance().getPreferredMathContext()
+          ModelPreferences.getInstance().getPreferredMathContext()
       );
     }
     
     public static BigDecimal create(String value) {
       return new BigDecimal(
           value, 
-          PreferencesModel.getInstance().getPreferredMathContext()
+          ModelPreferences.getInstance().getPreferredMathContext()
       );
     }
 }

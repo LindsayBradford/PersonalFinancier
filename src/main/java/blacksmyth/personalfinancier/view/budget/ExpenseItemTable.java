@@ -25,8 +25,8 @@ import javax.swing.table.TableColumn;
 
 import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
-import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
+import blacksmyth.personalfinancier.view.ViewPreferences;
 import blacksmyth.personalfinancier.view.WidgetFactory;
 
 public class ExpenseItemTable extends JTable {
@@ -188,7 +188,7 @@ public class ExpenseItemTable extends JTable {
 
     if (this.getColumnName(column) == this.getFrequencyAt(row).toString()) {
       cellRenderer.setForeground(
-          PreferencesModel.getInstance().getPreferredBudgetFrequencyCellColor()
+          ViewPreferences.getInstance().getPreferredBudgetFrequencyCellColor()
       );
     }
     

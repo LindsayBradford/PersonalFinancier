@@ -40,7 +40,6 @@ import blacksmyth.personalfinancier.control.FileHandlerBuilder;
 import blacksmyth.personalfinancier.control.budget.command.ResetBudgetItemsCommand;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
-import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetFileContent;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.view.IApplicationMessageView;
@@ -48,6 +47,7 @@ import blacksmyth.personalfinancier.view.IPersonalFinancierComponentView;
 import blacksmyth.personalfinancier.view.IPersonalFinancierView;
 import blacksmyth.personalfinancier.view.JUndoListeningButton;
 import blacksmyth.personalfinancier.view.PersonalFinancierView;
+import blacksmyth.personalfinancier.view.ViewPreferences;
 import blacksmyth.personalfinancier.view.WidgetFactory;
 import blacksmyth.personalfinancier.view.budget.BudgetCashFlowSummaryTable;
 import blacksmyth.personalfinancier.view.budget.BudgetCategorySummaryTable;
@@ -741,7 +741,7 @@ class BudgetUIFactory {
       { // begin: instance initializer
         
         this.setSelected(
-            PreferencesModel.getInstance().getBudgetItemButtonsVisibility()
+            ViewPreferences.getInstance().getBudgetItemButtonsVisibility()
         );
         this.setForeground(Color.GREEN);
         changeSelectionRendering();
@@ -749,7 +749,7 @@ class BudgetUIFactory {
         this.addActionListener(
             new ActionListener() {
               public void actionPerformed(ActionEvent arg0) {
-                PreferencesModel.getInstance().toggleBudgetItemButtonsVisibility();
+                ViewPreferences.getInstance().toggleBudgetItemButtonsVisibility();
                 changeSelectionRendering();
               }
             }
@@ -785,7 +785,7 @@ class BudgetUIFactory {
          } 
             
          private void updateViewers() {
-           boolean visibleBudgetItemButtonsState = PreferencesModel.getInstance().getBudgetItemButtonsVisibility();
+           boolean visibleBudgetItemButtonsState = ViewPreferences.getInstance().getBudgetItemButtonsVisibility();
            button.setSelected(visibleBudgetItemButtonsState);
 
            if (incomeItemToolbar.isVisible() != visibleBudgetItemButtonsState) {
@@ -800,7 +800,7 @@ class BudgetUIFactory {
          }
     };
      
-    PreferencesModel.getInstance().addObserver(
+    ViewPreferences.getInstance().addObserver(
         budgetButtonsController    
     );
     
@@ -814,7 +814,7 @@ class BudgetUIFactory {
       { // begin: instance initializer
         
         this.setSelected(
-            PreferencesModel.getInstance().getDerivedBudgetColumsVisibility()
+            ViewPreferences.getInstance().getDerivedBudgetColumsVisibility()
         );
         this.setForeground(Color.GREEN);
         changeSelectionRendering();
@@ -822,7 +822,7 @@ class BudgetUIFactory {
         this.addActionListener(
             new ActionListener() {
               public void actionPerformed(ActionEvent arg0) {
-                PreferencesModel.getInstance().toggleDerivedBudgetColumsVisibility();
+                ViewPreferences.getInstance().toggleDerivedBudgetColumsVisibility();
                 changeSelectionRendering();
               }
             }
@@ -858,7 +858,7 @@ class BudgetUIFactory {
          } 
             
          private void updateViewers() {
-           boolean visibleBudgetColumnsState = PreferencesModel.getInstance().getDerivedBudgetColumsVisibility();
+           boolean visibleBudgetColumnsState = ViewPreferences.getInstance().getDerivedBudgetColumsVisibility();
            button.setSelected(visibleBudgetColumnsState);
 
            if (incomeItemTable.isShowDerivedColumns() != visibleBudgetColumnsState) {
@@ -872,7 +872,7 @@ class BudgetUIFactory {
          }
     };
      
-    PreferencesModel.getInstance().addObserver(
+    ViewPreferences.getInstance().addObserver(
       derivedColumnController 	 
     );
     

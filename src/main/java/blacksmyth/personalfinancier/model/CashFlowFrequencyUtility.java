@@ -16,7 +16,7 @@ import java.math.MathContext;
 public final class CashFlowFrequencyUtility {
   
   // TODO: make this an observer of the Preferences so we react correctly to context changes.
-  private static final MathContext MATH_CONTEXT = PreferencesModel.getInstance().getPreferredMathContext();
+  private static final MathContext MATH_CONTEXT = ModelPreferences.getInstance().getPreferredMathContext();
   
   private static final BigDecimal MONTHS_PER_QUARTER = BigDecimalFactory.create(3);
   private static final BigDecimal MONTHS_PER_YEAR = BigDecimalFactory.create(12);

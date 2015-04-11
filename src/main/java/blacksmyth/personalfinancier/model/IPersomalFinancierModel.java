@@ -9,9 +9,4 @@
  */
 package blacksmyth.personalfinancier.model;
 
-import java.awt.Rectangle;
-
-public interface IPersomalFinancierModel {
-  public Rectangle getBounds();
-  public void setBounds(Rectangle bounds);
-}
+public interface IPersomalFinancierModel {}

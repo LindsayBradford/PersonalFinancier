@@ -147,6 +147,10 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
         BorderLayout.CENTER
     );
     
+    frame.setBounds(
+        ViewPreferences.getInstance().getWindowBounds()
+    );
+    
     frame.addComponentListener(
       new ComponentAdapter() {
         public void componentResized(ComponentEvent e) {
@@ -158,7 +162,9 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
         }
         
         private void raiseBoundsChangedEvent() {
-          raiseEvent(Events.BoundsChanged); 
+          ViewPreferences.getInstance().setWindowBounds(
+            frame.getBounds()    
+          );
         }
       }
     );

@@ -13,7 +13,7 @@ package blacksmyth.personalfinancier.model.budget;
 import java.math.BigDecimal;
 
 import blacksmyth.personalfinancier.model.MoneyFactory;
-import blacksmyth.personalfinancier.model.PreferencesModel;
+import blacksmyth.personalfinancier.model.ModelPreferences;
 
 public class BudgetItemFactory {
   // TODO: Expand to be more than just a nickname device.
@@ -27,8 +27,8 @@ public class BudgetItemFactory {
         "Discretionary",
         description,
         MoneyFactory.createAmount(BigDecimal.ZERO),
-        PreferencesModel.getInstance().getPreferredCashflowFrequency(),
-        PreferencesModel.getInstance().getPreferredBudgetAccount()
+        ModelPreferences.getInstance().getPreferredCashflowFrequency(),
+        ModelPreferences.getInstance().getPreferredBudgetAccount()
     );
   }
   
@@ -41,8 +41,8 @@ public class BudgetItemFactory {
         "Default",
         description,
         MoneyFactory.createAmount(BigDecimal.ZERO),
-        PreferencesModel.getInstance().getPreferredCashflowFrequency(),
-        PreferencesModel.getInstance().getPreferredBudgetAccount()
+        ModelPreferences.getInstance().getPreferredCashflowFrequency(),
+        ModelPreferences.getInstance().getPreferredBudgetAccount()
     );
   }
 

@@ -9,7 +9,6 @@
  */
 package blacksmyth.personalfinancier.model;
 
-import java.awt.Rectangle;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -20,17 +19,7 @@ import java.util.Observer;
 public final class PersonalFinancierModel extends Observable implements IPersomalFinancierModel, Observer {
   
   public PersonalFinancierModel() {
-    PreferencesModel.getInstance().addObserver(this);
-  }
-
-  @Override
-  public Rectangle getBounds() {
-    return PreferencesModel.getInstance().getWindowBounds();
-  }
-
-  @Override
-  public void setBounds(Rectangle bounds) {
-    PreferencesModel.getInstance().setWindowBounds(bounds);
+    ModelPreferences.getInstance().addObserver(this);
   }
 
   @Override

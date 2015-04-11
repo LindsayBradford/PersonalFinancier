@@ -11,10 +11,10 @@ package blacksmyth.personalfinancier.control;
 
 import java.util.Observable;
 
+import blacksmyth.personalfinancier.model.IPersomalFinancierModel;
+
 import blacksmyth.personalfinancier.view.IPersonalFinancierView;
 import blacksmyth.personalfinancier.view.IPersonalFinancierView.Events;
-
-import blacksmyth.personalfinancier.model.IPersomalFinancierModel;
 
 public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter {
   
@@ -23,18 +23,11 @@ public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter 
   public PersonalFinancierPersenter(IPersonalFinancierView view, IPersomalFinancierModel model) {
     addView(view);
     setModel(model);
-    alignViewWithModel(view);
   }
   
   @Override
   public void addView(IPersonalFinancierView view) {
     ((Observable) view).addObserver(this);
-  }
-  
-  private void alignViewWithModel(IPersonalFinancierView view) {
-    view.setBounds(
-        model.getBounds()
-    );
   }
   
   @Override
@@ -48,21 +41,11 @@ public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter 
   @Override
   public void processEvent(IPersonalFinancierView view, Events event) {
     switch(event) {
-    
-      case BoundsChanged:
-        processBoundsChanged(view);
-        break;
 
       case ExitRequested:
         processExitRequest();
         break;
     }
-  }
-  
-  private void processBoundsChanged(IPersonalFinancierView view) {
-    model.setBounds(
-        view.getBounds()
-    );
   }
   
   private void processExitRequest() {

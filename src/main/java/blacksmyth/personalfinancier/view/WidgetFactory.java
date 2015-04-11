@@ -43,11 +43,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.general.FontIconProvider;
-import blacksmyth.personalfinancier.model.PreferencesModel;
+import blacksmyth.personalfinancier.model.ModelPreferences;
 
 /**
  * A library of methods to construct low-level Swing JComponet widgets in a uniform
- * way throughout the application based on user preferences in {@link PreferencesModel}.
+ * way throughout the application based on user preferences in {@link ModelPreferences}.
  * @author linds
  *
  */
@@ -144,7 +144,7 @@ public final class WidgetFactory {
   
   /**
    * prepares a <tt>JTable</tt> cell renderer for display based on 
-   * various colour preferences in {@link PreferencesModel}.
+   * various colour preferences in {@link ModelPreferences}.
    * @param cellRenderer
    * @param row
    * @param column 
@@ -152,24 +152,24 @@ public final class WidgetFactory {
    */
   public static void prepareTableCellRenderer(JTable table, Component cellRenderer, int row, int column) {
     Color rowColor = (row % 2 == 0) ? 
-        PreferencesModel.getInstance().getPreferredEvenRowColor() : 
-        PreferencesModel.getInstance().getPreferredOddRowColor();
+        ViewPreferences.getInstance().getPreferredEvenRowColor() : 
+        ViewPreferences.getInstance().getPreferredOddRowColor();
     
     cellRenderer.setBackground(rowColor);
     
     if (table.isCellEditable(row,column)) {
       cellRenderer.setForeground(
-        PreferencesModel.getInstance().getPreferredEditableCellColor()
+          ViewPreferences.getInstance().getPreferredEditableCellColor()
       );
     } else {
       cellRenderer.setForeground(
-        PreferencesModel.getInstance().getPreferredUnEditableCellColor()
+          ViewPreferences.getInstance().getPreferredUnEditableCellColor()
       );
     }
     
     if (table.isCellSelected(row, column)) {
       cellRenderer.setBackground(
-          PreferencesModel.getInstance().getPreferredSelectedCellColor()
+          ViewPreferences.getInstance().getPreferredSelectedCellColor()
       );
       cellRenderer.setForeground(
           cellRenderer.getForeground().brighter()
@@ -274,7 +274,7 @@ public final class WidgetFactory {
     );
     
     field.setForeground(
-        PreferencesModel.getInstance().getPreferredEditableCellColor()
+        ViewPreferences.getInstance().getPreferredEditableCellColor()
     );
     
     field.setHorizontalAlignment(alignment);
@@ -332,7 +332,7 @@ public final class WidgetFactory {
     DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
     dlcr.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
     dlcr.setForeground(
-        PreferencesModel.getInstance().getPreferredEditableCellColor()
+        ViewPreferences.getInstance().getPreferredEditableCellColor()
     );
     comboBox.setRenderer(dlcr);
     

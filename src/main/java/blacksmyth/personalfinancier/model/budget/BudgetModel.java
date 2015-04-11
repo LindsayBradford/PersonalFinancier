@@ -29,7 +29,7 @@ import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequencyUtility;
-import blacksmyth.personalfinancier.model.PreferencesModel;
+import blacksmyth.personalfinancier.model.ModelPreferences;
 
 public class BudgetModel extends Observable implements Observer, IBudgetController, 
                                                        IFileHandlerModel<BudgetFileContent> {
@@ -479,7 +479,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
       BigDecimal originalTotal = summary.getBudgettedAmount().getTotal();
       BigDecimal newTotal = originalTotal.add(
         convertedBudgetAmount,
-        PreferencesModel.getInstance().getPreferredMathContext()
+        ModelPreferences.getInstance().getPreferredMathContext()
       );
       
       summary.getBudgettedAmount().setTotal(newTotal);
@@ -498,7 +498,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
       BigDecimal originalTotal = summary.getBudgettedAmount().getTotal();
       BigDecimal newTotal = originalTotal.subtract(
         convertedBudgetAmount,
-        PreferencesModel.getInstance().getPreferredMathContext()
+        ModelPreferences.getInstance().getPreferredMathContext()
       );
       
       summary.getBudgettedAmount().setTotal(newTotal);
@@ -530,7 +530,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
       BigDecimal originalTotal = summary.getBudgettedAmount().getTotal();
       BigDecimal newTotal = originalTotal.add(
         convertedBudgetAmount,
-        PreferencesModel.getInstance().getPreferredMathContext()
+        ModelPreferences.getInstance().getPreferredMathContext()
       );
       
       summary.getBudgettedAmount().setTotal(newTotal);
@@ -553,7 +553,7 @@ public class BudgetModel extends Observable implements Observer, IBudgetControll
       BigDecimal originalTotal = summary.getBudgettedAmount().getTotal();
       BigDecimal newTotal = originalTotal.subtract(
         convertedBudgetAmount,
-        PreferencesModel.getInstance().getPreferredMathContext()
+        ModelPreferences.getInstance().getPreferredMathContext()
       );
       
       summary.getBudgettedAmount().setTotal(newTotal);

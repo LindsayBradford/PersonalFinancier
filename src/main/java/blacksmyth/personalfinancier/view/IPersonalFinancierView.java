@@ -19,14 +19,9 @@ public interface IPersonalFinancierView {
 
   /**
    * An enumeration of all user-triggered events supported by a Personal Financier view:
-   * <li>{@link #BoundsChanged}</li>
    * <li>{@link #ExitRequested}</li>
    */
   public enum Events {
-    /**
-     * Represents a user-event where the bounds of the view's on-screen window changes.
-     */
-    BoundsChanged,
     /**
      * Represents a user-event where the user wishes to exit the application.
      */

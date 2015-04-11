@@ -15,24 +15,24 @@ import java.math.BigDecimal;
 public class MoneyFactory {
    public static Money createAmount(BigDecimal amount) {
      return new Money(
-         PreferencesModel.getInstance().getPreferredCurrency(), 
-         PreferencesModel.getInstance().getPreferredRoundingMode(), 
+         ModelPreferences.getInstance().getPreferredCurrency(), 
+         ModelPreferences.getInstance().getPreferredRoundingMode(), 
          amount
      );
    }
    
    public static Money createAmount(double amount) {
      return new Money(
-         PreferencesModel.getInstance().getPreferredCurrency(), 
-         PreferencesModel.getInstance().getPreferredRoundingMode(), 
+         ModelPreferences.getInstance().getPreferredCurrency(), 
+         ModelPreferences.getInstance().getPreferredRoundingMode(), 
          BigDecimal.valueOf(amount)
      );
    }
 
    public static Money createAmount(String amount) {
      return new Money(
-         PreferencesModel.getInstance().getPreferredCurrency(), 
-         PreferencesModel.getInstance().getPreferredRoundingMode(), 
+         ModelPreferences.getInstance().getPreferredCurrency(), 
+         ModelPreferences.getInstance().getPreferredRoundingMode(), 
          new BigDecimal(amount)
      );
    }

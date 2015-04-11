@@ -23,7 +23,7 @@ import blacksmyth.personalfinancier.control.FinancierUndoManager;
 import blacksmyth.personalfinancier.control.inflation.IInflationController;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
-import blacksmyth.personalfinancier.model.PreferencesModel;
+import blacksmyth.personalfinancier.model.ModelPreferences;
 
 public class InflationModel extends Observable implements InflationProvider, IInflationController,
                                                           IFileHandlerModel<InflationFileContent> {
@@ -74,8 +74,8 @@ public class InflationModel extends Observable implements InflationProvider, IIn
          originalValue.getTotal().multiply(
              comparsionCPIForDate.divide(
                  originalCPIForDate,
-                 PreferencesModel.getInstance().getPreferredPrecision(), 
-                 PreferencesModel.getInstance().getPreferredRoundingMode()
+                 ModelPreferences.getInstance().getPreferredPrecision(), 
+                 ModelPreferences.getInstance().getPreferredRoundingMode()
              )
          )    
        );

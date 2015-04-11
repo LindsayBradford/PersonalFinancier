@@ -16,11 +16,11 @@ public class PreferenceItemBuilder {
     return new IPreferenceItem<String>() {
 
       public void setPreference(String t) {
-        PreferencesModel.getInstance().setLastUsedBudgetFilePath(t);
+        ModelPreferences.getInstance().setLastUsedBudgetFilePath(t);
       }
 
       public String getPreference() {
-        return PreferencesModel.getInstance().getLastUsedBudgetFilePath();
+        return ModelPreferences.getInstance().getLastUsedBudgetFilePath();
       }
     };
   }
@@ -29,11 +29,11 @@ public class PreferenceItemBuilder {
     return new IPreferenceItem<String>() {
 
       public void setPreference(String t) {
-        PreferencesModel.getInstance().setLastUsedInflationFilePath(t);
+        ModelPreferences.getInstance().setLastUsedInflationFilePath(t);
       }
 
       public String getPreference() {
-        return PreferencesModel.getInstance().getLastUsedInflationFilePath();
+        return ModelPreferences.getInstance().getLastUsedInflationFilePath();
       }
     };
   }

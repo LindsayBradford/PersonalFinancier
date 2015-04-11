@@ -15,8 +15,8 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
-import blacksmyth.personalfinancier.model.PreferencesModel;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
+import blacksmyth.personalfinancier.view.ViewPreferences;
 import blacksmyth.personalfinancier.view.WidgetFactory;
 
 public class BudgetWidgetFactory {
@@ -54,7 +54,7 @@ public class BudgetWidgetFactory {
     DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
     dlcr.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
     dlcr.setForeground(
-        PreferencesModel.getInstance().getPreferredEditableCellColor()
+        ViewPreferences.getInstance().getPreferredEditableCellColor()
     );
     comboBox.setRenderer(dlcr);
 
