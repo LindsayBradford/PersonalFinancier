@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="libs/gral-core-0.10.jar"/>
+	<classpathentry kind="lib" path="libs/junit-4.12.jar" sourcepath="libs/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="libs/mockito-all-1.10.19.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/JTattoo-1.6.11.jar"/>
 	<classpathentry kind="lib" path="libs/json-io-3.0.1.jar"/>
-	<classpathentry kind="lib" path="libs/junit-4.12.jar"/>
-	<classpathentry kind="lib" path="libs/mockito-all-1.10.19.jar"/>
 	<classpathentry kind="lib" path="libs/bcprov-jdk15on-1.52.jar"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

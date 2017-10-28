@@ -10,50 +10,46 @@
 
 package blacksmyth.general.file;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 public class StrategicFileConverterTest {
  
-  private static IObjectFileConverter<String> svgConverter;
-  private static IObjectFileConverter<String> pdfConverter;
-  private static IObjectFileConverter<String> pngConverter;
-  
-  private static final String[] FILE_TYPES = new String[] {"svg", "pdf", "png"};
-  
-  private static final int SVG_INDEX = 0;
-  private static final int PDF_INDEX = 1;
-  private static final int PNG_INDEX = 2;
-  
-  private static final String RESULT = "Result";
+  private static final String EXPECTED_RESULT_PREFIX = "prefix-";
+  private static final String DUMMY_CONTENT = "dummyContent";
   
   private static HashMap<String, IObjectFileConverter<String>> converterMap;
   private static StrategicFileConverter<String> testConverter;
   
+  enum FileType {
+	  SVG, PDF, PNG;
+	  
+	  public String key() {
+		  return name().toLowerCase();
+	  }
+  }
+  
   @BeforeClass
   public static void testSetup() {
-    
-    svgConverter = buildMockConverter(SVG_INDEX);
-    pdfConverter = buildMockConverter(PDF_INDEX);
-    pngConverter = buildMockConverter(PNG_INDEX);
-    
-    converterMap = new HashMap<String, IObjectFileConverter<String>>();
-    
-    converterMap.put(FILE_TYPES[SVG_INDEX], svgConverter);
-    converterMap.put(FILE_TYPES[PDF_INDEX], pdfConverter);
-    converterMap.put(FILE_TYPES[PNG_INDEX], pngConverter);
-    
-    testConverter = new StrategicFileConverter<String>();
-    testConverter.setAdapterMap(converterMap);
+		converterMap = new HashMap<String, IObjectFileConverter<String>>();
+		
+		EnumSet.allOf(FileType.class).forEach( 
+				ft -> converterMap.put(ft.key(), buildMockConverter(ft.key()))
+		);
+	    
+	    testConverter = new StrategicFileConverter<String>();
+	    testConverter.setAdapterMap(converterMap);	  
   }
-
+  
   @SuppressWarnings({ "unchecked", "cast" })
-  private static IObjectFileConverter<String> buildMockConverter(int index) {
+  private static IObjectFileConverter<String> buildMockConverter(String fileType) {
     IObjectFileConverter<String> mockConverter = 
         (IObjectFileConverter<String>) mock(IObjectFileConverter.class);
 
@@ -62,7 +58,7 @@ public class StrategicFileConverterTest {
             any(String.class)
          )
     ).thenReturn(
-        RESULT + FILE_TYPES[index]
+        EXPECTED_RESULT_PREFIX + fileType
     );
     
     return mockConverter;
@@ -71,46 +67,51 @@ public class StrategicFileConverterTest {
   @Test
   public void ToObjectFromFile_SvgFilenameSupplied_SvgConverterUsed() {
     String result = testConverter.toObjectFromFile("test.svg");
-    
-    assertTrue(
-        result.equals(RESULT + FILE_TYPES[SVG_INDEX])
-    );
+    assertThat(result, is(expectedValueFor(FileType.SVG)));
   }
 
   @Test
   public void ToFileFromObject_SvgFilenameSupplied_SvgConverterUsed() {
-    testConverter.toFileFromObject("test.svg", "fart");
-    verify(svgConverter).toFileFromObject("test.svg", "fart");
+    testConverter.toFileFromObject("test.svg", DUMMY_CONTENT);
+    verify(mapEntryFor(FileType.SVG)).toFileFromObject("test.svg", DUMMY_CONTENT);
   }
   
   @Test
   public void ToObjectFromFile_PdfFilenameSupplied_PdfConverterUsed() {
     String result = testConverter.toObjectFromFile("test.pdf");
-
-    assertTrue(
-        result.equals(RESULT + FILE_TYPES[PDF_INDEX])
-    );
+    assertThat(result, is(expectedValueFor(FileType.PDF)));
   }
 
   @Test
   public void ToFileFromObject_PdfFilenameSupplied_PdfConverterUsed() {
-    testConverter.toFileFromObject("test.pdf", "tart");
-    verify(pdfConverter).toFileFromObject("test.pdf", "tart");
+    testConverter.toFileFromObject("test.pdf", DUMMY_CONTENT);
+    verify(mapEntryFor(FileType.PDF)).toFileFromObject("test.pdf", DUMMY_CONTENT);
   }
   
   @Test
   public void ToObjectFromFile_PngFilenameSupplied_PngConverterUsed() {
     String result = testConverter.toObjectFromFile("test.png");
-    
-    assertTrue(
-        result.equals(RESULT + FILE_TYPES[PNG_INDEX])
-    );
+    assertThat(result, is(expectedValueFor(FileType.PNG)));
+  }
+  
+  @Test
+  public void ToObjectFromFile_PdfSvgFilenameSupplied_SvgConverterUsed() {
+    String result = testConverter.toObjectFromFile("test.pdf.svg");
+    assertThat(result, is(expectedValueFor(FileType.SVG)));
+  }
+  
+  private String expectedValueFor(FileType fileType) {
+	  return EXPECTED_RESULT_PREFIX + fileType.key();
   }
 
   @Test
   public void ToFileFromObject_PngFilenameSupplied_PngConverterUsed() {
-    testConverter.toFileFromObject("test.png", "cart");
-    verify(pngConverter).toFileFromObject("test.png", "cart");
+    testConverter.toFileFromObject("test.png", DUMMY_CONTENT);
+    verify(mapEntryFor(FileType.PNG)).toFileFromObject("test.png", DUMMY_CONTENT);
+  }
+  
+  private IObjectFileConverter<String> mapEntryFor(FileType fileType) {
+	  return converterMap.get(fileType.key());
   }
   
   @Test(expected=AssertionError.class)

@@ -52,10 +52,6 @@ public class StrategicFileConverter<T> implements IObjectFileConverter<T> {
   }
   
   private String getFileExtension(String filePath) {
-    int i = filePath.lastIndexOf('.');
-    if (i >= 0) {
-        return filePath.substring(i+1);
-    }
-    return null;
+	  return filePath.replaceAll("^.*\\.", "").toLowerCase();
   }
 }
