@@ -10,7 +10,11 @@
 
 package blacksmyth.personalfinancier.model;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.is;
+
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.junit.Assert.assertThat;
 
 import java.math.BigDecimal;
 
@@ -74,10 +78,9 @@ public class CashFlowFrequencyUtilityTest {
     
     // we use BigDecimal.compareTo() instead of equals() because compareTo()
     // considers equality of numbers irrespective of scale.
-    
-    assertTrue(
-        initialValue.compareTo(convertedValue) == 0
-    );
+       
+    final int comparedNumbersAreEqual = 0;
+	assertThat(initialValue.compareTo(convertedValue), is(comparedNumbersAreEqual));
   }
 
   @Test
@@ -93,7 +96,7 @@ public class CashFlowFrequencyUtilityTest {
     
     // GIGO as a NINO: Null-in, null-out. 
     
-    assertNull(convertedValue);
+    assertThat(convertedValue, is(nullValue()));
   }
   
   @Test
@@ -107,10 +110,6 @@ public class CashFlowFrequencyUtilityTest {
         CashFlowFrequency.Daily
     );
     
-    // Conversion of the initial value using the same frequency should return the original value.
-    
-    assertTrue(
-        initialValue == convertedValue
-    );
+    assertThat(convertedValue, sameInstance(initialValue));
   }
 }
