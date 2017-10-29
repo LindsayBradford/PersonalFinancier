@@ -10,6 +10,7 @@
 
 package blacksmyth.personalfinancier.dependencies.json;
 
+import java.util.HashMap;
 import com.cedarsoftware.util.io.JsonIoException;
 import com.cedarsoftware.util.io.JsonObject;
 import com.cedarsoftware.util.io.JsonWriter;
@@ -38,14 +39,17 @@ final class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
     if (jsonContent == null) { return null; }
     
     try {
-
-    	Object objectOfJsonContent = JsonReader.jsonToJava(jsonContent);
+    	
+    	HashMap<String, Object> args = new HashMap<>();
+    	args.put(JsonReader.FAIL_ON_UNKNOWN_TYPE, Boolean.TRUE);
+    	
+    	Object objectOfJsonContent = JsonReader.jsonToJava(jsonContent, args);
 
       // Java generics erasure means we're capable of receiving a json-io JsonObject from the JsonReader
-      // that will not cause a ClassCastException when we cast back to <T> below for objects that couldn't be 
-      // deserialised into <T>. Instead of forcing the fromJson() caller to deal with this possibility, 
-      // we explicitly throw away the default 
-
+      // that will not cause a ClassCastException when we cast back to <T> below for objects that couldn't 
+      // be deserialised into <T> but are still valid Json (no json-io serialisation additions). 
+      // Instead of forcing the fromJson() caller to deal with this possibility, we explicitly throw away 
+      // these attempts.
       
       if (objectOfJsonContent instanceof JsonObject) {
     	  return null;
