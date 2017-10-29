@@ -47,7 +47,7 @@ public class JSonIoBridgeTest {
   }
   
   @Test
-  public void EncodeDecode_StringContent_SuccessfulDecode() {
+  public void EncodeDecode_ValidObject_SuccessfulDecode() {
     FakeJsonDto initialDto = new FakeJsonDto();
     initialDto.fakeFieldOne = "stuff";
     
@@ -57,7 +57,8 @@ public class JSonIoBridgeTest {
     assertThat(decodedContent, is(initialDto));
   }
 
-  // TODO (LWB): FIx balow ignores.
+  // TODO (LWB): FIx balow.
+  //  @Test
   @Ignore("Generics erasure means we won't know we have the wrong class type until out here.")
   public void Decode_RawJson_SuccessfulDecode() {
     FakeJsonDto initialDto = new FakeJsonDto();
@@ -69,15 +70,15 @@ public class JSonIoBridgeTest {
     
     assertThat(decodedContent, is(notNullValue()));
   }
-  
-  @Ignore("Generics erasure means we won't know we have the wrong class type until out here.")
-  public void Decode_StringContent_UnsuccessfulDecode() {
+
+  @Test
+  public void Decode_InvalidStringContent_DecodesToNull() {
     FakeJsonDto decodedContent = bridgeBeingTestsd.fromJSon("{\"NotValidDtoJson\": \"true\"}");
     assertThat(decodedContent, is(nullValue()));
   }
 
   @Test
-  public void Decode_NullContent_UnsuccessfulDecode() {
+  public void Decode_NullContent_DecodesToNull() {
     FakeJsonDto decodedContent = bridgeBeingTestsd.fromJSon(null);
     assertThat(decodedContent, is(nullValue()));
   }
