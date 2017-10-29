@@ -24,6 +24,8 @@ import com.cedarsoftware.util.io.JsonReader;
 
 final class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
 
+  private Class<?> typeT = null;
+  
   @Override
   public String toJSon(T object) {
     return JsonWriter.formatJson(
@@ -34,13 +36,9 @@ final class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
   @SuppressWarnings("unchecked")
   @Override
   public T fromJSon(String jsonContent) {
-    if (jsonContent == null) {
-      return null;
-    }
+    if (jsonContent == null) { return null; }
     try {
-      return (T) JsonReader.jsonToJava(
-          jsonContent
-      );
+      return (T) JsonReader.jsonToJava(jsonContent);
     } catch (JsonIoException jioe) {
       return null;
     }
