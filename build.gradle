@@ -5,8 +5,8 @@ defaultTasks 'distribute'
 
 // Start Project configuration
 
-sourceCompatibility = '1.7'
-targetCompatibility = '1.7'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 project.group = 'blacksmyth.personalfinancier'
 project.version = '0.4'
@@ -32,7 +32,7 @@ List libsToMerge = [
 ]
 
 List libsToShip = [ 
-  'org.bouncycastle:bcprov-jdk15on:1.52' 
+  'org.bouncycastle:bcprov-jdk15on:1.58' 
 ]
 
 repositories {
@@ -96,12 +96,6 @@ task distribute(type: Copy) {
   }
 }
 
-// File: build.gradle
-apply plugin: 'java'
-
-repositories {
-    mavenCentral()
-}
 
 test {
   testLogging {
