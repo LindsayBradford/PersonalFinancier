@@ -10,9 +10,9 @@
 
 package blacksmyth.personalfinancier.dependencies.encryption;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -47,9 +47,8 @@ public class BouncyCastleEncryptionBridgeTest {
             encryptedContent
          );
     
-    assertTrue(
-        STRING_CONTENT.equals(decryptedContent)
-    );
+    
+    assertThat(decryptedContent, is(STRING_CONTENT));
   }
   
   @Test
@@ -66,13 +65,9 @@ public class BouncyCastleEncryptionBridgeTest {
             VALID_PASSWORD, 
             encryptedContent
          );
+
     
-    assertTrue(
-        Arrays.equals(
-            decryptedContent, 
-            BINARY_CONTENT
-        )
-    );
+    assertThat(decryptedContent, is(BINARY_CONTENT));
   }
   
   @Test
@@ -90,9 +85,7 @@ public class BouncyCastleEncryptionBridgeTest {
             encryptedContent
          );
     
-    assertNull(
-        decryptedContent
-    );
+    assertThat(decryptedContent, is(nullValue()));
   }
   
   @Test
@@ -110,11 +103,6 @@ public class BouncyCastleEncryptionBridgeTest {
             encryptedContent
          );
     
-    assertTrue(
-        Arrays.equals(
-            decryptedContent, 
-            null
-        )
-    );
+    assertThat(decryptedContent, is(nullValue()));
   }
 }
