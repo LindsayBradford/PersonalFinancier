@@ -25,9 +25,9 @@ public class ByteUtilities {
    * @param bytes
    * @return UTF-8 encoded string of the bytes supplied.
    */
-  public static String BytesToString(byte[] bytes) {
+  public static String bytesToString(byte[] bytes) {
     if (bytes == null) {
-      return null;
+      return "";
     }
     return new String(bytes, ENCODING);
   }
@@ -37,7 +37,7 @@ public class ByteUtilities {
    * @param bytes
    * @return byte array of string.
    */
-  public static byte[] StringToBytes(String string) {
+  public static byte[] stringToBytes(String string) {
     return string.getBytes(ENCODING);
   }
 
@@ -47,7 +47,7 @@ public class ByteUtilities {
    * @param bytes
    * @return byte array of string.
    */
-  public static byte[] TrimBytes(byte[] bytes)
+  public static byte[] trimBytes(byte[] bytes)
   {
       int i = bytes.length - 1;
       while (i >= 0 && bytes[i] == 0) {

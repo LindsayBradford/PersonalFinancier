@@ -85,7 +85,7 @@ public class BouncyCastleEncryptionBridgeTest {
             encryptedContent
          );
     
-    assertThat(decryptedContent, is(nullValue()));
+    assertThat(decryptedContent, is(""));
   }
   
   @Test

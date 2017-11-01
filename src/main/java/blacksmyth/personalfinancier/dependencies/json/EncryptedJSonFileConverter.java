@@ -65,7 +65,7 @@ public class EncryptedJSonFileConverter<T> implements IObjectFileConverter<T>, I
       return;
     }
     
-    byte[] contentAsBytes = ByteUtilities.StringToBytes(jsonBridge.toJSon(t));
+    byte[] contentAsBytes = ByteUtilities.stringToBytes(jsonBridge.toJSon(t));
     
     fileSystemBridge.saveBinaryFile(
         filePath, 
@@ -103,7 +103,7 @@ public class EncryptedJSonFileConverter<T> implements IObjectFileConverter<T>, I
     }
     
     T objectFromFile = jsonBridge.fromJSon(
-        ByteUtilities.BytesToString(decryptedContent)
+        ByteUtilities.bytesToString(decryptedContent)
     );
     
     return objectFromFile;

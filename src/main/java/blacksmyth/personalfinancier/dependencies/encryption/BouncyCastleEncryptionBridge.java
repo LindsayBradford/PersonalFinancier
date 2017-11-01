@@ -67,7 +67,7 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
     return ByteUtils.toHexString(
         encrypt(
             password, 
-            ByteUtilities.StringToBytes(
+            ByteUtilities.stringToBytes(
                 content
             )
         )
@@ -102,7 +102,7 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
   
   @Override
   public String decrypt(char[] password, String content) {
-    return ByteUtilities.BytesToString(
+    return ByteUtilities.bytesToString(
         decrypt(
             password, 
             ByteUtils.fromHexString(
@@ -133,7 +133,7 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
       return null;
     } 
      
-    return ByteUtilities.TrimBytes(decryptedContent);
+    return ByteUtilities.trimBytes(decryptedContent);
   }
   
   private byte[] processDecryption(AESElements e, byte[] encryptedContent) {

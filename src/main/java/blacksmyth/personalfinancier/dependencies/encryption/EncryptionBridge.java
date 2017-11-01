@@ -20,37 +20,24 @@ import blacksmyth.general.ReflectionUtilities;
 
 public final class EncryptionBridge implements IEncryptionBridge {
   
-  
   @Override
   public String encrypt(char[] password, String content) {
-    if (encryptionAvailable()) {
       return getConcreteBridge().encrypt(password, content);
-    }
-    return content;
   }
 
   @Override
   public String decrypt(char[] password, String content) {
-    if (encryptionAvailable()) {
       return getConcreteBridge().decrypt(password, content);
-    }
-    return null;
   }
   
   @Override
   public byte[] encrypt(char[] password, byte[] content) {
-    if (encryptionAvailable()) {
       return getConcreteBridge().encrypt(password, content);
-    }
-    return content;
   }
 
   @Override
   public byte[] decrypt(char[] password, byte[] content) {
-    if (encryptionAvailable()) {
       return getConcreteBridge().decrypt(password, content);
-    }
-    return null;
   }
   
   @Override
@@ -64,6 +51,6 @@ public final class EncryptionBridge implements IEncryptionBridge {
     if (encryptionAvailable()) {
       return BouncyCastleEncryptionBridge.getInstance();
     }
-    return null;
+    return NullEncryptionBridge.getInstance();
   }
 }
