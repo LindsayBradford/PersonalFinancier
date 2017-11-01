@@ -11,12 +11,10 @@
 package blacksmyth.personalfinancier.dependencies.json;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class JSonIoBridgeTest {
@@ -57,18 +55,16 @@ public class JSonIoBridgeTest {
     assertThat(decodedContent, is(initialDto));
   }
 
-  // TODO (LWB): FIx balow.
-  //  @Test
-  @Ignore("Generics erasure means we won't know we have the wrong class type until out here.")
+  @Test
   public void Decode_RawJson_SuccessfulDecode() {
-    FakeJsonDto initialDto = new FakeJsonDto();
+    // given
+	FakeJsonDto initialDto = new FakeJsonDto();
     initialDto.fakeFieldOne = "stuff";
-
-    final String jsonToDecode = 
-    	"{ \"fakeFieldOne\": \"valueOne\", \"faleFieldTwo\": \"valueTwo\"}";
+    final String jsonToDecode = "{\r\n  \"@type\":\"blacksmyth.personalfinancier.dependencies.json.JSonIoBridgeTest$FakeJsonDto\",\r\n  \"fakeFieldOne\":\"stuff\",\r\n  \"fakeFieldTwo\":\"fakeFieldTwo\",\r\n  \"this$0\":{\r\n    \r\n  }\r\n}";
+    //when
     FakeJsonDto decodedContent = bridgeBeingTestsd.fromJSon(jsonToDecode);
-    
-    assertThat(decodedContent, is(notNullValue()));
+    //then
+    assertThat(decodedContent, is(initialDto));
   }
 
   @Test
