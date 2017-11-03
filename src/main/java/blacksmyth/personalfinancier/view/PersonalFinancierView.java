@@ -195,7 +195,7 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
     
     BlacksmythSwingUtilities.setGlyphAsText(
         button, 
-        FontIconProvider.fa_info_circle
+        FontIconProvider.FontIcon.fa_info_circle
     );
     
     button.setToolTipText(" About ");
@@ -232,7 +232,7 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
 
     BlacksmythSwingUtilities.setGlyphAsText(
         button, 
-        FontIconProvider.fa_cogs
+        FontIconProvider.FontIcon.fa_cogs
     );
     
     button.setToolTipText(" Preferences ");

@@ -32,6 +32,8 @@ import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.table.TableColumn;
 
+import blacksmyth.general.FontIconProvider.FontIcon;
+
 /**
  * A library of generally reusabile utility functions for Swing.
  * Being a library, the class is not able to be instantiated.
@@ -214,13 +216,13 @@ public final class BlacksmythSwingUtilities {
     });
   }
   
-  public static void setGlyphAsText(AbstractButton button, char iconAsChar) {
+  public static void setGlyphAsText(AbstractButton button, FontIcon icon) {
 	button.setFont(FontIconProvider.getInstance().getFont());
-	button.setText(String.valueOf(iconAsChar));
+	button.setText(String.valueOf(icon.asChar()));
   }
 
-  public static void setGlyphAsTitle(JTabbedPane pane, int tabIndex, char iconAsChar) {
+  public static void setGlyphAsTitle(JTabbedPane pane, int tabIndex, FontIcon icon) {
 	pane.setFont(FontIconProvider.getInstance().getFont());
-	pane.setTitleAt(tabIndex, String.valueOf(iconAsChar));
+	pane.setTitleAt(tabIndex, String.valueOf(icon.asChar()));
   }
 }

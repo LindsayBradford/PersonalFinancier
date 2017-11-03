@@ -365,7 +365,7 @@ public final class WidgetFactory {
 
     BlacksmythSwingUtilities.setGlyphAsTitle(
         pane, currTabIndex, 
-        FontIconProvider.fa_table
+        FontIconProvider.FontIcon.fa_table
     );
 
     currTabIndex++;
@@ -375,7 +375,7 @@ public final class WidgetFactory {
     
     BlacksmythSwingUtilities.setGlyphAsTitle(
         pane, currTabIndex, 
-        FontIconProvider.fa_pie_chart
+        FontIconProvider.FontIcon.fa_pie_chart
     );
     
     enableSelectionHilightedTabPane(pane);

@@ -218,7 +218,7 @@ class BudgetUIFactory {
 
     BlacksmythSwingUtilities.setGlyphAsText(
         button, 
-        FontIconProvider.fa_save
+        FontIconProvider.FontIcon.fa_save
     );
 
     button.setToolTipText(" Save the current budget ");
@@ -248,7 +248,7 @@ class BudgetUIFactory {
     
     BlacksmythSwingUtilities.setGlyphAsText(
         button, 
-        FontIconProvider.fa_save
+        FontIconProvider.FontIcon.fa_save
     );
     
     button.setForeground(Color.GREEN);
@@ -282,7 +282,7 @@ class BudgetUIFactory {
     
     BlacksmythSwingUtilities.setGlyphAsText(
         button, 
-        FontIconProvider.fa_folder_open_o
+        FontIconProvider.FontIcon.fa_folder_open_o
     );
     
     button.setForeground(Color.GREEN.darker());
@@ -483,7 +483,7 @@ class BudgetUIFactory {
     
     BlacksmythSwingUtilities.setGlyphAsText(
         newButton, 
-        FontIconProvider.fa_plus
+        FontIconProvider.FontIcon.fa_plus
     );
     
     newButton.setToolTipText(
@@ -510,7 +510,7 @@ class BudgetUIFactory {
     
     BlacksmythSwingUtilities.setGlyphAsText(
         newButton, 
-        FontIconProvider.fa_minus
+        FontIconProvider.FontIcon.fa_minus
     );
 
     newButton.setToolTipText(
@@ -529,7 +529,7 @@ class BudgetUIFactory {
     
     BlacksmythSwingUtilities.setGlyphAsText(
         newButton, 
-        FontIconProvider.fa_arrow_down
+        FontIconProvider.FontIcon.fa_arrow_down
     );
     
     newButton.setForeground(Color.GREEN);
@@ -550,7 +550,7 @@ class BudgetUIFactory {
     
     BlacksmythSwingUtilities.setGlyphAsText(
         newButton, 
-        FontIconProvider.fa_arrow_up
+        FontIconProvider.FontIcon.fa_arrow_up
     );
 
     newButton.setToolTipText(
@@ -596,7 +596,7 @@ class BudgetUIFactory {
     
     BlacksmythSwingUtilities.setGlyphAsText(
         newButton, 
-        FontIconProvider.fa_plus
+        FontIconProvider.FontIcon.fa_plus
     );
     
     newButton.setToolTipText(
@@ -623,7 +623,7 @@ class BudgetUIFactory {
     
     BlacksmythSwingUtilities.setGlyphAsText(
         newButton, 
-        FontIconProvider.fa_minus
+        FontIconProvider.FontIcon.fa_minus
     );
 
     newButton.setToolTipText(
@@ -642,7 +642,7 @@ class BudgetUIFactory {
     
     BlacksmythSwingUtilities.setGlyphAsText(
         newButton, 
-        FontIconProvider.fa_arrow_down
+        FontIconProvider.FontIcon.fa_arrow_down
     );
 
     newButton.setToolTipText(
@@ -663,7 +663,7 @@ class BudgetUIFactory {
     
     BlacksmythSwingUtilities.setGlyphAsText(
         newButton, 
-        FontIconProvider.fa_arrow_up
+        FontIconProvider.FontIcon.fa_arrow_up
     );
 
     newButton.setToolTipText(
@@ -755,7 +755,7 @@ class BudgetUIFactory {
         if (this.isSelected()) {
         	BlacksmythSwingUtilities.setGlyphAsText(
               this, 
-              FontIconProvider.fa_check_square_o
+              FontIconProvider.FontIcon.fa_check_square_o
           );
           this.setToolTipText(
               " Hide budget item table buttons. "
@@ -763,7 +763,7 @@ class BudgetUIFactory {
         } else {
         	BlacksmythSwingUtilities.setGlyphAsText(
               this, 
-              FontIconProvider.fa_square_o
+              FontIconProvider.FontIcon.fa_square_o
           );
           this.setToolTipText(
               " Show budget item table buttons. "
@@ -828,7 +828,7 @@ class BudgetUIFactory {
         if (this.isSelected()) {
         	BlacksmythSwingUtilities.setGlyphAsText(
               this, 
-              FontIconProvider.fa_toggle_right
+              FontIconProvider.FontIcon.fa_toggle_right
           );
           this.setToolTipText(
               " Hide derived amount columns. "
@@ -836,7 +836,7 @@ class BudgetUIFactory {
         } else {
         	BlacksmythSwingUtilities.setGlyphAsText(
               this, 
-              FontIconProvider.fa_toggle_left
+              FontIconProvider.FontIcon.fa_toggle_left
           );
           this.setToolTipText(
               " Show derived amount columns. "
@@ -892,7 +892,7 @@ class BudgetUIFactory {
     
     BlacksmythSwingUtilities.setGlyphAsText(
         resetItemsButton, 
-        FontIconProvider.fa_trash_o
+        FontIconProvider.FontIcon.fa_trash_o
     );
 
     resetItemsButton.setToolTipText(
@@ -936,7 +936,7 @@ class BudgetUIFactory {
 
     BlacksmythSwingUtilities.setGlyphAsText(
         button, 
-        FontIconProvider.fa_undo
+        FontIconProvider.FontIcon.fa_undo
     );
     
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
@@ -979,7 +979,7 @@ class BudgetUIFactory {
 
     BlacksmythSwingUtilities.setGlyphAsText(
         button, 
-        FontIconProvider.fa_repeat
+        FontIconProvider.FontIcon.fa_repeat
     );
 
     BlacksmythSwingUtilities.bindKeyStrokeToAction(
