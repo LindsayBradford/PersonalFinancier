@@ -20,12 +20,14 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.table.TableColumn;
@@ -212,4 +214,13 @@ public final class BlacksmythSwingUtilities {
     });
   }
   
+  public static void setGlyphAsText(AbstractButton button, char iconAsChar) {
+	button.setFont(FontIconProvider.getInstance().getFont());
+	button.setText(String.valueOf(iconAsChar));
+  }
+
+  public static void setGlyphAsTitle(JTabbedPane pane, int tabIndex, char iconAsChar) {
+	pane.setFont(FontIconProvider.getInstance().getFont());
+	pane.setTitleAt(tabIndex, String.valueOf(iconAsChar));
+  }
 }

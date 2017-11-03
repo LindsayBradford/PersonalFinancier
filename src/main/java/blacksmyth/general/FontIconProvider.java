@@ -13,9 +13,6 @@ package blacksmyth.general;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 
-import javax.swing.AbstractButton;
-import javax.swing.JTabbedPane;
-
 /**
  * A bridge/singleton pattern implementation providing convenient access to the 
  * "Font Awesome" font set (rev 4.0.3). The glyphs from this font set are used as an 
@@ -50,23 +47,8 @@ public final class FontIconProvider {
     return instance;
   }
 
-  /**
-   * Configures the supplied <tt>button</tt> to display the provided
-   * <tt>iconAsChar</tt> as button icon by using the specialised 
-   * font within this class for glyph production.  The character
-   * specified should only bee one of the characters supplied via
-   * this class.
-   * @param button
-   * @param iconAsChar
-   */
-  public void setGlyphAsText(AbstractButton button, char iconAsChar) {
-    button.setFont(MAIN_ICON_FONT);
-    button.setText(String.valueOf(iconAsChar));
-  }
-
-  public void setGlyphAsTitle(JTabbedPane pane, int tabIndex, char iconAsChar) {
-    pane.setFont(MAIN_ICON_FONT);
-    pane.setTitleAt(tabIndex, String.valueOf(iconAsChar));
+  public Font getFont() {
+	  return MAIN_ICON_FONT;
   }
 
   public static final char fa_glass =  '\uf000';

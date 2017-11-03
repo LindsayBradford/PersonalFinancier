@@ -162,7 +162,7 @@ class InflationUIFactory {
     //TODO: assign non-conflicting mnemonic
     button.setMnemonic(KeyEvent.VK_O);
     
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         button, 
         FontIconProvider.fa_folder_open_o
     );
@@ -198,7 +198,7 @@ class InflationUIFactory {
     //TODO: assign non-conflicting mnemonic
     button.setMnemonic(KeyEvent.VK_S);
 
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         button, 
         FontIconProvider.fa_save
     );
@@ -217,7 +217,7 @@ class InflationUIFactory {
         Color.RED.brighter()
    );
     
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         removeInflationEntriesButton, 
         FontIconProvider.fa_minus
     );
@@ -243,7 +243,7 @@ class InflationUIFactory {
     
     addInflationEntryButton.setMnemonic(KeyEvent.VK_INSERT);
 
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         addInflationEntryButton, 
         FontIconProvider.fa_plus
     );
@@ -290,7 +290,7 @@ class InflationUIFactory {
     
     inflationModel.getUndoManager().addObserver(button);
 
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         button, 
         FontIconProvider.fa_undo
     );
@@ -333,7 +333,7 @@ class InflationUIFactory {
     
     inflationModel.getUndoManager().addObserver(button);
 
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         button, 
         FontIconProvider.fa_repeat
     );

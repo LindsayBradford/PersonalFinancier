@@ -216,7 +216,7 @@ class BudgetUIFactory {
     
     button.setMnemonic(KeyEvent.VK_S);
 
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         button, 
         FontIconProvider.fa_save
     );
@@ -246,7 +246,7 @@ class BudgetUIFactory {
     
     button.setMnemonic(KeyEvent.VK_A);
     
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         button, 
         FontIconProvider.fa_save
     );
@@ -280,7 +280,7 @@ class BudgetUIFactory {
     
     button.setMnemonic(KeyEvent.VK_L);
     
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         button, 
         FontIconProvider.fa_folder_open_o
     );
@@ -481,7 +481,7 @@ class BudgetUIFactory {
     
     newButton.setAction(BudgetItemInsertAction);
     
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         newButton, 
         FontIconProvider.fa_plus
     );
@@ -508,7 +508,7 @@ class BudgetUIFactory {
         Color.RED.brighter()
    );
     
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         newButton, 
         FontIconProvider.fa_minus
     );
@@ -527,7 +527,7 @@ class BudgetUIFactory {
     
     newButton.setEnabled(false);
     
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         newButton, 
         FontIconProvider.fa_arrow_down
     );
@@ -548,7 +548,7 @@ class BudgetUIFactory {
     
     newButton.setEnabled(false);
     
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         newButton, 
         FontIconProvider.fa_arrow_up
     );
@@ -594,7 +594,7 @@ class BudgetUIFactory {
 
     newButton.setAction(BudgetItemInsertAction);
     
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         newButton, 
         FontIconProvider.fa_plus
     );
@@ -621,7 +621,7 @@ class BudgetUIFactory {
         Color.RED.brighter()
    );
     
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         newButton, 
         FontIconProvider.fa_minus
     );
@@ -640,7 +640,7 @@ class BudgetUIFactory {
     
     newButton.setEnabled(false);
     
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         newButton, 
         FontIconProvider.fa_arrow_down
     );
@@ -661,7 +661,7 @@ class BudgetUIFactory {
     
     newButton.setEnabled(false);
     
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         newButton, 
         FontIconProvider.fa_arrow_up
     );
@@ -753,7 +753,7 @@ class BudgetUIFactory {
       
       private void changeSelectionRendering() {
         if (this.isSelected()) {
-          FontIconProvider.getInstance().setGlyphAsText(
+        	BlacksmythSwingUtilities.setGlyphAsText(
               this, 
               FontIconProvider.fa_check_square_o
           );
@@ -761,7 +761,7 @@ class BudgetUIFactory {
               " Hide budget item table buttons. "
           );
         } else {
-          FontIconProvider.getInstance().setGlyphAsText(
+        	BlacksmythSwingUtilities.setGlyphAsText(
               this, 
               FontIconProvider.fa_square_o
           );
@@ -826,7 +826,7 @@ class BudgetUIFactory {
       
       private void changeSelectionRendering() {
         if (this.isSelected()) {
-          FontIconProvider.getInstance().setGlyphAsText(
+        	BlacksmythSwingUtilities.setGlyphAsText(
               this, 
               FontIconProvider.fa_toggle_right
           );
@@ -834,7 +834,7 @@ class BudgetUIFactory {
               " Hide derived amount columns. "
           );
         } else {
-          FontIconProvider.getInstance().setGlyphAsText(
+        	BlacksmythSwingUtilities.setGlyphAsText(
               this, 
               FontIconProvider.fa_toggle_left
           );
@@ -890,7 +890,7 @@ class BudgetUIFactory {
         Color.GRAY.brighter()
    );
     
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         resetItemsButton, 
         FontIconProvider.fa_trash_o
     );
@@ -934,7 +934,7 @@ class BudgetUIFactory {
     
     budgetModel.getUndoManager().addObserver(button);
 
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         button, 
         FontIconProvider.fa_undo
     );
@@ -977,7 +977,7 @@ class BudgetUIFactory {
     
     budgetModel.getUndoManager().addObserver(button);
 
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         button, 
         FontIconProvider.fa_repeat
     );

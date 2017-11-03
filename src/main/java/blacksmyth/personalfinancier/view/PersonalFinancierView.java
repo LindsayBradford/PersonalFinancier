@@ -193,7 +193,7 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
     
     button.setForeground(Color.GRAY);
     
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         button, 
         FontIconProvider.fa_info_circle
     );
@@ -230,7 +230,7 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
 
     button.setForeground(Color.GRAY);
 
-    FontIconProvider.getInstance().setGlyphAsText(
+    BlacksmythSwingUtilities.setGlyphAsText(
         button, 
         FontIconProvider.fa_cogs
     );

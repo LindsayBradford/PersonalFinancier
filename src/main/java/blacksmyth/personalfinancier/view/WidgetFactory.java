@@ -363,7 +363,7 @@ public final class WidgetFactory {
     pane.addTab("", tableComponent);
     pane.setToolTipTextAt(currTabIndex, " View as table ");
 
-    FontIconProvider.getInstance().setGlyphAsTitle(
+    BlacksmythSwingUtilities.setGlyphAsTitle(
         pane, currTabIndex, 
         FontIconProvider.fa_table
     );
@@ -373,7 +373,7 @@ public final class WidgetFactory {
     pane.addTab("",graphComponent);
     pane.setToolTipTextAt(currTabIndex, " View as graph ");
     
-    FontIconProvider.getInstance().setGlyphAsTitle(
+    BlacksmythSwingUtilities.setGlyphAsTitle(
         pane, currTabIndex, 
         FontIconProvider.fa_pie_chart
     );
