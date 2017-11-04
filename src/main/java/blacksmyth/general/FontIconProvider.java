@@ -607,8 +607,8 @@ public final class FontIconProvider {
 		  this.value = value;
 	  }
 	  
-	  public char asChar() {
-		  return value;
+	  public String asString() {
+		  return String.valueOf(value);
 	  }
   }
 }

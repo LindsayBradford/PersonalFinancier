@@ -130,16 +130,8 @@ public final class BlacksmythSwingUtilities {
                                            Action actionToPerform) {
     
     InputMap inputMap = component.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-    
-    inputMap.put(
-        keyStroke, 
-        keyStrokeLabel
-    );
-
-    component.getActionMap().put(
-        keyStrokeLabel, 
-        actionToPerform
-    );
+    inputMap.put(keyStroke, keyStrokeLabel);
+    component.getActionMap().put(keyStrokeLabel, actionToPerform);
   }
   
   /**
@@ -171,18 +163,8 @@ public final class BlacksmythSwingUtilities {
   
   public static void equalizeComponentSizes(List<JComponent> components) {
     Dimension  maxComponentSize = new Dimension(0,0);
-    for (int i = 0; i < components.size(); ++i) {
-      setMaximumSize(
-          maxComponentSize, 
-          components.get(i)
-      );
-    }
-    for (int i = 0; i < components.size(); ++i) {
-      resize(
-          components.get(i), 
-          maxComponentSize
-      );
-    }
+    components.stream().forEach(c -> setMaximumSize(maxComponentSize, c));
+    components.stream().forEach(c -> resize(c, maxComponentSize));
   } 
 
   private static void setMaximumSize(Dimension maxComponentSize, JComponent component) {
@@ -218,11 +200,11 @@ public final class BlacksmythSwingUtilities {
   
   public static void setGlyphAsText(AbstractButton button, FontIcon icon) {
 	button.setFont(FontIconProvider.getInstance().getFont());
-	button.setText(String.valueOf(icon.asChar()));
+	button.setText(icon.asString());
   }
 
   public static void setGlyphAsTitle(JTabbedPane pane, int tabIndex, FontIcon icon) {
 	pane.setFont(FontIconProvider.getInstance().getFont());
-	pane.setTitleAt(tabIndex, String.valueOf(icon.asChar()));
+	pane.setTitleAt(tabIndex, icon.asString());
   }
 }
