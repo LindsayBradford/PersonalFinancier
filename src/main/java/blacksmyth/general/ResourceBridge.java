@@ -44,10 +44,8 @@ public class ResourceBridge {
      String iconPath = MENU_ICON_PATH + "/" + iconImageFileName;
      byte[] iconByteArray;
 
-     try {
-       InputStream in = ResourceBridge.class.getResourceAsStream(iconPath);
+     try (InputStream in = streamOfResource(iconPath)) {
        iconByteArray = toByteArray(in, MENU_ICON_BUFFER_SIZE);
-       in.close();
      } catch (Exception e) {
        return null;
      }
@@ -91,12 +89,15 @@ public class ResourceBridge {
    public static Font getFont(String fontFilename) {
      String fontPath = FONT_PATH + "/" + fontFilename;
 
-     try {
-       InputStream inStream = ResourceBridge.class.getResourceAsStream(fontPath);
+     try (InputStream inStream = streamOfResource(fontPath)) {
        return Font.createFont(Font.TRUETYPE_FONT, inStream);
      } catch (Exception e) {
        e.printStackTrace();
        return null;
      }
+   }
+   
+   private static InputStream streamOfResource(String name) {
+	   return ResourceBridge.class.getResourceAsStream(name);
    }
 }
