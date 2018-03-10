@@ -15,10 +15,11 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+@SuppressWarnings("serial")
 public abstract class JTableListeningButton extends JButton implements ListSelectionListener {
-  
+
   private JTable table;
-  
+
   public JTableListeningButton(JTable theTable) {
     super();
     this.table = theTable;
@@ -29,11 +30,11 @@ public abstract class JTableListeningButton extends JButton implements ListSelec
   public JTable getTable() {
     return this.table;
   }
-  
+
   public int selectedTableRows() {
     return this.table.getSelectedRows().length;
   }
-  
+
   @Override
   public abstract void valueChanged(ListSelectionEvent event);
 }

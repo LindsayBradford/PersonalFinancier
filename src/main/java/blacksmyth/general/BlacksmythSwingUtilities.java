@@ -35,8 +35,9 @@ import javax.swing.table.TableColumn;
 import blacksmyth.general.FontIconProvider.FontIcon;
 
 /**
- * A library of generally reusabile utility functions for Swing.
- * Being a library, the class is not able to be instantiated.
+ * A library of generally reusabile utility functions for Swing. Being a
+ * library, the class is not able to be instantiated.
+ * 
  * @author linds
  *
  */
@@ -44,6 +45,7 @@ public final class BlacksmythSwingUtilities {
 
   /**
    * Locks the width of <tt>column</tt> to the <tt>width</tt> specified.
+   * 
    * @param column
    * @param width
    */
@@ -51,37 +53,36 @@ public final class BlacksmythSwingUtilities {
     column.setMinWidth(width);
     column.setMaxWidth(width);
   }
-  
+
   /**
-   * Returns the width in pixels that the supplied <tt>text</tt>
-   * would consume if rendered with a <tt>JLabel</tt> using its default font.
+   * Returns the width in pixels that the supplied <tt>text</tt> would consume if
+   * rendered with a <tt>JLabel</tt> using its default font.
+   * 
    * @param text
    * @return width as an integer.
    */
   public static int getTextWidth(String text) {
     JLabel label = new JLabel(text);
-    
+
     FontMetrics metrics = label.getFontMetrics(label.getFont());
-    
-    return (int) metrics.getStringBounds(
-        text, 
-        label.getGraphics()
-    ).getWidth();
+
+    return (int) metrics.getStringBounds(text, label.getGraphics()).getWidth();
 
   }
-  
+
   /**
    * Returns the longest string set as an item in the supplied <tt>comboBox</tt>
+   * 
    * @param comboBox
    * @return
    */
   public static String getWidestTextInComboBox(JComboBox<String> comboBox) {
-    
+
     String longestFoundString = "";
 
-    for(int i = 0; i < comboBox.getItemCount(); i++) {
+    for (int i = 0; i < comboBox.getItemCount(); i++) {
       assert (comboBox.getItemAt(i).getClass().equals(String.class));
-    
+
       String item = comboBox.getItemAt(i);
       if (item.length() > longestFoundString.length()) {
         longestFoundString = item;
@@ -89,88 +90,88 @@ public final class BlacksmythSwingUtilities {
     }
     return longestFoundString;
   }
-  
+
   /**
-   * Binds the supplied <code>actionToPerform</code> to the supplied <code>keyStroke</code> 
-   * for the given <code>component</code>. <p>
-   * This is a convenience method that auto-generates the necessary <code>keyStrokeLabel</code> for the 
-   * caller when mapping the <code>keyStroke</code> to the <code>actionToPerform</code>.
+   * Binds the supplied <code>actionToPerform</code> to the supplied
+   * <code>keyStroke</code> for the given <code>component</code>.
+   * <p>
+   * This is a convenience method that auto-generates the necessary
+   * <code>keyStrokeLabel</code> for the caller when mapping the
+   * <code>keyStroke</code> to the <code>actionToPerform</code>.
+   * 
    * @see #bindKeyStrokeToAction(JComponent, String, KeyStroke, AbstractAction)
    * @param component
    * @param keyStroke
    * @param actionToPerform
    */
-  public static void bindKeyStrokeToAction(JComponent component, 
-                                           KeyStroke keyStroke, 
-                                           Action actionToPerform) {
-    bindKeyStrokeToAction(
-        component, 
-        UUID.randomUUID().toString(),  // just use a random (semi-)unique label we don't need to track
-        keyStroke, 
-        actionToPerform
-    );
+  public static void bindKeyStrokeToAction(JComponent component, KeyStroke keyStroke, Action actionToPerform) {
+    bindKeyStrokeToAction(component, UUID.randomUUID().toString(), // just use a random (semi-)unique label we don't
+                                                                   // need to track
+        keyStroke, actionToPerform);
   }
 
   /**
-   * Binds the supplied <code>actionToPerform</code> to the supplied 
-   * <code>keyStroke</code> for the given <code>component</code> 
-   * via the <code>keyStrokeLabel</code>. <p>
-   * Note that the <code>keyStroke</code> will trigger <code>actionToPerform</code>
-   * whenever the component is in a focused window.
+   * Binds the supplied <code>actionToPerform</code> to the supplied
+   * <code>keyStroke</code> for the given <code>component</code> via the
+   * <code>keyStrokeLabel</code>.
+   * <p>
+   * Note that the <code>keyStroke</code> will trigger
+   * <code>actionToPerform</code> whenever the component is in a focused window.
+   * 
    * @see JComponent#WHEN_IN_FOCUSED_WINDOW
    * @param component
    * @param keyStrokeLabel
    * @param keyStroke
    * @param actionToPerform
    */
-  
-  public static void bindKeyStrokeToAction(JComponent component, 
-                                           String keyStrokeLabel, 
-                                           KeyStroke keyStroke, 
-                                           Action actionToPerform) {
-    
+
+  public static void bindKeyStrokeToAction(JComponent component, String keyStrokeLabel, KeyStroke keyStroke,
+      Action actionToPerform) {
+
     InputMap inputMap = component.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
     inputMap.put(keyStroke, keyStrokeLabel);
     component.getActionMap().put(keyStrokeLabel, actionToPerform);
   }
-  
+
   /**
-   * Returns whether the mouse is currently located within the on-screen bounds of component.
+   * Returns whether the mouse is currently located within the on-screen bounds of
+   * component.
+   * 
    * @param component
    * @return true if mouse is over component, false otherwise.
    */
-  
+
   public static boolean mouseIsOverComponent(JComponent component) {
     Point mousePoint = MouseInfo.getPointerInfo().getLocation();
     Point componentPoint = component.getLocationOnScreen();
-    
-    if (mousePoint.x < componentPoint.x) return false;
-    if (mousePoint.x > componentPoint.x + component.getWidth()) return false;
 
-    if (mousePoint.y < componentPoint.y) return false;
-    if (mousePoint.y > componentPoint.y + component.getHeight()) return false;
+    if (mousePoint.x < componentPoint.x)
+      return false;
+    if (mousePoint.x > componentPoint.x + component.getWidth())
+      return false;
+
+    if (mousePoint.y < componentPoint.y)
+      return false;
+    if (mousePoint.y > componentPoint.y + component.getHeight())
+      return false;
 
     return true;
   }
-  
+
   public static void scrollRowToVisible(JTable table, int row) {
-    table.scrollRectToVisible(
-        table.getCellRect(
-            row, 0, true
-        )
-    );
+    table.scrollRectToVisible(table.getCellRect(row, 0, true));
   }
-  
+
   public static void equalizeComponentSizes(List<JComponent> components) {
-    Dimension  maxComponentSize = new Dimension(0,0);
+    Dimension maxComponentSize = new Dimension(0, 0);
     components.stream().forEach(c -> setMaximumSize(maxComponentSize, c));
     components.stream().forEach(c -> resize(c, maxComponentSize));
-  } 
+  }
 
   private static void setMaximumSize(Dimension maxComponentSize, JComponent component) {
-    final Dimension componentSize   = component.getPreferredSize();
-    maxComponentSize.width  = Math.max(maxComponentSize.width,  (int)componentSize.getWidth());
-    maxComponentSize.height = Math.max(maxComponentSize.height, (int)componentSize.getHeight());
+    final Dimension componentSize = component.getPreferredSize();
+    maxComponentSize.width = Math.max(maxComponentSize.width, (int) componentSize.getWidth());
+    maxComponentSize.height = Math.max(maxComponentSize.height, (int) componentSize.getHeight());
   }
 
   private static void resize(JComponent component, Dimension size) {
@@ -178,7 +179,8 @@ public final class BlacksmythSwingUtilities {
     component.setMaximumSize(size);
     component.setMinimumSize(size);
   }
-  
+
+  @SuppressWarnings("serial")
   public static void enableEnterKeyEditsInJTable(final JTable theTable) {
     InputMap im = theTable.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     ActionMap am = theTable.getActionMap();
@@ -187,24 +189,24 @@ public final class BlacksmythSwingUtilities {
 
     im.put(enterKey, "Action.enter");
     am.put("Action.enter", new AbstractAction() {
-        public void actionPerformed(ActionEvent evt) {
-          int row = theTable.getSelectedRow();
-          int column = theTable.getSelectedColumn();
-          
-          if (theTable.editCellAt(row, column)) {
-            theTable.getEditorComponent().requestFocusInWindow();
-          }
+      public void actionPerformed(ActionEvent evt) {
+        int row = theTable.getSelectedRow();
+        int column = theTable.getSelectedColumn();
+
+        if (theTable.editCellAt(row, column)) {
+          theTable.getEditorComponent().requestFocusInWindow();
         }
+      }
     });
   }
-  
+
   public static void setGlyphAsText(AbstractButton button, FontIcon icon) {
-	button.setFont(FontIconProvider.getInstance().getFont());
-	button.setText(icon.asString());
+    button.setFont(FontIconProvider.getInstance().getFont());
+    button.setText(icon.asString());
   }
 
   public static void setGlyphAsTitle(JTabbedPane pane, int tabIndex, FontIcon icon) {
-	pane.setFont(FontIconProvider.getInstance().getFont());
-	pane.setTitleAt(tabIndex, icon.asString());
+    pane.setFont(FontIconProvider.getInstance().getFont());
+    pane.setTitleAt(tabIndex, icon.asString());
   }
 }

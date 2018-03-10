@@ -32,58 +32,57 @@ import javax.swing.JPasswordField;
 
 import blacksmyth.general.BlacksmythSwingUtilities;
 
+@SuppressWarnings("serial")
 public class PasswordPromptView extends JDialog implements IPasswordPromptView, ActionListener {
-  private JFrame controllingFrame; 
-  
+  private JFrame controllingFrame;
+
   private JPasswordField passwordField = new JPasswordField(10);
   private JButton okButton, cancelButton;
 
   private static String OK = "Ok";
   private static String CANCEL = "Cancel";
-  
+
   private boolean passwordSpecified = false;
-  
+
   public PasswordPromptView(PersonalFinancierView view) {
     super(view.getWindowFrame(), true);
     controllingFrame = view.getWindowFrame();
     buildView();
 
-    this.setSize(
-        this.getPreferredSize()
-    );
+    this.setSize(this.getPreferredSize());
   }
-  
+
   private void buildView() {
-    
+
     this.setTitle("Specify File Access Password");
-    
+
     Container contentPane = this.getContentPane();
 
-    GridBagLayout      gbl = new GridBagLayout();
+    GridBagLayout gbl = new GridBagLayout();
     GridBagConstraints gbc = new GridBagConstraints();
 
     contentPane.setLayout(gbl);
 
-    gbc.insets = new Insets(11,11,0,11);
+    gbc.insets = new Insets(11, 11, 0, 11);
 
-    gbc.gridwidth    = GridBagConstraints.REMAINDER;
-    gbc.gridheight   = 1;
-    gbc.gridx        = 0;
-    gbc.gridy        = 0;
-    gbc.weightx      = 0;
-    gbc.anchor       = GridBagConstraints.CENTER;
+    gbc.gridwidth = GridBagConstraints.REMAINDER;
+    gbc.gridheight = 1;
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    gbc.weightx = 0;
+    gbc.anchor = GridBagConstraints.CENTER;
     contentPane.add(createPromptPanel(), gbc);
 
-    gbc.insets = new Insets(17,12,11,11);
+    gbc.insets = new Insets(17, 12, 11, 11);
 
     gbc.gridy++;
-    gbc.weightx      = 1;
-    gbc.anchor       = GridBagConstraints.EAST;
+    gbc.weightx = 1;
+    gbc.anchor = GridBagConstraints.EAST;
     contentPane.add(createButtonPanel(), gbc);
   }
-  
+
   private JPanel createPromptPanel() {
-    
+
     JPanel panel = new JPanel();
 
     passwordField.setActionCommand(OK);
@@ -93,39 +92,37 @@ public class PasswordPromptView extends JDialog implements IPasswordPromptView, 
     label.setDisplayedMnemonic('p');
     label.setLabelFor(passwordField);
 
-    panel.setLayout(
-        new FlowLayout(FlowLayout.TRAILING)
-    );
+    panel.setLayout(new FlowLayout(FlowLayout.TRAILING));
 
     panel.add(label);
     panel.add(passwordField);
-    
+
     return panel;
   }
-  
+
   private JPanel createButtonPanel() {
 
     JPanel buttonPanel = new JPanel();
 
-    GridBagLayout      gbl = new GridBagLayout();
+    GridBagLayout gbl = new GridBagLayout();
     GridBagConstraints gbc = new GridBagConstraints();
 
     buttonPanel.setLayout(gbl);
 
-    gbc.insets = new Insets(0,5,0,0);
+    gbc.insets = new Insets(0, 5, 0, 0);
 
-    gbc.gridwidth    = 1;
-    gbc.gridheight   = 1;
-    gbc.gridx        = 0;
-    gbc.gridy        = 0;
-    gbc.ipadx        = 6;
-    gbc.weightx      = 1; 
-    gbc.gridx        = 0;
-    gbc.anchor       = GridBagConstraints.CENTER;
+    gbc.gridwidth = 1;
+    gbc.gridheight = 1;
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    gbc.ipadx = 6;
+    gbc.weightx = 1;
+    gbc.gridx = 0;
+    gbc.anchor = GridBagConstraints.CENTER;
 
     buttonPanel.add(getOkButton(), gbc);
 
-    gbc.gridx        = 1;
+    gbc.gridx = 1;
 
     buttonPanel.add(getCancelButton(), gbc);
 
@@ -142,7 +139,7 @@ public class PasswordPromptView extends JDialog implements IPasswordPromptView, 
 
     return buttonPanel;
   }
-  
+
   private JButton getCancelButton() {
     cancelButton = new JButton("Cancel");
     cancelButton.setMnemonic(KeyEvent.VK_C);
@@ -154,7 +151,7 @@ public class PasswordPromptView extends JDialog implements IPasswordPromptView, 
 
   private JButton getOkButton() {
     okButton = new JButton("Ok");
-    
+
     okButton.setMnemonic(KeyEvent.VK_O);
     okButton.setActionCommand(OK);
     okButton.addActionListener(this);
@@ -164,18 +161,18 @@ public class PasswordPromptView extends JDialog implements IPasswordPromptView, 
 
   @Override
   public void clearPassword() {
-    //Zero out the possible password, for security.
+    // Zero out the possible password, for security.
     char[] password = passwordField.getPassword();
     Arrays.fill(password, '0');
 
     passwordField.setText(null);
-    
+
     passwordSpecified = false;
 
     passwordField.selectAll();
     resetFocus();
   }
-  
+
   public void actionPerformed(ActionEvent e) {
     if (e.getActionCommand() == OK) {
       passwordSpecified = true;
@@ -185,23 +182,23 @@ public class PasswordPromptView extends JDialog implements IPasswordPromptView, 
     }
     setVisible(false);
   }
-  
-  //Must be called from the event dispatch thread.
+
+  // Must be called from the event dispatch thread.
   protected void resetFocus() {
-      passwordField.requestFocusInWindow();
+    passwordField.requestFocusInWindow();
   }
-  
+
   public void setVisible(boolean visible) {
     if (visible) {
       this.setLocationRelativeTo(controllingFrame);
     }
     super.setVisible(visible);
   }
-  
+
   private void display() {
     setVisible(true);
   }
- 
+
   @Override
   public boolean passwordSpecified() {
     return passwordSpecified;
@@ -219,7 +216,7 @@ public class PasswordPromptView extends JDialog implements IPasswordPromptView, 
   public void displayLoadPrompt() {
     okButton.setText("Load");
     okButton.setMnemonic('L');
-    
+
     display();
   }
 
@@ -230,11 +227,6 @@ public class PasswordPromptView extends JDialog implements IPasswordPromptView, 
 
   @Override
   public void displayError(String errorMessage) {
-    JOptionPane.showMessageDialog(
-        controllingFrame,
-        errorMessage,
-        "Password Error",
-        JOptionPane.ERROR_MESSAGE
-    );
+    JOptionPane.showMessageDialog(controllingFrame, errorMessage, "Password Error", JOptionPane.ERROR_MESSAGE);
   }
 }

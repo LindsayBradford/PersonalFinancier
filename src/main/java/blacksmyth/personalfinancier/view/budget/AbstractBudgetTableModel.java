@@ -15,19 +15,24 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.view.AbstractFinancierTableModel;
 
 /**
- * An abstract TableModel using generics for collecting all common behaviours of the Budget TableModels. An enumeration representing
- * the columns of the table model is required as part of the class definition. 
+ * An abstract TableModel using generics for collecting all common behaviours of
+ * the Budget TableModels. An enumeration representing the columns of the table
+ * model is required as part of the class definition.
+ * 
  * @author linds
  *
  * @param <T>
  */
-abstract class AbstractBudgetTableModel<T extends Enum<T>> extends 
-               AbstractFinancierTableModel<T> implements IBudgetObserver {
+
+@SuppressWarnings("serial")
+abstract class AbstractBudgetTableModel<T extends Enum<T>> extends AbstractFinancierTableModel<T>
+    implements IBudgetObserver {
 
   private BudgetModel budgetModel;
 
   /**
    * Returns a reference to the budget model this TableModel observers.
+   * 
    * @return
    */
   protected final BudgetModel getBudgetModel() {
@@ -35,8 +40,9 @@ abstract class AbstractBudgetTableModel<T extends Enum<T>> extends
   }
 
   /**
-   * Registers this TableModel as an observer of <tt>budgetModel</tt>
-   * and stores a reference to it.
+   * Registers this TableModel as an observer of <tt>budgetModel</tt> and stores a
+   * reference to it.
+   * 
    * @param budgetModel
    */
   protected final void setBudgetModel(BudgetModel budgetModel) {

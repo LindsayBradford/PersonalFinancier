@@ -28,42 +28,45 @@ import blacksmyth.personalfinancier.control.budget.command.MoveExpenseItemUpComm
 import blacksmyth.personalfinancier.control.budget.command.RemoveExpenseItemCommand;
 import blacksmyth.personalfinancier.model.BigDecimalFactory;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
-import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.CashFlowFrequencyUtility;
+import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.budget.BudgetEvent;
 import blacksmyth.personalfinancier.model.budget.BudgetItem;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 enum EXPENSE_ITEM_COLUMNS {
-  Category, Description, Amount, Frequency, 
-  Daily, Weekly,Fortnightly, Monthly,
-  Quarterly, Yearly, Account
+  Category, Description, Amount, Frequency, Daily, Weekly, Fortnightly, Monthly, Quarterly, Yearly, Account
 }
 
+@SuppressWarnings("serial")
 class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMNS> {
-  
+
   public ExpenseItemTableModel(BudgetModel budgetModel) {
     super();
     setBudgetModel(budgetModel);
   }
-  
+
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public Class getColumnClass(int colNum) {
 
     switch (this.getColumnEnumValueAt(colNum)) {
-      case Category:
-        return String.class;
-      case Description:
-        return String.class;
-      case Amount: 
-        return Money.class;
-      case Frequency:
-        return CashFlowFrequency.class;
-      case Daily: case Weekly: case Fortnightly: 
-      case Monthly: case Quarterly: case Yearly:
-        return BigDecimal.class;
-      case Account:
-        return String.class;
+    case Category:
+      return String.class;
+    case Description:
+      return String.class;
+    case Amount:
+      return Money.class;
+    case Frequency:
+      return CashFlowFrequency.class;
+    case Daily:
+    case Weekly:
+    case Fortnightly:
+    case Monthly:
+    case Quarterly:
+    case Yearly:
+      return BigDecimal.class;
+    case Account:
+      return String.class;
     }
     return Object.class;
   }
@@ -71,116 +74,94 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
   public int getRowCount() {
     return getBudgetModel().getExpenseItems().size();
   }
-  
+
   public boolean isCellEditable(int rowNum, int colNum) {
     switch (this.getColumnEnumValueAt(colNum)) {
-      case Daily: case Weekly: case Fortnightly: 
-      case Monthly: case Quarterly: case Yearly:
-        return false;
-      default:
-        return true;
+    case Daily:
+    case Weekly:
+    case Fortnightly:
+    case Monthly:
+    case Quarterly:
+    case Yearly:
+      return false;
+    default:
+      return true;
     }
   }
 
   public Object getValueAt(int rowNum, int colNum) {
     BudgetItem item = getBudgetModel().getExpenseItems().get(rowNum);
-    
+
     switch (this.getColumnEnumValueAt(colNum)) {
-      case Category:
-        return item.getCategory();
-      case Description:
-        return item.getDescription();
-      case Amount: 
-        return item.getBudgettedAmount().getTotal();
-      case Daily:
-        return convertAmount(item, CashFlowFrequency.Daily);
-      case Weekly:
-        return convertAmount(item, CashFlowFrequency.Weekly);
-      case Fortnightly:
-        return convertAmount(item, CashFlowFrequency.Fortnightly);
-      case Monthly:
-        return convertAmount(item, CashFlowFrequency.Monthly);
-      case Quarterly:
-        return convertAmount(item, CashFlowFrequency.Quarterly);
-      case Yearly:
-        return convertAmount(item, CashFlowFrequency.Yearly);
-      case Frequency:
-        return item.getFrequency();
-      case Account:
-         return item.getBudgetAccount().getNickname();
-       default:
-         return null;
+    case Category:
+      return item.getCategory();
+    case Description:
+      return item.getDescription();
+    case Amount:
+      return item.getBudgettedAmount().getTotal();
+    case Daily:
+      return convertAmount(item, CashFlowFrequency.Daily);
+    case Weekly:
+      return convertAmount(item, CashFlowFrequency.Weekly);
+    case Fortnightly:
+      return convertAmount(item, CashFlowFrequency.Fortnightly);
+    case Monthly:
+      return convertAmount(item, CashFlowFrequency.Monthly);
+    case Quarterly:
+      return convertAmount(item, CashFlowFrequency.Quarterly);
+    case Yearly:
+      return convertAmount(item, CashFlowFrequency.Yearly);
+    case Frequency:
+      return item.getFrequency();
+    case Account:
+      return item.getBudgetAccount().getNickname();
+    default:
+      return null;
     }
   }
-  
+
   private BigDecimal convertAmount(BudgetItem item, CashFlowFrequency newFrequency) {
-    return CashFlowFrequencyUtility.convertFrequencyAmount(
-        item.getBudgettedAmount().getTotal(), 
-        item.getFrequency(), 
-        newFrequency
-    );
+    return CashFlowFrequencyUtility.convertFrequencyAmount(item.getBudgettedAmount().getTotal(), item.getFrequency(),
+        newFrequency);
   }
-  
+
   public void setValueAt(Object value, int rowNum, int colNum) {
     switch (this.getColumnEnumValueAt(colNum)) {
     case Category:
-      getBudgetModel().getUndoManager().addEdit(
-          ChangeExpenseCategoryCommand.doCmd(
-              getBudgetModel(), 
-              rowNum, 
-              (String) value
-          )
-      );
+      getBudgetModel().getUndoManager()
+          .addEdit(ChangeExpenseCategoryCommand.doCmd(getBudgetModel(), rowNum, (String) value));
       break;
     case Description:
-      getBudgetModel().getUndoManager().addEdit(
-          ChangeExpenseDescriptionCommand.doCmd(
-              getBudgetModel(), 
-              rowNum, 
-              (String) value
-          )
-      );
+      getBudgetModel().getUndoManager()
+          .addEdit(ChangeExpenseDescriptionCommand.doCmd(getBudgetModel(), rowNum, (String) value));
       break;
     case Amount:
       getBudgetModel().getUndoManager().addEdit(
-          ChangeExpenseAmountCommand.doCmd(
-              getBudgetModel(), 
-              rowNum, 
-              BigDecimalFactory.create((String) value)
-          )
-      );
+          ChangeExpenseAmountCommand.doCmd(getBudgetModel(), rowNum, BigDecimalFactory.create((String) value)));
       break;
     case Frequency:
       getBudgetModel().getUndoManager().addEdit(
-          ChangeExpenseFrequencyCommand.doCmd(
-              getBudgetModel(), 
-              rowNum, 
-              CashFlowFrequency.valueOf((String) value)
-          )
-      );
+          ChangeExpenseFrequencyCommand.doCmd(getBudgetModel(), rowNum, CashFlowFrequency.valueOf((String) value)));
       break;
     case Account:
-      getBudgetModel().getUndoManager().addEdit(
-          ChangeExpenseAccountCommand.doCmd(
-              getBudgetModel(), 
-              rowNum, 
-              (String) value
-          )
-      );
+      getBudgetModel().getUndoManager()
+          .addEdit(ChangeExpenseAccountCommand.doCmd(getBudgetModel(), rowNum, (String) value));
       break;
+    default:
+      // do nothing
     }
   }
-  
+
   /**
-   * Forces a table refresh whenever the BudgetModel this TableModel
-   * observes sends an update.
+   * Forces a table refresh whenever the BudgetModel this TableModel observes
+   * sends an update.
    */
   @Override
   public void update(Observable budgeModelAsObject, Object budgetEventAsObject) {
     BudgetEvent event = (BudgetEvent) budgetEventAsObject;
-    
-    if (event.getItemType() == BudgetEvent.ItemType.ExpenseItems ||
-        event.getItemType() == BudgetEvent.ItemType.AllItems) {
+
+    if (event.getItemType() == BudgetEvent.ItemType.ExpenseItems
+        || event.getItemType() == BudgetEvent.ItemType.AllItems) {
       this.fireTableDataChanged();
     }
   }
@@ -189,48 +170,28 @@ class ExpenseItemTableModel extends AbstractBudgetTableModel<EXPENSE_ITEM_COLUMN
     this.getBudgetModel().addObserver(observer);
   }
 
-  public void addExpenseItem(int row) {    
-    getBudgetModel().getUndoManager().addEdit(
-      AddExpenseItemCommand.doCmd(
-          getBudgetModel(),
-          row
-      )
-    );
+  public void addExpenseItem(int row) {
+    getBudgetModel().getUndoManager().addEdit(AddExpenseItemCommand.doCmd(getBudgetModel(), row));
   }
-  
+
   public void removeItems(int[] rows) {
     CompoundEdit removeItemsEdit = new CompoundEdit();
-	  
-	  Arrays.sort(rows);  // guarantee we're iterating over the rows in correct order.
-	  
-	  for(int rowIdx = rows.length - 1; rowIdx > -1; rowIdx--) {
-	    removeItemsEdit.addEdit(
-	      RemoveExpenseItemCommand.doCmd(
-		      getBudgetModel(),
-		      rows[rowIdx]
-		    )
-      );
-	  }
-	  removeItemsEdit.end();
-	  
-	  getBudgetModel().getUndoManager().addEdit(removeItemsEdit);
+
+    Arrays.sort(rows); // guarantee we're iterating over the rows in correct order.
+
+    for (int rowIdx = rows.length - 1; rowIdx > -1; rowIdx--) {
+      removeItemsEdit.addEdit(RemoveExpenseItemCommand.doCmd(getBudgetModel(), rows[rowIdx]));
+    }
+    removeItemsEdit.end();
+
+    getBudgetModel().getUndoManager().addEdit(removeItemsEdit);
   }
-  
+
   public void moveExpenseItemDown(int row) {
-    getBudgetModel().getUndoManager().addEdit(
-        MoveExpenseItemDownCommand.doCmd(
-            getBudgetModel(),
-            row
-        )
-    );
+    getBudgetModel().getUndoManager().addEdit(MoveExpenseItemDownCommand.doCmd(getBudgetModel(), row));
   }
 
   public void moveExpenseItemUp(int row) {
-    getBudgetModel().getUndoManager().addEdit(
-        MoveExpenseItemUpCommand.doCmd(
-            getBudgetModel(),
-            row
-        )
-    );
+    getBudgetModel().getUndoManager().addEdit(MoveExpenseItemUpCommand.doCmd(getBudgetModel(), row));
   }
 }

@@ -49,18 +49,16 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
 
   private JFrame frame;
   private JTabbedPane componentPane;
-  
+
   private IApplicationMessageView messageViewer;
-  
+
   public PersonalFinancierView() {
 
-    setMessageViewer(
-        createMessageBar()
-    );
-    
+    setMessageViewer(createMessageBar());
+
     createFrame();
   }
-  
+
   @Override
   public void raiseEvent(Events event) {
     this.setChanged();
@@ -75,7 +73,7 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
   @Override
   public void setBounds(Rectangle windowBounds) {
     frame.setBounds(windowBounds);
-    
+
   }
 
   @Override
@@ -94,134 +92,95 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
   }
 
   @Override
-  public void addComponentView(IPersonalFinancierComponentView componentView)  {
-    
+  public void addComponentView(IPersonalFinancierComponentView componentView) {
+
     JComponent swingComponent = (JComponent) componentView;
-    
-    componentPane.addTab(
-        (String) swingComponent.getClientProperty("TabName"), 
-        swingComponent
-    );
+
+    componentPane.addTab((String) swingComponent.getClientProperty("TabName"), swingComponent);
   }
 
   public JFrame getWindowFrame() {
     return frame;
   }
-  
+
   private void createFrame() {
     frame = new JFrame();
 
     frame.setTitle("Personal Financier");
-    
-    frame.setDefaultCloseOperation(
-        WindowConstants.DO_NOTHING_ON_CLOSE
-    );
-    
-    frame.addWindowListener(
-        new WindowAdapter(){
-            @Override
-            public void windowClosing(WindowEvent arg0) {
-                raiseEvent(Events.ExitRequested); 
-            }
-        }
-    );
-    
-    frame.getContentPane().add(
-        ((ApplicationMessageView) this.messageViewer).getPanel(),
-        BorderLayout.PAGE_END
-    );
-    
-    Toolkit.getDefaultToolkit().setDynamicLayout(false);
-    
-    frame.setJMenuBar(
-        createMenu()
-    );
-    
-    frame.getContentPane().add(
-        createMainToolbar(),
-        BorderLayout.PAGE_START
-    );
-    
-    frame.getContentPane().add(
-        createContentPane(), 
-        BorderLayout.CENTER
-    );
-    
-    frame.setBounds(
-        ViewPreferences.getInstance().getWindowBounds()
-    );
-    
-    frame.addComponentListener(
-      new ComponentAdapter() {
-        public void componentResized(ComponentEvent e) {
-          raiseBoundsChangedEvent();
-        }
-        
-        public void componentMoved(ComponentEvent e) {
-          raiseBoundsChangedEvent();
-        }
-        
-        private void raiseBoundsChangedEvent() {
-          ViewPreferences.getInstance().setWindowBounds(
-            frame.getBounds()    
-          );
-        }
+
+    frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+
+    frame.addWindowListener(new WindowAdapter() {
+      @Override
+      public void windowClosing(WindowEvent arg0) {
+        raiseEvent(Events.ExitRequested);
       }
-    );
+    });
+
+    frame.getContentPane().add(((ApplicationMessageView) this.messageViewer).getPanel(), BorderLayout.PAGE_END);
+
+    Toolkit.getDefaultToolkit().setDynamicLayout(false);
+
+    frame.setJMenuBar(createMenu());
+
+    frame.getContentPane().add(createMainToolbar(), BorderLayout.PAGE_START);
+
+    frame.getContentPane().add(createContentPane(), BorderLayout.CENTER);
+
+    frame.setBounds(ViewPreferences.getInstance().getWindowBounds());
+
+    frame.addComponentListener(new ComponentAdapter() {
+      public void componentResized(ComponentEvent e) {
+        raiseBoundsChangedEvent();
+      }
+
+      public void componentMoved(ComponentEvent e) {
+        raiseBoundsChangedEvent();
+      }
+
+      private void raiseBoundsChangedEvent() {
+        ViewPreferences.getInstance().setWindowBounds(frame.getBounds());
+      }
+    });
   }
-  
+
   private Component createMainToolbar() {
     JToolBar toolbar = new JToolBar();
 
     toolbar.addSeparator();
 
-    toolbar.add(
-        createPreferencesButton()
-    );
+    toolbar.add(createPreferencesButton());
 
     toolbar.addSeparator();
-    
-    toolbar.add(
-        createAboutButton()
-    );
-    
+
+    toolbar.add(createAboutButton());
+
     return toolbar;
   }
 
   private JButton createAboutButton() {
     JButton button = new JButton();
-    
+
     button.setForeground(Color.GRAY);
-    
-    BlacksmythSwingUtilities.setGlyphAsText(
-        button, 
-        FontIconProvider.FontIcon.fa_info_circle
-    );
-    
+
+    BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_info_circle);
+
     button.setToolTipText(" About ");
-    
+
     button.putClientProperty("AppMessage", "About this application...");
     getMessageViewer().bindViewComponent(button);
-    
-    button.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent arg0) {
-            JOptionPane.showMessageDialog(
-                frame,
-                "<html><body>" +
-                "This application depends on unmodified binary distributions of the following libraries:" + 
-                 "<ul>" +
-                 "<li> JTattoo (http://www.jtattoo.net/) for a radically different Swing Look & Feel" +
-                 "<li> FontAwesome (http://fortawesome.github.com/Font-Awesome) for icon-friendly font glyphs" +
-                 "<li> GRAL (http://trac.erichseifert.de/gral/) for charting." +
-                 "<li> Json-io (http://code.google.com/p/json-io/) for Java JSon serialisation" +
-                 "</ul>" +
-                 "This project wouldn't be possible without these excellent libraries." +
-                "</body></html>"
-            );
-          }
-        }
-    );
+
+    button.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent arg0) {
+        JOptionPane.showMessageDialog(frame,
+            "<html><body>" + "This application depends on unmodified binary distributions of the following libraries:"
+                + "<ul>" + "<li> JTattoo (http://www.jtattoo.net/) for a radically different Swing Look & Feel"
+                + "<li> FontAwesome (http://fortawesome.github.com/Font-Awesome) for icon-friendly font glyphs"
+                + "<li> GRAL (http://trac.erichseifert.de/gral/) for charting."
+                + "<li> Json-io (http://code.google.com/p/json-io/) for Java JSon serialisation" + "</ul>"
+                + "This project wouldn't be possible without these excellent libraries." + "</body></html>");
+      }
+    });
     return button;
   }
 
@@ -230,43 +189,37 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
 
     button.setForeground(Color.GRAY);
 
-    BlacksmythSwingUtilities.setGlyphAsText(
-        button, 
-        FontIconProvider.FontIcon.fa_cogs
-    );
-    
+    BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_cogs);
+
     button.setToolTipText(" Preferences ");
-    
+
     button.putClientProperty("AppMessage", "Set your preferences (not yet implemented)...");
     getMessageViewer().bindViewComponent(button);
-    
+
     return button;
   }
 
   private JComponent createContentPane() {
     componentPane = new JTabbedPane();
-      
-    componentPane.addMouseMotionListener(
-        new MouseMotionAdapter() {
-          
-          @Override
-          public void mouseMoved(MouseEvent e) {
-            for (int i = 0; i < componentPane.getTabCount(); i++){
-              if (componentPane.getBoundsAt(i).contains(e.getPoint())) { 
-                JComponent component = (JComponent) componentPane.getComponentAt(i);
-               
-                getMessageViewer().showMessage(
-                    (String) component.getClientProperty("AppMessage"),
-                    2000 // 2 seconds.
-                );
-                
-              } // if event point is within tab's bounds
-            } // for all tab pane indices
-          }
+
+    componentPane.addMouseMotionListener(new MouseMotionAdapter() {
+
+      @Override
+      public void mouseMoved(MouseEvent e) {
+        for (int i = 0; i < componentPane.getTabCount(); i++) {
+          if (componentPane.getBoundsAt(i).contains(e.getPoint())) {
+            JComponent component = (JComponent) componentPane.getComponentAt(i);
+
+            getMessageViewer().showMessage((String) component.getClientProperty("AppMessage"), 2000 // 2 seconds.
+            );
+
+          } // if event point is within tab's bounds
+        } // for all tab pane indices
+      }
     });
-    
+
     WidgetFactory.enableSelectionHilightedTabPane(componentPane);
-    
+
     return componentPane;
   }
 
@@ -279,40 +232,29 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
 
     JMenu fileMenu = new JMenu("File");
 
-    fileMenu.add(
-        new JMenuItem("Preferences")
-    );
+    fileMenu.add(new JMenuItem("Preferences"));
 
     fileMenu.addSeparator();
 
-    fileMenu.add(
-        createExitMenuItem()
-    );
-    
+    fileMenu.add(createExitMenuItem());
+
     menuBar.add(fileMenu);
 
     return menuBar;
   }
-  
+
+  @SuppressWarnings("serial")
   private JMenuItem createExitMenuItem() {
     ExitAction = new AbstractAction("Exit") {
       public void actionPerformed(ActionEvent e) {
         raiseEvent(Events.ExitRequested);
       }
     };
-    
-    JMenuItem menuItem = new JMenuItem(
-        ExitAction    
-    );
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(
-        menuItem, 
-        KeyStroke.getKeyStroke(
-            KeyEvent.VK_X, 
-            Event.CTRL_MASK
-        ), 
-        ExitAction
-    );
+    JMenuItem menuItem = new JMenuItem(ExitAction);
+
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(menuItem, KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK),
+        ExitAction);
 
     return menuItem;
   }

@@ -21,66 +21,59 @@ import blacksmyth.general.SortedArrayList;
 import blacksmyth.general.file.IFileHandlerModel;
 import blacksmyth.personalfinancier.control.FinancierUndoManager;
 import blacksmyth.personalfinancier.control.inflation.IInflationController;
+import blacksmyth.personalfinancier.model.ModelPreferences;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
-import blacksmyth.personalfinancier.model.ModelPreferences;
 
-public class InflationModel extends Observable implements InflationProvider, IInflationController,
-                                                          IFileHandlerModel<InflationFileContent> {
-  
+public class InflationModel extends Observable
+    implements InflationProvider, IInflationController, IFileHandlerModel<InflationFileContent> {
+
   private static GregorianCalendar TODAY;
-  
+
   private static final String CONTROLLER_ASSERT_MSG = "Caller does not implement IInflationController.";
-  private static final String VIEWER_ASSERT_MSG = "Caller does not implement IInflationObserver.";
-  
-  //Note: SortedSet of CPIEntries are to be sorted earliest to latest in date order.
+  // private static final String VIEWER_ASSERT_MSG = "Caller does not implement
+  // IInflationObserver.";
+
+  // Note: SortedSet of CPIEntries are to be sorted earliest to latest in date
+  // order.
   private static SortedArrayList<InflationEntry> inflationList = new SortedArrayList<InflationEntry>();
-  
+
   private final FinancierUndoManager undoManager = new FinancierUndoManager();
 
   public InflationModel() {
-    TODAY = new GregorianCalendar(); TODAY.setTime(new Date());
+    TODAY = new GregorianCalendar();
+    TODAY.setTime(new Date());
   }
-  
+
   public SortedArrayList<InflationEntry> getInflationList() {
     return InflationModel.inflationList;
   }
-  
+
   public void setInflationList(SortedArrayList<InflationEntry> list) {
     InflationModel.inflationList = list;
     this.changeAndNotifyObservers();
   }
-  
+
   public FinancierUndoManager getUndoManager() {
     return undoManager;
   }
 
   @Override
-  public Money computeComparisonValue(Money originalValue,
-                                      Calendar originalDate, 
-                                      Calendar comparisonDate) {
+  public Money computeComparisonValue(Money originalValue, Calendar originalDate, Calendar comparisonDate) {
 
     Money returnValue = MoneyFactory.copy(originalValue);
 
     BigDecimal originalCPIForDate = new BigDecimal(getCPIFigureForDate(originalDate));
     BigDecimal comparsionCPIForDate = new BigDecimal(getCPIFigureForDate(comparisonDate));
-    
-   if (getCPIFigureForDate(comparisonDate) == 0) {
-     returnValue.setTotal(
-         new BigDecimal(0)
-     );
-   } else {
-     returnValue.setTotal(
-         originalValue.getTotal().multiply(
-             comparsionCPIForDate.divide(
-                 originalCPIForDate,
-                 ModelPreferences.getInstance().getPreferredPrecision(), 
-                 ModelPreferences.getInstance().getPreferredRoundingMode()
-             )
-         )    
-       );
-   }
-    
+
+    if (getCPIFigureForDate(comparisonDate) == 0) {
+      returnValue.setTotal(new BigDecimal(0));
+    } else {
+      returnValue.setTotal(originalValue.getTotal().multiply(
+          comparsionCPIForDate.divide(originalCPIForDate, ModelPreferences.getInstance().getPreferredPrecision(),
+              ModelPreferences.getInstance().getPreferredRoundingMode())));
+    }
+
     return returnValue;
   }
 
@@ -94,16 +87,16 @@ public class InflationModel extends Observable implements InflationProvider, IIn
     }
     return getCPIFigureFromList(date);
   }
-  
+
   public double getCPIFigureFromList(Calendar date) {
-    
+
     if (inflationList.size() == 0) {
       return 0;
     }
-    
+
     double cpiFigure = inflationList.last().getCPIValue();
-    
-    for(int i = inflationList.size() - 1; i >= 0; i--) {
+
+    for (int i = inflationList.size() - 1; i >= 0; i--) {
       Calendar applicableFromDate = inflationList.get(i).getDate();
       cpiFigure = inflationList.get(i).getCPIValue();
 
@@ -116,42 +109,39 @@ public class InflationModel extends Observable implements InflationProvider, IIn
   }
 
   @Override
-  public double getInflationForDateRange(Calendar earlierDate,
-                                         Calendar laterDate) {
+  public double getInflationForDateRange(Calendar earlierDate, Calendar laterDate) {
 
     if (inflationList.size() == 0) {
       return 0;
     }
-    
+
     if (laterDate.before(earlierDate)) {
       return getInflationForDateRange(laterDate, earlierDate);
-    } 
-    return getCPIFigureForDate(laterDate) / getCPIFigureForDate(earlierDate) - 1;                                           
+    }
+    return getCPIFigureForDate(laterDate) / getCPIFigureForDate(earlierDate) - 1;
   }
 
   @Override
-  public double getInflationPerAnnum(Calendar firstDate,
-                                     Calendar secondDate) {
+  public double getInflationPerAnnum(Calendar firstDate, Calendar secondDate) {
     if (inflationList.size() == 0) {
       return 0;
     }
-    
+
     if (secondDate.before(firstDate)) {
       return getInflationPerAnnum(secondDate, firstDate);
-    } 
-    
+    }
+
     double inflationOverDateRange = getInflationForDateRange(firstDate, secondDate);
     if (inflationOverDateRange != 0) {
-      return  inflationOverDateRange / getTimeDiffInYears(firstDate, secondDate);
+      return inflationOverDateRange / getTimeDiffInYears(firstDate, secondDate);
     }
     return 0;
   }
-  
-  private double getTimeDiffInYears(Calendar earlierDate, 
-                                    Calendar laterDate) {
-    final long   MILLISECONDS_PER_DAY = 86400000;
-    final double DAYS_PER_YEAR =  MILLISECONDS_PER_DAY * 365.25;
-    
+
+  private double getTimeDiffInYears(Calendar earlierDate, Calendar laterDate) {
+    final long MILLISECONDS_PER_DAY = 86400000;
+    final double DAYS_PER_YEAR = MILLISECONDS_PER_DAY * 365.25;
+
     return (laterDate.getTimeInMillis() - earlierDate.getTimeInMillis()) / DAYS_PER_YEAR;
   }
 
@@ -163,7 +153,7 @@ public class InflationModel extends Observable implements InflationProvider, IIn
 
     return inflationList.first().getDate();
   }
-  
+
   @Override
   public Calendar getLatestDate() {
     if (inflationList.size() == 0) {
@@ -172,7 +162,7 @@ public class InflationModel extends Observable implements InflationProvider, IIn
 
     return inflationList.last().getDate();
   }
-  
+
   public InflationEntry addEntry() {
     assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
     InflationEntry newItem = InflationEntryFactory.createEntry(inflationList);
@@ -180,20 +170,18 @@ public class InflationModel extends Observable implements InflationProvider, IIn
     return newItem;
   }
 
-  
   public void addEntry(InflationEntry entry) {
     assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
     inflationList.add(entry);
     this.changeAndNotifyObservers();
   }
-  
-  
+
   public void addEntry(int index, InflationEntry item) {
     assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
     inflationList.add(index, item);
     this.changeAndNotifyObservers();
   }
-  
+
   public InflationEntry removeEntry(int index) {
     assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
     InflationEntry removedEntry = inflationList.remove(index);
@@ -206,7 +194,7 @@ public class InflationModel extends Observable implements InflationProvider, IIn
     inflationList.remove(entry);
     this.changeAndNotifyObservers();
   }
-  
+
   public void setInflationEntryValue(int index, double value) {
     assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
     assert (index >= 0 && index < inflationList.size());
@@ -235,20 +223,20 @@ public class InflationModel extends Observable implements InflationProvider, IIn
 
   @Override
   public void fromSerializable(InflationFileContent content) {
-     //assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
+    // assert ReflectionUtilities.callerImplements(IInflationController.class) :
+    // CONTROLLER_ASSERT_MSG;
     inflationList = content.inflationList;
-    
+
     this.changeAndNotifyObservers();
   }
 
   @Override
   public InflationFileContent toSerializable() {
     InflationFileContent content = new InflationFileContent();
-    
+
     content.inflationList = inflationList;
-    
+
     return content;
   }
-  
- 
+
 }

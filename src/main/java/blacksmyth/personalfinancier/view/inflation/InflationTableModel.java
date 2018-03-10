@@ -21,14 +21,15 @@ import blacksmyth.personalfinancier.control.inflation.command.ChangeInflationDat
 import blacksmyth.personalfinancier.control.inflation.command.ChangeInflationNotesCommand;
 import blacksmyth.personalfinancier.control.inflation.command.ChangeInflationValueCommand;
 import blacksmyth.personalfinancier.control.inflation.command.RemoveInflationEntryCommand;
-
-import blacksmyth.personalfinancier.view.AbstractFinancierTableModel;
-import blacksmyth.personalfinancier.model.inflation.InflationModel;
 import blacksmyth.personalfinancier.model.inflation.InflationEntry;
+import blacksmyth.personalfinancier.model.inflation.InflationModel;
+import blacksmyth.personalfinancier.view.AbstractFinancierTableModel;
 
 /**
- * An abstract TableModel using generics for collecting all common behaviours of the Budget TableModels. An enumeration representing
- * the columns of the table model is required as part of the class definition. 
+ * An abstract TableModel using generics for collecting all common behaviours of
+ * the Budget TableModels. An enumeration representing the columns of the table
+ * model is required as part of the class definition.
+ * 
  * @author linds
  *
  * @param <T>
@@ -38,11 +39,11 @@ enum COLUMNS {
   Date, CPI, Notes
 }
 
+@SuppressWarnings("serial")
 class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
 
   private InflationModel inflationModel;
 
-  
   public InflationTableModel(InflationModel inflationModel) {
     super();
     setInflationModel(inflationModel);
@@ -50,6 +51,7 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
 
   /**
    * Returns a reference to the budget model this TableModel observers.
+   * 
    * @return
    */
   protected final InflationModel getInflationModel() {
@@ -57,29 +59,30 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
   }
 
   /**
-   * Registers this TableModel as an observer of <tt>budgetModel</tt>
-   * and stores a reference to it.
+   * Registers this TableModel as an observer of <tt>budgetModel</tt> and stores a
+   * reference to it.
+   * 
    * @param budgetModel
    */
   protected final void setInflationModel(InflationModel inflationModel) {
     inflationModel.addObserver(this);
     this.inflationModel = inflationModel;
   }
-  
+
   public void addModelObserver(Observer observer) {
     inflationModel.addObserver(observer);
   }
-  
+
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public Class getColumnClass(int colNum) {
 
     switch (this.getColumnEnumValueAt(colNum)) {
-      case Date:
-        return GregorianCalendar.class;
-      case CPI:
-        return Double.class;
-      case Notes: 
-        return String.class;
+    case Date:
+      return GregorianCalendar.class;
+    case CPI:
+      return Double.class;
+    case Notes:
+      return String.class;
     }
     return Object.class;
   }
@@ -87,86 +90,61 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
   public int getRowCount() {
     return inflationModel.getInflationList().size();
   }
-  
+
   public boolean isCellEditable(int rowNum, int colNum) {
     return true;
   }
 
   public Object getValueAt(int rowNum, int colNum) {
     InflationEntry entry = inflationModel.getInflationList().get(rowNum);
-    
+
     switch (this.getColumnEnumValueAt(colNum)) {
-      case Date:
-        return entry.getDate();
-      case CPI:
-        return new Double(entry.getCPIValue());
-      case Notes: 
-        return entry.getNotes();
-      default:
-        return null;
+    case Date:
+      return entry.getDate();
+    case CPI:
+      return new Double(entry.getCPIValue());
+    case Notes:
+      return entry.getNotes();
+    default:
+      return null;
     }
   }
-  
+
   public void setValueAt(Object value, int rowNum, int colNum) {
     switch (this.getColumnEnumValueAt(colNum)) {
     case Date:
-      
+
       GregorianCalendar valueAsCalendar = (GregorianCalendar) value;
-       
-      inflationModel.getUndoManager().addEdit(
-          ChangeInflationDateCommand.doCmd(
-              inflationModel, 
-              rowNum, 
-              valueAsCalendar
-          )
-      );
+
+      inflationModel.getUndoManager()
+          .addEdit(ChangeInflationDateCommand.doCmd(inflationModel, rowNum, valueAsCalendar));
       break;
     case CPI:
-      inflationModel.getUndoManager().addEdit(
-          ChangeInflationValueCommand.doCmd(
-              inflationModel, 
-              rowNum, 
-              Double.parseDouble((String) value)
-          )
-      );
+      inflationModel.getUndoManager()
+          .addEdit(ChangeInflationValueCommand.doCmd(inflationModel, rowNum, Double.parseDouble((String) value)));
       break;
     case Notes:
-      inflationModel.getUndoManager().addEdit(
-          ChangeInflationNotesCommand.doCmd(
-              inflationModel, 
-              rowNum, 
-              (String) value
-          )
-      );
+      inflationModel.getUndoManager()
+          .addEdit(ChangeInflationNotesCommand.doCmd(inflationModel, rowNum, (String) value));
       break;
     }
   }
 
   public void addEntry() {
-    inflationModel.getUndoManager().addEdit(
-        AddInflationEntryCommand.doCmd(
-            inflationModel
-        )
-    );
+    inflationModel.getUndoManager().addEdit(AddInflationEntryCommand.doCmd(inflationModel));
   }
 
   public void removeEntries(int[] rows) {
     CompoundEdit removeItemsEdit = new CompoundEdit();
-    
-    Arrays.sort(rows);  // guarantee we're iterating over the rows in correct order.
-  
-    for(int rowIdx = rows.length - 1; rowIdx > -1; rowIdx--) {
-      removeItemsEdit.addEdit(
-        RemoveInflationEntryCommand.doCmd(
-          inflationModel,
-          rows[rowIdx]
-        )
-      );
+
+    Arrays.sort(rows); // guarantee we're iterating over the rows in correct order.
+
+    for (int rowIdx = rows.length - 1; rowIdx > -1; rowIdx--) {
+      removeItemsEdit.addEdit(RemoveInflationEntryCommand.doCmd(inflationModel, rows[rowIdx]));
     }
     removeItemsEdit.end();
-    
+
     inflationModel.getUndoManager().addEdit(removeItemsEdit);
   }
-
 
 }

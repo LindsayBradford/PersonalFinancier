@@ -12,52 +12,48 @@ package blacksmyth.personalfinancier.control;
 import java.util.Observable;
 
 import blacksmyth.personalfinancier.model.IPersomalFinancierModel;
-
 import blacksmyth.personalfinancier.view.IPersonalFinancierView;
 import blacksmyth.personalfinancier.view.IPersonalFinancierView.Events;
 
 public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter {
-  
+
+  @SuppressWarnings("unused")
   private IPersomalFinancierModel model;
-  
+
   public PersonalFinancierPersenter(IPersonalFinancierView view, IPersomalFinancierModel model) {
     addView(view);
     setModel(model);
   }
-  
+
   @Override
   public void addView(IPersonalFinancierView view) {
     ((Observable) view).addObserver(this);
   }
-  
+
   @Override
   public void update(Observable o, Object arg) {
-    processEvent(
-        (IPersonalFinancierView) o,
-        (IPersonalFinancierView.Events) arg
-    );
+    processEvent((IPersonalFinancierView) o, (IPersonalFinancierView.Events) arg);
   }
 
   @Override
   public void processEvent(IPersonalFinancierView view, Events event) {
-    switch(event) {
+    switch (event) {
 
-      case ExitRequested:
-        processExitRequest();
-        break;
+    case ExitRequested:
+      processExitRequest();
+      break;
     }
   }
-  
+
   private void processExitRequest() {
     // TODO: Move this out to the budget presenter.
-    //UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
-    //budgetFileController.save();
+    // UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
+    // budgetFileController.save();
     System.exit(0);
   }
 
   @Override
   public void setModel(IPersomalFinancierModel model) {
     this.model = model;
-    
   }
 }

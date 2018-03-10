@@ -19,10 +19,11 @@ import blacksmyth.personalfinancier.control.budget.IBudgetController;
 
 public class AccountModel extends Observable {
   private static final String CONTROLLER_ASSERT_MSG = "Caller does not implement IBudgetController.";
-  private static final String VIEWER_ASSERT_MSG = "Caller does not implement IBudgetObserver.";
-  
+  // private static final String VIEWER_ASSERT_MSG = "Caller does not implement
+  // BudgetObserver.";
+
   private ArrayList<Account> accounts;
-  
+
   public AccountModel() {
     super();
     addDefaultAccount();
@@ -52,7 +53,7 @@ public class AccountModel extends Observable {
     }
     return Account.DEFAULT;
   }
-  
+
   public Account getAccount(String nickname) {
     for (Account account : this.getAccounts()) {
       if (account.getNickname().equals(nickname)) {
@@ -61,7 +62,7 @@ public class AccountModel extends Observable {
     }
     return Account.DEFAULT;
   }
-  
+
   public int getAccountIndex(String nickname) {
     for (Account account : this.getAccounts()) {
       if (account.getNickname().equals(nickname)) {
@@ -74,7 +75,7 @@ public class AccountModel extends Observable {
   public Account getAccount(int index) {
     return this.accounts.get(index);
   }
-  
+
   public void setAccountNickname(int index, String newNickname) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     assert (index >= 0 && index < this.accounts.size());
@@ -88,7 +89,7 @@ public class AccountModel extends Observable {
     this.accounts.get(index).setDetail(newDetail);
     this.changeAndNotifyObservers();
   }
-  
+
   public ArrayList<Account> getBudgetAccounts() {
     ArrayList<Account> budgetAccounts = new ArrayList<Account>();
     for (Account account : this.accounts) {
@@ -101,32 +102,31 @@ public class AccountModel extends Observable {
 
   public Account addAccount() {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
-    
+
     Account newAccount = Account.Create();
-    
+
     this.addAccount(newAccount);
-    
+
     return newAccount;
   }
-  
+
   public void addAccount(Account account) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.accounts.add(account);
     this.changeAndNotifyObservers();
   }
-  
-  
+
   public void removeAccount(Account account) {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.accounts.remove(account);
     this.changeAndNotifyObservers();
   }
-  
+
   private void changeAndNotifyObservers() {
     this.setChanged();
     this.notifyObservers();
   }
-  
+
   public void addObserver(Observer observer) {
     super.addObserver(observer);
     this.changeAndNotifyObservers();

@@ -18,14 +18,11 @@ import blacksmyth.personalfinancier.view.WidgetFactory;
 
 public class InflationWidgetFactory {
 
-  @SuppressWarnings("serial")
   public static DefaultTableCellRenderer createCPIValueCellRenderer() {
     return WidgetFactory.createDecimalCellRenderer(JTextField.CENTER);
   }
-  
+
   public static DefaultCellEditor createCPIValueCellEditor() {
-    return new DefaultCellEditor(
-        WidgetFactory.createCentredDecimalTextField()
-    );
+    return new DefaultCellEditor(WidgetFactory.createCentredDecimalTextField());
   }
 }
