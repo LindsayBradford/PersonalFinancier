@@ -19,8 +19,7 @@ import blacksmyth.personalfinancier.control.budget.IBudgetController;
 
 public class AccountModel extends Observable {
   private static final String CONTROLLER_ASSERT_MSG = "Caller does not implement IBudgetController.";
-  // private static final String VIEWER_ASSERT_MSG = "Caller does not implement
-  // BudgetObserver.";
+  // private static final String VIEWER_ASSERT_MSG = "Caller does not implement BudgetObserver.";
 
   private ArrayList<Account> accounts;
 
