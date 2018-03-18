@@ -13,11 +13,13 @@ package blacksmyth.personalfinancier;
 
 import javax.swing.UIManager;
 
+import org.apache.logging.log4j.core.config.Configurator;
+
+import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
+
 import blacksmyth.personalfinancier.control.PersonalFinancierPersenter;
 import blacksmyth.personalfinancier.model.PersonalFinancierModel;
 import blacksmyth.personalfinancier.view.PersonalFinancierView;
-
-import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
 
 /**
  * The bootstrap "main" class for the PersonalFinancier.  It 
@@ -45,8 +47,12 @@ public final class PersonalFinancier {
     
     createView().display();
   }
+
   
   private static PersonalFinancierView createView() {
+    
+    Configurator.initialize("config", "resources/log4j2config.xml");    
+    
     final PersonalFinancierView view = new PersonalFinancierView();
     
     new PersonalFinancierPersenter(

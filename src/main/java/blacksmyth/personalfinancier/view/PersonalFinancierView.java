@@ -40,10 +40,15 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.general.FontIconProvider;
 
 public class PersonalFinancierView extends Observable implements IPersonalFinancierView {
+  
+  private static final Logger LOG = LogManager.getLogger(PersonalFinancierView.class);
 
   private static Action ExitAction;
 
@@ -73,11 +78,11 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
   @Override
   public void setBounds(Rectangle windowBounds) {
     frame.setBounds(windowBounds);
-
   }
 
   @Override
   public void display() {
+    LOG.info("Displaying View");
     frame.setVisible(true);
   }
 
