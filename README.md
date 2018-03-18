@@ -13,6 +13,7 @@ A budgetting and bookeeping application built to suit my way of doing household 
   * GRAL (<http://trac.erichseifert.de/gral/>) for charting. 
   * JUnit (<http://junit.org/>) for unit testing.
   * Mockito (<https://code.google.com/p/mockito/>) for mock object testing. 
+  * Log4j2 (<https://logging.apache.org/log4j/2.x/>) for logging. 
   
 ## Contact Detail:
 - Email: lindsay.w.bradford@gmail.com
