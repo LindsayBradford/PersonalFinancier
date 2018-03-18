@@ -54,10 +54,10 @@ public final class EncryptionBridge implements IEncryptionBridge {
   
   private IEncryptionBridge getConcreteBridge() {
     if (encryptionAvailable()) {
-      LOG.info("Found encryption bridge [{}]", BouncyCastleEncryptionBridge.getInstance().getClass().getSimpleName());
+      LOG.info("Found encryption bridge [{}]", BouncyCastleEncryptionBridge.getInstance().getName());
       return BouncyCastleEncryptionBridge.getInstance();
     }
-    LOG.info("No encryption bridge found. Using [{}]", NullEncryptionBridge.getInstance().getClass().getSimpleName());
+    LOG.info("No encryption bridge found. Using [{}]", NullEncryptionBridge.getInstance().getName());
     return NullEncryptionBridge.getInstance();
   }
 }

@@ -68,4 +68,8 @@ public interface IEncryptionBridge {
    * @return decrypted content if encryption is available.
    */
   public byte[] decrypt(char[] password, byte[] content);
+  
+  default String getName() {
+    return this.getClass().getSimpleName();
+  }
 }
