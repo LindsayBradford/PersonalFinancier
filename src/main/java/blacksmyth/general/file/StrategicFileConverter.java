@@ -12,6 +12,9 @@ package blacksmyth.general.file;
 
 import java.util.HashMap;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * This is a concrete implementation of IObjectFileConverter<T> that
  * interrogates the file extension  of the file specified, and uses that
@@ -21,6 +24,8 @@ import java.util.HashMap;
  */
 
 public class StrategicFileConverter<T> implements IObjectFileConverter<T> {
+  
+  private static final Logger LOG = LogManager.getLogger(StrategicFileConverter.class);
 
   private HashMap<String, IObjectFileConverter<T>> adapterMap;
   
@@ -45,6 +50,9 @@ public class StrategicFileConverter<T> implements IObjectFileConverter<T> {
     String fileExt = getFileExtension(filePath);
 
     IObjectFileConverter<T> converter = adapterMap.get(fileExt);
+    
+    
+    LOG.info("Converter [{}] can process file [{}]",converter.getClass().getSimpleName(),  filePath);
     
     assert converter != null : "No converter maps to supplied file (" + filePath + ")";
 

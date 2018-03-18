@@ -11,10 +11,14 @@
 package blacksmyth.personalfinancier.dependencies.json;
 
 import java.util.HashMap;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.cedarsoftware.util.io.JsonIoException;
 import com.cedarsoftware.util.io.JsonObject;
-import com.cedarsoftware.util.io.JsonWriter;
 import com.cedarsoftware.util.io.JsonReader;
+import com.cedarsoftware.util.io.JsonWriter;
 
 /**
  * A class implementing the 'Concrete Implementor class' of the Bridge pattern, allowing a bridge 
@@ -25,9 +29,12 @@ import com.cedarsoftware.util.io.JsonReader;
  */
 
 final class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
+  
+  private static final Logger LOG = LogManager.getLogger(JSonIoBridge.class);
 
   @Override
   public String toJSon(T object) {
+    LOG.info("Converting object hierarchy to JSON");
     return JsonWriter.formatJson(
       JsonWriter.objectToJson(object)
     );
@@ -36,7 +43,12 @@ final class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
   @SuppressWarnings("unchecked")
   @Override
   public T fromJSon(String jsonContent) {
-    if (jsonContent == null) { return null; }
+    LOG.info("Converting JSON to object hierarchy");
+
+    if (jsonContent == null) { 
+      LOG.warn("Content supplied was empty. Nothing to convert.");
+      return null; 
+    }
     
     try {
     	
@@ -57,6 +69,7 @@ final class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
 
       return (T) objectOfJsonContent;
     } catch (JsonIoException e) {
+      LOG.error(e);
       return null;
     }
   }

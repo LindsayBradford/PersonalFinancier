@@ -18,6 +18,8 @@ import java.security.spec.InvalidKeySpecException;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bouncycastle.crypto.DataLengthException;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.engines.AESEngine;
@@ -38,6 +40,8 @@ import blacksmyth.general.ByteUtilities;
 
 final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
   
+  private static final Logger LOG = LogManager.getLogger(BouncyCastleEncryptionBridge.class);
+
   private static PaddedBufferedBlockCipher CIPHER;
   
   /**
@@ -54,7 +58,6 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
   }
   
   protected BouncyCastleEncryptionBridge() {
-
     Security.addProvider(
         new BouncyCastleProvider()
     );
@@ -63,6 +66,7 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
   }
   
   @Override
+  @Deprecated
   public String encrypt(char[] password, String content) {
     return ByteUtils.toHexString(
         encrypt(
@@ -76,6 +80,7 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
   
   @Override
   public byte[] encrypt(char[] password, byte[] content) {
+    LOG.info("Encrypting content against password supplied");
     
     AESElements e = AESBuilder.buildElements(password);
 
@@ -89,18 +94,17 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
     ParametersWithIV parameterIV =
         new ParametersWithIV(new KeyParameter(e.key),e.iv);
 
-    /*
-    System.out.println("Encrypt salt: " + ByteUtils.toHexString(e.salt));
-    System.out.println("Encrypt  key: " + ByteUtils.toHexString(e.key));
-    System.out.println("Encrypt   IV: " + ByteUtils.toHexString(e.iv));
-    */
-    
+    LOG.debug("Encrypt salt: " + ByteUtils.toHexString(e.salt));
+    LOG.debug("Encrypt  key: " + ByteUtils.toHexString(e.key));
+    LOG.debug("Encrypt   IV: " + ByteUtils.toHexString(e.iv));
+   
     CIPHER.init(true, parameterIV);
 
     return processContent(content);
   }
   
   @Override
+  @Deprecated
   public String decrypt(char[] password, String content) {
     return ByteUtilities.bytesToString(
         decrypt(
@@ -114,6 +118,7 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
 
   @Override
   public byte[] decrypt(char[] password, byte[] content) {
+    LOG.info("Decrypting content against password supplied");
     
     AESElements e = new AESElements();
 
@@ -140,12 +145,10 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
     ParametersWithIV parameterIV =
         new ParametersWithIV(new KeyParameter(e.key),e.iv);
 
-    /*
-    System.out.println("Decrypt salt: " + ByteUtils.toHexString(e.salt));
-    System.out.println("Decrypt  key: " + ByteUtils.toHexString(e.key));
-    System.out.println("Decrypt   IV: " + ByteUtils.toHexString(e.iv));
-    */
-    
+    LOG.debug("Encrypt salt: " + ByteUtils.toHexString(e.salt));
+    LOG.debug("Encrypt  key: " + ByteUtils.toHexString(e.key));
+    LOG.debug("Encrypt   IV: " + ByteUtils.toHexString(e.iv));
+   
     CIPHER.init(false, parameterIV);
 
     return processContent(encryptedContent);

@@ -10,6 +10,9 @@
 
 package blacksmyth.personalfinancier.dependencies.json;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import blacksmyth.general.file.IFileSystemBridge;
 import blacksmyth.general.file.IObjectFileConverter;
 
@@ -19,6 +22,8 @@ import blacksmyth.general.file.IObjectFileConverter;
  */
 
 public class JSonObjectFileConverter<T> implements IObjectFileConverter<T> {
+  
+  private static final Logger LOG = LogManager.getLogger(JSonObjectFileConverter.class);
   
   private IJSonSerialisationBridge<T> jsonBridge;
   private IFileSystemBridge fileSystemBridge;
@@ -42,6 +47,8 @@ public class JSonObjectFileConverter<T> implements IObjectFileConverter<T> {
   public void toFileFromObject(String filePath, T t) {
     assert hasValidConfig();
     
+    LOG.info("Saving content to file [{}]", filePath);
+    
     fileSystemBridge.saveTextFile(
         filePath, 
         jsonBridge.toJSon(t)
@@ -51,6 +58,8 @@ public class JSonObjectFileConverter<T> implements IObjectFileConverter<T> {
   @Override
   public T toObjectFromFile(String filePath) {
     assert hasValidConfig();
+
+    LOG.info("Loading content from file [{}]", filePath);
 
     return jsonBridge.fromJSon(
       fileSystemBridge.loadTextFile(filePath)

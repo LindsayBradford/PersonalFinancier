@@ -10,6 +10,9 @@
 
 package blacksmyth.personalfinancier.dependencies.json;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import blacksmyth.general.ByteUtilities;
 import blacksmyth.general.file.IFileSystemBridge;
 import blacksmyth.general.file.IObjectFileConverter;
@@ -23,6 +26,8 @@ import blacksmyth.personalfinancier.view.IPasswordPromptView;
  */
 
 public class EncryptedJSonFileConverter<T> implements IObjectFileConverter<T>, IPasswordPromptPresenter {
+
+  private static final Logger LOG = LogManager.getLogger(EncryptedJSonFileConverter.class);
   
   private IPasswordPromptView passwordView;
   
@@ -64,9 +69,11 @@ public class EncryptedJSonFileConverter<T> implements IObjectFileConverter<T>, I
     if (!passwordView.passwordSpecified()) {
       return;
     }
-    
+
     byte[] contentAsBytes = ByteUtilities.stringToBytes(jsonBridge.toJSon(t));
-    
+
+    LOG.info("Saving encrypted content to file [{}]", filePath);
+
     fileSystemBridge.saveBinaryFile(
         filePath, 
         encryptionBridge.encrypt(
@@ -87,7 +94,9 @@ public class EncryptedJSonFileConverter<T> implements IObjectFileConverter<T>, I
     if (!passwordView.passwordSpecified()) {
       return null;
     }
-    
+
+    LOG.info("Loading encrypted content from file [{}]", filePath);
+
     byte[] decryptedContent = encryptionBridge.decrypt(
         passwordView.getPassword(), 
         fileSystemBridge.loadBinaryFile(filePath)
@@ -101,7 +110,7 @@ public class EncryptedJSonFileConverter<T> implements IObjectFileConverter<T>, I
       );
       return null;
     }
-    
+
     T objectFromFile = jsonBridge.fromJSon(
         ByteUtilities.bytesToString(decryptedContent)
     );

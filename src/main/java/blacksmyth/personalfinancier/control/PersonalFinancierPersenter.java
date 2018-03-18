@@ -11,11 +11,16 @@ package blacksmyth.personalfinancier.control;
 
 import java.util.Observable;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import blacksmyth.personalfinancier.model.IPersomalFinancierModel;
 import blacksmyth.personalfinancier.view.IPersonalFinancierView;
 import blacksmyth.personalfinancier.view.IPersonalFinancierView.Events;
 
 public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter {
+
+  private static final Logger LOG = LogManager.getLogger(PersonalFinancierPersenter.class);
 
   @SuppressWarnings("unused")
   private IPersomalFinancierModel model;
@@ -37,8 +42,10 @@ public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter 
 
   @Override
   public void processEvent(IPersonalFinancierView view, Events event) {
-    switch (event) {
 
+    LOG.info("Processing View Event [{}]", event.name());
+
+    switch (event) {
     case ExitRequested:
       processExitRequest();
       break;
@@ -49,6 +56,7 @@ public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter 
     // TODO: Move this out to the budget presenter.
     // UndoManagers.BUDGET_UNDO_MANAGER.discardAllEdits();
     // budgetFileController.save();
+    LOG.info("Exiting Application");
     System.exit(0);
   }
 

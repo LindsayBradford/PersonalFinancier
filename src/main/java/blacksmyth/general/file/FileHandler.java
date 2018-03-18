@@ -12,6 +12,9 @@ package blacksmyth.general.file;
 
 import java.util.Observer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import blacksmyth.personalfinancier.control.IApplicationMessagePresenter;
 import blacksmyth.personalfinancier.model.IPreferenceItem;
 
@@ -22,6 +25,8 @@ import blacksmyth.personalfinancier.model.IPreferenceItem;
  * @param <T>
  */
 public final class FileHandler<T> implements IFileHandler<T> {
+
+  private static final Logger LOG = LogManager.getLogger(FileHandler.class);
 
   private IFileHandlerView     view;
   private IFileHandlerModel<T> model;
@@ -64,6 +69,7 @@ public final class FileHandler<T> implements IFileHandler<T> {
 
   @Override
   public void save() {
+    LOG.info("Handling event [File Save]");
     assert hasValidConfig();
 
     if (view.getFilename() == null) {
@@ -81,10 +87,12 @@ public final class FileHandler<T> implements IFileHandler<T> {
           view.getFilename()
       );
     }
+    LOG.info("Event [File Save] handled.");
   }
 
   @Override
   public void saveAs() {
+    LOG.info("Handling event [File Save As]");
     assert hasValidConfig();
 
     if (view.promptForSaveFilename()) {
@@ -94,6 +102,7 @@ public final class FileHandler<T> implements IFileHandler<T> {
           view.getFilename()
       );
     }
+    LOG.info("Event [File Save As] handled");
   }
 
   private void save(String fileName) {
@@ -115,6 +124,7 @@ public final class FileHandler<T> implements IFileHandler<T> {
   
   @Override
   public void load() {
+    LOG.info("Handling event [File Load]");
     assert hasValidConfig();
 
     view.setPromptDirectory(
@@ -128,6 +138,7 @@ public final class FileHandler<T> implements IFileHandler<T> {
           view.getFilename()
       );
     }
+    LOG.info("Event [File Load] handled");
   }
   
   private void load(String filename) {

@@ -10,6 +10,9 @@
 
 package blacksmyth.personalfinancier.dependencies.encryption;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import blacksmyth.general.ReflectionUtilities;
 
 /**
@@ -19,6 +22,8 @@ import blacksmyth.general.ReflectionUtilities;
  */
 
 public final class EncryptionBridge implements IEncryptionBridge {
+  
+  private static final Logger LOG = LogManager.getLogger(EncryptionBridge.class);
   
   @Override
   public String encrypt(char[] password, String content) {
@@ -49,8 +54,10 @@ public final class EncryptionBridge implements IEncryptionBridge {
   
   private IEncryptionBridge getConcreteBridge() {
     if (encryptionAvailable()) {
+      LOG.info("Found encryption bridge [{}]", BouncyCastleEncryptionBridge.getInstance().getClass().getSimpleName());
       return BouncyCastleEncryptionBridge.getInstance();
     }
+    LOG.info("No encryption bridge found. Using [{}]", NullEncryptionBridge.getInstance().getClass().getSimpleName());
     return NullEncryptionBridge.getInstance();
   }
 }
