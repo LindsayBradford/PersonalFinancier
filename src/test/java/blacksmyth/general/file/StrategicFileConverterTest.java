@@ -10,15 +10,19 @@
 
 package blacksmyth.general.file;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import org.mockito.Mock;
 
 public class StrategicFileConverterTest {
  
@@ -27,6 +31,9 @@ public class StrategicFileConverterTest {
   
   private static HashMap<String, IObjectFileConverter<String>> converterMap;
   private static StrategicFileConverter<String> testConverter;
+
+  @Mock
+  private static IObjectFileConverter<String> defaultMockConverter;
   
   enum FileType {
 	  SVG, PDF, PNG;
@@ -45,7 +52,8 @@ public class StrategicFileConverterTest {
 		);
 	    
 	    testConverter = new StrategicFileConverter<String>();
-	    testConverter.setAdapterMap(converterMap);	  
+	    testConverter.setConverterMap(converterMap);	
+	    testConverter.setDefaultConverter(defaultMockConverter);
   }
   
   @SuppressWarnings({ "unchecked", "cast" })
@@ -114,13 +122,13 @@ public class StrategicFileConverterTest {
 	  return converterMap.get(fileType.key());
   }
   
-  @Test(expected=AssertionError.class)
-  public void ToObjectFromFile_UnsupportedFilenameSupplied_AssertionError() {
+  public void ToObjectFromFile_UnsupportedFilenameSupplied_DefaultUsed() {
     testConverter.toObjectFromFile("test.crap");
+    verify(defaultMockConverter).toObjectFromFile("test.crap");
   }
 
-  @Test(expected=AssertionError.class)
-  public void ToFileFromObject_UnsupportedFilenameSupplied_AssertionError() {
+  public void ToFileFromObject_UnsupportedFilenameSupplied_DefaultUsed() {
     testConverter.toFileFromObject("test.crap", "cart");
+    verify(defaultMockConverter).toFileFromObject("test.crap", "cart");
   }
 }

@@ -26,11 +26,17 @@ import org.apache.logging.log4j.Logger;
 public class StrategicFileConverter<T> implements IObjectFileConverter<T> {
   
   private static final Logger LOG = LogManager.getLogger(StrategicFileConverter.class);
-
-  private HashMap<String, IObjectFileConverter<T>> adapterMap;
   
-  public void setAdapterMap(HashMap<String, IObjectFileConverter<T>> inputMap) {
-    this.adapterMap = inputMap;
+  private IObjectFileConverter<T> defaultConverter;
+  
+  private HashMap<String, IObjectFileConverter<T>> converterMap;
+  
+  public void setConverterMap(HashMap<String, IObjectFileConverter<T>> inputMap) {
+    this.converterMap = inputMap;
+  }
+  
+  public void setDefaultConverter(IObjectFileConverter<T> defaultConverter) {
+    this.defaultConverter = defaultConverter;
   }
 
   @Override
@@ -42,19 +48,18 @@ public class StrategicFileConverter<T> implements IObjectFileConverter<T> {
   @Override
   public void toFileFromObject(String filePath, T t) {
     IObjectFileConverter<T> converter = getMatchingConverter(filePath);
-    
     converter.toFileFromObject(filePath, t);
   }
 
   private IObjectFileConverter<T> getMatchingConverter(String filePath) {
     String fileExt = getFileExtension(filePath);
 
-    IObjectFileConverter<T> converter = adapterMap.get(fileExt);
-    
-    assert converter != null : "No converter maps to supplied file (" + filePath + ")";
+    IObjectFileConverter<T> converter = converterMap.get(fileExt);
+    if (converter == null) {
+      return defaultConverter;
+    }
 
-    LOG.info("Converter [{}] can process file [{}]",converter.getClass().getSimpleName(),  filePath);
-
+    LOG.info("Converter [{}] can process file [{}]", converter.getClass().getSimpleName(),  filePath);
     return converter;
   }
   
