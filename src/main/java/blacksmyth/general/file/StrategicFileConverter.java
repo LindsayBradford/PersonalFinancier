@@ -51,10 +51,9 @@ public class StrategicFileConverter<T> implements IObjectFileConverter<T> {
 
     IObjectFileConverter<T> converter = adapterMap.get(fileExt);
     
-    
-    LOG.info("Converter [{}] can process file [{}]",converter.getClass().getSimpleName(),  filePath);
-    
     assert converter != null : "No converter maps to supplied file (" + filePath + ")";
+
+    LOG.info("Converter [{}] can process file [{}]",converter.getClass().getSimpleName(),  filePath);
 
     return converter;
   }
