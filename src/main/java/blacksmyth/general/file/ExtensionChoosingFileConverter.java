@@ -23,9 +23,9 @@ import org.apache.logging.log4j.Logger;
  * @param <T>
  */
 
-public class StrategicFileConverter<T> implements IObjectFileConverter<T> {
+public class ExtensionChoosingFileConverter<T> implements IObjectFileConverter<T> {
   
-  private static final Logger LOG = LogManager.getLogger(StrategicFileConverter.class);
+  private static final Logger LOG = LogManager.getLogger(ExtensionChoosingFileConverter.class);
   
   private IObjectFileConverter<T> defaultConverter;
   

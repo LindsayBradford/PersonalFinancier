@@ -22,7 +22,7 @@ import blacksmyth.general.file.IFileHandlerModel;
 import blacksmyth.general.file.IFileHandlerView;
 import blacksmyth.general.file.IObjectFileConverter;
 import blacksmyth.general.file.NullObjectFileConverter;
-import blacksmyth.general.file.StrategicFileConverter;
+import blacksmyth.general.file.ExtensionChoosingFileConverter;
 import blacksmyth.personalfinancier.dependencies.encryption.EncryptionBridge;
 import blacksmyth.personalfinancier.dependencies.json.EncryptedJSonFileConverter;
 import blacksmyth.personalfinancier.dependencies.json.JSonBridge;
@@ -130,8 +130,8 @@ public final class FileHandlerBuilder {
   private static IObjectFileConverter<BudgetFileContent> buildBudgetFileConverter(
       HashMap<String, IObjectFileConverter<BudgetFileContent>> converters) {
     
-    StrategicFileConverter<BudgetFileContent> strategicConverter = 
-        new StrategicFileConverter<BudgetFileContent>();
+    ExtensionChoosingFileConverter<BudgetFileContent> strategicConverter = 
+        new ExtensionChoosingFileConverter<BudgetFileContent>();
 
     strategicConverter.setConverterMap(converters);
     strategicConverter.setDefaultConverter(new NullObjectFileConverter<BudgetFileContent>());

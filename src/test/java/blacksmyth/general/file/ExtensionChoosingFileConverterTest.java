@@ -24,13 +24,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mock;
 
-public class StrategicFileConverterTest {
+public class ExtensionChoosingFileConverterTest {
  
   private static final String EXPECTED_RESULT_PREFIX = "prefix-";
   private static final String DUMMY_CONTENT = "dummyContent";
   
   private static HashMap<String, IObjectFileConverter<String>> converterMap;
-  private static StrategicFileConverter<String> testConverter;
+  private static ExtensionChoosingFileConverter<String> testConverter;
 
   @Mock
   private static IObjectFileConverter<String> defaultMockConverter;
@@ -51,7 +51,7 @@ public class StrategicFileConverterTest {
 				ft -> converterMap.put(ft.key(), buildMockConverter(ft.key()))
 		);
 	    
-	    testConverter = new StrategicFileConverter<String>();
+	    testConverter = new ExtensionChoosingFileConverter<String>();
 	    testConverter.setConverterMap(converterMap);	
 	    testConverter.setDefaultConverter(defaultMockConverter);
   }
