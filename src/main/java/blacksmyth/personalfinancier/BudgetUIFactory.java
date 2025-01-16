@@ -12,7 +12,6 @@ package blacksmyth.personalfinancier;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Event;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -188,7 +187,7 @@ class BudgetUIFactory {
 
     button.setForeground(Color.GREEN.darker());
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK),
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK),
         SaveBudgetAction);
 
     button.setMnemonic(KeyEvent.VK_S);
@@ -207,7 +206,7 @@ class BudgetUIFactory {
 
     JButton button = new JButton(SaveAsBudgetAction);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK),
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK),
         SaveAsBudgetAction);
 
     button.setMnemonic(KeyEvent.VK_A);
@@ -228,7 +227,7 @@ class BudgetUIFactory {
 
     JButton button = new JButton(LoadBudgetAction);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_L, Event.CTRL_MASK),
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK),
         LoadBudgetAction);
 
     button.setMnemonic(KeyEvent.VK_L);
@@ -291,10 +290,10 @@ class BudgetUIFactory {
         BudgetItemDeleteAction);
 
     BlacksmythSwingUtilities.bindKeyStrokeToAction(expenseItemPanel,
-        KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, Event.ALT_MASK), BudgetItemDownAction);
+        KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, ActionEvent.ALT_MASK), BudgetItemDownAction);
 
     BlacksmythSwingUtilities.bindKeyStrokeToAction(expenseItemPanel,
-        KeyStroke.getKeyStroke(KeyEvent.VK_UP, Event.ALT_MASK), BudgetItemUpAction);
+        KeyStroke.getKeyStroke(KeyEvent.VK_UP, ActionEvent.ALT_MASK), BudgetItemUpAction);
 
     return expenseItemPanel;
   }
@@ -316,10 +315,10 @@ class BudgetUIFactory {
         BudgetItemDeleteAction);
 
     BlacksmythSwingUtilities.bindKeyStrokeToAction(incomeItemPanel,
-        KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, Event.ALT_MASK), BudgetItemDownAction);
+        KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, ActionEvent.ALT_MASK), BudgetItemDownAction);
 
     BlacksmythSwingUtilities.bindKeyStrokeToAction(incomeItemPanel,
-        KeyStroke.getKeyStroke(KeyEvent.VK_UP, Event.ALT_MASK), BudgetItemUpAction);
+        KeyStroke.getKeyStroke(KeyEvent.VK_UP, ActionEvent.ALT_MASK), BudgetItemUpAction);
 
     return incomeItemPanel;
   }
@@ -672,7 +671,7 @@ class BudgetUIFactory {
 
     BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_undo);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK),
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK),
         undoAction);
 
     button.setForeground(Color.GREEN);
@@ -707,7 +706,7 @@ class BudgetUIFactory {
 
     BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_repeat);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK),
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK),
         redoAction);
 
     button.setForeground(Color.GREEN);

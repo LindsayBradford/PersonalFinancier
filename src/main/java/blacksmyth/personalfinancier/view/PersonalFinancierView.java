@@ -12,7 +12,6 @@ package blacksmyth.personalfinancier.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Event;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -258,7 +257,7 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
 
     JMenuItem menuItem = new JMenuItem(ExitAction);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(menuItem, KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK),
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(menuItem, KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK),
         ExitAction);
 
     return menuItem;

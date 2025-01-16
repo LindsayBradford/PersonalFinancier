@@ -5,8 +5,8 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/Data/03.Development/GitHubRepositories/PersonalFinancier/libs/gral-core-0.11.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/junit-4.12.jar" sourcepath="libs/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="libs/gral-core-0.11.jar"/>
+	<classpathentry kind="lib" path="libs/junit-4.13.2.jar" sourcepath="libs/junit-4.13.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/mockito-all-1.10.19.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/JTattoo-1.6.11.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/json-io-4.10.0.jar"/>

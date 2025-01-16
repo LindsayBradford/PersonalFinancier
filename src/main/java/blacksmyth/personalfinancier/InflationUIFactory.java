@@ -13,7 +13,6 @@ package blacksmyth.personalfinancier;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Event;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -149,7 +148,7 @@ class InflationUIFactory {
 
     button.setForeground(Color.GREEN.darker());
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK),
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK),
         SaveInflationAction);
 
     // TODO: assign non-conflicting mnemonic
@@ -228,7 +227,7 @@ class InflationUIFactory {
 
     BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_undo);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK),
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK),
         undoAction);
 
     button.setForeground(Color.GREEN);
@@ -263,7 +262,7 @@ class InflationUIFactory {
 
     BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_repeat);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK),
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK),
         redoAction);
 
     button.setForeground(Color.GREEN);
