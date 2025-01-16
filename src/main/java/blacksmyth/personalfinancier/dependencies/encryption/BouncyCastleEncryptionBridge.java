@@ -28,7 +28,7 @@ import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
+import org.bouncycastle.pqc.legacy.math.linearalgebra.ByteUtils;
 
 import blacksmyth.general.ByteUtilities;
 

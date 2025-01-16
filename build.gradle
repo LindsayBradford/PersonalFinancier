@@ -9,7 +9,7 @@ sourceCompatibility = '10'
 targetCompatibility = '10'
 
 project.group = 'blacksmyth.personalfinancier'
-project.version = '0.4'
+project.version = '0.5'
 
 project.ext {
   title = 'PersonalFinancier'
@@ -28,20 +28,17 @@ List testLibs = [
 List libsToMerge = [ 
   'com.jtattoo:JTattoo:1.6.11', 
   'com.cedarsoftware:json-io:4.10.0', 
-  'de.erichseifert.gral:gral-core:0.10',
+  'de.erichseifert.gral:gral-core:0.11',
   'org.apache.logging.log4j:log4j-api:2.11.0',
   'org.apache.logging.log4j:log4j-core:2.11.0'
 ]
 
 List libsToShip = [ 
-  'org.bouncycastle:bcprov-jdk15on:1.58' 
+  'org.bouncycastle:bcprov-jdk18on:1.80' 
 ]
 
 repositories {
    mavenCentral()
-   maven {
-     url 'http://mvn.erichseifert.de/maven2'
-   } 
 }
 
 configurations {

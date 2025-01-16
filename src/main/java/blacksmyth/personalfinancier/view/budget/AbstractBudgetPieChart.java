@@ -23,13 +23,13 @@ import javax.swing.border.EmptyBorder;
 import blacksmyth.personalfinancier.control.budget.IBudgetObserver;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.Drawable;	
 import de.erichseifert.gral.plots.PiePlot;
 import de.erichseifert.gral.plots.PiePlot.PieSliceRenderer;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.ui.InteractivePanel;
-import de.erichseifert.gral.util.Insets2D;
-import de.erichseifert.gral.util.Location;
+import de.erichseifert.gral.graphics.Insets2D;
+import de.erichseifert.gral.graphics.Location;
 
 /**
  * An abstract Pie Chart that summarises and displays budget model data.
