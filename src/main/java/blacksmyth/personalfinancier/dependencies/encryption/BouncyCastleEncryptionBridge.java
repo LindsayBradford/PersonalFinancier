@@ -218,8 +218,8 @@ final class AESBuilder {
   public static PaddedBufferedBlockCipher buildCipher() {
     return
         new PaddedBufferedBlockCipher(
-            new CBCBlockCipher(
-                new AESEngine()
+            CBCBlockCipher.newInstance(
+                AESEngine.newInstance()
             )
       );
   }
