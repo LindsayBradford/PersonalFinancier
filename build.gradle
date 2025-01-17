@@ -21,7 +21,8 @@ project.ext {
 mainClassName = project.group + '.' + project.title
 
 List testLibs = [
-  'junit:junit:4.13.2', 
+  'junit:junit:4.13.2',
+  'org.hamcrest:hamcrest:2.2',
   'org.mockito:mockito-all:1.10.19'
 ]
 

@@ -17,5 +17,6 @@
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="lib" path="libs/JTattoo-1.6.13.jar"/>
 	<classpathentry kind="lib" path="libs/commons-codec-1.17.2.jar"/>
+	<classpathentry kind="lib" path="libs/hamcrest-2.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
