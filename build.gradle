@@ -25,7 +25,8 @@ List testLibs = [
   'org.mockito:mockito-all:1.10.19'
 ]
 
-List libsToMerge = [ 
+List libsToMerge = [
+  'commons-codec:commons-codec:1.17.2', 
   'com.jtattoo:JTattoo:1.6.13', 
   'com.cedarsoftware:json-io:4.10.0', 
   'de.erichseifert.gral:gral-core:0.11',
