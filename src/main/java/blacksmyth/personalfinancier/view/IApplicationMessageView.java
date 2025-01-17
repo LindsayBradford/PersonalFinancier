@@ -10,14 +10,14 @@
 
 package blacksmyth.personalfinancier.view;
 
-import java.util.Observer;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JComponent;
 
 /**
  *  An interface for showing messages at an application level.
  */
-public interface IApplicationMessageView extends Observer {
+public interface IApplicationMessageView extends PropertyChangeListener {
   
   public void bindViewComponent(JComponent component);
   

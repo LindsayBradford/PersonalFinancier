@@ -23,7 +23,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Observable;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -45,7 +46,7 @@ import org.apache.logging.log4j.Logger;
 import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.general.FontIconProvider;
 
-public class PersonalFinancierView extends Observable implements IPersonalFinancierView {
+public class PersonalFinancierView implements IPersonalFinancierView {
   
   private static final Logger LOG = LogManager.getLogger(PersonalFinancierView.class);
 
@@ -55,8 +56,11 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
   private JTabbedPane componentPane;
 
   private IApplicationMessageView messageViewer;
+  
+  private PropertyChangeSupport support;
 
   public PersonalFinancierView() {
+    support = new PropertyChangeSupport(this);
 
     setMessageViewer(createMessageBar());
 
@@ -65,8 +69,12 @@ public class PersonalFinancierView extends Observable implements IPersonalFinanc
 
   @Override
   public void raiseEvent(Events event) {
-    this.setChanged();
-    this.notifyObservers(event);
+    support.firePropertyChange("ViewEvent", null, event);
+  }
+  
+  @Override
+  public void addObserver(PropertyChangeListener listener) {
+    support.addPropertyChangeListener(listener);
   }
 
   @Override

@@ -10,7 +10,7 @@
 
 package blacksmyth.general.file;
 
-import java.util.Observer;
+import java.beans.PropertyChangeListener;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -167,8 +167,8 @@ public final class FileHandler<T> implements IFileHandler<T> {
   }
   
   @Override
-  public void addObserver(Observer o) {
-    appMessagePresenter.addObserver(o);
+  public void addObserver(PropertyChangeListener listener) {
+      appMessagePresenter.addObserver(listener);
   }
   
 }

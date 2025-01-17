@@ -13,6 +13,8 @@ package blacksmyth.personalfinancier.view;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Observable;
 import java.util.prefs.Preferences;
 
@@ -31,7 +33,7 @@ public class ViewPreferences extends BasePreferences {
   private static ViewPreferences instance = null;
 
   protected ViewPreferences() {
-     // Exists only to defeat instantiation.
+    support = new PropertyChangeSupport(this);
   }
   
   public static ViewPreferences getInstance() {
@@ -244,5 +246,9 @@ public class ViewPreferences extends BasePreferences {
         color.getRGB()
     );
     this.setChangeAndNotifyObservers();
+  }
+  
+  public void addObserver(PropertyChangeListener listener) {
+      support.addPropertyChangeListener(listener);
   }
 }

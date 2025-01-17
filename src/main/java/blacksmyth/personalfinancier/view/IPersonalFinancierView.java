@@ -10,6 +10,7 @@
 package blacksmyth.personalfinancier.view;
 
 import java.awt.Rectangle;
+import java.beans.PropertyChangeListener;
 
 /**
  * The interface all implementations of a view for the Personal Financier utility must implement.
@@ -74,5 +75,7 @@ public interface IPersonalFinancierView {
    * Ensures the view is being displayed to the user.
    */
   public void display();
+
+  public void addObserver(PropertyChangeListener listener);
 
 }

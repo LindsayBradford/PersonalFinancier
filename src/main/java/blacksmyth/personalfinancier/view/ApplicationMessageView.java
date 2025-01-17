@@ -16,7 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -81,13 +81,14 @@ public class ApplicationMessageView implements IApplicationMessageView {
   }
 
   @Override
-  public void update(Observable o, Object arg) {
+  public void propertyChange(PropertyChangeEvent evt) {
     assert ReflectionUtilities.classImplements(
-        o.getClass(), 
+        evt.getSource().getClass(), 
         IApplicationMessagePresenter.class
     );
-    showMessage((String) arg);
+    showMessage((String) evt.getNewValue());
   }
+
 
   @Override
   public void showMessage(String message) {
@@ -128,4 +129,5 @@ public class ApplicationMessageView implements IApplicationMessageView {
          }
     });
   }
+
 }

@@ -9,7 +9,7 @@
  */
 package blacksmyth.personalfinancier.control;
 
-import java.util.Observer;
+import java.beans.PropertyChangeListener;
 
 import blacksmyth.personalfinancier.view.IPersonalFinancierView;
 import blacksmyth.personalfinancier.view.IPersonalFinancierView.Events;
@@ -21,7 +21,7 @@ import blacksmyth.personalfinancier.model.IPersomalFinancierModel;
  * It is a Presenter as per the MVP design pattern. 
  *
  */
-public interface IPersoanalFinancierPresenter extends Observer {
+public interface IPersoanalFinancierPresenter extends PropertyChangeListener {
   
   /**
    * Binds the supplied view to this presenter, so the presenter can issue

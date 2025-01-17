@@ -9,7 +9,7 @@
  */
 package blacksmyth.personalfinancier.control;
 
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,12 +32,12 @@ public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter 
 
   @Override
   public void addView(IPersonalFinancierView view) {
-    ((Observable) view).addObserver(this);
+    view.addObserver(this);
   }
 
   @Override
-  public void update(Observable o, Object arg) {
-    processEvent((IPersonalFinancierView) o, (IPersonalFinancierView.Events) arg);
+  public void propertyChange(PropertyChangeEvent evt) {
+    processEvent((IPersonalFinancierView) evt.getSource(), (IPersonalFinancierView.Events) evt.getNewValue());
   }
 
   @Override
@@ -64,4 +64,6 @@ public class PersonalFinancierPersenter implements IPersoanalFinancierPresenter 
   public void setModel(IPersomalFinancierModel model) {
     this.model = model;
   }
+
+
 }

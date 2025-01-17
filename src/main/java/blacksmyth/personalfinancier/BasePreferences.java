@@ -10,7 +10,7 @@
 
 package blacksmyth.personalfinancier;
 
-import java.util.Observable;
+import java.beans.PropertyChangeSupport;
 import java.util.prefs.Preferences;
 
 /**
@@ -18,17 +18,18 @@ import java.util.prefs.Preferences;
  * allowing observers to react to user preference changes. Constructed as a singleton so that observers 
  * can subscribe to updates via an object instance reference to PreferencesModel.
  */
-public abstract class BasePreferences extends Observable {
+public abstract class BasePreferences {
 
   private static final String BaseNode = "blacksmyth/personalfinancier";
   protected static final Preferences BaseUserPrefs = Preferences.userRoot().node(BaseNode);
 
+  protected PropertyChangeSupport support;
+  
   protected String getPath() {
     return BaseUserPrefs.absolutePath();
   }
 
   protected void setChangeAndNotifyObservers() {
-    this.setChanged();
-    this.notifyObservers();
+    support.firePropertyChange("PreferencesChanged", null, null);
   }
 }

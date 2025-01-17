@@ -10,6 +10,8 @@
 
 package blacksmyth.personalfinancier.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Currency;
@@ -36,7 +38,7 @@ public class ModelPreferences extends BasePreferences {
   private static MathContext preferredMathContext;
   
   protected ModelPreferences() {
-     // Exists only to defeat instantiation.
+    support = new PropertyChangeSupport(this);
   }
   
   public static ModelPreferences getInstance() {
@@ -201,4 +203,9 @@ public class ModelPreferences extends BasePreferences {
     );
     this.setChangeAndNotifyObservers();
   }
+  
+  public void addObserver(PropertyChangeListener listener) {
+    support.addPropertyChangeListener(listener);
+  }
+
 }

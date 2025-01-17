@@ -10,16 +10,27 @@
 
 package blacksmyth.general;
 
-import java.util.Observable;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 import blacksmyth.personalfinancier.control.IApplicationMessagePresenter;
 
-public class ApplicationMessagePresenter extends Observable 
+public class ApplicationMessagePresenter  
             implements IApplicationMessagePresenter {
+  
+  public ApplicationMessagePresenter() {
+    support = new PropertyChangeSupport(this);
+  }
 
+  private PropertyChangeSupport support;
+  
+  public void addObserver(PropertyChangeListener o) {
+    support.addPropertyChangeListener(o);
+  }
+  
+  
   @Override
   public void setMessage(String message) {
-    setChanged();
-    notifyObservers(message);
+    support.firePropertyChange("ApplicaitonMessage", null, message);
   }
 }

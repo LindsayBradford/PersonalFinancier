@@ -10,7 +10,7 @@
 
 package blacksmyth.general.file;
 
-import java.util.Observer;
+import java.beans.PropertyChangeListener;
 
 import blacksmyth.personalfinancier.control.IApplicationMessagePresenter;
 import blacksmyth.personalfinancier.model.IPreferenceItem;
@@ -75,6 +75,6 @@ public interface IFileHandler<T> {
    * Allows Observers to watch for updates.
    * @param o
    */
-  void addObserver(Observer o);
+  void addObserver(PropertyChangeListener listener);
 
 }

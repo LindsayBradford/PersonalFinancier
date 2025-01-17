@@ -9,22 +9,25 @@
  */
 package blacksmyth.personalfinancier.model;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeSupport;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * The default implementation of the Personal Financier Model.
  */
 
-public final class PersonalFinancierModel extends Observable implements IPersomalFinancierModel, Observer {
+public final class PersonalFinancierModel implements IPersomalFinancierModel, PropertyChangeListener {
+  
+  private PropertyChangeSupport support;
   
   public PersonalFinancierModel() {
+    support = new PropertyChangeSupport(this);
     ModelPreferences.getInstance().addObserver(this);
   }
 
   @Override
-  public void update(Observable arg0, Object arg1) {
-    this.setChanged();
-    this.notifyObservers(arg1);
+  public void propertyChange(PropertyChangeEvent evt) {
+    support.firePropertyChange(evt);
   }
 }

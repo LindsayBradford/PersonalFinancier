@@ -16,8 +16,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -542,7 +542,7 @@ class BudgetUIFactory {
       }
     };
 
-    final Observer budgetButtonsController = new Observer() {
+    final PropertyChangeListener budgetButtonsController = new PropertyChangeListener() {
       {
         this.updateViewers();
       }
@@ -558,7 +558,8 @@ class BudgetUIFactory {
         }
       }
 
-      public void update(Observable arg0, Object arg1) {
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
         updateViewers();
       }
     };
@@ -598,7 +599,7 @@ class BudgetUIFactory {
       }
     };
 
-    final Observer derivedColumnController = new Observer() {
+    final PropertyChangeListener derivedColumnController = new PropertyChangeListener() {
       {
         this.updateViewers();
       }
@@ -613,7 +614,8 @@ class BudgetUIFactory {
         }
       }
 
-      public void update(Observable arg0, Object arg1) {
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
         updateViewers();
       }
     };

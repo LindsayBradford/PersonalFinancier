@@ -10,7 +10,7 @@
 
 package blacksmyth.personalfinancier.control;
 
-import java.util.Observer;
+import java.beans.PropertyChangeListener;
 
 /**
  * Implementations of this interface are expected to extend the Observable
@@ -24,7 +24,7 @@ public interface IApplicationMessagePresenter {
    * Adds observer o to the list of observers watching this message presenter.
    * @param o
    */
-  public void addObserver(Observer o);
+  public void addObserver(PropertyChangeListener o);
   
   /**
    * Allows the setting of an application message. 
