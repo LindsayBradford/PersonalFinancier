@@ -102,7 +102,7 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
     case Date:
       return entry.getDate();
     case CPI:
-      return new Double(entry.getCPIValue());
+      return Double.valueOf(entry.getCPIValue());
     case Notes:
       return entry.getNotes();
     default:
