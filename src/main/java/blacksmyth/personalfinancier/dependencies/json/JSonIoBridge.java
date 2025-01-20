@@ -53,7 +53,7 @@ final class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
     try {
     	
     	HashMap<String, Object> args = new HashMap<>();
-    	args.put(JsonReader.FAIL_ON_UNKNOWN_TYPE, Boolean.TRUE);
+    	args.put(JsonReader.FAIL_ON_UNKNOWN_TYPE, Boolean.FALSE);
     	
     	Object objectOfJsonContent = JsonReader.jsonToJava(jsonContent, args);
 

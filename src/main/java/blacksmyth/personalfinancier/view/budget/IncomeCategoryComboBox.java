@@ -10,7 +10,7 @@
 
 package blacksmyth.personalfinancier.view.budget;
 
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -28,15 +28,16 @@ public class IncomeCategoryComboBox extends JComboBox<String> implements IBudget
     );
   }
   
-  public void update(Observable budgetModel, Object modelArgs) {
-    
-    BudgetEvent event = (BudgetEvent) modelArgs;
+  
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    BudgetEvent event = (BudgetEvent) evt.getNewValue();
     if (event.getItemType() == BudgetEvent.ItemType.incomeCategories || 
         event.getItemType() == BudgetEvent.ItemType.AllItems) {
-      buildItemList((BudgetModel) budgetModel);
+      buildItemList((BudgetModel) evt.getSource());
     }
   }
-  
+
   private void buildItemList(BudgetModel model) {
     this.removeAllItems();
 

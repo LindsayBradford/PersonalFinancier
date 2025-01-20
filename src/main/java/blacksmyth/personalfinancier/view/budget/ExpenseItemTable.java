@@ -11,8 +11,8 @@
 package blacksmyth.personalfinancier.view.budget;
 
 import java.awt.Component;
+import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
-import java.util.Observer;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
@@ -98,7 +98,7 @@ public class ExpenseItemTable extends JTable {
     getColFromEnum(EXPENSE_ITEM_COLUMNS.Account).setCellEditor(editor);
     
     this.getExpenseItemTableModel().addModelObserver(
-        (Observer) editor.getComponent()
+        (PropertyChangeListener) editor.getComponent()
     );
     
     BlacksmythSwingUtilities.lockColumnWidth(
@@ -138,7 +138,7 @@ public class ExpenseItemTable extends JTable {
     getColFromEnum(EXPENSE_ITEM_COLUMNS.Category).setCellEditor(editor);
 
     this.getExpenseItemTableModel().addModelObserver(
-        (Observer) editor.getComponent()
+        (PropertyChangeListener) editor.getComponent()
     );
     
     BlacksmythSwingUtilities.lockColumnWidth(

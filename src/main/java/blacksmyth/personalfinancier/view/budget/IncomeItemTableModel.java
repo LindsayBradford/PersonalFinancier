@@ -10,10 +10,10 @@
 
 package blacksmyth.personalfinancier.view.budget;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.undo.CompoundEdit;
 
@@ -157,16 +157,16 @@ class IncomeItemTableModel extends AbstractBudgetTableModel<INCOME_ITEM_COLUMNS>
    * sends an update.
    */
   @Override
-  public void update(Observable budgeModelAsObject, Object budgetEventAsObject) {
-    BudgetEvent event = (BudgetEvent) budgetEventAsObject;
+  public void propertyChange(PropertyChangeEvent evt) {
+    BudgetEvent event = (BudgetEvent) evt.getNewValue();
 
     if (event.getItemType() == BudgetEvent.ItemType.IncomeItems
         || event.getItemType() == BudgetEvent.ItemType.AllItems) {
       this.fireTableDataChanged();
     }
   }
-
-  public void addModelObserver(Observer observer) {
+  
+  public void addModelObserver(PropertyChangeListener observer) {
     this.getBudgetModel().addObserver(observer);
   }
 
@@ -194,4 +194,5 @@ class IncomeItemTableModel extends AbstractBudgetTableModel<INCOME_ITEM_COLUMNS>
   public void moveIncomeItemUp(int row) {
     getBudgetModel().getUndoManager().addEdit(MoveIncomeItemUpCommand.doCmd(getBudgetModel(), row));
   }
+
 }

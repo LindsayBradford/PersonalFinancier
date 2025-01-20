@@ -15,7 +15,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.LinearGradientPaint;
 import java.awt.Shape;
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -66,9 +66,9 @@ public abstract class AbstractBudgetPieChart extends JPanel implements IBudgetOb
   protected BudgetModel getModel() {
     return this.model;
   }
-
+  
   @Override
-  public void update(Observable arg0, Object arg1) {
+  public void propertyChange(PropertyChangeEvent evt) {
     forceUpdate();
   }
 

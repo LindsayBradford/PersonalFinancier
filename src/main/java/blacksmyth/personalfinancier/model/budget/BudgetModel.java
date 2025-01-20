@@ -10,12 +10,13 @@
 
 package blacksmyth.personalfinancier.model.budget;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Observable;
-import java.util.Observer;
 
 import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.general.SortedArrayList;
@@ -31,8 +32,8 @@ import blacksmyth.personalfinancier.model.ModelPreferences;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
 
-public class BudgetModel extends Observable
-    implements Observer, IBudgetController, IFileHandlerModel<BudgetFileContent> {
+public class BudgetModel 
+    implements PropertyChangeListener, IBudgetController, IFileHandlerModel<BudgetFileContent> {
 
   private static final String CONTROLLER_ASSERT_MSG = "Caller does not implement IBudgetController.";
   private static final String VIEWER_ASSERT_MSG = "Caller does not implement IBudgetObserver.";
@@ -52,11 +53,15 @@ public class BudgetModel extends Observable
 
   private Money netCashFlow;
   
+  private PropertyChangeSupport support;
+  
   private enum BudgetItemType {
     INCOME, EXPENSE
   }
 
   public BudgetModel(AccountModel accountModel) {
+    this.support = new PropertyChangeSupport(this);
+    
     this.expenseCategories = new HashSet<String>();
     this.incomeCategories = new HashSet<String>();
 
@@ -489,20 +494,18 @@ public class BudgetModel extends Observable
   }
 
   public void changeAndNotifyObservers(BudgetEvent.ItemType itemType) {
-    this.setChanged();
     this.updateDerivedData();
-    this.notifyObservers(new BudgetEvent(itemType));
+    support.firePropertyChange("BUdget Event", null, new BudgetEvent(itemType));
   }
 
-  public void addObserver(Observer observer) {
-    assert (ReflectionUtilities.classImplements(observer.getClass(), IBudgetObserver.class)) : VIEWER_ASSERT_MSG;
-    super.addObserver(observer);
-
+  public void addObserver(PropertyChangeListener listener) {
+    assert (ReflectionUtilities.classImplements(listener.getClass(), IBudgetObserver.class)) : VIEWER_ASSERT_MSG;
+    support.addPropertyChangeListener(listener);
     this.changeAndNotifyObservers();
   }
 
-  public void update(Observable o, Object arg) {
-    this.changeAndNotifyObservers();
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
   }
 
   public BudgetFileContent toSerializable() {

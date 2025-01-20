@@ -10,21 +10,23 @@
 
 package blacksmyth.personalfinancier.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
 import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.personalfinancier.control.budget.IBudgetController;
 
-public class AccountModel extends Observable {
+public class AccountModel {
   private static final String CONTROLLER_ASSERT_MSG = "Caller does not implement IBudgetController.";
   // private static final String VIEWER_ASSERT_MSG = "Caller does not implement BudgetObserver.";
 
   private ArrayList<Account> accounts;
 
+  private PropertyChangeSupport support;
+  
   public AccountModel() {
-    super();
+    support = new PropertyChangeSupport(this);
     addDefaultAccount();
   }
 
@@ -122,12 +124,11 @@ public class AccountModel extends Observable {
   }
 
   private void changeAndNotifyObservers() {
-    this.setChanged();
-    this.notifyObservers();
+    support.firePropertyChange("Account Changed", null,null);
   }
 
-  public void addObserver(Observer observer) {
-    super.addObserver(observer);
+  public void addObserver(PropertyChangeListener listener) {
+    support.addPropertyChangeListener(listener);
     this.changeAndNotifyObservers();
   }
 }

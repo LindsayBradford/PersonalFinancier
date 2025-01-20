@@ -10,7 +10,7 @@
 
 package blacksmyth.personalfinancier.view.budget;
 
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.Money;
@@ -58,7 +58,7 @@ public class BudgetCategorySummaryTableModel extends AbstractBudgetTableModel<CA
   }
   
   @Override
-  public void update(Observable arg0, Object arg1) {
+  public void propertyChange(PropertyChangeEvent evt) {
     this.fireTableDataChanged();
   }
 }

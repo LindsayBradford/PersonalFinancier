@@ -10,7 +10,7 @@
 
 package blacksmyth.personalfinancier.view.budget;
 
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 
 import javax.swing.JComboBox;
 
@@ -21,10 +21,11 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 @SuppressWarnings("serial")
 public class AccountComboBox extends JComboBox<String> implements IBudgetObserver {
 
-  public void update(Observable model, Object modelArgs) {
-    buildItemList((BudgetModel) model);
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    buildItemList((BudgetModel) evt.getSource());
   }
-  
+
   private void buildItemList(BudgetModel model) {
     this.removeAllItems();
 
@@ -32,4 +33,5 @@ public class AccountComboBox extends JComboBox<String> implements IBudgetObserve
       this.addItem(account.getNickname());
     }
   }
+
 }

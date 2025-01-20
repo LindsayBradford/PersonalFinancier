@@ -21,11 +21,21 @@ import java.util.Currency;
  *
  */
 public final class Money  implements Comparable<Money> {
+  /**
+   * 
+   */
   final static int AMOUNTS_EQUAL = 0;
   
   private Currency currency;
   private BigDecimal total;
   private RoundingMode rounding;
+  
+  
+  public Money(String currency, String rounding, String total) {
+    this.currency = Currency.getInstance(currency);
+    this.rounding = RoundingMode.valueOf(rounding);
+    this.total = BigDecimal.valueOf(Double.parseDouble(total));
+  }
   
   public Money(Currency currency, RoundingMode rounding, BigDecimal total) {
     this.currency = currency;
