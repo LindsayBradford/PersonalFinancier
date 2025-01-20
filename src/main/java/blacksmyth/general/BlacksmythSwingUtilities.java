@@ -30,6 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumn;
 
 import blacksmyth.general.FontIconProvider.FontIcon;
@@ -209,4 +210,17 @@ public final class BlacksmythSwingUtilities {
     pane.setFont(FontIconProvider.getInstance().getFont());
     pane.setTitleAt(tabIndex, icon.asString());
   }
+  
+  public static void refreshLater(JComponent component) {
+    SwingUtilities.invokeLater(
+        new Runnable() {
+          @Override
+          public void run() {
+            component.revalidate(); 
+            component.repaint(); 
+          }
+        }
+    );
+  }
+  
 }
