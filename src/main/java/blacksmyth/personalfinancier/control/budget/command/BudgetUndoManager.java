@@ -10,8 +10,8 @@
 
 package blacksmyth.personalfinancier.control.budget.command;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoManager;
@@ -26,19 +26,11 @@ public class BudgetUndoManager extends UndoManager {
    * The BudgetUndoManager is observable indirectly by relying on all Observable
    * behaviour, delegated to <tt>observableDelegate</tt>
    */
-  private Observable observableDelegate;
+  private PropertyChangeSupport observableDelegate;
 
   protected BudgetUndoManager() {
     super();
-    this.observableDelegate = new Observable() {
-      @Override
-      public void notifyObservers(Object arg) {
-        // Small convenience tweak, forcing a notify
-        // on all observers every time this method is invoked.
-        this.setChanged();
-        super.notifyObservers(arg);
-      }
-    };
+    this.observableDelegate = new PropertyChangeSupport(this);
   }
 
   public static BudgetUndoManager getInstance() {
@@ -48,36 +40,42 @@ public class BudgetUndoManager extends UndoManager {
     return instance;
   }
 
-  public void addObserver(Observer o) {
-    this.observableDelegate.addObserver(o);
+  public void addObserver(PropertyChangeListener o) {
+    this.observableDelegate.addPropertyChangeListener(o);
     // Below: a quick and nasty way to sync observer state with current model state.
-    this.observableDelegate.notifyObservers(this);
+    fireUndoableEvent();
   }
+  
 
   public void undo() {
     super.undo();
-    this.observableDelegate.notifyObservers(this);
+    fireUndoableEvent();
   }
 
   public void redo() {
     super.redo();
-    this.observableDelegate.notifyObservers(this);
+    fireUndoableEvent();
   }
 
   public boolean addEdit(UndoableEdit e) {
     boolean result = super.addEdit(e);
-    this.observableDelegate.notifyObservers(this);
+    fireUndoableEvent();
     return result;
   }
 
   public void discardAllEdits() {
     super.discardAllEdits();
-    this.observableDelegate.notifyObservers(this);
+    fireUndoableEvent();
   }
 
   public void undoableEditHappened(UndoableEditEvent e) {
     super.undoableEditHappened(e);
-    this.observableDelegate.notifyObservers(this);
+    fireUndoableEvent();
+  }
+
+  
+  private void fireUndoableEvent() {
+    this.observableDelegate.firePropertyChange("Undoable Budget Change",null,null);
   }
 
 }

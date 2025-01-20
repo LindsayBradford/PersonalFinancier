@@ -10,8 +10,8 @@
 
 package blacksmyth.personalfinancier.view;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -26,7 +26,7 @@ import javax.swing.undo.UndoManager;
  */
 
 @SuppressWarnings("serial")
-public abstract class JUndoListeningButton extends JButton implements Observer {
+public abstract class JUndoListeningButton extends JButton implements PropertyChangeListener {
 
   public JUndoListeningButton() {
     super();
@@ -35,13 +35,13 @@ public abstract class JUndoListeningButton extends JButton implements Observer {
   public JUndoListeningButton(Action a) {
     super(a);
   }
-
-  public final void update(Observable o, Object arg) {
+  
+  public void propertyChange(PropertyChangeEvent evt) {
     // TODO: replace with a reflective assert on arg being an UndoManager.
-    if (arg == null)
+    if (evt.getSource() == null)
       return;
 
-    handleUndoManagerState((UndoManager) arg);
+    handleUndoManagerState((UndoManager) evt.getSource());
   }
 
   private void handleUndoManagerState(UndoManager manager) {
