@@ -60,6 +60,7 @@ dependencies {
 }
 
 jar {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
   from {
     configurations.mergeLibs.collect { zipTree(it) }
@@ -84,7 +85,8 @@ jar {
 }
 
 task syncLibs(type: Sync) {
-  from configurations.compile, configurations.testCompile
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+  from configurations.compileClasspath, configurations.testCompileClasspath
   into project.libsDirectory
   doLast {
     println "Synchronised library dependencies into directory ($project.libsDirectory)."
