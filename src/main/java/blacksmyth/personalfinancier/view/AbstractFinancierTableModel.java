@@ -10,8 +10,8 @@
 
 package blacksmyth.personalfinancier.view;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -28,10 +28,10 @@ import blacksmyth.general.ReflectionUtilities;
  */
 
 @SuppressWarnings("serial")
-public abstract class AbstractFinancierTableModel<T extends Enum<T>> extends AbstractTableModel implements Observer {
+public abstract class AbstractFinancierTableModel<T extends Enum<T>> extends AbstractTableModel implements PropertyChangeListener {
 
   /**
-   * Derives the Class of the columns enumeration supplied as the Gemeric type at
+   * Derives the Class of the columns enumeration supplied as the Generic type at
    * subclass definition time.
    * 
    * @return The Class of the columns enumeration.
@@ -46,10 +46,10 @@ public abstract class AbstractFinancierTableModel<T extends Enum<T>> extends Abs
    * sends an update.
    */
   @Override
-  public void update(Observable arg0, Object arg1) {
+  public void propertyChange(PropertyChangeEvent evt) {
     this.fireTableDataChanged();
   }
-
+  
   @Override
   public final int getColumnCount() {
     return getColEnumClass().getEnumConstants().length;

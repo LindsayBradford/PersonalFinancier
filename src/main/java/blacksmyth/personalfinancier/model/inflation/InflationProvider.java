@@ -10,6 +10,7 @@
 
 package blacksmyth.personalfinancier.model.inflation;
 
+import java.beans.PropertyChangeListener;
 import java.util.Calendar;
 
 import blacksmyth.personalfinancier.model.Money;
@@ -36,4 +37,6 @@ public interface InflationProvider {
 
   public abstract Calendar getEarliestDate();
   public abstract Calendar getLatestDate();
+  
+  public abstract void addListener(PropertyChangeListener listener);
 }

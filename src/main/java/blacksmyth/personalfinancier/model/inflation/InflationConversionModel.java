@@ -10,14 +10,15 @@
 
 package blacksmyth.personalfinancier.model.inflation;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Calendar;
-import java.util.Observable;
-import java.util.Observer;
 
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
 
-public class InflationConversionModel extends Observable implements Observer {
+public class InflationConversionModel  implements PropertyChangeListener {
   
   private Money initialValue;
   private Calendar initialDate;
@@ -29,15 +30,12 @@ public class InflationConversionModel extends Observable implements Observer {
   private double inflationPerAnnum;
   
   private InflationProvider inflationProvider;
+  
+  private PropertyChangeSupport support;
 
-  public void setInflationProvider(InflationProvider inflationProvider) {
-    this.inflationProvider = inflationProvider;
-
-    Observable providerAsObservable = (Observable) inflationProvider;
-    providerAsObservable.addObserver(this);
-  }
   
   public InflationConversionModel(InflationProvider provider) {
+    this.support = new PropertyChangeSupport(this);
     this.setInflationProvider(provider);
     this.initialValue = MoneyFactory.createAmount(0);
     this.initialDate = inflationProvider.getEarliestDate();
@@ -49,6 +47,16 @@ public class InflationConversionModel extends Observable implements Observer {
     this.inflationPerAnnum = 0;
 
     this.changeAndNotifyObservers();
+  }
+  
+  public void addListener(PropertyChangeListener listener) {
+    support.addPropertyChangeListener(listener);
+  }
+
+  public void setInflationProvider(InflationProvider inflationProvider) {
+    this.inflationProvider = inflationProvider;
+
+    inflationProvider.addListener(this);
   }
 
   public Money getInitialValue() {
@@ -133,11 +141,6 @@ public class InflationConversionModel extends Observable implements Observer {
     this.inflationPerAnnum = inflationPerAnnum;
   }
 
-  public void changeAndNotifyObservers() {
-    this.setChanged();
-    updateDerivedValues();
-    this.notifyObservers();
-  }
   
   private void updateDerivedValues() {
     updateInflationOverPeriod();
@@ -170,8 +173,14 @@ public class InflationConversionModel extends Observable implements Observer {
   }
 
   @Override
-  public void update(Observable arg0, Object arg1) {
+  public void propertyChange(PropertyChangeEvent evt) {
     updateConversionValue();
     changeAndNotifyObservers();
   }
+  
+  public void changeAndNotifyObservers() {
+    updateDerivedValues();
+    this.support.firePropertyChange("Inflation Conversion Event", null, null);
+  }
+
 }

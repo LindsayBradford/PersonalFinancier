@@ -10,7 +10,7 @@
 
 package blacksmyth.personalfinancier.control.inflation;
 
-import java.util.Observer;
+import java.beans.PropertyChangeListener;
 
 /**
  * An interface that all MVC view classes of the
@@ -18,4 +18,4 @@ import java.util.Observer;
  * notified of BudgetModel updates.
  * @author linds
  */
-public interface IInfllationObserver extends Observer {}
+public interface IInfllationObserver extends PropertyChangeListener {}

@@ -10,9 +10,9 @@
 
 package blacksmyth.personalfinancier.view.inflation;
 
+import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
-import java.util.Observer;
 
 import javax.swing.undo.CompoundEdit;
 
@@ -65,12 +65,12 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
    * @param budgetModel
    */
   protected final void setInflationModel(InflationModel inflationModel) {
-    inflationModel.addObserver(this);
+    inflationModel.addListener(this);
     this.inflationModel = inflationModel;
   }
 
-  public void addModelObserver(Observer observer) {
-    inflationModel.addObserver(observer);
+  public void addModelObserver(PropertyChangeListener observer) {
+    inflationModel.addListener(observer);
   }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })

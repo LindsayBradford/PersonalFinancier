@@ -15,9 +15,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.GregorianCalendar;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Vector;
 
 import javax.swing.JComponent;
@@ -32,7 +33,7 @@ import blacksmyth.personalfinancier.model.inflation.InflationConversionModel;
 import blacksmyth.personalfinancier.view.WidgetFactory;
 
 @SuppressWarnings("serial")
-public class InflationConversionPanel extends JPanel implements Observer {
+public class InflationConversionPanel extends JPanel implements PropertyChangeListener {
 
   private GregorianCalendar earliestDate;
   private GregorianCalendar latestDate;
@@ -55,12 +56,20 @@ public class InflationConversionPanel extends JPanel implements Observer {
   private JLabel dateRangeLabel;
 
   private InflationConversionController controller;
+  
+  private PropertyChangeSupport support;
 
   public InflationConversionPanel(InflationConversionController controller) {
     super();
     this.controller = controller;
+    this.support = new PropertyChangeSupport(this);
+    
     setLayout(gbl);
     createView();
+  }
+  
+  public void addListener(PropertyChangeListener listener) {
+    support.addPropertyChangeListener(listener);
   }
 
   private void createView() {
@@ -185,10 +194,10 @@ public class InflationConversionPanel extends JPanel implements Observer {
   }
 
   @Override
-  public void update(Observable o, Object arg) {
-    assert o.getClass().equals(InflationConversionModel.class) : "View/Model mismatch.";
+  public void propertyChange(PropertyChangeEvent evt) {
+    assert evt.getSource().getClass().equals(InflationConversionModel.class) : "View/Model mismatch.";
 
-    InflationConversionModel model = (InflationConversionModel) o;
+    InflationConversionModel model = (InflationConversionModel) evt.getSource();
 
     this.initialDateField.setValue(model.getInitialDate().getTime());
 

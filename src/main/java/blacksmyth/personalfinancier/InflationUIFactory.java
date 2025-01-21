@@ -306,7 +306,7 @@ class InflationUIFactory {
     final InflationConversionPanel conversionPanel = new InflationConversionPanel(
         new InflationConversionController(conversionModel));
 
-    conversionModel.addObserver(conversionPanel);
+    conversionModel.addListener(conversionPanel);
 
     panel.add(new JScrollPane(conversionPanel), BorderLayout.CENTER);
 

@@ -10,11 +10,12 @@
 
 package blacksmyth.personalfinancier.model.inflation;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Observable;
 
 import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.general.SortedArrayList;
@@ -25,7 +26,7 @@ import blacksmyth.personalfinancier.model.ModelPreferences;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
 
-public class InflationModel extends Observable
+public class InflationModel
     implements InflationProvider, IInflationController, IFileHandlerModel<InflationFileContent> {
 
   private static GregorianCalendar TODAY;
@@ -40,9 +41,16 @@ public class InflationModel extends Observable
 
   private final FinancierUndoManager undoManager = new FinancierUndoManager();
 
+  private PropertyChangeSupport support;
+  
   public InflationModel() {
+    support = new PropertyChangeSupport(this);
     TODAY = new GregorianCalendar();
     TODAY.setTime(new Date());
+  }
+  
+  public void addListener(PropertyChangeListener listener) {
+    support.addPropertyChangeListener(listener);
   }
 
   public SortedArrayList<InflationEntry> getInflationList() {
@@ -216,11 +224,6 @@ public class InflationModel extends Observable
     this.changeAndNotifyObservers();
   }
 
-  public void changeAndNotifyObservers() {
-    this.setChanged();
-    this.notifyObservers();
-  }
-
   @Override
   public void fromSerializable(InflationFileContent content) {
     // assert ReflectionUtilities.callerImplements(IInflationController.class) :
@@ -230,6 +233,10 @@ public class InflationModel extends Observable
     this.changeAndNotifyObservers();
   }
 
+  public void changeAndNotifyObservers() {
+    support.firePropertyChange("Inflation Model Change", null, null);
+  }
+  
   @Override
   public InflationFileContent toSerializable() {
     InflationFileContent content = new InflationFileContent();
