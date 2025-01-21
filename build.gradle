@@ -31,7 +31,10 @@ List libsToMerge = [
   'com.jtattoo:JTattoo:1.6.13', 
   'com.cedarsoftware:json-io:4.14.3', 
   'de.erichseifert.gral:gral-core:0.11',
-  'org.apache.logging.log4j:log4j-api:2.24.3',
+  'org.apache.logging.log4j:log4j-api:2.24.3'
+]
+
+List annotatingLibsToMerge = [
   'org.apache.logging.log4j:log4j-core:2.24.3'
 ]
 
@@ -49,10 +52,11 @@ configurations {
 }
 
 dependencies {
-  mergeLibs libsToMerge 
+  mergeLibs libsToMerge, annotatingLibsToMerge 
   shipLibs libsToShip
-  compile  libsToMerge, libsToShip 
-  testCompile testLibs
+  annotationProcessor annotatingLibsToMerge 
+  implementation libsToMerge, annotatingLibsToMerge, libsToShip
+  testImplementation testLibs
 }
 
 jar {
