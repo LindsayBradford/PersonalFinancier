@@ -77,7 +77,7 @@ jar {
       'Implementation-Version': project.version,
       'Contact':  project.contact,
       'Built-With': "gradle-${project.getGradle().getGradleVersion()}, groovy-${GroovySystem.getVersion()}",
-      'Created-By': "${JavaVersion.current()} (${System.getProperty('java.vendor')})",
+      'Created-By': "Java SDK ${JavaVersion.current()} (${System.getProperty('java.vendor')})",
       'Main-Class' : application.mainClass,
       'Class-Path' : configurations.shipLibs.collect{ it.getName() }.join(' '),
     )
@@ -110,9 +110,6 @@ test {
 
 run {
   dependsOn distribute 
-  doLast {
-    println "Running $project.title"
-  }
 }
 
 task full {

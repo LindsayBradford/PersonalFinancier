@@ -51,7 +51,7 @@ public final class PersonalFinancier {
   
   private static PersonalFinancierView createView() {
     
-    Configurator.initialize("config", "resources/log4j2config.xml");    
+    Configurator.initialize("blacksmyth.personalfinancier", "resources/log4j2.xml");    
     
     final PersonalFinancierView view = new PersonalFinancierView();
     
