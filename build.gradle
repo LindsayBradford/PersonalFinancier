@@ -5,8 +5,8 @@ defaultTasks 'distribute'
 
 // Start Project configuration
 
-sourceCompatibility = '13'
-targetCompatibility = '13'
+sourceCompatibility = '16'
+targetCompatibility = '16'
 
 project.group = 'blacksmyth.personalfinancier'
 project.version = '0.5'
@@ -29,7 +29,7 @@ List testLibs = [
 List libsToMerge = [
   'commons-codec:commons-codec:1.17.2', 
   'com.jtattoo:JTattoo:1.6.13', 
-  'com.cedarsoftware:json-io:4.14.3', 
+  'com.cedarsoftware:json-io:4.30.0', 
   'de.erichseifert.gral:gral-core:0.11',
   'org.apache.logging.log4j:log4j-api:2.24.3'
 ]

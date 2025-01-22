@@ -10,15 +10,21 @@
 
 package blacksmyth.personalfinancier.dependencies.json;
 
-import java.util.HashMap;
+import java.util.Currency;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.cedarsoftware.util.io.JsonIoException;
-import com.cedarsoftware.util.io.JsonObject;
-import com.cedarsoftware.util.io.JsonReader;
-import com.cedarsoftware.util.io.JsonWriter;
+import com.cedarsoftware.io.JsonIoException;
+import com.cedarsoftware.io.JsonObject;
+import com.cedarsoftware.io.JsonReader;
+import com.cedarsoftware.io.ReadOptions;
+import com.cedarsoftware.io.ReadOptionsBuilder;
+import com.cedarsoftware.io.Resolver;
+import com.cedarsoftware.io.JsonIo;
+import com.cedarsoftware.io.WriteOptions;
+import com.cedarsoftware.io.WriteOptionsBuilder;
 
 /**
  * A class implementing the 'Concrete Implementor class' of the Bridge pattern, allowing a bridge 
@@ -29,15 +35,25 @@ import com.cedarsoftware.util.io.JsonWriter;
  */
 
 final class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
+
+  class CurrencyClassFactory implements JsonReader.ClassFactory {
+    public Object newInstance(Class<?> c, JsonObject jsonObject, Resolver resolver) {
+      @SuppressWarnings("unchecked")
+      Map<String, Object> map = (Map) jsonObject;
+      String currencyCode = (String) map.get("currencyCode");
+      
+      return Currency.getInstance(currencyCode);
+    }    
+  }
+
   
   private static final Logger LOG = LogManager.getLogger(JSonIoBridge.class);
 
   @Override
   public String toJSon(T object) {
     LOG.info("Converting object hierarchy to JSON");
-    return JsonWriter.formatJson(
-      JsonWriter.objectToJson(object)
-    );
+    WriteOptions writeOptions = new WriteOptionsBuilder().prettyPrint(true).build();
+    return JsonIo.toJson(object, writeOptions);
   }
   
   @SuppressWarnings("unchecked")
@@ -52,10 +68,12 @@ final class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
     
     try {
     	
-    	HashMap<String, Object> args = new HashMap<>();
-    	args.put(JsonReader.FAIL_ON_UNKNOWN_TYPE, Boolean.FALSE);
-    	
-    	Object objectOfJsonContent = JsonReader.jsonToJava(jsonContent, args);
+      ReadOptions readOptions = 
+          new ReadOptionsBuilder()
+              .failOnUnknownType(false)
+              .addClassFactory(Currency.class, new CurrencyClassFactory())
+              .build();
+      Object objectOfJsonContent = JsonIo.toObjects(jsonContent, readOptions, null);
 
       // Java generics erasure means we're capable of receiving a json-io JsonObject from the JsonReader
       // that will not cause a ClassCastException when we cast back to <T> below for objects that couldn't 
@@ -73,4 +91,5 @@ final class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
       return null;
     }
   }
+  
 }

@@ -8,15 +8,15 @@
 	<classpathentry kind="lib" path="libs/gral-core-0.11.jar"/>
 	<classpathentry kind="lib" path="libs/junit-4.13.2.jar" sourcepath="libs/junit-4.13.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/mockito-all-1.10.19.jar"/>
-	<classpathentry kind="lib" path="D:/Data/03.Development/GitHubRepositories/PersonalFinancier/libs/json-io-4.14.3.jar"/>
 	<classpathentry kind="lib" path="libs/bcprov-jdk18on-1.80.jar"/>
-	<classpathentry kind="lib" path="D:/Data/03.Development/GitHubRepositories/PersonalFinancier/libs/log4j-api-2.24.3.jar"/>
-	<classpathentry kind="lib" path="D:/Data/03.Development/GitHubRepositories/PersonalFinancier/libs/log4j-core-2.24.3.jar"/>
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="lib" path="libs/JTattoo-1.6.13.jar"/>
 	<classpathentry kind="lib" path="libs/commons-codec-1.17.2.jar"/>
 	<classpathentry kind="lib" path="libs/hamcrest-2.2.jar"/>
+	<classpathentry kind="lib" path="libs/log4j-api-2.24.3.jar"/>
+	<classpathentry kind="lib" path="libs/log4j-core-2.24.3.jar"/>
+	<classpathentry kind="lib" path="libs/json-io-4.30.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
