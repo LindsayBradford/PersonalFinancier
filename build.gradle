@@ -79,8 +79,8 @@ jar {
   }
   
   doLast {
-    file(jar.archivePath).setExecutable(true)
-    println "$jar.archiveName created and is executable."
+    file(jar.archiveFile).setExecutable(true)
+    println "$jar.archiveFileName created and is executable."
   }
 }
 
