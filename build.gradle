@@ -1,12 +1,15 @@
-apply plugin: 'java'
-apply plugin: 'application'
+plugins {
+  id 'java'
+  id 'application'
+}
 
 defaultTasks 'distribute'
 
 // Start Project configuration
-
-sourceCompatibility = '19'
-targetCompatibility = '19'
+java {
+  sourceCompatibility = JavaVersion.VERSION_23
+  targetCompatibility = JavaVersion.VERSION_23
+}
 
 project.group = 'blacksmyth.personalfinancier'
 project.version = '0.5'
@@ -18,7 +21,9 @@ project.ext {
   distributionDirectory = 'dist'
 }
 
-mainClassName = project.group + '.' + project.title
+application {
+  mainClass.set(project.group + '.' + project.title)
+}
 
 List testLibs = [
   'junit:junit:4.13.2',
@@ -72,15 +77,14 @@ jar {
       'Implementation-Version': project.version,
       'Contact':  project.contact,
       'Built-With': "gradle-${project.getGradle().getGradleVersion()}, groovy-${GroovySystem.getVersion()}",
-      'Created-By': System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')',
-      'Main-Class' : mainClassName,
+      'Created-By': "${JavaVersion.current()} (${System.getProperty('java.vendor')})",
+      'Main-Class' : application.mainClass,
       'Class-Path' : configurations.shipLibs.collect{ it.getName() }.join(' '),
     )
   }
   
   doLast {
     file(jar.archiveFile).setExecutable(true)
-    println "$jar.archiveFileName created and is executable."
   }
 }
 
@@ -88,9 +92,6 @@ task syncLibs(type: Sync) {
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
   from configurations.compileClasspath, configurations.testCompileClasspath
   into project.libsDirectory
-  doLast {
-    println "Synchronised library dependencies into directory ($project.libsDirectory)."
-  }
 }
 
 task distribute(type: Copy) {
@@ -98,9 +99,6 @@ task distribute(type: Copy) {
   from jar 
   from configurations.shipLibs
   into project.distributionDirectory
-  doLast {
-    println "Distributed $project.title and support libraries to directory ($project.distributionDirectory)."
-  }
 }
 
 
