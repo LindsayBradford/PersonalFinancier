@@ -17,6 +17,6 @@
 	<classpathentry kind="lib" path="libs/hamcrest-2.2.jar"/>
 	<classpathentry kind="lib" path="libs/log4j-api-2.24.3.jar"/>
 	<classpathentry kind="lib" path="libs/log4j-core-2.24.3.jar"/>
-	<classpathentry kind="lib" path="libs/json-io-4.30.0.jar"/>
+	<classpathentry kind="lib" path="libs/json-io-4.32.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
