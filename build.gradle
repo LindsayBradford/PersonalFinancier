@@ -5,8 +5,8 @@ defaultTasks 'distribute'
 
 // Start Project configuration
 
-sourceCompatibility = '16'
-targetCompatibility = '16'
+sourceCompatibility = '19'
+targetCompatibility = '19'
 
 project.group = 'blacksmyth.personalfinancier'
 project.version = '0.5'
