@@ -160,7 +160,7 @@ class BudgetUIFactory {
           return;
         }
 
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(expenseItemPanel)) {
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomeItemPanel)) {
           incomeItemTable.moveSelectedItemUp();
         }
       }
@@ -174,7 +174,7 @@ class BudgetUIFactory {
           return;
         }
 
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(expenseItemPanel)) {
+        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomeItemPanel)) {
           incomeItemTable.moveSelectedItemDown();
         }
       }
