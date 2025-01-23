@@ -29,7 +29,6 @@
 	<classpathentry kind="lib" path="libs/byte-buddy-agent-1.15.11.jar"/>
 	<classpathentry kind="lib" path="libs/commons-codec-1.17.2.jar"/>
 	<classpathentry kind="lib" path="libs/gral-core-0.11.jar"/>
-	<classpathentry kind="lib" path="libs/hamcrest-2.2.jar"/>
 	<classpathentry kind="lib" path="libs/hamcrest-core-1.3.jar"/>
 	<classpathentry kind="lib" path="libs/java-util-3.0.0.jar"/>
 	<classpathentry kind="lib" path="libs/json-io-4.32.0.jar"/>
@@ -39,5 +38,7 @@
 	<classpathentry kind="lib" path="libs/log4j-core-2.24.3.jar"/>
 	<classpathentry kind="lib" path="libs/mockito-core-5.15.2.jar"/>
 	<classpathentry kind="lib" path="libs/VectorGraphics2D-0.10.jar"/>
+	<classpathentry kind="lib" path="libs/hamcrest-3.0.jar"/>
+	<classpathentry kind="lib" path="libs/junit-vintage-engine-5.11.4.jar"/>
 	<classpathentry kind="output" path="bin/default"/>
 </classpath>

@@ -26,8 +26,8 @@ application {
 }
 
 List testLibs = [
-  'junit:junit:4.13.2',
-  'org.hamcrest:hamcrest:2.2',
+  'org.junit.vintage:junit-vintage-engine:5.11.4',
+  'org.hamcrest:hamcrest:3.0',
   'org.mockito:mockito-core:5.15.2'
 ]
 
