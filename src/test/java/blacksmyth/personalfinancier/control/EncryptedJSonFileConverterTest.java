@@ -10,11 +10,11 @@
 
 package blacksmyth.personalfinancier.control;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -135,6 +135,25 @@ public class EncryptedJSonFileConverterTest {
     ).thenReturn(
         null
     );
+
+    when(
+        mockEncryptionBridge.encrypt(
+            eq(VALID_PASSWORD),
+            any(byte[].class)
+         )
+    ).thenReturn(
+        RAW_CONTENT
+    );
+
+    when(
+        mockEncryptionBridge.encrypt(
+            eq(INVALID_PASSWORD),
+            any(byte[].class)
+         )
+    ).thenReturn(
+        null
+    );
+
     
     testConverter.setEncryptionBridge(mockEncryptionBridge);
   }
@@ -160,8 +179,8 @@ public class EncryptedJSonFileConverterTest {
     verify(noPasswordView).displaySavePrompt();
     verify(noPasswordView).passwordSpecified();
     
-    verifyZeroInteractions(mockEncryptionBridge);
-    verifyZeroInteractions(mockJSonBridge);
+    verifyNoInteractions(mockEncryptionBridge);
+    verifyNoInteractions(mockJSonBridge);
   }
 
   @Test
@@ -173,8 +192,8 @@ public class EncryptedJSonFileConverterTest {
     verify(noPasswordView).displayLoadPrompt();
     verify(noPasswordView).passwordSpecified();
 
-    verifyZeroInteractions(mockEncryptionBridge);
-    verifyZeroInteractions(mockJSonBridge);
+    verifyNoInteractions(mockEncryptionBridge);
+    verifyNoInteractions(mockJSonBridge);
   }
 
   @Test

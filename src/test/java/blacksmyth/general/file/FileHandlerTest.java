@@ -10,7 +10,7 @@
 
 package blacksmyth.general.file;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -102,9 +102,9 @@ public class FileHandlerTest {
     
     testHandler.save();
 
-    verifyZeroInteractions(mockPresenter);
-    verifyZeroInteractions(mockConverter);
-    verifyZeroInteractions(mockPreference);
+    verifyNoInteractions(mockPresenter);
+    verifyNoInteractions(mockConverter);
+    verifyNoInteractions(mockPreference);
   }
   
   @Test
@@ -183,9 +183,9 @@ public class FileHandlerTest {
     
     testHandler.saveAs();
     
-    verifyZeroInteractions(mockPresenter);
-    verifyZeroInteractions(mockConverter);
-    verifyZeroInteractions(mockPreference);
+    verifyNoInteractions(mockPresenter);
+    verifyNoInteractions(mockConverter);
+    verifyNoInteractions(mockPreference);
   }
   
   @Test
@@ -228,7 +228,7 @@ public class FileHandlerTest {
     
     testHandler.load();
 
-    verifyZeroInteractions(mockPresenter);
-    verifyZeroInteractions(mockConverter);
+    verifyNoInteractions(mockPresenter);
+    verifyNoInteractions(mockConverter);
   }
 }

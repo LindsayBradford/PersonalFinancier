@@ -71,15 +71,16 @@ public class EncryptedJSonFileConverter<T> implements IObjectFileConverter<T>, I
     }
 
     byte[] contentAsBytes = ByteUtilities.stringToBytes(jsonBridge.toJSon(t));
+    byte[] encryptedContentAsBytes = encryptionBridge.encrypt(
+        passwordView.getPassword(),
+        contentAsBytes
+    );
 
     LOG.info("Saving encrypted content to file [{}]", filePath);
 
     fileSystemBridge.saveBinaryFile(
         filePath, 
-        encryptionBridge.encrypt(
-            passwordView.getPassword(),
-            contentAsBytes
-        )
+        encryptedContentAsBytes
     );
 
     passwordView.clearPassword();
