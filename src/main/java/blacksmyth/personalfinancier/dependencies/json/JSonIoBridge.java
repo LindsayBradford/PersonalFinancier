@@ -82,8 +82,11 @@ final class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
       // these attempts.
       
       if (objectOfJsonContent instanceof JsonObject) {
-    	  return null;
+        LOG.error("Failed converting JSON to desired object hierarchy type. Ignoring.");
+        return null;
       }
+
+      LOG.info("Successfully converted JSON to object hierarchy");
 
       return (T) objectOfJsonContent;
     } catch (JsonIoException e) {

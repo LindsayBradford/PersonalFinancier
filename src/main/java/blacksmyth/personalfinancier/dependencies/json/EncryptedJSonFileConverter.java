@@ -106,12 +106,16 @@ public class EncryptedJSonFileConverter<T> implements IObjectFileConverter<T>, I
     passwordView.clearPassword();
 
     if (decryptedContent == null) {
-      passwordView.displayError(
-          "The password specified could not decrypt this file."
-      );
+      LOG.warn("The password supplied could not decrypt file [{}]. Ignoring.", filePath);
+
+      String displayMessage = "The supplied password could not decrypt this file.";
+      passwordView.displayError(displayMessage);
+      
       return null;
     }
 
+    LOG.info("The supplied password allowed decryption of file [{}]", filePath);
+    
     T objectFromFile = jsonBridge.fromJSon(
         ByteUtilities.bytesToString(decryptedContent)
     );

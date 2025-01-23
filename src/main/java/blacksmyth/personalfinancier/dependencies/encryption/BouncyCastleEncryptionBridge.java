@@ -95,10 +95,6 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
     ParametersWithIV parameterIV =
         new ParametersWithIV(new KeyParameter(e.key),e.iv);
 
-    LOG.debug("Encrypt salt: " + Hex.encodeHexString(e.salt));
-    LOG.debug("Encrypt  key: " + Hex.encodeHexString(e.key));
-    LOG.debug("Encrypt   IV: " + Hex.encodeHexString(e.iv));
-   
     CIPHER.init(true, parameterIV);
 
     return processContent(content);
@@ -135,6 +131,7 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
     try {
       e.key = AESBuilder.buildKey(password, e.salt);
     } catch (Exception ex) {
+      LOG.error("Salted key construction failed: {}",ex);
       return null;
     }
 
@@ -151,10 +148,6 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
     ParametersWithIV parameterIV =
         new ParametersWithIV(new KeyParameter(e.key),e.iv);
 
-    LOG.debug("Encrypt salt: " + Hex.encodeHexString(e.salt));
-    LOG.debug("Encrypt  key: " + Hex.encodeHexString(e.key));
-    LOG.debug("Encrypt   IV: " + Hex.encodeHexString(e.iv));
-   
     CIPHER.init(false, parameterIV);
 
     return processContent(encryptedContent);
@@ -167,10 +160,13 @@ final class BouncyCastleEncryptionBridge implements IEncryptionBridge {
     try {
       CIPHER.doFinal(processedBytes, numProcessed);
     } catch (DataLengthException e) {
+      LOG.warn(e);
       return null;
     } catch (IllegalStateException e) {
+      LOG.warn(e);
       return null;
     } catch (InvalidCipherTextException e) {
+      LOG.warn(e);
       return null;
     }
 
