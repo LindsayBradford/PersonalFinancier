@@ -5,17 +5,19 @@
                    https://logging.apache.org/xml/ns
                    https://logging.apache.org/xml/ns/log4j-config-2.xsd">
   <Appenders>
-    <Console name="STDOUT" target="SYSTEM_OUT">
+    <Console name="CONSOLE" target="SYSTEM_OUT">
       <PatternLayout pattern="%d %-5p [%C{1}] : %m%n" />
     </Console>
-    <File name="LOGFILE" fileName="log.txt"> 
+    <File name="INFO_LOG" fileName="logs/info.log"> 
       <PatternLayout pattern="%d %-5p [%C{1}] : %m%n" />
     </File>
   </Appenders>
   <Loggers>
-    <Root level="INFO">
-      <AppenderRef ref="STDOUT"/>
-      <AppenderRef ref="LOGFILE"/>
+    <Root level="WARN">
+      <AppenderRef ref="CONSOLE"/>
     </Root>
+    <Logger name="blacksmyth.personalfinancier" level="DEBUG">
+      <AppenderRef ref="INFO_LOG"/>
+    </Logger>
   </Loggers>
 </Configuration>

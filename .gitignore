@@ -10,3 +10,4 @@ javadocs/*
 .settings/*
 /bin/
 /build/
+/logs

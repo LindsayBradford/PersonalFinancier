@@ -79,7 +79,7 @@ jar {
       'Built-With': "gradle-${project.getGradle().getGradleVersion()}, groovy-${GroovySystem.getVersion()}",
       'Created-By': "Java SDK ${JavaVersion.current()} (${System.getProperty('java.vendor')})",
       'Main-Class' : application.mainClass,
-      'Class-Path' : configurations.shipLibs.collect{ it.getName() }.join(' '),
+      'Class-Path' : ". " + configurations.shipLibs.collect{ it.getName() }.join(' ')
     )
   }
   
