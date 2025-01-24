@@ -16,10 +16,12 @@ public class Account {
 
   private boolean isBudgetAccount;
 
-  public static final Account DEFAULT = new Account("Bills", "Bills Account Detail");
-  
+  public static final Account BILLS = new Account("Bills", "Bills Account Detail");
+  public static final Account GENERAL = new Account("General", "General Account Detail");
+  public static final Account SAVINGS = new Account("Savings", "Savings Account Detail");
+
   public static Account Create() {
-    return new Account("New Account", "New Account Detail");
+    return new Account("New", "New Account Detail");
   }
 
   public Account(String nickname) {

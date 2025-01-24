@@ -32,7 +32,7 @@ public class IncomeCategoryComboBox extends JComboBox<String> implements IBudget
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     BudgetEvent event = (BudgetEvent) evt.getNewValue();
-    if (event.getItemType() == BudgetEvent.ItemType.incomeCategories || 
+    if (event.getItemType() == BudgetEvent.ItemType.IncomeCategories || 
         event.getItemType() == BudgetEvent.ItemType.AllItems) {
       buildItemList((BudgetModel) evt.getSource());
     }

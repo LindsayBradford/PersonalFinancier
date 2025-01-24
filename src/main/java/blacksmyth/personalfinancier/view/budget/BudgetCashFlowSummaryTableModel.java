@@ -111,7 +111,11 @@ public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<AC
   }
 
   public void addAccount() {
-    getBudgetModel().getUndoManager().addEdit(AddAccountCommand.doCmd(getAccountModel()));
+    getBudgetModel().getUndoManager().addEdit(
+        AddAccountCommand.doCmd(
+            getAccountModel()
+        )
+     );
   }
 
   @Override

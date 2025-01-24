@@ -128,12 +128,12 @@ public class ModelPreferences extends BasePreferences {
 
   // TODO: Build out Account support.
   @SuppressWarnings("unused")
-  private static final String DEFAULT_BUDGET_ACCOUNT = "Default";
+  private static final String DEFAULT_BUDGET_ACCOUNT = "General";
   private static final String BUDGET_ACCOUNT_KEY = "BudgetAccount";
   
   public Account getPreferredBudgetAccount() {
     // TODO: introduce account model.
-    return Account.DEFAULT;
+    return Account.GENERAL;
 //    return this.prefs.get(
 //       BUDGET_ACCOUNT_KEY, 
 //       DEFAULT_BUDGET_ACCOUNT

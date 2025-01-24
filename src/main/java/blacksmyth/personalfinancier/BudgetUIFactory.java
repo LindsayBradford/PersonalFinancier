@@ -36,9 +36,12 @@ import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.file.IFileHandler;
 import blacksmyth.personalfinancier.control.FileHandlerBuilder;
+import blacksmyth.personalfinancier.control.budget.command.AddAccountCommand;
+import blacksmyth.personalfinancier.control.budget.command.AddIncomeItemCommand;
 import blacksmyth.personalfinancier.control.budget.command.ResetBudgetItemsCommand;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
+import blacksmyth.personalfinancier.model.budget.BudgetEvent;
 import blacksmyth.personalfinancier.model.budget.BudgetFileContent;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.view.IApplicationMessageView;
@@ -77,6 +80,8 @@ class BudgetUIFactory {
   private static Action BudgetItemDeleteAction;
   private static Action BudgetItemUpAction;
   private static Action BudgetItemDownAction;
+  
+  private static Action AddAccountAction;
 
   public static IPersonalFinancierComponentView createBudgetComponent(PersonalFinancierView view) {
 
@@ -733,11 +738,31 @@ class BudgetUIFactory {
   }
 
   private static JComponent createCategorySummaryTable() {
-    return new JScrollPane(new BudgetCategorySummaryTable(budgetModel));
+    BudgetCategorySummaryTable table = new BudgetCategorySummaryTable(budgetModel);
+    return new JScrollPane(table);
   }
 
+  @SuppressWarnings("serial")
   private static JComponent createAccountSummaryTable() {
-    return new JScrollPane(new BudgetCashFlowSummaryTable(budgetModel));
+    BudgetCashFlowSummaryTable table = new BudgetCashFlowSummaryTable(budgetModel);
+    
+    AddAccountAction = new AbstractAction("Add Account") {
+      public void actionPerformed(ActionEvent e) {
+        
+        budgetModel.getUndoManager().addEdit(
+            AddAccountCommand.doCmd(
+                budgetModel.getAccountModel()
+            )
+        );
+      }
+    };
+    
+    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+        table, KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0),
+        AddAccountAction
+    );
+    
+    return new JScrollPane(table);
   }
 
   private static JComponent createCategoryPieChart() {

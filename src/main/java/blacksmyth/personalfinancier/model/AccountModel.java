@@ -24,16 +24,23 @@ public class AccountModel {
   private ArrayList<Account> accounts;
 
   private PropertyChangeSupport support;
+
+  public AccountModel(ArrayList<Account> accounts) {
+    support = new PropertyChangeSupport(this);
+    this.setAccounts(accounts);
+  }
   
   public AccountModel() {
     support = new PropertyChangeSupport(this);
-    addDefaultAccount();
+    addDefaultAccounts();
   }
 
-  private void addDefaultAccount() {
+  private void addDefaultAccounts() {
     ArrayList<Account> tmpAccounts = new ArrayList<Account>();
 
-    tmpAccounts.add(Account.DEFAULT);
+    tmpAccounts.add(Account.BILLS);
+    tmpAccounts.add(Account.GENERAL);
+    tmpAccounts.add(Account.SAVINGS);
 
     this.setAccounts(tmpAccounts);
   }
@@ -52,7 +59,7 @@ public class AccountModel {
     if (account.isBudgetAccount()) {
       return account;
     }
-    return Account.DEFAULT;
+    return Account.GENERAL;
   }
 
   public Account getAccount(String nickname) {
@@ -61,7 +68,7 @@ public class AccountModel {
         return account;
       }
     }
-    return Account.DEFAULT;
+    return Account.GENERAL;
   }
 
   public int getAccountIndex(String nickname) {
@@ -103,9 +110,7 @@ public class AccountModel {
 
   public Account addAccount() {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
-
     Account newAccount = Account.Create();
-
     this.addAccount(newAccount);
 
     return newAccount;
@@ -124,7 +129,7 @@ public class AccountModel {
   }
 
   private void changeAndNotifyObservers() {
-    support.firePropertyChange("Account Changed", null,null);
+    support.firePropertyChange("Account Model Changed", null,null);
   }
 
   public void addObserver(PropertyChangeListener listener) {

@@ -31,7 +31,7 @@ public class ExpenseCategoryComboBox extends JComboBox<String> implements IBudge
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     BudgetEvent event = (BudgetEvent) evt.getNewValue();
-    if (event.getItemType() == BudgetEvent.ItemType.expenseCategories || 
+    if (event.getItemType() == BudgetEvent.ItemType.ExpenseCategories || 
         event.getItemType() == BudgetEvent.ItemType.AllItems) {
       buildItemList((BudgetModel) evt.getSource());
     }

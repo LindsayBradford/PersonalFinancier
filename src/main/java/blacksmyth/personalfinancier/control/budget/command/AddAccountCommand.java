@@ -39,4 +39,20 @@ public class AddAccountCommand extends AbstractBudgetCommand {
   public void undo() throws CannotUndoException {
     model.removeAccount(this.postCommandAccount);
   }
+  
+  @Override
+  public String getPresentationName() {
+    return String.format("Added new account [%s] ", postCommandAccount.getNickname());
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return String.format("Undid addition of account [%s]", postCommandAccount.getNickname());
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return String.format("Added new account [%s] ", postCommandAccount.getNickname());
+  }
+
 }

@@ -92,7 +92,7 @@ public class BudgetModel
     this.expenseItems = state.expenseItems;
     this.incomeItems = state.incomeItems;
 
-    this.accountModel = new AccountModel();
+    this.accountModel = new AccountModel(state.accounts);
 
     this.changeAndNotifyObservers();
   }
@@ -299,6 +299,12 @@ public class BudgetModel
     return accountModel.getBudgetAccount(nickname);
   }
 
+  public void addAccount() {
+    assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
+    accountModel.addAccount();
+    this.changeAndNotifyObservers(BudgetEvent.ItemType.Accounts);
+  }
+  
   public void removeAllExpenseItems() {
     assert ReflectionUtilities.callerImplements(IBudgetController.class) : CONTROLLER_ASSERT_MSG;
     this.expenseItems = new ArrayList<BudgetItem>();
@@ -322,12 +328,12 @@ public class BudgetModel
 
   public void setExpenseCategories(HashSet<String> expenseCategories) {
     this.expenseCategories = expenseCategories;
-    this.changeAndNotifyObservers(BudgetEvent.ItemType.expenseCategories);
+    this.changeAndNotifyObservers(BudgetEvent.ItemType.ExpenseCategories);
   }
 
   public void addExpenseCategory(String newCategory) {
     if (this.expenseCategories.add(newCategory)) {
-      this.changeAndNotifyObservers(BudgetEvent.ItemType.expenseCategories);
+      this.changeAndNotifyObservers(BudgetEvent.ItemType.ExpenseCategories);
     }
   }
 
@@ -337,13 +343,13 @@ public class BudgetModel
 
   public void setIncomeCategories(HashSet<String> incomeCategories) {
     this.incomeCategories = incomeCategories;
-    this.changeAndNotifyObservers(BudgetEvent.ItemType.incomeCategories);
+    this.changeAndNotifyObservers(BudgetEvent.ItemType.IncomeCategories);
   }
 
   public void addIncomeCategory(String newCategory) {
     System.out.println("Adding Income Category: " + newCategory);
     if (this.incomeCategories.add(newCategory)) {
-      this.changeAndNotifyObservers(BudgetEvent.ItemType.incomeCategories);
+      this.changeAndNotifyObservers(BudgetEvent.ItemType.IncomeCategories);
     }
   }
 
@@ -495,7 +501,7 @@ public class BudgetModel
 
   public void changeAndNotifyObservers(BudgetEvent.ItemType itemType) {
     this.updateDerivedData();
-    support.firePropertyChange("BUdget Event", null, new BudgetEvent(itemType));
+    support.firePropertyChange("Budget Model Event", null, new BudgetEvent(itemType));
   }
 
   public void addObserver(PropertyChangeListener listener) {
@@ -506,6 +512,7 @@ public class BudgetModel
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
+    changeAndNotifyObservers(BudgetEvent.ItemType.AllItems);
   }
 
   public BudgetFileContent toSerializable() {
