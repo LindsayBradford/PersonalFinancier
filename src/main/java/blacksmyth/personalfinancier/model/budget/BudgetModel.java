@@ -15,8 +15,8 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.TreeSet;
 
 import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.general.SortedArrayList;
@@ -42,8 +42,8 @@ public class BudgetModel
 
   private AccountModel accountModel;
 
-  private HashSet<String> expenseCategories;
-  private HashSet<String> incomeCategories;
+  private TreeSet<String> expenseCategories;
+  private TreeSet<String> incomeCategories;
 
   private ArrayList<BudgetItem> expenseItems;
   private ArrayList<BudgetItem> incomeItems;
@@ -62,11 +62,11 @@ public class BudgetModel
   public BudgetModel(AccountModel accountModel) {
     this.support = new PropertyChangeSupport(this);
     
-    this.expenseCategories = new HashSet<String>();
-    this.incomeCategories = new HashSet<String>();
+    this.incomeCategories = Categories.defaultIncomeCategories();
+    this.expenseCategories = Categories.defaultExpenseCategories();
 
-    this.expenseItems = new ArrayList<BudgetItem>();
     this.incomeItems = new ArrayList<BudgetItem>();
+    this.expenseItems = new ArrayList<BudgetItem>();
 
     this.cashFlowSummaries = new SortedArrayList<AccountSummary>();
     this.categorySummaries = new SortedArrayList<CategorySummary>();
@@ -76,7 +76,7 @@ public class BudgetModel
 
     this.changeAndNotifyObservers();
   }
-
+  
   public AccountModel getAccountModel() {
     return this.accountModel;
   }
@@ -86,6 +86,8 @@ public class BudgetModel
   }
 
   public BudgetModel(BudgetFileContent state) {
+    this.support = new PropertyChangeSupport(this);
+
     this.expenseCategories = state.expenseCategories;
     this.incomeCategories = state.incomeCategories;
 
@@ -93,6 +95,7 @@ public class BudgetModel
     this.incomeItems = state.incomeItems;
 
     this.accountModel = new AccountModel(state.accounts);
+    this.accountModel.addObserver(this);
 
     this.changeAndNotifyObservers();
   }
@@ -322,11 +325,11 @@ public class BudgetModel
     this.removeAllExpenseItems();
   }
 
-  public HashSet<String> getExpenseCategories() {
+  public TreeSet<String> getExpenseCategories() {
     return expenseCategories;
   }
 
-  public void setExpenseCategories(HashSet<String> expenseCategories) {
+  public void setExpenseCategories(TreeSet<String> expenseCategories) {
     this.expenseCategories = expenseCategories;
     this.changeAndNotifyObservers(BudgetEvent.ItemType.ExpenseCategories);
   }
@@ -337,11 +340,11 @@ public class BudgetModel
     }
   }
 
-  public HashSet<String> getIncomeCategories() {
+  public TreeSet<String> getIncomeCategories() {
     return incomeCategories;
   }
 
-  public void setIncomeCategories(HashSet<String> incomeCategories) {
+  public void setIncomeCategories(TreeSet<String> incomeCategories) {
     this.incomeCategories = incomeCategories;
     this.changeAndNotifyObservers(BudgetEvent.ItemType.IncomeCategories);
   }
