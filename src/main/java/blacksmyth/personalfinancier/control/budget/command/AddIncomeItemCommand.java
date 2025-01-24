@@ -46,16 +46,16 @@ public class AddIncomeItemCommand extends AbstractBudgetCommand {
   
   @Override
   public String getPresentationName() {
-    return String.format("Added new imcome item [%s] ", postCommandDescription);
+    return String.format("Added new income item [%s] ", postCommandDescription);
   }
 
   @Override
   public String getUndoPresentationName() {
-    return String.format("Undid addition of imcome item [%s]", postCommandDescription);
+    return String.format("Undid addition of income item [%s]", postCommandDescription);
   }
 
   @Override
   public String getRedoPresentationName() {
-    return String.format("Added new imcome item [%s] ", postCommandDescription);
+    return String.format("Added new income item [%s] ", postCommandDescription);
   }
 }
