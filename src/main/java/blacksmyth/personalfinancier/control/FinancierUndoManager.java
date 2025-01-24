@@ -17,6 +17,9 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @SuppressWarnings("serial")
 public class FinancierUndoManager extends UndoManager {
 
@@ -25,6 +28,8 @@ public class FinancierUndoManager extends UndoManager {
    * Observable behaviour, delegated to <tt>observableDelegate</tt>
    */
   private PropertyChangeSupport observableDelegate;
+  
+  private static Logger LOG = LogManager.getLogger(FinancierUndoManager.class);
 
   public FinancierUndoManager() {
     super();
@@ -38,22 +43,26 @@ public class FinancierUndoManager extends UndoManager {
   }
 
   public void undo() {
+    LOG.info(this.getUndoPresentationName());
     super.undo();
     fireUndoableEvent();
   }
 
   public void redo() {
+    LOG.info(this.getRedoPresentationName());
     super.redo();
     fireUndoableEvent();
   }
 
   public boolean addEdit(UndoableEdit e) {
+    LOG.info(e.getPresentationName());
     boolean result = super.addEdit(e);
     fireUndoableEvent();
     return result;
   }
 
   public void discardAllEdits() {
+    LOG.info("Discarding all edits");
     super.discardAllEdits();
     fireUndoableEvent();
   }

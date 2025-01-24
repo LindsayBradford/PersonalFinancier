@@ -47,4 +47,20 @@ public class ResetBudgetItemsCommand extends AbstractBudgetCommand {
     model.setExpenseItems(this.preCommandExpenseItems);
     model.setIncomeItems(this.preCommandIncomeItems);
   }
+  
+  @Override
+  public String getPresentationName() {
+    return getRedoPresentationName();
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return String.format("All Income and expense items replaced");
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return String.format("All Income and expense items removed");
+  }
+
 }

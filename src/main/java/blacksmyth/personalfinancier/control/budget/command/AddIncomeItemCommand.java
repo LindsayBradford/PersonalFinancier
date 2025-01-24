@@ -21,6 +21,7 @@ public class AddIncomeItemCommand extends AbstractBudgetCommand {
   private BudgetModel budgetModel;
   private BudgetItem postCommandItem;
   private int itemIndex;
+  private String postCommandDescription;
   
   public static AddIncomeItemCommand doCmd(BudgetModel model, int itemIndex) {
     return new AddIncomeItemCommand(model, itemIndex);
@@ -30,6 +31,7 @@ public class AddIncomeItemCommand extends AbstractBudgetCommand {
     this.budgetModel = model;
     this.itemIndex = itemIndex;
     this.postCommandItem = model.addIncomeItem(itemIndex);
+    this.postCommandDescription = budgetModel.getIncomeItems().get(this.itemIndex).getDescription();
   }
 
   @Override
@@ -40,5 +42,20 @@ public class AddIncomeItemCommand extends AbstractBudgetCommand {
   @Override
   public void undo() throws CannotUndoException {
     budgetModel.removeIncomeItem(this.itemIndex);
+  }
+  
+  @Override
+  public String getPresentationName() {
+    return String.format("Added new imcome item [%s] ", postCommandDescription);
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return String.format("Undid addition of imcome item [%s]", postCommandDescription);
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return String.format("Added new imcome item [%s] ", postCommandDescription);
   }
 }

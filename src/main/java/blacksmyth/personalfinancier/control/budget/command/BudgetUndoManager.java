@@ -19,18 +19,18 @@ import javax.swing.undo.UndoableEdit;
 
 @SuppressWarnings("serial")
 public class BudgetUndoManager extends UndoManager {
-
+  
   private static BudgetUndoManager instance;
 
   /**
-   * The BudgetUndoManager is observable indirectly by relying on all Observable
-   * behaviour, delegated to <tt>observableDelegate</tt>
+   * The BudgetUndoManager is observable indirectly by relying on all PropertyChangeListener
+   * behaviour, delegated to <tt>support</tt>
    */
-  private PropertyChangeSupport observableDelegate;
+  private PropertyChangeSupport support;
 
   protected BudgetUndoManager() {
     super();
-    this.observableDelegate = new PropertyChangeSupport(this);
+    this.support = new PropertyChangeSupport(this);
   }
 
   public static BudgetUndoManager getInstance() {
@@ -41,11 +41,10 @@ public class BudgetUndoManager extends UndoManager {
   }
 
   public void addObserver(PropertyChangeListener o) {
-    this.observableDelegate.addPropertyChangeListener(o);
+    this.support.addPropertyChangeListener(o);
     // Below: a quick and nasty way to sync observer state with current model state.
     fireUndoableEvent();
   }
-  
 
   public void undo() {
     super.undo();
@@ -72,10 +71,8 @@ public class BudgetUndoManager extends UndoManager {
     super.undoableEditHappened(e);
     fireUndoableEvent();
   }
-
   
   private void fireUndoableEvent() {
-    this.observableDelegate.firePropertyChange("Undoable Budget Change",null,null);
+    this.support.firePropertyChange("Undoable Budget Change",null,null);
   }
-
 }

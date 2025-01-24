@@ -21,6 +21,7 @@ public class ChangeExpenseAccountCommand extends AbstractBudgetCommand {
   private int itemIndex;
   private String preCommandAccount;
   private String postCommandAccount;
+  private String itemDescription;
   
   public static ChangeExpenseAccountCommand doCmd(BudgetModel model, int itemIndex, 
                                                  String postCommandAccount) {
@@ -37,10 +38,11 @@ public class ChangeExpenseAccountCommand extends AbstractBudgetCommand {
     return command;
   }
   
-  protected ChangeExpenseAccountCommand(BudgetModel model, int incomeItemIndex, 
+  protected ChangeExpenseAccountCommand(BudgetModel model, int itemIndex, 
                                        String preCommandAccount, String postCommandAccount) {
     this.model = model;
-    this.itemIndex = incomeItemIndex;
+    this.itemIndex = itemIndex;
+    this.itemDescription = model.getExpenseItems().get(itemIndex).getDescription();
     this.preCommandAccount = preCommandAccount;
     this.postCommandAccount = postCommandAccount;
   }
@@ -68,4 +70,20 @@ public class ChangeExpenseAccountCommand extends AbstractBudgetCommand {
         preCommandAccount
     );
   }
+  
+  @Override
+  public String getPresentationName() {
+    return getRedoPresentationName();
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return String.format("Expense item [%s] account changed to [%s]", this.itemDescription, this.preCommandAccount);
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return String.format("Expense item [%s] account changed to [%s]", this.itemDescription, this.postCommandAccount);
+  }
+
 }

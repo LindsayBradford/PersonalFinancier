@@ -68,4 +68,19 @@ public class ChangeExpenseDescriptionCommand extends AbstractBudgetCommand {
         preCommandDescription
     );
   }
+  
+  @Override
+  public String getPresentationName() {
+    return getRedoPresentationName();
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return String.format("Expense item [%s] changed to [%s]", this.postCommandDescription, this.preCommandDescription);
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return String.format("Expense item [%s] changed to [%s]", this.preCommandDescription, this.postCommandDescription);
+  }
 }

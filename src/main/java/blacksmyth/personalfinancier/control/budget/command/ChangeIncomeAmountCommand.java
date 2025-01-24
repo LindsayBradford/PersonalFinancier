@@ -23,6 +23,7 @@ public class ChangeIncomeAmountCommand extends AbstractBudgetCommand {
   private int incomeItemIndex;
   private BigDecimal preCommandAmount;
   private BigDecimal postCommandAmount;
+  private String itemDescription;
   
   public static ChangeIncomeAmountCommand doCmd(BudgetModel model, int incomeItemIndex, 
                                                 BigDecimal postCommandAmount) {
@@ -43,6 +44,7 @@ public class ChangeIncomeAmountCommand extends AbstractBudgetCommand {
                                       BigDecimal preCommandAmount, BigDecimal postCommandAmount) {
     this.model = model;
     this.incomeItemIndex = incomeItemIndex;
+    this.itemDescription = model.getIncomeItems().get(incomeItemIndex).getDescription();
     this.preCommandAmount = preCommandAmount;
     this.postCommandAmount = postCommandAmount;
   }
@@ -69,5 +71,20 @@ public class ChangeIncomeAmountCommand extends AbstractBudgetCommand {
         incomeItemIndex, 
         preCommandAmount
     );
+  }
+  
+  @Override
+  public String getPresentationName() {
+    return getRedoPresentationName();
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return String.format("Income item [%s] amount changed to [%s]", this.itemDescription, this.preCommandAmount);
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return String.format("Income item [%s] amount changed to [%s]", this.itemDescription, this.postCommandAmount);
   }
 }

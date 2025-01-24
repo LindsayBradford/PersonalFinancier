@@ -18,7 +18,8 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 public class MoveIncomeItemUpCommand extends AbstractBudgetCommand {
   
   private BudgetModel model;
-  private int itemIndex;
+  private int preItemIndex;
+  private int postItemIndex;
   
   public static MoveIncomeItemUpCommand doCmd(BudgetModel model, int itemIndex) {
     MoveIncomeItemUpCommand command = new MoveIncomeItemUpCommand(model, itemIndex);
@@ -30,16 +31,33 @@ public class MoveIncomeItemUpCommand extends AbstractBudgetCommand {
   
   protected MoveIncomeItemUpCommand(BudgetModel model, int itemIndex) {
     this.model = model;
-    this.itemIndex = itemIndex;
+    this.preItemIndex = itemIndex;
+    this.postItemIndex = itemIndex - 1;
+
   }
 
   @Override
   public void redo() throws CannotRedoException {
-    model.moveIncomeItemUp(this.itemIndex);
+    model.moveIncomeItemUp(this.preItemIndex);
   }
 
   @Override
   public void undo() throws CannotUndoException {
-    model.moveIncomeItemDown(this.itemIndex - 1);
+    model.moveIncomeItemDown(this.postItemIndex);
+  }
+  
+  @Override
+  public String getPresentationName() {
+    return String.format("Income item [%s] moved up", model.getIncomeItems().get(this.postItemIndex).getDescription());
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return String.format("Income item [%s] moved down", model.getIncomeItems().get(this.postItemIndex).getDescription());
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return String.format("Income item [%s] moved up", model.getIncomeItems().get(this.preItemIndex).getDescription());
   }
 }

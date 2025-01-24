@@ -22,6 +22,7 @@ public class ChangeIncomeFrequencyCommand extends AbstractBudgetCommand {
   private int incomeItemIndex;
   private CashFlowFrequency preCommandFrequency;
   private CashFlowFrequency postCommandFrequency;
+  private String itemDescription;
   
   public static ChangeIncomeFrequencyCommand doCmd(BudgetModel model, int incomeItemIndex, 
                                                    CashFlowFrequency postCommandFrequency) {
@@ -38,10 +39,11 @@ public class ChangeIncomeFrequencyCommand extends AbstractBudgetCommand {
     return command;
   }
   
-  protected ChangeIncomeFrequencyCommand(BudgetModel model, int incomeItemIndex, 
+  protected ChangeIncomeFrequencyCommand(BudgetModel model, int itemIndex, 
                                          CashFlowFrequency preCommandFrequency, CashFlowFrequency postCommandFrequency) {
     this.model = model;
-    this.incomeItemIndex = incomeItemIndex;
+    this.incomeItemIndex = itemIndex;
+    this.itemDescription = model.getIncomeItems().get(itemIndex).getDescription();
     this.preCommandFrequency = preCommandFrequency;
     this.postCommandFrequency = postCommandFrequency;
   }
@@ -68,5 +70,20 @@ public class ChangeIncomeFrequencyCommand extends AbstractBudgetCommand {
         incomeItemIndex, 
         preCommandFrequency
     );
+  }
+  
+  @Override
+  public String getPresentationName() {
+    return getRedoPresentationName();
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return String.format("Income item [%s] frequency changed to [%s]", this.itemDescription, this.preCommandFrequency);
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return String.format("Income item [%s] frequency changed to [%s]", this.itemDescription, this.postCommandFrequency);
   }
 }

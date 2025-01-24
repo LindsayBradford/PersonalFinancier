@@ -18,9 +18,10 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 public class ChangeIncomeCategoryCommand extends AbstractBudgetCommand {
   
   private BudgetModel model;
-  private int incomeItemIndex;
+  private int itemIndex;
   private String preCommandCategory;
   private String postCommandCategory;
+  private String itemDescription;
   
   public static ChangeIncomeCategoryCommand doCmd(BudgetModel model, int incomeItemIndex, 
                                                    String postCommandCategory) {
@@ -37,10 +38,11 @@ public class ChangeIncomeCategoryCommand extends AbstractBudgetCommand {
     return command;
   }
   
-  protected ChangeIncomeCategoryCommand(BudgetModel model, int incomeItemIndex, 
+  protected ChangeIncomeCategoryCommand(BudgetModel model, int itemIndex, 
                                          String preCommandCategory, String postCommandCategory) {
     this.model = model;
-    this.incomeItemIndex = incomeItemIndex;
+    this.itemIndex = itemIndex;
+    this.itemDescription = model.getIncomeItems().get(itemIndex).getDescription();
     this.preCommandCategory = preCommandCategory;
     this.postCommandCategory = postCommandCategory;
   }
@@ -56,7 +58,7 @@ public class ChangeIncomeCategoryCommand extends AbstractBudgetCommand {
   @Override
   public void redo() throws CannotRedoException {
     model.setIncomeItemCategory(
-        incomeItemIndex, 
+        itemIndex, 
         postCommandCategory
     );
   }
@@ -64,8 +66,23 @@ public class ChangeIncomeCategoryCommand extends AbstractBudgetCommand {
   @Override
   public void undo() throws CannotUndoException {
     model.setIncomeItemCategory(
-        incomeItemIndex, 
+        itemIndex, 
         preCommandCategory
     );
+  }
+  
+  @Override
+  public String getPresentationName() {
+    return getRedoPresentationName();
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return String.format("Income item [%s] category changed to [%s]", this.itemDescription, this.preCommandCategory);
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return String.format("Income item [%s] category changed to [%s]", this.itemDescription, this.postCommandCategory);
   }
 }

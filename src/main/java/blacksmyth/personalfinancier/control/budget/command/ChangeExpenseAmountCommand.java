@@ -23,6 +23,7 @@ public class ChangeExpenseAmountCommand extends AbstractBudgetCommand {
   private int itemIndex;
   private BigDecimal preCommandAmount;
   private BigDecimal postCommandAmount;
+  private String itemDescription;
   
   public static ChangeExpenseAmountCommand doCmd(BudgetModel model, int itemIndex, 
                                                 BigDecimal postCommandAmount) {
@@ -43,6 +44,7 @@ public class ChangeExpenseAmountCommand extends AbstractBudgetCommand {
                                       BigDecimal preCommandAmount, BigDecimal postCommandAmount) {
     this.model = model;
     this.itemIndex = itemIndex;
+    this.itemDescription = model.getExpenseItems().get(itemIndex).getDescription();
     this.preCommandAmount = preCommandAmount;
     this.postCommandAmount = postCommandAmount;
   }
@@ -70,4 +72,20 @@ public class ChangeExpenseAmountCommand extends AbstractBudgetCommand {
         preCommandAmount
     );
   }
+  
+  @Override
+  public String getPresentationName() {
+    return getRedoPresentationName();
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return String.format("Expense item [%s] amount changed to [%s]", this.itemDescription, this.preCommandAmount);
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return String.format("Expense item [%s] amount changed to [%s]", this.itemDescription, this.postCommandAmount);
+  }
+
 }

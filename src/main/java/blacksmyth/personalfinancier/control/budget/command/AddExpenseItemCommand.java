@@ -21,6 +21,7 @@ public class AddExpenseItemCommand extends AbstractBudgetCommand {
   private BudgetModel model;
   private BudgetItem postCommandItem;
   private int itemIndex;
+  private String postCommandDescription;
   
   public static AddExpenseItemCommand doCmd(BudgetModel model, int itemIndex) {
     return new AddExpenseItemCommand(model, itemIndex);
@@ -30,6 +31,7 @@ public class AddExpenseItemCommand extends AbstractBudgetCommand {
     this.model = model;
     this.itemIndex = itemIndex;
     this.postCommandItem = model.addExpenseItem(itemIndex);
+    this.postCommandDescription = model.getExpenseItems().get(this.itemIndex).getDescription();
   }
 
   @Override
@@ -40,5 +42,20 @@ public class AddExpenseItemCommand extends AbstractBudgetCommand {
   @Override
   public void undo() throws CannotUndoException {
     model.removeExpenseItem(this.itemIndex);
+  }
+  
+  @Override
+  public String getPresentationName() {
+    return String.format("Added new expense item [%s] ", postCommandDescription);
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return String.format("Undid addition of expense item [%s]", postCommandDescription);
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return String.format("Added new expense item [%s] ", postCommandDescription);
   }
 }

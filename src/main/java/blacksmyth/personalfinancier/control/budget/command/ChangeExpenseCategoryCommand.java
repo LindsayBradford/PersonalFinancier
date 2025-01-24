@@ -18,9 +18,10 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 public class ChangeExpenseCategoryCommand extends AbstractBudgetCommand {
   
   private BudgetModel model;
-  private int expenseItemIndex;
+  private int itemIndex;
   private String preCommandCategory;
   private String postCommandCategory;
+  private String itemDescription;
   
   public static ChangeExpenseCategoryCommand doCmd(BudgetModel model, int expenseItemIndex, 
                                                    String postCommandCategory) {
@@ -37,10 +38,11 @@ public class ChangeExpenseCategoryCommand extends AbstractBudgetCommand {
     return command;
   }
   
-  protected ChangeExpenseCategoryCommand(BudgetModel model, int expenseItemIndex, 
+  protected ChangeExpenseCategoryCommand(BudgetModel model, int itemIndex, 
                                          String preCommandCategory, String postCommandCategory) {
     this.model = model;
-    this.expenseItemIndex = expenseItemIndex;
+    this.itemIndex = itemIndex;
+    this.itemDescription = model.getExpenseItems().get(itemIndex).getDescription();
     this.preCommandCategory = preCommandCategory;
     this.postCommandCategory = postCommandCategory;
   }
@@ -56,7 +58,7 @@ public class ChangeExpenseCategoryCommand extends AbstractBudgetCommand {
   @Override
   public void redo() throws CannotRedoException {
     model.setExpenseItemCategory(
-        expenseItemIndex, 
+        itemIndex, 
         postCommandCategory
     );
   }
@@ -64,8 +66,23 @@ public class ChangeExpenseCategoryCommand extends AbstractBudgetCommand {
   @Override
   public void undo() throws CannotUndoException {
     model.setExpenseItemCategory(
-        expenseItemIndex, 
+        itemIndex, 
         preCommandCategory
     );
+  }
+  
+  @Override
+  public String getPresentationName() {
+    return getRedoPresentationName();
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return String.format("Expense item [%s] category changed to [%s]", this.itemDescription, this.preCommandCategory);
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return String.format("Expense item [%s] category changed to [%s]", this.itemDescription, this.postCommandCategory);
   }
 }

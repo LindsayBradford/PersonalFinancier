@@ -18,17 +18,18 @@ import blacksmyth.personalfinancier.model.AccountModel;
 public class ChangeAccountDetailCommand extends AbstractBudgetCommand {
   
   private AccountModel model;
-  private int accountItemIndex;
+  private int accountIndex;
   private String preCommandDetail;
   private String postCommandDetail;
+  private String nickname;
   
-  public static ChangeAccountDetailCommand doCmd(AccountModel model, int accountItemIndex, 
+  public static ChangeAccountDetailCommand doCmd(AccountModel model, int accountIndex, 
                                                  String postCommandDetail) {
     
     ChangeAccountDetailCommand command = new ChangeAccountDetailCommand(
         model, 
-        accountItemIndex, 
-        model.getAccount(accountItemIndex).getDetail(),
+        accountIndex, 
+        model.getAccount(accountIndex).getDetail(),
         postCommandDetail
     );
     
@@ -37,10 +38,11 @@ public class ChangeAccountDetailCommand extends AbstractBudgetCommand {
     return command;
   }
   
-  protected ChangeAccountDetailCommand(AccountModel model, int accountItemIndex, 
+  protected ChangeAccountDetailCommand(AccountModel model, int accountIndex, 
                                          String preCommandDetail, String postCommandDetail) {
     this.model = model;
-    this.accountItemIndex = accountItemIndex;
+    this.accountIndex = accountIndex;
+    this.nickname = model.getAccount(accountIndex).getNickname();
     this.preCommandDetail = preCommandDetail;
     this.postCommandDetail = postCommandDetail;
   }
@@ -56,7 +58,7 @@ public class ChangeAccountDetailCommand extends AbstractBudgetCommand {
   @Override
   public void redo() throws CannotRedoException {
     model.setAccountDetail(
-        accountItemIndex, 
+        accountIndex, 
         postCommandDetail
     );
   }
@@ -64,8 +66,24 @@ public class ChangeAccountDetailCommand extends AbstractBudgetCommand {
   @Override
   public void undo() throws CannotUndoException {
     model.setAccountDetail(
-        accountItemIndex, 
+        accountIndex, 
         preCommandDetail
     );
   }
+  
+  @Override
+  public String getPresentationName() {
+    return getRedoPresentationName();
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return String.format("Account [%s] detail changed to [%s]", this.nickname, this.preCommandDetail);
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return String.format("Account [%s] detail changed to [%s]", this.nickname, this.postCommandDetail);
+  }
+
 }
