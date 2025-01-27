@@ -10,10 +10,26 @@
 
 package blacksmyth.personalfinancier.control.inflation;
 
+import java.time.LocalDate;
+
+import blacksmyth.personalfinancier.model.Money;
+
 /**
  * An interface that all MVC controller classes of the
  * <tt>InflationModel</tt> must implement if they wish to invoke its
  * control methods.
  * @author linds
  */
-public interface IInflationController {}
+public interface IInflationController {
+
+  Money computeComparisonValue(Money originalValue, LocalDate originalDate, LocalDate comparisonDate);
+
+  double getCPIFigureForDate(LocalDate date);
+
+  double getInflationPerAnnum(LocalDate firstDate, LocalDate secondDate);
+
+  double getInflationForDateRange(LocalDate earlierDate, LocalDate laterDate);
+  
+}
+
+

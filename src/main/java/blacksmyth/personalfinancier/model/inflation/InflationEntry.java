@@ -10,25 +10,25 @@
 
 package blacksmyth.personalfinancier.model.inflation;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 
 public class InflationEntry {
   
-  private Calendar Date;
+  private LocalDate Date;
   private double CPIValue;
   private String Notes;
   
-  public InflationEntry(Calendar date, double value, String notes) {
+  public InflationEntry(LocalDate date, double value, String notes) {
     this.Date = date;
     this.CPIValue = value;
     this.Notes = notes;
   }
 
-  public Calendar getDate() {
+  public LocalDate getDate() {
     return Date;
   }
 
-  public void setDate(Calendar date) {
+  public void setDate(LocalDate date) {
     this.Date = date;
   }
 

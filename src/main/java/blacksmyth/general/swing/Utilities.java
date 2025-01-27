@@ -8,7 +8,7 @@
  * http://opensource.org/licenses/BSD-3-Clause
  */
 
-package blacksmyth.general;
+package blacksmyth.general.swing;
 
 import java.awt.Dimension;
 import java.awt.FontMetrics;
@@ -33,7 +33,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumn;
 
-import blacksmyth.general.FontIconProvider.FontIcon;
+import blacksmyth.general.swing.FontIconProvider.FontIcon;
 
 /**
  * A library of generally reusabile utility functions for Swing. Being a
@@ -42,7 +42,7 @@ import blacksmyth.general.FontIconProvider.FontIcon;
  * @author linds
  *
  */
-public final class BlacksmythSwingUtilities {
+public final class Utilities {
 
   /**
    * Locks the width of <tt>column</tt> to the <tt>width</tt> specified.

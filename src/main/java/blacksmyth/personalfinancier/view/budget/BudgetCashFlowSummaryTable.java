@@ -23,9 +23,9 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.view.WidgetFactory;
+import blacksmyth.general.swing.Utilities;
 
 // TODO: Sorting from largest budgetted amount to smallest.
 
@@ -65,9 +65,9 @@ public class BudgetCashFlowSummaryTable extends JTable {
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
     
-    BlacksmythSwingUtilities.lockColumnWidth(
+    Utilities.lockColumnWidth(
         getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.Account),
-        BlacksmythSwingUtilities.getTextWidth(
+        Utilities.getTextWidth(
             WidgetFactory.ACCOUNT_BUFFER
         ) + CELL_BUFFER
     );
@@ -78,9 +78,9 @@ public class BudgetCashFlowSummaryTable extends JTable {
   }
   
   private void setupBudgettedCol() {
-    BlacksmythSwingUtilities.lockColumnWidth(
+    Utilities.lockColumnWidth(
         getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.CashFlow),
-        BlacksmythSwingUtilities.getTextWidth(
+        Utilities.getTextWidth(
             WidgetFactory.DECIMAL_FORMAT_PATTERN
         ) + CELL_BUFFER
     );

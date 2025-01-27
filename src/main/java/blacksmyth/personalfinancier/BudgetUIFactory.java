@@ -32,16 +32,15 @@ import javax.swing.KeyStroke;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
-import blacksmyth.general.BlacksmythSwingUtilities;
-import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.file.IFileHandler;
+import blacksmyth.general.swing.Utilities;
+import blacksmyth.general.swing.FontIconProvider;
 import blacksmyth.personalfinancier.control.FileHandlerBuilder;
 import blacksmyth.personalfinancier.control.budget.command.AddAccountCommand;
-import blacksmyth.personalfinancier.control.budget.command.AddIncomeItemCommand;
+
 import blacksmyth.personalfinancier.control.budget.command.ResetBudgetItemsCommand;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
-import blacksmyth.personalfinancier.model.budget.BudgetEvent;
 import blacksmyth.personalfinancier.model.budget.BudgetFileContent;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.view.IApplicationMessageView;
@@ -132,12 +131,12 @@ class BudgetUIFactory {
     BudgetItemInsertAction = new AbstractAction("Insert Budget Item") {
       public void actionPerformed(ActionEvent e) {
 
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(expenseItemPanel)) {
+        if (Utilities.mouseIsOverComponent(expenseItemPanel)) {
           expenseItemTable.addBudgetItem();
           return;
         }
 
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomeItemPanel)) {
+        if (Utilities.mouseIsOverComponent(incomeItemPanel)) {
           incomeItemTable.addBudgetItem();
         }
       }
@@ -146,12 +145,12 @@ class BudgetUIFactory {
     BudgetItemDeleteAction = new AbstractAction("Delete Budget Item") {
       public void actionPerformed(ActionEvent e) {
 
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(expenseItemPanel)) {
+        if (Utilities.mouseIsOverComponent(expenseItemPanel)) {
           expenseItemTable.removeBudgetItems();
           return;
         }
 
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomeItemPanel)) {
+        if (Utilities.mouseIsOverComponent(incomeItemPanel)) {
           incomeItemTable.removeBudgetItems();
         }
       }
@@ -160,12 +159,12 @@ class BudgetUIFactory {
     BudgetItemUpAction = new AbstractAction("Move Budget Item Up") {
       public void actionPerformed(ActionEvent e) {
 
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(expenseItemPanel)) {
+        if (Utilities.mouseIsOverComponent(expenseItemPanel)) {
           expenseItemTable.moveSelectedItemUp();
           return;
         }
 
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomeItemPanel)) {
+        if (Utilities.mouseIsOverComponent(incomeItemPanel)) {
           incomeItemTable.moveSelectedItemUp();
         }
       }
@@ -174,12 +173,12 @@ class BudgetUIFactory {
     BudgetItemDownAction = new AbstractAction("Move Budget Item Down") {
       public void actionPerformed(ActionEvent e) {
 
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(expenseItemPanel)) {
+        if (Utilities.mouseIsOverComponent(expenseItemPanel)) {
           expenseItemTable.moveSelectedItemDown();
           return;
         }
 
-        if (BlacksmythSwingUtilities.mouseIsOverComponent(incomeItemPanel)) {
+        if (Utilities.mouseIsOverComponent(incomeItemPanel)) {
           incomeItemTable.moveSelectedItemDown();
         }
       }
@@ -192,12 +191,12 @@ class BudgetUIFactory {
 
     button.setForeground(Color.GREEN.darker());
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK),
+    Utilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK),
         SaveBudgetAction);
 
     button.setMnemonic(KeyEvent.VK_S);
 
-    BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_save);
+    Utilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_save);
 
     button.setToolTipText(" Save the current budget ");
 
@@ -211,12 +210,12 @@ class BudgetUIFactory {
 
     JButton button = new JButton(SaveAsBudgetAction);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK),
+    Utilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK),
         SaveAsBudgetAction);
 
     button.setMnemonic(KeyEvent.VK_A);
 
-    BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_save);
+    Utilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_save);
 
     button.setForeground(Color.GREEN);
 
@@ -232,12 +231,12 @@ class BudgetUIFactory {
 
     JButton button = new JButton(LoadBudgetAction);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK),
+    Utilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK),
         LoadBudgetAction);
 
     button.setMnemonic(KeyEvent.VK_L);
 
-    BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_folder_open_o);
+    Utilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_folder_open_o);
 
     button.setForeground(Color.GREEN.darker());
 
@@ -288,16 +287,16 @@ class BudgetUIFactory {
 
     expenseItemPanel.add(tableScrollPane, BorderLayout.CENTER);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(expenseItemPanel, KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0),
+    Utilities.bindKeyStrokeToAction(expenseItemPanel, KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0),
         BudgetItemInsertAction);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(expenseItemPanel, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
+    Utilities.bindKeyStrokeToAction(expenseItemPanel, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
         BudgetItemDeleteAction);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(expenseItemPanel,
+    Utilities.bindKeyStrokeToAction(expenseItemPanel,
         KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, ActionEvent.ALT_MASK), BudgetItemDownAction);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(expenseItemPanel,
+    Utilities.bindKeyStrokeToAction(expenseItemPanel,
         KeyStroke.getKeyStroke(KeyEvent.VK_UP, ActionEvent.ALT_MASK), BudgetItemUpAction);
 
     return expenseItemPanel;
@@ -313,16 +312,16 @@ class BudgetUIFactory {
 
     incomeItemPanel.add(new JScrollPane(incomeItemTable), BorderLayout.CENTER);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(incomeItemPanel, KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0),
+    Utilities.bindKeyStrokeToAction(incomeItemPanel, KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0),
         BudgetItemInsertAction);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(incomeItemPanel, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
+    Utilities.bindKeyStrokeToAction(incomeItemPanel, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
         BudgetItemDeleteAction);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(incomeItemPanel,
+    Utilities.bindKeyStrokeToAction(incomeItemPanel,
         KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, ActionEvent.ALT_MASK), BudgetItemDownAction);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(incomeItemPanel,
+    Utilities.bindKeyStrokeToAction(incomeItemPanel,
         KeyStroke.getKeyStroke(KeyEvent.VK_UP, ActionEvent.ALT_MASK), BudgetItemUpAction);
 
     return incomeItemPanel;
@@ -350,7 +349,7 @@ class BudgetUIFactory {
 
     newButton.setAction(BudgetItemInsertAction);
 
-    BlacksmythSwingUtilities.setGlyphAsText(newButton, FontIconProvider.FontIcon.fa_plus);
+    Utilities.setGlyphAsText(newButton, FontIconProvider.FontIcon.fa_plus);
 
     newButton.setToolTipText("Add a new expense item");
 
@@ -368,7 +367,7 @@ class BudgetUIFactory {
 
     newButton.setForeground(Color.RED.brighter());
 
-    BlacksmythSwingUtilities.setGlyphAsText(newButton, FontIconProvider.FontIcon.fa_minus);
+    Utilities.setGlyphAsText(newButton, FontIconProvider.FontIcon.fa_minus);
 
     newButton.setToolTipText("Delete selected expense item(s)");
 
@@ -382,7 +381,7 @@ class BudgetUIFactory {
 
     newButton.setEnabled(false);
 
-    BlacksmythSwingUtilities.setGlyphAsText(newButton, FontIconProvider.FontIcon.fa_arrow_down);
+    Utilities.setGlyphAsText(newButton, FontIconProvider.FontIcon.fa_arrow_down);
 
     newButton.setForeground(Color.GREEN);
 
@@ -398,7 +397,7 @@ class BudgetUIFactory {
 
     newButton.setEnabled(false);
 
-    BlacksmythSwingUtilities.setGlyphAsText(newButton, FontIconProvider.FontIcon.fa_arrow_up);
+    Utilities.setGlyphAsText(newButton, FontIconProvider.FontIcon.fa_arrow_up);
 
     newButton.setToolTipText(" Move item up in list ");
 
@@ -429,7 +428,7 @@ class BudgetUIFactory {
 
     newButton.setAction(BudgetItemInsertAction);
 
-    BlacksmythSwingUtilities.setGlyphAsText(newButton, FontIconProvider.FontIcon.fa_plus);
+    Utilities.setGlyphAsText(newButton, FontIconProvider.FontIcon.fa_plus);
 
     newButton.setToolTipText("Add a new income item");
 
@@ -447,7 +446,7 @@ class BudgetUIFactory {
 
     newButton.setForeground(Color.RED.brighter());
 
-    BlacksmythSwingUtilities.setGlyphAsText(newButton, FontIconProvider.FontIcon.fa_minus);
+    Utilities.setGlyphAsText(newButton, FontIconProvider.FontIcon.fa_minus);
 
     newButton.setToolTipText("Delete selected income item(s)");
 
@@ -461,7 +460,7 @@ class BudgetUIFactory {
 
     newButton.setEnabled(false);
 
-    BlacksmythSwingUtilities.setGlyphAsText(newButton, FontIconProvider.FontIcon.fa_arrow_down);
+    Utilities.setGlyphAsText(newButton, FontIconProvider.FontIcon.fa_arrow_down);
 
     newButton.setToolTipText(" Move item down in list ");
 
@@ -477,7 +476,7 @@ class BudgetUIFactory {
 
     newButton.setEnabled(false);
 
-    BlacksmythSwingUtilities.setGlyphAsText(newButton, FontIconProvider.FontIcon.fa_arrow_up);
+    Utilities.setGlyphAsText(newButton, FontIconProvider.FontIcon.fa_arrow_up);
 
     newButton.setToolTipText(" Move item up in list ");
 
@@ -538,10 +537,10 @@ class BudgetUIFactory {
 
       private void changeSelectionRendering() {
         if (this.isSelected()) {
-          BlacksmythSwingUtilities.setGlyphAsText(this, FontIconProvider.FontIcon.fa_check_square_o);
+          Utilities.setGlyphAsText(this, FontIconProvider.FontIcon.fa_check_square_o);
           this.setToolTipText(" Hide budget item table buttons. ");
         } else {
-          BlacksmythSwingUtilities.setGlyphAsText(this, FontIconProvider.FontIcon.fa_square_o);
+          Utilities.setGlyphAsText(this, FontIconProvider.FontIcon.fa_square_o);
           this.setToolTipText(" Show budget item table buttons. ");
         }
       }
@@ -595,10 +594,10 @@ class BudgetUIFactory {
 
       private void changeSelectionRendering() {
         if (this.isSelected()) {
-          BlacksmythSwingUtilities.setGlyphAsText(this, FontIconProvider.FontIcon.fa_toggle_right);
+          Utilities.setGlyphAsText(this, FontIconProvider.FontIcon.fa_toggle_right);
           this.setToolTipText(" Hide derived amount columns. ");
         } else {
-          BlacksmythSwingUtilities.setGlyphAsText(this, FontIconProvider.FontIcon.fa_toggle_left);
+          Utilities.setGlyphAsText(this, FontIconProvider.FontIcon.fa_toggle_left);
           this.setToolTipText(" Show derived amount columns. ");
         }
       }
@@ -642,13 +641,13 @@ class BudgetUIFactory {
 
     resetItemsButton.setForeground(Color.GRAY.brighter());
 
-    BlacksmythSwingUtilities.setGlyphAsText(resetItemsButton, FontIconProvider.FontIcon.fa_trash_o);
+    Utilities.setGlyphAsText(resetItemsButton, FontIconProvider.FontIcon.fa_trash_o);
 
     resetItemsButton.setToolTipText(" Clear all income and expense items");
 
     resetItemsButton.setForeground(Color.RED);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(resetItemsButton, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
+    Utilities.bindKeyStrokeToAction(resetItemsButton, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
         resetItemsAction);
     return resetItemsButton;
   }
@@ -676,9 +675,9 @@ class BudgetUIFactory {
 
     budgetModel.getUndoManager().addObserver(button);
 
-    BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_undo);
+    Utilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_undo);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK),
+    Utilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK),
         undoAction);
 
     button.setForeground(Color.GREEN);
@@ -711,9 +710,9 @@ class BudgetUIFactory {
 
     budgetModel.getUndoManager().addObserver(button);
 
-    BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_repeat);
+    Utilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_repeat);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK),
+    Utilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK),
         redoAction);
 
     button.setForeground(Color.GREEN);
@@ -757,7 +756,7 @@ class BudgetUIFactory {
       }
     };
     
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(
+    Utilities.bindKeyStrokeToAction(
         table, KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0),
         AddAccountAction
     );

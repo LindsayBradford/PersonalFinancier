@@ -12,7 +12,7 @@ package blacksmyth.personalfinancier.view.inflation;
 
 import java.beans.PropertyChangeListener;
 import java.util.Arrays;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
 
 import javax.swing.undo.CompoundEdit;
 
@@ -78,7 +78,7 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
 
     switch (this.getColumnEnumValueAt(colNum)) {
     case Date:
-      return GregorianCalendar.class;
+      return LocalDate.class;
     case CPI:
       return Double.class;
     case Notes:
@@ -114,7 +114,7 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
     switch (this.getColumnEnumValueAt(colNum)) {
     case Date:
 
-      GregorianCalendar valueAsCalendar = (GregorianCalendar) value;
+      LocalDate valueAsCalendar = (LocalDate) value;
 
       inflationModel.getUndoManager()
           .addEdit(ChangeInflationDateCommand.doCmd(inflationModel, rowNum, valueAsCalendar));

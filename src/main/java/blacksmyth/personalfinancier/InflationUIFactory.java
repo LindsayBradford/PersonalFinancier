@@ -31,9 +31,10 @@ import javax.swing.KeyStroke;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
-import blacksmyth.general.BlacksmythSwingUtilities;
-import blacksmyth.general.FontIconProvider;
 import blacksmyth.general.file.IFileHandler;
+import blacksmyth.general.swing.Utilities;
+import blacksmyth.general.swing.FontIconProvider;
+
 import blacksmyth.personalfinancier.control.FileHandlerBuilder;
 import blacksmyth.personalfinancier.control.inflation.InflationConversionController;
 import blacksmyth.personalfinancier.model.inflation.InflationConversionModel;
@@ -126,7 +127,7 @@ class InflationUIFactory {
     // TODO: assign non-conflicting mnemonic
     button.setMnemonic(KeyEvent.VK_O);
 
-    BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_folder_open_o);
+    Utilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_folder_open_o);
 
     button.setForeground(Color.GREEN.darker());
 
@@ -148,13 +149,13 @@ class InflationUIFactory {
 
     button.setForeground(Color.GREEN.darker());
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK),
+    Utilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK),
         SaveInflationAction);
 
     // TODO: assign non-conflicting mnemonic
     button.setMnemonic(KeyEvent.VK_S);
 
-    BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_save);
+    Utilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_save);
 
     button.setToolTipText(" Save the inflation data ");
     return button;
@@ -167,7 +168,7 @@ class InflationUIFactory {
 
     removeInflationEntriesButton.setForeground(Color.RED.brighter());
 
-    BlacksmythSwingUtilities.setGlyphAsText(removeInflationEntriesButton, FontIconProvider.FontIcon.fa_minus);
+    Utilities.setGlyphAsText(removeInflationEntriesButton, FontIconProvider.FontIcon.fa_minus);
 
     removeInflationEntriesButton.setToolTipText("Remove selected inflation entry");
 
@@ -186,7 +187,7 @@ class InflationUIFactory {
 
     addInflationEntryButton.setMnemonic(KeyEvent.VK_INSERT);
 
-    BlacksmythSwingUtilities.setGlyphAsText(addInflationEntryButton, FontIconProvider.FontIcon.fa_plus);
+    Utilities.setGlyphAsText(addInflationEntryButton, FontIconProvider.FontIcon.fa_plus);
 
     addInflationEntryButton.setToolTipText("Add a new Inflation Entry");
 
@@ -225,9 +226,9 @@ class InflationUIFactory {
 
     inflationModel.getUndoManager().addObserver(button);
 
-    BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_undo);
+    Utilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_undo);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK),
+    Utilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK),
         undoAction);
 
     button.setForeground(Color.GREEN);
@@ -260,9 +261,9 @@ class InflationUIFactory {
 
     inflationModel.getUndoManager().addObserver(button);
 
-    BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_repeat);
+    Utilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_repeat);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK),
+    Utilities.bindKeyStrokeToAction(button, KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK),
         redoAction);
 
     button.setForeground(Color.GREEN);

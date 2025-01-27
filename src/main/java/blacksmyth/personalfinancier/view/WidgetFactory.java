@@ -17,11 +17,11 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListCellRenderer;
@@ -41,8 +41,8 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import blacksmyth.general.BlacksmythSwingUtilities;
-import blacksmyth.general.FontIconProvider;
+import blacksmyth.general.swing.Utilities;
+import blacksmyth.general.swing.FontIconProvider;
 import blacksmyth.personalfinancier.model.ModelPreferences;
 
 /**
@@ -64,7 +64,7 @@ public final class WidgetFactory {
   public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat(DECIMAL_FORMAT_PATTERN);
 
   public static final String DATE_FORMAT_PATTERN = "dd/MM/yyyy";
-  public static final DateFormat DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT_PATTERN);
+  public static final DateTimeFormatter  DATE_FORMAT = DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN);
 
   @SuppressWarnings("serial")
   public static DefaultTableCellRenderer createTableCellRenderer(final int alignment) {
@@ -94,11 +94,9 @@ public final class WidgetFactory {
   public static DefaultTableCellRenderer createDateCellRenderer() {
     return new DefaultTableCellRenderer() {
       public void setValue(Object value) {
-        if (value.getClass().equals(GregorianCalendar.class)) {
-          value = ((GregorianCalendar) value).getTime();
-        }
+        LocalDate valueAsLocalDate = (LocalDate) value;
         this.setHorizontalAlignment(JTextField.CENTER);
-        this.setText((value == null) ? "" : DATE_FORMAT.format(value));
+        this.setText((value == null) ? "" : valueAsLocalDate.format(DATE_FORMAT));
       }
     };
   }
@@ -114,10 +112,10 @@ public final class WidgetFactory {
       public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
           int column) {
 
-        if (value.getClass() == GregorianCalendar.class) {
-          GregorianCalendar valueAsCalendar = (GregorianCalendar) value;
+        if (value.getClass() == LocalDate.class) {
+          LocalDate valueAsLocalDate = (LocalDate) value;
 
-          String formattedvalue = DATE_FORMAT.format(valueAsCalendar.getTime());
+          String formattedvalue = DATE_FORMAT.format(valueAsLocalDate);
           delegate.setValue(formattedvalue);
 
           return editorComponent;
@@ -129,14 +127,13 @@ public final class WidgetFactory {
       @Override
       public Object getCellEditorValue() {
         String value = (String) delegate.getCellEditorValue();
-        GregorianCalendar valueAsCalendar;
+        LocalDate valueAsLocalDate;
         try {
-          valueAsCalendar = new GregorianCalendar();
-          valueAsCalendar.setTime(DATE_FORMAT.parse(value));
-        } catch (ParseException e) {
+          valueAsLocalDate = LocalDate.parse(value, DATE_FORMAT);
+        } catch (DateTimeParseException e) {
           return super.getCellEditorValue();
         }
-        return valueAsCalendar;
+        return valueAsLocalDate;
       }
     };
   }
@@ -209,7 +206,7 @@ public final class WidgetFactory {
     JFormattedTextField field = new JFormattedTextField(DECIMAL_FORMAT);
 
     configureGenericTextFieldBehaviour(field, alignment,
-        new Dimension(BlacksmythSwingUtilities.getTextWidth(DECIMAL_FORMAT_PATTERN),
+        new Dimension(Utilities.getTextWidth(DECIMAL_FORMAT_PATTERN),
             (int) field.getPreferredSize().getHeight()),
         "0123456789.,");
 
@@ -226,7 +223,7 @@ public final class WidgetFactory {
     JFormattedTextField field = new JFormattedTextField(PERCENT_FORMAT);
 
     configureGenericTextFieldBehaviour(field, alignment,
-        new Dimension(BlacksmythSwingUtilities.getTextWidth(PERCENT_FORMAT_PATTERN),
+        new Dimension(Utilities.getTextWidth(PERCENT_FORMAT_PATTERN),
             (int) field.getPreferredSize().getHeight()),
         "0123456789.,%");
 
@@ -240,11 +237,13 @@ public final class WidgetFactory {
    * @return
    */
   public static JFormattedTextField createDateTextField() {
+    
+    String nowAsText = LocalDate.now().format(DATE_FORMAT);
 
-    final JFormattedTextField field = new JFormattedTextField(DATE_FORMAT);
+    final JFormattedTextField field = new JFormattedTextField(nowAsText);
 
     configureGenericTextFieldBehaviour(field, JTextField.CENTER,
-        new Dimension(BlacksmythSwingUtilities.getTextWidth(DATE_FORMAT_PATTERN),
+        new Dimension(Utilities.getTextWidth(DATE_FORMAT_PATTERN),
             (int) field.getPreferredSize().getHeight()),
         "0123456789/");
 
@@ -345,14 +344,14 @@ public final class WidgetFactory {
     pane.addTab("", tableComponent);
     pane.setToolTipTextAt(currTabIndex, " View as table ");
 
-    BlacksmythSwingUtilities.setGlyphAsTitle(pane, currTabIndex, FontIconProvider.FontIcon.fa_table);
+    Utilities.setGlyphAsTitle(pane, currTabIndex, FontIconProvider.FontIcon.fa_table);
 
     currTabIndex++;
 
     pane.addTab("", graphComponent);
     pane.setToolTipTextAt(currTabIndex, " View as graph ");
 
-    BlacksmythSwingUtilities.setGlyphAsTitle(pane, currTabIndex, FontIconProvider.FontIcon.fa_pie_chart);
+    Utilities.setGlyphAsTitle(pane, currTabIndex, FontIconProvider.FontIcon.fa_pie_chart);
 
     enableSelectionHilightedTabPane(pane);
 

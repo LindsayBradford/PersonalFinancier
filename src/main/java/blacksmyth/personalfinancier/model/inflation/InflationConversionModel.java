@@ -13,7 +13,7 @@ package blacksmyth.personalfinancier.model.inflation;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.Calendar;
+import java.time.LocalDate;
 
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
@@ -21,10 +21,10 @@ import blacksmyth.personalfinancier.model.MoneyFactory;
 public class InflationConversionModel  implements PropertyChangeListener {
   
   private Money initialValue;
-  private Calendar initialDate;
+  private LocalDate initialDate;
 
   private Money conversionValue;
-  private Calendar conversionDate;
+  private LocalDate conversionDate;
   
   private double inflationOverPeriod;
   private double inflationPerAnnum;
@@ -37,6 +37,7 @@ public class InflationConversionModel  implements PropertyChangeListener {
   public InflationConversionModel(InflationProvider provider) {
     this.support = new PropertyChangeSupport(this);
     this.setInflationProvider(provider);
+    
     this.initialValue = MoneyFactory.createAmount(0);
     this.initialDate = inflationProvider.getEarliestDate();
     
@@ -51,6 +52,7 @@ public class InflationConversionModel  implements PropertyChangeListener {
   
   public void addListener(PropertyChangeListener listener) {
     support.addPropertyChangeListener(listener);
+    this.support.firePropertyChange("Inflation Conversion Event", null, null);
   }
 
   public void setInflationProvider(InflationProvider inflationProvider) {
@@ -71,11 +73,11 @@ public class InflationConversionModel  implements PropertyChangeListener {
     changeAndNotifyObservers();
   }
 
-  public Calendar getInitialDate() {
+  public LocalDate getInitialDate() {
     return initialDate;
   }
 
-  public void setInitialDate(Calendar initialDate) {
+  public void setInitialDate(LocalDate initialDate) {
     this.initialDate = initialDate;
 
     updateConversionValue();
@@ -104,11 +106,11 @@ public class InflationConversionModel  implements PropertyChangeListener {
     changeAndNotifyObservers();
   }
 
-  public Calendar getConversionDate() {
+  public LocalDate getConversionDate() {
     return conversionDate;
   }
 
-  public void setConversionDate(Calendar conversionDate) {
+  public void setConversionDate(LocalDate conversionDate) {
     this.conversionDate = conversionDate;
 
     updateInitialValue();
@@ -165,16 +167,24 @@ public class InflationConversionModel  implements PropertyChangeListener {
     );
   }
   
-  public Calendar getEarliestDate() {
+  public LocalDate getEarliestDate() {
     return inflationProvider.getEarliestDate();
   }
-  public Calendar getLatestLatestDate() {
+  public LocalDate getLatestLatestDate() {
     return inflationProvider.getLatestDate();
   }
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    updateConversionValue();
+    switch(evt.getPropertyName()) {
+      case "Inflation Model Loaded":
+        this.setInitialDate(inflationProvider.getEarliestDate());
+        this.setConversionDate(inflationProvider.getLatestDate());
+        this.setInitialValue(MoneyFactory.createAmount(1));
+        updateConversionValue();
+      case "Inflation Model Change":
+        updateConversionValue();
+    }
     changeAndNotifyObservers();
   }
   
@@ -182,5 +192,4 @@ public class InflationConversionModel  implements PropertyChangeListener {
     updateDerivedValues();
     this.support.firePropertyChange("Inflation Conversion Event", null, null);
   }
-
 }

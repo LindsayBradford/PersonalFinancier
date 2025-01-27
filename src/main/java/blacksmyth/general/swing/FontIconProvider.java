@@ -8,7 +8,9 @@
  * http://opensource.org/licenses/BSD-3-Clause
  */
 
-package blacksmyth.general;
+package blacksmyth.general.swing;
+
+import blacksmyth.general.ResourceBridge;
 
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;

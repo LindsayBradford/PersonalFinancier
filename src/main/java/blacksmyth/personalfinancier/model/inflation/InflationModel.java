@@ -13,9 +13,8 @@ package blacksmyth.personalfinancier.model.inflation;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.general.SortedArrayList;
@@ -29,7 +28,7 @@ import blacksmyth.personalfinancier.model.MoneyFactory;
 public class InflationModel
     implements InflationProvider, IInflationController, IFileHandlerModel<InflationFileContent> {
 
-  private static GregorianCalendar TODAY;
+  private static LocalDate TODAY;
 
   private static final String CONTROLLER_ASSERT_MSG = "Caller does not implement IInflationController.";
   // private static final String VIEWER_ASSERT_MSG = "Caller does not implement
@@ -45,8 +44,7 @@ public class InflationModel
   
   public InflationModel() {
     support = new PropertyChangeSupport(this);
-    TODAY = new GregorianCalendar();
-    TODAY.setTime(new Date());
+    TODAY = LocalDate.now();
   }
   
   public void addListener(PropertyChangeListener listener) {
@@ -67,7 +65,7 @@ public class InflationModel
   }
 
   @Override
-  public Money computeComparisonValue(Money originalValue, Calendar originalDate, Calendar comparisonDate) {
+  public Money computeComparisonValue(Money originalValue, LocalDate originalDate, LocalDate comparisonDate) {
 
     Money returnValue = MoneyFactory.copy(originalValue);
 
@@ -86,17 +84,17 @@ public class InflationModel
   }
 
   @Override
-  public double getCPIFigureForDate(Calendar date) {
-    if (date.before(getEarliestDate())) {
+  public double getCPIFigureForDate(LocalDate date) {
+    if (date.isBefore(getEarliestDate())) {
       return getCPIFigureForDate(getEarliestDate());
     }
-    if (date.after(getLatestDate())) {
+    if (date.isAfter(getLatestDate())) {
       return getCPIFigureForDate(getLatestDate());
     }
     return getCPIFigureFromList(date);
   }
 
-  public double getCPIFigureFromList(Calendar date) {
+  public double getCPIFigureFromList(LocalDate date) {
 
     if (inflationList.size() == 0) {
       return 0;
@@ -105,10 +103,10 @@ public class InflationModel
     double cpiFigure = inflationList.last().getCPIValue();
 
     for (int i = inflationList.size() - 1; i >= 0; i--) {
-      Calendar applicableFromDate = inflationList.get(i).getDate();
+      LocalDate applicableFromDate = inflationList.get(i).getDate();
       cpiFigure = inflationList.get(i).getCPIValue();
 
-      if (applicableFromDate.before(date) || applicableFromDate.equals(date)) {
+      if (applicableFromDate.isBefore(date) || applicableFromDate.equals(date)) {
         break;
       }
     }
@@ -117,25 +115,25 @@ public class InflationModel
   }
 
   @Override
-  public double getInflationForDateRange(Calendar earlierDate, Calendar laterDate) {
+  public double getInflationForDateRange(LocalDate earlierDate,  LocalDate laterDate) {
 
     if (inflationList.size() == 0) {
       return 0;
     }
 
-    if (laterDate.before(earlierDate)) {
+    if (laterDate.isBefore(earlierDate)) {
       return getInflationForDateRange(laterDate, earlierDate);
     }
     return getCPIFigureForDate(laterDate) / getCPIFigureForDate(earlierDate) - 1;
   }
 
   @Override
-  public double getInflationPerAnnum(Calendar firstDate, Calendar secondDate) {
+  public double getInflationPerAnnum(LocalDate firstDate, LocalDate secondDate) {
     if (inflationList.size() == 0) {
       return 0;
     }
 
-    if (secondDate.before(firstDate)) {
+    if (secondDate.isBefore(firstDate)) {
       return getInflationPerAnnum(secondDate, firstDate);
     }
 
@@ -146,15 +144,17 @@ public class InflationModel
     return 0;
   }
 
-  private double getTimeDiffInYears(Calendar earlierDate, Calendar laterDate) {
+  private double getTimeDiffInYears(LocalDate earlierDate, LocalDate laterDate) {
     final long MILLISECONDS_PER_DAY = 86400000;
     final double DAYS_PER_YEAR = MILLISECONDS_PER_DAY * 365.25;
 
-    return (laterDate.getTimeInMillis() - earlierDate.getTimeInMillis()) / DAYS_PER_YEAR;
+    long differenceInDays = Math.abs(ChronoUnit.DAYS.between(earlierDate, laterDate)) + 1;
+    
+    return differenceInDays / DAYS_PER_YEAR;
   }
 
   @Override
-  public Calendar getEarliestDate() {
+  public LocalDate getEarliestDate() {
     if (inflationList.size() == 0) {
       return TODAY;
     }
@@ -163,7 +163,7 @@ public class InflationModel
   }
 
   @Override
-  public Calendar getLatestDate() {
+  public LocalDate getLatestDate() {
     if (inflationList.size() == 0) {
       return TODAY;
     }
@@ -217,7 +217,7 @@ public class InflationModel
     this.changeAndNotifyObservers();
   }
 
-  public void setInflationEntryDate(int index, Calendar date) {
+  public void setInflationEntryDate(int index, LocalDate date) {
     assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
     assert (index >= 0 && index < inflationList.size());
     inflationList.get(index).setDate(date);
@@ -229,8 +229,7 @@ public class InflationModel
     // assert ReflectionUtilities.callerImplements(IInflationController.class) :
     // CONTROLLER_ASSERT_MSG;
     inflationList = content.inflationList;
-
-    this.changeAndNotifyObservers();
+    support.firePropertyChange("Inflation Model Loaded", null, null);
   }
 
   public void changeAndNotifyObservers() {

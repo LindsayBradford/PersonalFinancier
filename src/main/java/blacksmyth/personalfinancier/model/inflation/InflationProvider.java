@@ -11,7 +11,7 @@
 package blacksmyth.personalfinancier.model.inflation;
 
 import java.beans.PropertyChangeListener;
-import java.util.Calendar;
+import java.time.LocalDate;
 
 import blacksmyth.personalfinancier.model.Money;
 
@@ -19,24 +19,24 @@ public interface InflationProvider {
 
   public abstract Money computeComparisonValue(
       Money originalValue, 
-      Calendar origianlDate, 
-      Calendar comparisonDate
+      LocalDate origianlDate, 
+      LocalDate comparisonDate
    );
 
-  public abstract double getCPIFigureForDate(Calendar date);                                             
+  public abstract double getCPIFigureForDate(LocalDate date);                                             
 
   public abstract double getInflationForDateRange(
-      Calendar earlierDate, 
-      Calendar laterDate
+      LocalDate earlierDate, 
+      LocalDate laterDate
   );                                             
 
   public abstract double getInflationPerAnnum(
-      Calendar firstDate, 
-      Calendar secondDate
+      LocalDate firstDate, 
+      LocalDate secondDate
   );
 
-  public abstract Calendar getEarliestDate();
-  public abstract Calendar getLatestDate();
+  public abstract LocalDate getEarliestDate();
+  public abstract LocalDate getLatestDate();
   
   public abstract void addListener(PropertyChangeListener listener);
 }

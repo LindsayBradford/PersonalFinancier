@@ -23,7 +23,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import blacksmyth.general.BlacksmythSwingUtilities;
+
+import blacksmyth.general.swing.Utilities;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.view.ViewPreferences;
@@ -67,7 +68,7 @@ public class ExpenseItemTable extends JTable {
       );
     }
     
-    BlacksmythSwingUtilities.enableEnterKeyEditsInJTable(this);
+    Utilities.enableEnterKeyEditsInJTable(this);
    
     this.getExpenseItemTableModel().fireTableDataChanged();
   }
@@ -101,18 +102,18 @@ public class ExpenseItemTable extends JTable {
         (PropertyChangeListener) editor.getComponent()
     );
     
-    BlacksmythSwingUtilities.lockColumnWidth(
+    Utilities.lockColumnWidth(
         getColFromEnum(EXPENSE_ITEM_COLUMNS.Account),
-        BlacksmythSwingUtilities.getTextWidth(
+        Utilities.getTextWidth(
             WidgetFactory.ACCOUNT_BUFFER
         ) + CELL_BUFFER
     );
   }
 
   private void setupAmountCol(EXPENSE_ITEM_COLUMNS thisColumn) {
-    BlacksmythSwingUtilities.lockColumnWidth(
+    Utilities.lockColumnWidth(
         getColFromEnum(thisColumn),
-        BlacksmythSwingUtilities.getTextWidth(
+        Utilities.getTextWidth(
             WidgetFactory.DECIMAL_FORMAT_PATTERN
         ) + CELL_BUFFER
     );
@@ -141,9 +142,9 @@ public class ExpenseItemTable extends JTable {
         (PropertyChangeListener) editor.getComponent()
     );
     
-    BlacksmythSwingUtilities.lockColumnWidth(
+    Utilities.lockColumnWidth(
         getColFromEnum(EXPENSE_ITEM_COLUMNS.Category),
-        BlacksmythSwingUtilities.getTextWidth(" Variable Essential ")
+        Utilities.getTextWidth(" Variable Essential ")
     );
   }
 
@@ -155,7 +156,7 @@ public class ExpenseItemTable extends JTable {
     DefaultCellEditor editor = BudgetWidgetFactory.createCashFlowFrequencyCellEditor();    
     getColFromEnum(EXPENSE_ITEM_COLUMNS.Frequency).setCellEditor(editor);
 
-    BlacksmythSwingUtilities.lockColumnWidth(
+    Utilities.lockColumnWidth(
         getColFromEnum(EXPENSE_ITEM_COLUMNS.Frequency),
         (int) editor.getComponent().getPreferredSize().getWidth()
     );
@@ -217,7 +218,7 @@ public class ExpenseItemTable extends JTable {
 
     this.getExpenseItemTableModel().addExpenseItem(row + 1);
 
-    BlacksmythSwingUtilities.scrollRowToVisible(
+    Utilities.scrollRowToVisible(
         this, 
         row + 1
     );
@@ -246,7 +247,7 @@ public class ExpenseItemTable extends JTable {
     
     this.getExpenseItemTableModel().moveExpenseItemDown(row);
     this.selectionModel.setSelectionInterval(row + 1, row + 1);
-    BlacksmythSwingUtilities.scrollRowToVisible(this, row + 1);
+    Utilities.scrollRowToVisible(this, row + 1);
     this.requestFocus();
   }
 
@@ -257,7 +258,7 @@ public class ExpenseItemTable extends JTable {
 
     this.getExpenseItemTableModel().moveExpenseItemUp(row);
     this.selectionModel.setSelectionInterval(row - 1, row - 1);
-    BlacksmythSwingUtilities.scrollRowToVisible(this, row - 1);
+    Utilities.scrollRowToVisible(this, row - 1);
     this.requestFocus();
   }
 

@@ -30,7 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
-import blacksmyth.general.BlacksmythSwingUtilities;
+import blacksmyth.general.swing.Utilities;
 
 @SuppressWarnings("serial")
 public class PasswordPromptView extends JDialog implements IPasswordPromptView, ActionListener {
@@ -133,7 +133,7 @@ public class PasswordPromptView extends JDialog implements IPasswordPromptView, 
     buttons.add(okButton);
     buttons.add(cancelButton);
 
-    BlacksmythSwingUtilities.equalizeComponentSizes(buttons);
+    Utilities.equalizeComponentSizes(buttons);
 
     buttons = null;
 

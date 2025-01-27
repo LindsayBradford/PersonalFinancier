@@ -10,21 +10,35 @@
 
 package blacksmyth.personalfinancier.control.inflation;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.inflation.InflationConversionModel;
 import blacksmyth.personalfinancier.view.WidgetFactory;
 
-public class InflationConversionController  {
+public class InflationConversionController implements PropertyChangeListener  {
+  
+  private static Logger LOG = LogManager.getLogger(InflationConversionController .class);
   
   private InflationConversionModel model;
   
+  private PropertyChangeSupport support;
+  
+  
   public InflationConversionController(InflationConversionModel model) {
     this.model = model;
+
+    this.support = new PropertyChangeSupport(this);
+    this.support.addPropertyChangeListener(model);
   }
   
   public void setInitialValue(String initialValueAsString) {
@@ -34,7 +48,7 @@ public class InflationConversionController  {
     try {
       valueAsDouble = WidgetFactory.DECIMAL_FORMAT.parse(initialValueAsString);
     } catch (ParseException e) {
-      // deliberately do nothing.
+      LOG.warn("Initial value format {} not parsable", initialValue);
     }
     
     BigDecimal newInitialValue = BigDecimal.valueOf(
@@ -50,17 +64,11 @@ public class InflationConversionController  {
 
   public void setInitialDate(String initialDateAsString) {
     
-    GregorianCalendar newInitialDate;
+    LocalDate newInitialDate = LocalDate.now();
     try {
-      newInitialDate = new GregorianCalendar();
-      newInitialDate.setTime(
-        WidgetFactory.DATE_FORMAT.parse(initialDateAsString)
-      );
-    } catch (ParseException e) {
-      newInitialDate= new GregorianCalendar();
-      newInitialDate.setTime(
-          new Date()
-      );
+      newInitialDate = LocalDate.parse(initialDateAsString, WidgetFactory.DATE_FORMAT);
+    } catch (DateTimeParseException e) {
+      LOG.warn("Initial date format {} not parsable", initialDateAsString);
     }
     
     model.setInitialDate(newInitialDate);
@@ -74,7 +82,7 @@ public class InflationConversionController  {
     try {
       valueAsDouble = WidgetFactory.DECIMAL_FORMAT.parse(conversionValueAsString);
     } catch (ParseException e) {
-      // deliberately do nothing.
+      LOG.warn("Conversion value format {} not parsable", conversionValue);
     }
     
     BigDecimal newValue = BigDecimal.valueOf(
@@ -90,18 +98,21 @@ public class InflationConversionController  {
 
   public void setConversionDate(String conversionDateAsString) {
     
-    GregorianCalendar newConversionDate;
+    LocalDate newConversionDate = LocalDate.now();
     try {
-      newConversionDate = new GregorianCalendar();
-      newConversionDate.setTime(
-        WidgetFactory.DATE_FORMAT.parse(conversionDateAsString)
-      );
-    } catch (ParseException e) {
-      newConversionDate= new GregorianCalendar();
-      newConversionDate.setTime(
-          new Date()
-      );
+      newConversionDate = LocalDate.parse(conversionDateAsString, WidgetFactory.DATE_FORMAT);
+    } catch (DateTimeParseException e) {
+      LOG.warn("Conversion date format {} not parsable", conversionDateAsString);
     }
     model.setConversionDate(newConversionDate);
+  }
+
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    support.firePropertyChange(evt);
+  }
+  
+  public void addPropertyListener(PropertyChangeListener listener) {
+    this.support.addPropertyChangeListener(listener);
   }
 }

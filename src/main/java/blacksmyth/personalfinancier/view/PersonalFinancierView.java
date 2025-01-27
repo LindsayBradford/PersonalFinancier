@@ -43,8 +43,8 @@ import javax.swing.WindowConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import blacksmyth.general.BlacksmythSwingUtilities;
-import blacksmyth.general.FontIconProvider;
+import blacksmyth.general.swing.Utilities;
+import blacksmyth.general.swing.FontIconProvider;
 
 public class PersonalFinancierView implements IPersonalFinancierView {
   
@@ -175,7 +175,7 @@ public class PersonalFinancierView implements IPersonalFinancierView {
 
     button.setForeground(Color.GRAY);
 
-    BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_info_circle);
+    Utilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_info_circle);
 
     button.setToolTipText(" About ");
 
@@ -201,7 +201,7 @@ public class PersonalFinancierView implements IPersonalFinancierView {
 
     button.setForeground(Color.GRAY);
 
-    BlacksmythSwingUtilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_cogs);
+    Utilities.setGlyphAsText(button, FontIconProvider.FontIcon.fa_cogs);
 
     button.setToolTipText(" Preferences ");
 
@@ -265,7 +265,7 @@ public class PersonalFinancierView implements IPersonalFinancierView {
 
     JMenuItem menuItem = new JMenuItem(ExitAction);
 
-    BlacksmythSwingUtilities.bindKeyStrokeToAction(menuItem, KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK),
+    Utilities.bindKeyStrokeToAction(menuItem, KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK),
         ExitAction);
 
     return menuItem;

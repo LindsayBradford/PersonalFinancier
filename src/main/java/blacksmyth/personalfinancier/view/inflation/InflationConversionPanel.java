@@ -18,7 +18,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
 import java.util.Vector;
 
 import javax.swing.JComponent;
@@ -27,7 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import blacksmyth.general.BlacksmythSwingUtilities;
+import blacksmyth.general.swing.Utilities;
 import blacksmyth.personalfinancier.control.inflation.InflationConversionController;
 import blacksmyth.personalfinancier.model.inflation.InflationConversionModel;
 import blacksmyth.personalfinancier.view.WidgetFactory;
@@ -35,8 +35,8 @@ import blacksmyth.personalfinancier.view.WidgetFactory;
 @SuppressWarnings("serial")
 public class InflationConversionPanel extends JPanel implements PropertyChangeListener {
 
-  private GregorianCalendar earliestDate;
-  private GregorianCalendar latestDate;
+  private LocalDate earliestDate;
+  private LocalDate latestDate;
 
   private GridBagLayout gbl = new GridBagLayout();
   private GridBagConstraints gbc = new GridBagConstraints();
@@ -63,13 +63,15 @@ public class InflationConversionPanel extends JPanel implements PropertyChangeLi
     super();
     this.controller = controller;
     this.support = new PropertyChangeSupport(this);
+    this.controller.addPropertyListener(this);
     
     setLayout(gbl);
     createView();
-  }
+}
   
   public void addListener(PropertyChangeListener listener) {
     support.addPropertyChangeListener(listener);
+    this.support.firePropertyChange("Inflation Conversion Event", null, null);
   }
 
   private void createView() {
@@ -138,8 +140,8 @@ public class InflationConversionPanel extends JPanel implements PropertyChangeLi
 
     gbc.insets = new Insets(10, 5, 5, 5);
 
-    BlacksmythSwingUtilities.equalizeComponentSizes(labels);
-    BlacksmythSwingUtilities.equalizeComponentSizes(fields);
+    Utilities.equalizeComponentSizes(labels);
+    Utilities.equalizeComponentSizes(fields);
 
     labels.clear();
     fields.clear();
@@ -166,12 +168,12 @@ public class InflationConversionPanel extends JPanel implements PropertyChangeLi
     return "CPI calculations cover the date range " + earliestDateString + " - " + latestDateString + ".";
   }
 
-  private String dateToString(GregorianCalendar date) {
+  private String dateToString(LocalDate date) {
     if (date == null) {
       return "";
 
     }
-    return WidgetFactory.DATE_FORMAT.format(date.getTime());
+    return date.format(WidgetFactory.DATE_FORMAT);
   }
 
   protected void addFieldPair(JLabel label, JFormattedTextField field, int gridX, int gridY) {
@@ -199,11 +201,11 @@ public class InflationConversionPanel extends JPanel implements PropertyChangeLi
 
     InflationConversionModel model = (InflationConversionModel) evt.getSource();
 
-    this.initialDateField.setValue(model.getInitialDate().getTime());
+    this.initialDateField.setValue(model.getInitialDate().format(WidgetFactory.DATE_FORMAT));
 
     this.initialValueField.setValue(model.getInitialValue().getTotal().doubleValue());
 
-    this.conversionDateField.setValue(model.getConversionDate().getTime());
+    this.conversionDateField.setValue(model.getConversionDate().format(WidgetFactory.DATE_FORMAT));
 
     this.conversionValueField.setValue(model.getConversionValue().getTotal().doubleValue());
 
@@ -211,8 +213,8 @@ public class InflationConversionPanel extends JPanel implements PropertyChangeLi
 
     this.inflationPerAnnumField.setValue(model.getInflationPerAnnum());
 
-    this.earliestDate = (GregorianCalendar) model.getEarliestDate();
-    this.latestDate = (GregorianCalendar) model.getLatestLatestDate();
+    this.earliestDate = model.getEarliestDate();
+    this.latestDate = model.getLatestLatestDate();
 
     dateRangeLabel.setText(getDateRangeMessage());
   }

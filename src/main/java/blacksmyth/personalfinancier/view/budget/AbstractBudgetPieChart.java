@@ -20,7 +20,6 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import blacksmyth.general.BlacksmythSwingUtilities;
 import blacksmyth.personalfinancier.control.budget.IBudgetObserver;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import de.erichseifert.gral.data.DataTable;
@@ -31,6 +30,9 @@ import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.graphics.Location;
+
+
+import blacksmyth.general.swing.Utilities;
 
 /**
  * An abstract Pie Chart that summarises and displays budget model data.
@@ -86,7 +88,7 @@ public abstract class AbstractBudgetPieChart extends JPanel implements IBudgetOb
 
     this.add(new InteractivePanel(plot), BorderLayout.CENTER);
 
-    BlacksmythSwingUtilities.refreshLater(this);
+    Utilities.refreshLater(this);
   }
 
   private PiePlot createPiePlot(String title, DataTable cashFlowData) {
