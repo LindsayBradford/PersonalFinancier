@@ -17,8 +17,6 @@ import blacksmyth.personalfinancier.model.inflation.InflationEntry;
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
 
 public class AddInflationEntryCommand extends AbstractInflationCommand {
-  
-  private InflationModel inflationModel;
   private InflationEntry postCommandEntry;
   
   public static AddInflationEntryCommand doCmd(InflationModel model) {
@@ -26,17 +24,33 @@ public class AddInflationEntryCommand extends AbstractInflationCommand {
   }
   
   protected AddInflationEntryCommand(InflationModel model) {
-    this.inflationModel = model;
+    super(model, model.getInflationList().size());
     this.postCommandEntry = model.addEntry();
   }
 
   @Override
   public void redo() throws CannotRedoException {
-    inflationModel.addEntry(this.postCommandEntry);
+    model.addEntry(this.inflationEntryIndex, this.postCommandEntry);
   }
 
   @Override
   public void undo() throws CannotUndoException {
-    inflationModel.removeEntry(this.postCommandEntry);
+    model.removeEntry(this.inflationEntryIndex);
   }
+  
+  @Override
+  public String getPresentationName() {
+    return getRedoPresentationName();
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return String.format("Undid addition of inflation item [%s]", dateAsString());
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return String.format("Added new inflation item [%s] ", dateAsString());
+  }
+
 }

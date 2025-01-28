@@ -17,8 +17,6 @@ import blacksmyth.personalfinancier.model.inflation.InflationModel;
 
 public class ChangeInflationNotesCommand extends AbstractInflationCommand {
   
-  private InflationModel model;
-  private int inflationEntryIndex;
   private String preCommandNotes;
   private String postCommandNotes;
   
@@ -39,8 +37,8 @@ public class ChangeInflationNotesCommand extends AbstractInflationCommand {
   
   protected ChangeInflationNotesCommand(InflationModel model, int inflationEntryIndex, 
                                         String preCommandNotes, String postCommandNotes) {
-    this.model = model;
-    this.inflationEntryIndex = inflationEntryIndex;
+    super(model, inflationEntryIndex);
+
     this.preCommandNotes = preCommandNotes;
     this.postCommandNotes = postCommandNotes;
   }
@@ -66,6 +64,27 @@ public class ChangeInflationNotesCommand extends AbstractInflationCommand {
     model.setInflationEntryNotes(
         inflationEntryIndex, 
         preCommandNotes
+    );
+  }
+  
+  @Override
+  public String getPresentationName() {
+    return getRedoPresentationName();
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return String.format(
+        "Inflation entry [%s] notes [%s] changed to [%s]", dateAsString(), 
+        this.postCommandNotes, this.preCommandNotes
+    );
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return String.format(
+        "Inflation entry [%s] notes [%s] changed to [%s]", dateAsString(), 
+        this.preCommandNotes, this.postCommandNotes
     );
   }
 }

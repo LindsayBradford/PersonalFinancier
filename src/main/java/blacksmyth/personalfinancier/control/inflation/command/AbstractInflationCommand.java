@@ -10,14 +10,26 @@
 
 package blacksmyth.personalfinancier.control.inflation.command;
 
+import java.time.LocalDate;
+
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
 import blacksmyth.personalfinancier.control.inflation.UndoableInflationCommand;
+import blacksmyth.personalfinancier.model.inflation.InflationModel;
+import blacksmyth.personalfinancier.view.WidgetFactory;
 
 public abstract class AbstractInflationCommand implements UndoableInflationCommand {
 
+  protected InflationModel model;
+  protected int inflationEntryIndex;
+  
+  public AbstractInflationCommand(InflationModel model, int index) {
+    this.model = model;
+    this.inflationEntryIndex = index;
+  }
+  
   @Override
   public boolean addEdit(UndoableEdit arg0) {
     return false;
@@ -68,4 +80,15 @@ public abstract class AbstractInflationCommand implements UndoableInflationComma
 
   @Override
   public abstract void undo() throws CannotUndoException;
+  
+  protected String toString(LocalDate date) {
+    return date.format(WidgetFactory.DATE_FORMAT);
+  }
+  
+  protected String dateAsString() {
+    LocalDate date = model.getInflationList().get(inflationEntryIndex).getDate();
+    return toString(date);
+  }
+
+
 }

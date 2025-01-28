@@ -19,8 +19,6 @@ import blacksmyth.personalfinancier.model.inflation.InflationModel;
 
 public class ChangeInflationDateCommand extends AbstractInflationCommand {
   
-  private InflationModel model;
-  private int inflationEntryIndex;
   private LocalDate preCommandDate;
   private LocalDate postCommandDate;
   
@@ -41,12 +39,12 @@ public class ChangeInflationDateCommand extends AbstractInflationCommand {
   
   protected ChangeInflationDateCommand(InflationModel model, int inflationEntryIndex, 
                                        LocalDate preCommandDate, LocalDate postCommandDate) {
-    this.model = model;
-    this.inflationEntryIndex = inflationEntryIndex;
+    super(model, inflationEntryIndex);
+
     this.preCommandDate = preCommandDate;
     this.postCommandDate = postCommandDate;
   }
-
+  
   @Override
   public boolean isSignificant() {
     if (this.preCommandDate.equals(this.postCommandDate)) {
@@ -69,5 +67,20 @@ public class ChangeInflationDateCommand extends AbstractInflationCommand {
         inflationEntryIndex, 
         preCommandDate
     );
+  }
+  
+  @Override
+  public String getPresentationName() {
+    return getRedoPresentationName();
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return String.format("Inflation entry [%s] changed to [%s]", toString(this.postCommandDate), toString(this.preCommandDate));
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return String.format("Inflation entry [%s] changed to [%s]", toString(this.preCommandDate), toString(this.postCommandDate));
   }
 }

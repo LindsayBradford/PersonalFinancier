@@ -46,7 +46,7 @@ public class AddExpenseItemCommand extends AbstractBudgetCommand {
   
   @Override
   public String getPresentationName() {
-    return String.format("Added new expense item [%s] ", postCommandDescription);
+    return getRedoPresentationName();
   }
 
   @Override
