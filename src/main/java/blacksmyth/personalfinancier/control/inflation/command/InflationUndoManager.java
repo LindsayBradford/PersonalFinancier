@@ -8,7 +8,7 @@
  * http://opensource.org/licenses/BSD-3-Clause
  */
 
-package blacksmyth.personalfinancier.control;
+package blacksmyth.personalfinancier.control.inflation.command;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -20,18 +20,19 @@ import javax.swing.undo.UndoableEdit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
 @SuppressWarnings("serial")
-public class FinancierUndoManager extends UndoManager {
+public class InflationUndoManager extends UndoManager {
 
   /**
-   * The FinancierUndoManager is observable indirectly by relying on all
-   * Observable behaviour, delegated to <tt>observableDelegate</tt>
+   * The BudgetUndoManager is observable indirectly by relying on all PropertyChangeListener
+   * behaviour, delegated to <tt>support</tt>
    */
   private PropertyChangeSupport observableDelegate;
   
-  private static Logger LOG = LogManager.getLogger(FinancierUndoManager.class);
+  private static Logger LOG = LogManager.getLogger(InflationUndoManager.class);
 
-  public FinancierUndoManager() {
+  public InflationUndoManager() {
     super();
     this.observableDelegate = new PropertyChangeSupport(this);
   }
@@ -73,7 +74,7 @@ public class FinancierUndoManager extends UndoManager {
   }
   
   private void fireUndoableEvent() {
-    this.observableDelegate.firePropertyChange("Undoable Financier Change",null,null);
+    this.observableDelegate.firePropertyChange("Undoable Inflation Change",null,null);
   }
 
 }

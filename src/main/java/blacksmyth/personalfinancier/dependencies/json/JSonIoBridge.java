@@ -38,7 +38,7 @@ final class JSonIoBridge<T> implements IJSonSerialisationBridge<T> {
 
   class CurrencyClassFactory implements JsonReader.ClassFactory {
     public Object newInstance(Class<?> c, JsonObject jsonObject, Resolver resolver) {
-      @SuppressWarnings("unchecked")
+      @SuppressWarnings({ "unchecked", "rawtypes" })
       Map<String, Object> map = (Map) jsonObject;
       String currencyCode = (String) map.get("currencyCode");
       

@@ -21,9 +21,9 @@ import java.util.TreeSet;
 import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.general.SortedArrayList;
 import blacksmyth.general.file.IFileHandlerModel;
-import blacksmyth.personalfinancier.control.FinancierUndoManager;
 import blacksmyth.personalfinancier.control.budget.IBudgetController;
 import blacksmyth.personalfinancier.control.budget.IBudgetObserver;
+import blacksmyth.personalfinancier.control.budget.command.BudgetUndoManager;
 import blacksmyth.personalfinancier.model.Account;
 import blacksmyth.personalfinancier.model.AccountModel;
 import blacksmyth.personalfinancier.model.CashFlowFrequency;
@@ -38,7 +38,7 @@ public class BudgetModel
   private static final String CONTROLLER_ASSERT_MSG = "Caller does not implement IBudgetController.";
   private static final String VIEWER_ASSERT_MSG = "Caller does not implement IBudgetObserver.";
 
-  private final FinancierUndoManager undoManager = new FinancierUndoManager();
+  private final BudgetUndoManager undoManager = new BudgetUndoManager();
 
   private AccountModel accountModel;
 
@@ -81,7 +81,7 @@ public class BudgetModel
     return this.accountModel;
   }
 
-  public FinancierUndoManager getUndoManager() {
+  public BudgetUndoManager getUndoManager() {
     return undoManager;
   }
 

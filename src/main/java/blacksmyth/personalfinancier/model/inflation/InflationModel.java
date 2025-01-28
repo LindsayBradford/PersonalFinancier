@@ -19,8 +19,8 @@ import java.time.temporal.ChronoUnit;
 import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.general.SortedArrayList;
 import blacksmyth.general.file.IFileHandlerModel;
-import blacksmyth.personalfinancier.control.FinancierUndoManager;
 import blacksmyth.personalfinancier.control.inflation.IInflationController;
+import blacksmyth.personalfinancier.control.inflation.command.InflationUndoManager;
 import blacksmyth.personalfinancier.model.ModelPreferences;
 import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.MoneyFactory;
@@ -38,7 +38,7 @@ public class InflationModel
   // order.
   private static SortedArrayList<InflationEntry> inflationList = new SortedArrayList<InflationEntry>();
 
-  private final FinancierUndoManager undoManager = new FinancierUndoManager();
+  private final InflationUndoManager undoManager = new InflationUndoManager();
 
   private PropertyChangeSupport support;
   
@@ -60,7 +60,7 @@ public class InflationModel
     this.changeAndNotifyObservers();
   }
 
-  public FinancierUndoManager getUndoManager() {
+  public InflationUndoManager getUndoManager() {
     return undoManager;
   }
 

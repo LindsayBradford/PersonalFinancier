@@ -17,52 +17,53 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
 @SuppressWarnings("serial")
 public class BudgetUndoManager extends UndoManager {
-  
-  private static BudgetUndoManager instance;
 
   /**
    * The BudgetUndoManager is observable indirectly by relying on all PropertyChangeListener
    * behaviour, delegated to <tt>support</tt>
    */
-  private PropertyChangeSupport support;
+  private PropertyChangeSupport observableDelegate;
+  
+  private static Logger LOG = LogManager.getLogger(BudgetUndoManager.class);
 
-  protected BudgetUndoManager() {
+  public BudgetUndoManager() {
     super();
-    this.support = new PropertyChangeSupport(this);
-  }
-
-  public static BudgetUndoManager getInstance() {
-    if (instance == null) {
-      instance = new BudgetUndoManager();
-    }
-    return instance;
+    this.observableDelegate = new PropertyChangeSupport(this);
   }
 
   public void addObserver(PropertyChangeListener o) {
-    this.support.addPropertyChangeListener(o);
+    this.observableDelegate.addPropertyChangeListener(o);
     // Below: a quick and nasty way to sync observer state with current model state.
     fireUndoableEvent();
   }
 
   public void undo() {
+    LOG.info(this.getUndoPresentationName());
     super.undo();
     fireUndoableEvent();
   }
 
   public void redo() {
+    LOG.info(this.getRedoPresentationName());
     super.redo();
     fireUndoableEvent();
   }
 
   public boolean addEdit(UndoableEdit e) {
+    LOG.info(e.getPresentationName());
     boolean result = super.addEdit(e);
     fireUndoableEvent();
     return result;
   }
 
   public void discardAllEdits() {
+    LOG.info("Discarding all edits");
     super.discardAllEdits();
     fireUndoableEvent();
   }
@@ -73,6 +74,7 @@ public class BudgetUndoManager extends UndoManager {
   }
   
   private void fireUndoableEvent() {
-    this.support.firePropertyChange("Undoable Budget Change",null,null);
+    this.observableDelegate.firePropertyChange("Undoable Budget Change",null,null);
   }
+
 }
