@@ -36,7 +36,8 @@ List libsToMerge = [
   'com.jtattoo:JTattoo:1.6.13', 
   'com.cedarsoftware:json-io:4.32.0', 
   'de.erichseifert.gral:gral-core:0.11',
-  'org.apache.logging.log4j:log4j-api:2.24.3'
+  'org.apache.logging.log4j:log4j-api:2.24.3',
+  'org.knowm.xchart:xchart:3.8.8'
 ]
 
 List annotatingLibsToMerge = [

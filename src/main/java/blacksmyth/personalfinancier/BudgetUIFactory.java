@@ -725,15 +725,37 @@ class BudgetUIFactory {
   private static JComponent createBudgetSummaryPanel() {
     JPanel panel = new JPanel(new GridLayout(1, 2));
 
-    panel.setBorder(new CompoundBorder(WidgetFactory
-        .createColoredTitledBorder(" " + CashFlowFrequency.Fortnightly.toString() + " Summary ", Color.GRAY.brighter()),
-        new EmptyBorder(0, 3, 5, 4)));
+    panel.setBorder(
+        new CompoundBorder(
+            WidgetFactory.createColoredTitledBorder(
+                " " + CashFlowFrequency.Fortnightly.toString() + " Summary ", Color.GRAY.brighter()
+            ),
+            new EmptyBorder(0, 3, 5, 4)
+        )
+    );
+    
+    bindGraphTableComponents(
+        panel, 
+        new CashFlowPieChart(budgetModel), 
+        createAccountSummaryTable()
+    );
 
-    panel.add(WidgetFactory.createGraphTablePane(new CashFlowPieChart(budgetModel), createAccountSummaryTable()));
-
-    panel.add(WidgetFactory.createGraphTablePane(createCategoryPieChart(), createCategorySummaryTable()));
+    bindGraphTableComponents(
+        panel, 
+        createCategoryPieChart(), 
+        createCategorySummaryTable()
+    );
 
     return panel;
+  }
+  
+  private static void bindGraphTableComponents(JPanel panel, JComponent graphComponent, JComponent tableComponent) {
+    panel.add(
+        WidgetFactory.createGraphTablePane(
+            graphComponent, 
+            tableComponent
+        )
+    );
   }
 
   private static JComponent createCategorySummaryTable() {

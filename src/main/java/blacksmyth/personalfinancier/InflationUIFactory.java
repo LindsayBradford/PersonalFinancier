@@ -13,16 +13,25 @@ package blacksmyth.personalfinancier;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -31,13 +40,22 @@ import javax.swing.KeyStroke;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
+import org.knowm.xchart.XChartPanel;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
+import org.knowm.xchart.XYSeries;
+import org.knowm.xchart.style.Styler.LegendPosition;
+import org.knowm.xchart.style.markers.SeriesMarkers;
+
 import blacksmyth.general.file.IFileHandler;
 import blacksmyth.general.swing.Utilities;
 import blacksmyth.general.swing.FontIconProvider;
 
 import blacksmyth.personalfinancier.control.FileHandlerBuilder;
+import blacksmyth.personalfinancier.control.inflation.IInfllationObserver;
 import blacksmyth.personalfinancier.control.inflation.InflationConversionController;
 import blacksmyth.personalfinancier.model.inflation.InflationConversionModel;
+import blacksmyth.personalfinancier.model.inflation.InflationEntry;
 import blacksmyth.personalfinancier.model.inflation.InflationFileContent;
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
 import blacksmyth.personalfinancier.view.IPersonalFinancierComponentView;
@@ -277,8 +295,11 @@ class InflationUIFactory {
     JPanel panel = new JPanel(new BorderLayout());
 
     panel.setBorder(
-        new CompoundBorder(WidgetFactory.createColoredTitledBorder(" Inflation Entries ", Color.GRAY.brighter()),
-            new EmptyBorder(0, 3, 5, 4)));
+      new CompoundBorder(
+        WidgetFactory.createColoredTitledBorder(" Inflation Entries ", Color.GRAY.brighter()),
+        new EmptyBorder(0, 3, 5, 4)
+      )
+    );
 
     panel.add(new JScrollPane(inflationTable), BorderLayout.CENTER);
 
@@ -299,8 +320,11 @@ class InflationUIFactory {
     JPanel panel = new JPanel(new BorderLayout());
 
     panel.setBorder(
-        new CompoundBorder(WidgetFactory.createColoredTitledBorder(" Value Conversion ", Color.GRAY.brighter()),
-            new EmptyBorder(0, 3, 5, 4)));
+      new CompoundBorder(
+        WidgetFactory.createColoredTitledBorder(" Value Conversion ", Color.GRAY.brighter()),
+        new EmptyBorder(0, 3, 5, 4)
+      )
+    );
 
     final InflationConversionModel conversionModel = new InflationConversionModel(inflationModel);
 
@@ -318,13 +342,216 @@ class InflationUIFactory {
     JPanel panel = new JPanel(new BorderLayout());
 
     panel.setBorder(
-        new CompoundBorder(WidgetFactory.createColoredTitledBorder(" Inflation Graph ", Color.GRAY.brighter()),
-            new EmptyBorder(0, 3, 5, 4)));
+      new CompoundBorder(
+        WidgetFactory.createColoredTitledBorder(" Inflation Graph ", Color.GRAY.brighter()),
+         new EmptyBorder(0, 3, 5, 4)
+      )
+    );
 
-    panel.add(new JLabel("A pretty graph goes here!"), BorderLayout.CENTER);
+    panel.add(new InflationPlotPanel(inflationModel), BorderLayout.CENTER);
 
     return panel;
   }
+}
+
+@SuppressWarnings("serial")
+class InflationPlotPanel extends JPanel implements IInfllationObserver {
+  private InflationModel model;
+  
+  static final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
+  
+  class XYChartData {
+    public List<Date> xData;
+    public List<Double> yData;
+    
+    public XYChartData() {
+      this.xData = new LinkedList<Date>();
+      this.yData = new LinkedList<Double>();
+    }
+  };
+  
+  public InflationPlotPanel (InflationModel model) {
+    super(new BorderLayout());
+
+    this.setBorder(new EmptyBorder(5, 5, 5, 5));
+    this.setBackground(Color.WHITE);
+
+    setModel(model);
+  }
+
+  private void setModel(InflationModel model) {
+    this.model = model;
+    model.addListener(this);
+  }
+
+  protected InflationModel getModel() {
+    return this.model;
+  }
+
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    forceUpdate();
+  }
+
+  private void forceUpdate() {
+    displayChart(
+      createChart(createTitleText(), createChartData())
+    );
+  }
+  
+  private String createTitleText() {
+    return "Inflation Over Time";
+  };
+
+  private XYChartData createChartData() {
+    
+    XYChartData chartData = new XYChartData();
+
+    for (InflationEntry entry : model.getInflationList()) {
+      Instant instant = entry.getDate().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
+      Date date = Date.from(instant);
+      
+      chartData.xData.add(date);
+      chartData.yData.add(entry.getCPIValue());
+    }
+    
+    return chartData;
+  }
+  
+  private XYChartData createTargetChartData(XYChartData actualData) {
+    
+    // Sets Inflation targets by first sampling the initial 1996 RBA CPI figure, and
+    // applying a 2.5% increase per year, ignoring the actual fluctuations per year.
+    
+    // This is a simplification of what the RBA actually does, but suits my purposes well enough.
+    
+    Date targetStartDate = Date.from(Instant.now());
+
+    try {
+      targetStartDate = new SimpleDateFormat("dd/MM/yyyy").parse("31/12/1995");
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+   
+    Date targetCurrentDate = targetStartDate;
+    
+    XYChartData targetData = new XYChartData();
+    double initialTargetCPI = 0;
+    
+    for (int index = 0; index < actualData.xData.size(); index++) {
+      
+      if (actualData.xData.get(index).before(targetStartDate)) {
+        continue;
+      } else {
+        initialTargetCPI = (double) Math.round(actualData.yData.get(index) * 10.25) / 10;
+        break;
+      }
+    }
+    
+    double currentTargetCPI = initialTargetCPI;
+   
+    
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(actualData.xData.getLast());
+    calendar.add(Calendar.YEAR,  1);
+    Date targetFinalDate = calendar.getTime();
+    
+    while (targetCurrentDate.before(targetFinalDate)) {
+      targetData.xData.add(targetCurrentDate);
+      targetData.yData.add(currentTargetCPI);
+      
+      currentTargetCPI = (double) Math.round(currentTargetCPI * 10.25) / 10;
+      
+      calendar = Calendar.getInstance();
+      calendar.setTime(targetCurrentDate);
+      calendar.add(Calendar.YEAR,  1);
+      targetCurrentDate= calendar.getTime();
+    }
+
+    return targetData;
+  }
+  
+  @SuppressWarnings("unused")
+  private XYChartData createTargetChartDataSimple(XYChartData actualData) {
+
+    XYChartData targetData = new XYChartData();
+
+    for (int index = 0; index < actualData.xData.size(); index++) {
+      targetData.xData.add(actualData.xData.get(index));
+      
+      double actualCPI = actualData.yData.get(index - 1);
+      double targetCPI = (double) Math.round(actualCPI * 10.25) / 10;  // 2.5% target increase of last figure. 
+
+      targetData.yData.add(targetCPI);
+    }
+    
+    return targetData;
+  }
+  
+  /**
+   * @param title
+   * @param data
+   * @return
+   */
+  private XYChart createChart(String title, XYChartData data) {
+    XYChart chart =
+        new XYChartBuilder()
+            .title(title + deriveDateRangeString(data))
+            .xAxisTitle("Date")
+            .yAxisTitle("Consumer Price Index")
+            .build();
+    
+    chart.getStyler().setZoomEnabled(true);
+    chart.getStyler().setLegendPosition(LegendPosition.InsideNW);
+    chart.getStyler().setXAxisTitleVisible(false);
+    
+    chart.getStyler().setYAxisDecimalPattern("0.0");
+    chart.getStyler().setChartBackgroundColor(Color.WHITE);
+    chart.getStyler().setDatePattern("dd/MM/yyyy");
+    
+    chart.getStyler().setToolTipsEnabled(true);
+    chart.getStyler().setToolTipFont(new Font("Courier New", Font.BOLD, 12));
+    chart.getStyler().setToolTipHighlightColor(Color.RED.darker());
+    chart.getStyler().setToolTipHighlightColor(Color.RED.darker());
+    
+    XYChartData targetData = createTargetChartData(data);
+
+    XYSeries targetCpiSeries = chart.addSeries("Target", targetData.xData, targetData.yData);
+    targetCpiSeries.setLineColor(Color.BLUE);
+    targetCpiSeries.setLineWidth(2);
+    targetCpiSeries.setMarker(SeriesMarkers.DIAMOND);
+    targetCpiSeries.setMarkerColor(Color.BLUE);
+
+    XYSeries actualCpiSeries = chart.addSeries("Actual", data.xData, data.yData);
+    
+    actualCpiSeries.setLineWidth(2);
+    actualCpiSeries.setLineColor(Color.green.darker());
+    actualCpiSeries.setMarker(SeriesMarkers.CIRCLE);
+    actualCpiSeries.setMarkerColor(Color.green.darker());
+    
+    
+    return chart;
+  }
+  
+  private String deriveDateRangeString(XYChartData data) {
+    return new StringBuilder(": ")
+        .append(dateFormatter.format(data.xData.getFirst()))
+        .append(" - ")
+        .append(dateFormatter.format(data.xData.getLast()))
+        .toString();
+  }
+  
+  @SuppressWarnings("unused")
+  private void configureChart(XYChart chart, String title) {
+    // TODO: Do I need this?
+  }
+  
+  private void displayChart(XYChart chart) {
+    this.removeAll(); 
+    this.add(new XChartPanel<XYChart>(chart), BorderLayout.CENTER);
+    Utilities.refreshLater(this);
+  }
+  
 }
 
 @SuppressWarnings("serial")
@@ -334,3 +561,4 @@ final class InflationComponent extends JSplitPane implements IPersonalFinancierC
     super(verticalSplit, inflationItemPanel, inflationSummaryPanel);
   }
 }
+

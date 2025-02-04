@@ -37,8 +37,9 @@
 	<classpathentry kind="lib" path="libs/log4j-api-2.24.3.jar"/>
 	<classpathentry kind="lib" path="libs/log4j-core-2.24.3.jar"/>
 	<classpathentry kind="lib" path="libs/mockito-core-5.15.2.jar"/>
-	<classpathentry kind="lib" path="libs/VectorGraphics2D-0.10.jar"/>
 	<classpathentry kind="lib" path="libs/hamcrest-3.0.jar"/>
 	<classpathentry kind="lib" path="libs/junit-vintage-engine-5.11.4.jar"/>
+	<classpathentry kind="lib" path="libs/VectorGraphics2D-0.13.jar"/>
+	<classpathentry kind="lib" path="libs/xchart-3.8.8.jar"/>
 	<classpathentry kind="output" path="bin/default"/>
 </classpath>

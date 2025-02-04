@@ -145,8 +145,7 @@ public class InflationModel
   }
 
   private double getTimeDiffInYears(LocalDate earlierDate, LocalDate laterDate) {
-    final long MILLISECONDS_PER_DAY = 86400000;
-    final double DAYS_PER_YEAR = MILLISECONDS_PER_DAY * 365.25;
+    final double DAYS_PER_YEAR = 365.25;
 
     long differenceInDays = Math.abs(ChronoUnit.DAYS.between(earlierDate, laterDate)) + 1;
     
