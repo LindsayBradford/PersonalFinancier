@@ -6,6 +6,7 @@
     <title>Personal Financier by LindsayBradford</title>
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+	<link rel="stylesheet" href="venobox/venobox.min.css" type="text/css" media="screen"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="javascripts/respond.js"></script>
     <!--[if lt IE 9]>
@@ -24,13 +25,11 @@
           <li class="downloads"><a href="https://github.com/LindsayBradford/PersonalFinancier/zipball/master">Source ZIP</a></li>
           <li class="downloads"><a href="https://github.com/LindsayBradford/PersonalFinancier/tarball/master">Source TARball</a></li>
           <li class="downloads"><a href="https://github.com/downloads/LindsayBradford/PersonalFinancier/PersonalFinancier-0.1.jar">Executable JAR</a></li>
-
-<li class="title">DOWNLOADS</li>
+		  <li class="title">DOWNLOADS</li>
         </nav>
       </div><!-- end header -->
 
     <div class="wrapper">
-
       <section>
         <div id="title">
           <h1>Personal Financier</h1>
@@ -42,14 +41,27 @@
 
         <h3>Welcome to the homepage of PersonalFinancier.</h3>
 
-<p>The aim of this project is to create the best value for money personal finance package available.   A package that allows every household the opportunity to understand and manage their finances easily.  Watch this space!</p>
+		<p>The aim of this project is to create the best value for money personal finance package available.   A package that allows households to understand and manage their finances easily.</p>
 
-
-
+		<a class="screenshots" href="images/screenshots/PersonalFinancier-BudgetComponent.png">
+			<img src="images/screenshots/PersonalFinancier-BudgetComponent.png" alt="A screenshot of the budgeting component of PersonalFinancier"/>
+		</a>
+		<a class="screenshots" href="images/screenshots/PersonalFinancier-InflationComponent.png">
+			<img src="images/screenshots/PersonalFinancier-InflationComponent.png" alt="A screenshot of the inflation component of PersonalFinancier"/>
+		</a>
       </section>
-
     </div>
     <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
-    
+    <script type="text/javascript" src="venobox/venobox.min.js"></script>
+	<script type="text/javascript">
+		new VenoBox({
+			selector: '.screenshots',
+			numeration: true,
+			infinigall: true,
+			navTouch: true,
+			share: true,
+			spinner: 'circle-fade'			
+		});
+	</script>
   </body>
 </html>
