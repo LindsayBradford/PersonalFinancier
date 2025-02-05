@@ -82,7 +82,7 @@ class BudgetUIFactory {
   
   private static Action AddAccountAction;
 
-  public static IPersonalFinancierComponentView createBudgetComponent(PersonalFinancierView view) {
+  public static IPersonalFinancierComponentView createComponent(PersonalFinancierView view) {
 
     budgetModel = new BudgetModel(new AccountModel());
 

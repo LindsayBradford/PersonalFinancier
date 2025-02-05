@@ -18,4 +18,4 @@ import java.beans.PropertyChangeListener;
  * notified of BudgetModel updates.
  * @author linds
  */
-public interface IInfllationObserver extends PropertyChangeListener {}
+public interface InfllationObserver extends PropertyChangeListener {}

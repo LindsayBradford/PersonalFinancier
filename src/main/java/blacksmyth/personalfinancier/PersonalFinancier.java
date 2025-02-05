@@ -8,7 +8,6 @@
  * http://opensource.org/licenses/BSD-3-Clause
  */
 
-
 package blacksmyth.personalfinancier;
 
 import javax.swing.UIManager;
@@ -21,7 +20,6 @@ import org.apache.logging.log4j.Logger;
 
 import org.apache.logging.log4j.core.config.Configurator;
 
-
 import blacksmyth.personalfinancier.control.PersonalFinancierPersenter;
 import blacksmyth.personalfinancier.model.PersonalFinancierModel;
 import blacksmyth.personalfinancier.view.PersonalFinancierView;
@@ -29,7 +27,7 @@ import blacksmyth.personalfinancier.view.PersonalFinancierView;
 /**
  * The bootstrap "main" class for the PersonalFinancier.  It 
  * sets the application's look & feel, but delegates construction
- * of the application GUI dependency graph to the factory 
+ * of the application GUI dependency graph to specialist factories. 
  * @author linds
  */
 public final class PersonalFinancier {
@@ -62,22 +60,22 @@ public final class PersonalFinancier {
   
   private static PersonalFinancierView createView() {
     
-    final PersonalFinancierView view = new PersonalFinancierView();
+    final PersonalFinancierView pfView = new PersonalFinancierView();
     
     new PersonalFinancierPersenter(
-        view, 
+        pfView, 
         new PersonalFinancierModel()
     );
     
-    view.addComponentView(
-        BudgetUIFactory.createBudgetComponent(view)
+    pfView.addComponentView(
+        BudgetUIFactory.createComponent(pfView)
     );
 
-    view.addComponentView(
-        InflationUIFactory.createInflationComponent(view)
+    pfView.addComponentView(
+        InflationUIFactory.createComponent(pfView)
       );
     
-    return view;
+    return pfView;
   }
 }
 
