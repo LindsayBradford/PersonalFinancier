@@ -185,13 +185,18 @@ public class PersonalFinancierView implements IPersonalFinancierView {
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent arg0) {
         JOptionPane.showMessageDialog(frame,
-            "<html><body>" + "This application depends on unmodified binary distributions of the following libraries:"
-                + "<ul>" + "<li> JTattoo (http://www.jtattoo.net/) for a radically different Swing Look & Feel"
-                + "<li> FontAwesome (http://fortawesome.github.com/Font-Awesome) for icon-friendly font glyphs"
-                + "<li> GRAL (http://trac.erichseifert.de/gral/) for charting."
-                + "<li> Json-io (http://code.google.com/p/json-io/) for Java JSon serialisation" + "</ul>"
+            "<html><body>" + "This application depends on unmodified, embedded binary distributions of the following libraries:"
+                + "<ul>" + "<li> JTattoo 1.6.13 for a radically different Swing Look & Feel"
+                + "<li> FontAwesome 4.7.0 for icon-friendly font glyphs"
+                + "<li> GRAL 0.11 and XChart 3.8.8 for charting"
+                + "<li> Log4j 2.24.3 for logging"
+                + "<li> Json-io 4.32.0 for JSon serialisation"  
+                + "</ul>"
+                + "This application also optionally depends on Bouncy Castle 1.80 for AES-256 password encrypted budget files.<br> "
+                + "Drop the relevant provider jar into the same directory as this application's jar to enable encryption functionality."
+                + "<p><hr><p><br>"
                 + "This project wouldn't be possible without these excellent libraries." + "</body></html>");
-      }
+        }
     });
     return button;
   }

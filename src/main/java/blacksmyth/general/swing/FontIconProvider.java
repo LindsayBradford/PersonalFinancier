@@ -49,8 +49,8 @@ public final class FontIconProvider {
   }
   
   private void registerFont(Font font) {
-	GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-	ge.registerFont(font);
+    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    ge.registerFont(font);
   }
 
   public Font getFont() {
@@ -855,6 +855,5 @@ public final class FontIconProvider {
 		  return String.valueOf(value);
 	  }
   }
-
 }
 
