@@ -10,14 +10,15 @@ A budgetting and bookeeping application built to suit my way of doing household 
   * JTattoo (<http://www.jtattoo.net/>) for a radically different Swing Look & Feel
   * FontAwesome (<http://fortawesome.github.com/Font-Awesome>) for icon-friendly font glyphs 
   * Legion of the Bouncy Castle (<https://www.bouncycastle.org/>) for file encryption. 
-  * GRAL (<http://trac.erichseifert.de/gral/>) for charting. 
+  * GRAL (<http://trac.erichseifert.de/gral/>) for charting.
+  * XChart (<https://knowm.org/open-source/XChart/>) for charting. 
   * JUnit (<http://junit.org/>) for unit testing.
   * Mockito (<https://code.google.com/p/mockito/>) for mock object testing. 
   * Log4j2 (<https://logging.apache.org/log4j/2.x/>) for logging. 
   
 ## Contact Detail:
-- Email: lindsay.w.bradford@gmail.com
-- Twitter: http://twitter.com/hollowdreamer
+- Email: [lindsay.w.bradford@gmail.com](mailto:lindsay.w.bradford@gmail.com)
+- [LinkedIn Profile](www.linkedin.com/in/lindsaybradford) 
 
 ##License
 This program and the accompanying materials are made available 
