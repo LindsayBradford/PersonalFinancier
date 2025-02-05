@@ -14,7 +14,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -307,15 +306,15 @@ class InflationUIFactory {
   }
 
   private static JComponent createInflationSummaryPanel() {
-    JPanel panel = new JPanel(new GridLayout(1, 2));
-
-    panel.add(createInflationConversionPanel());
-
-    panel.add(createInflationGraphPanel());
-
-    return panel;
+    JSplitPane splitPane = new JSplitPane(
+        JSplitPane.HORIZONTAL_SPLIT, 
+        createInflationConversionPanel(), 
+        createInflationGraphPanel()
+    );
+    
+    return splitPane;
   }
-
+  
   private static Component createInflationConversionPanel() {
     JPanel panel = new JPanel(new BorderLayout());
 
@@ -330,10 +329,12 @@ class InflationUIFactory {
 
     final InflationConversionPanel conversionPanel = new InflationConversionPanel(
         new InflationConversionController(conversionModel));
+    
+    conversionPanel.setMinimumSize(conversionPanel.getPreferredSize());
 
     conversionModel.addListener(conversionPanel);
 
-    panel.add(new JScrollPane(conversionPanel), BorderLayout.CENTER);
+    panel.add(conversionPanel);
 
     return panel;
   }
@@ -497,7 +498,6 @@ class InflationPlotPanel extends JPanel implements IInfllationObserver {
     XYChart chart =
         new XYChartBuilder()
             .title(title + deriveDateRangeString(data))
-            .xAxisTitle("Date")
             .yAxisTitle("Consumer Price Index")
             .build();
     
