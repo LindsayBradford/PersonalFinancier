@@ -18,20 +18,19 @@ import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
+import blacksmyth.general.MaskedLogger;
 
 @SuppressWarnings("serial")
 public class BudgetUndoManager extends UndoManager {
-
   /**
    * The BudgetUndoManager is observable indirectly by relying on all PropertyChangeListener
    * behaviour, delegated to <tt>support</tt>
    */
   private PropertyChangeSupport observableDelegate;
   
-  private static Logger LOG = LogManager.getLogger(BudgetUndoManager.class);
-
+  private static MaskedLogger LOG = MaskedLogger.wrap(LogManager.getLogger(BudgetUndoManager.class));
+  
   public BudgetUndoManager() {
     super();
     this.observableDelegate = new PropertyChangeSupport(this);
@@ -76,5 +75,7 @@ public class BudgetUndoManager extends UndoManager {
   private void fireUndoableEvent() {
     this.observableDelegate.firePropertyChange("Undoable Budget Change",null,null);
   }
-
+  
 }
+
+
