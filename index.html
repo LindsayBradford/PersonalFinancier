@@ -39,7 +39,10 @@
           <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
         </div>
 
-		<p>The aim of this project is to create a free yet powerful household budgetting tool.  Let's explore the various features of the tool in the sections below:</p>
+		<p>The aim of this project is to create a free yet powerful household budgetting tool.  A zip-file of the executable jar, along with 
+		example save files, logging configuration and a compatible cryptography library is supplied above.  It should contain everything you 
+		need to get going once you've installed a <a href="https://www.oracle.com/java/technologies/downloads/">Java 23</a> runtime environment.</p> 		
+		<p>Let's explore the various features of the tool in the sections below:</p>
 
 		<h3>Budgetting</h3>
 
@@ -64,7 +67,10 @@
 		password protected save files.</p>
 
 		<p>The default file extension for PersonalFinancier budget files is <code>.pf</code>.  If the crypto library is supplied in the same directory as PersonalFinancier,
-		specifying a file extension of <code>.epf</code> will propmt the user for a password, and use it to encrypt the saved budget date.</p>  
+		specifying a file extension of <code>.epf</code> will prompt the user for a password, and use it to encrypt the budget data saved.</p>
+		
+		<p><b>Please note that there is nothing I can do for you if you forget your password.</b> AES-256 doesn't store the password, or anything remotely like it, 
+		so you're just plumb out of luck if you really want that data back but can't remember the password used to encrypt it.  Caveat Emptor!</p>
 
 		<h3>Inflation</h3>
 
@@ -78,9 +84,10 @@
 		
 		<h3>Optional rich logging with sensitive data masking</h3>
 		
-		<p>By supplying an optional log4j configuration file in the same directory as the Personal Financier jar, you'll be able to log usage of the 
-		PersonalFinancier as you please. With the budgeting component, some data, such as account, bsb, and credit-card nubmers, is considered sensitive. 
-		Personal Financier will mask all sensitive data before it is logged.</p>
+		<p>By supplying an optional <a href="https://logging.apache.org/log4j/2.x/manual/configuration.html">log4j configuration file</a> in the same 
+		directory as the Personal Financier jar, you'll be able to log usage of the PersonalFinancier as you please. With the budgeting component, 
+		some data, such as account, bsb, and credit-card nubmers, is considered sensitive. 		Personal Financier will mask all sensitive data 
+		before it is logged.</p>
 		
 		<a class="screenshots" href="images/screenshots/PersonalFinancier-Logging.png">
 			<img src="images/screenshots/PersonalFinancier-Logging.png" alt="A screenshot of the PersonalFinancier logging its usage to the command-line"/>
