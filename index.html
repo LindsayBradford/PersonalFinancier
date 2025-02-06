@@ -24,7 +24,7 @@
           <li class="fork"><a href="https://github.com/LindsayBradford/PersonalFinancier">View On GitHub</a></li>
           <li class="downloads"><a href="https://github.com/LindsayBradford/PersonalFinancier/zipball/master">Source ZIP</a></li>
           <li class="downloads"><a href="https://github.com/LindsayBradford/PersonalFinancier/tarball/master">Source TARball</a></li>
-          <li class="downloads"><a href="https://github.com/downloads/LindsayBradford/PersonalFinancier/PersonalFinancier-0.1.jar">Executable JAR</a></li>
+          <li class="downloads"><a href="downloads/PersonalFinancier-0.5.zip">Executable JAR environment</a></li>
 		  <li class="title">DOWNLOADS</li>
         </nav>
       </div><!-- end header -->
@@ -39,15 +39,51 @@
           <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
         </div>
 
-        <h3>Welcome to the homepage of PersonalFinancier.</h3>
+		<p>The aim of this project is to create a free yet powerful household budgetting tool.  Let's explore the various features of the tool in the sections below:</p>
 
-		<p>The aim of this project is to create the best value for money personal finance package available.   A package that allows households to understand and manage their finances easily.</p>
+		<h3>Budgetting</h3>
+
+		<p>The core purpose of PersonalFinancier is household budgeting, available via the Budget tab. The following functionality is offered:
+		  <ul>
+		    <li> Ability to specify income and expense items, mapping them to bank accounts, categories and the frequency at which an item occurs
+			<li> Optionally show the amount of budget item at daily, weekly, fortnightly, monthly, quarterly or yearly frequency
+			<li> Fortnightly summaries expected cashflow in both terms of bank accounts and budget categories. These summaries can be displayed in either tabular or pie-chart formats
+			<li> Full undo/redo functionality for budget changes.
+		  </ul>
+		</p>
 
 		<a class="screenshots" href="images/screenshots/PersonalFinancier-BudgetComponent.png">
 			<img src="images/screenshots/PersonalFinancier-BudgetComponent.png" alt="A screenshot of the budgeting component of PersonalFinancier"/>
 		</a>
+
+		<h4>Optional password-protected AES-256 encrypted save files</h4>
+
+		<p>Budget save data is by default unencrypted Json data, readable via any text editor. However, as budget data can hold sensitive information, 
+		you can optionally supply the PersonalFinancier access to the <a href="https://www.bouncycastle.org/">Bouncy Castle cryptography library</a>, 
+		which will allow <a href="https://www.makeuseof.com/what-is-aes-256-encryption-how-does-it-work/">AES-256 encrypted</a>,	
+		password protected save files.</p>
+
+		<p>The default file extension for PersonalFinancier budget files is <code>.pf</code>.  If the crypto library is supplied in the same directory as PersonalFinancier,
+		specifying a file extension of <code>.epf</code> will propmt the user for a password, and use it to encrypt the saved budget date.</p>  
+
+		<h3>Inflation</h3>
+
+		<p>The PersonalFinancier comes with an Inflation component, allowing you to load inflation data from a json file, or create your own. 
+		It charts the inflation against a target, and supplies a conversion utility pane that allows you to convert a monetary value at one date
+		to its equivlent value at a different date.</p>
+
 		<a class="screenshots" href="images/screenshots/PersonalFinancier-InflationComponent.png">
 			<img src="images/screenshots/PersonalFinancier-InflationComponent.png" alt="A screenshot of the inflation component of PersonalFinancier"/>
+		</a>
+		
+		<h3>Optional rich logging with sensitive data masking</h3>
+		
+		<p>By supplying an optional log4j configuration file in the same directory as the Personal Financier jar, you'll be able to log usage of the 
+		PersonalFinancier as you please. With the budgeting component, some data, such as account, bsb, and credit-card nubmers, is considered sensitive. 
+		Personal Financier will mask all sensitive data before it is logged.</p>
+		
+		<a class="screenshots" href="images/screenshots/PersonalFinancier-Logging.png">
+			<img src="images/screenshots/PersonalFinancier-Logging.png" alt="A screenshot of the PersonalFinancier logging its usage to the command-line"/>
 		</a>
       </section>
     </div>
