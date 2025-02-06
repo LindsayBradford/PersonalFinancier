@@ -41,7 +41,7 @@ public class MaskedLogger {
     while(m.find()) {
       String guts = m.group(1);
       String maskedGuts = guts.replaceAll("\\d", "*");
-      message = message.replace(guts,maskedGuts);
+      message = message.replaceFirst(guts,maskedGuts);
     }
     return message;
   }
