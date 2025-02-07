@@ -1,3 +1,13 @@
+/**
+ * Copyright (c) 2012, Lindsay Bradford and other Contributors.
+ * All rights reserved.
+ * 
+ * This program and the accompanying materials  are made available 
+ * under the terms of the BSD 3-Clause licence  which accompanies 
+ * this distribution, and is available at
+ * http://opensource.org/licenses/BSD-3-Clause
+ */
+
 package blacksmyth.general;
 
 import java.util.regex.Matcher;
@@ -9,7 +19,8 @@ public class MaskedLogger {
   private Logger log;
   
   // Below, an educated-guess at possible sensitive numbers such as account, bsb and credit card numbers.
-  private static Pattern pattern = Pattern.compile("\\d([\\d\\-\\s]+)\\d"); // any sequence of digits, space or hyphens book-ended by digits.
+  // any sequence of digits, space or hyphens book-ended by a digit.
+  private static Pattern pattern = Pattern.compile("\\d([\\d\\-\\s]+)\\d"); 
 
   public MaskedLogger() {}
   

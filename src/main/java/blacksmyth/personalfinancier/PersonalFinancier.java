@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 
 import org.apache.logging.log4j.core.config.Configurator;
 
+import blacksmyth.general.ManifestBridge;
 import blacksmyth.personalfinancier.control.PersonalFinancierPersenter;
 import blacksmyth.personalfinancier.model.PersonalFinancierModel;
 import blacksmyth.personalfinancier.view.PersonalFinancierView;
@@ -43,8 +44,8 @@ public final class PersonalFinancier {
   public static void main(String[] args) {
 
     Configurator.initialize("blacksmyth.personalfinancier", "resources/log4j2.xml");
-
-    LOG.info("Bootstrapping [{}]",PersonalFinancier.class.getName());
+    
+    logNameAndVersion();
     
     try {
       LookAndFeel thisLookAndFeel = new HiFiLookAndFeel();
@@ -56,7 +57,13 @@ public final class PersonalFinancier {
 
     createView().display();
   }
-
+  
+  private static void logNameAndVersion() {
+    String title = ManifestBridge.getInstance().getAttribute("Implementation-Title");
+    String version = ManifestBridge.getInstance().getAttribute("Implementation-Version");
+    
+    LOG.info("Bootstrapping [{}]",title + " version " + version);
+  }
   
   private static PersonalFinancierView createView() {
     

@@ -1,21 +1,26 @@
+/**
+ * Copyright (c) 2012, Lindsay Bradford and other Contributors.
+ * All rights reserved.
+ * 
+ * This program and the accompanying materials  are made available 
+ * under the terms of the BSD 3-Clause licence  which accompanies 
+ * this distribution, and is available at
+ * http://opensource.org/licenses/BSD-3-Clause
+ */
+
 package blacksmyth.general.file;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-
 
 import blacksmyth.general.MaskedLogger;
 
 public class MaskedLoggerTest {
   
   private Logger spyLogger = mock(Logger.class);
-  final ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-
   
   @Test
   public void testNonsensitiveInfoString() {
@@ -25,7 +30,7 @@ public class MaskedLoggerTest {
     
     loggerUnderTest.info(stringUnderTest);
     
-    verify(spyLogger, times(1)).info(stringUnderTest);
+    verify(spyLogger).info(stringUnderTest);
   }
 
   @Test
@@ -36,7 +41,7 @@ public class MaskedLoggerTest {
     
     loggerUnderTest.info(stringUnderTest);
     
-    verify(spyLogger, times(1)).info("BSB: 1**-**6");
+    verify(spyLogger).info("BSB: 1**-**6");
   }
   
   @Test
@@ -48,7 +53,7 @@ public class MaskedLoggerTest {
     
     loggerUnderTest.info(stringUnderTest);
     
-    verify(spyLogger, times(1)).info(stringExpected);
+    verify(spyLogger).info(stringExpected);
   }
 
   @Test
@@ -60,7 +65,7 @@ public class MaskedLoggerTest {
     
     loggerUnderTest.info(stringUnderTest);
     
-    verify(spyLogger, times(1)).info(stringExpected);
+    verify(spyLogger).info(stringExpected);
   }
   
   @Test
@@ -72,7 +77,7 @@ public class MaskedLoggerTest {
     
     loggerUnderTest.debug(stringUnderTest);
     
-    verify(spyLogger, times(1)).debug(stringExpected);
+    verify(spyLogger).debug(stringExpected);
   }
   
   @Test
@@ -84,7 +89,7 @@ public class MaskedLoggerTest {
     
     loggerUnderTest.warn(stringUnderTest);
     
-    verify(spyLogger, times(1)).warn(stringExpected);
+    verify(spyLogger).warn(stringExpected);
   }
 
   @Test
@@ -96,6 +101,6 @@ public class MaskedLoggerTest {
     
     loggerUnderTest.error(stringUnderTest);
     
-    verify(spyLogger, times(1)).error(stringExpected);
+    verify(spyLogger).error(stringExpected);
   }
 }
