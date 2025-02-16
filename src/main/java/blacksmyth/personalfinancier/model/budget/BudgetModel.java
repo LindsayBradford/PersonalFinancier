@@ -49,7 +49,9 @@ public class BudgetModel
   private ArrayList<BudgetItem> incomeItems;
 
   private SortedArrayList<AccountSummary> cashFlowSummaries;
-  private SortedArrayList<CategorySummary> categorySummaries;
+
+  private SortedArrayList<CategorySummary> incomeCategorySummaries;
+  private SortedArrayList<CategorySummary> expenseCategorySummaries;
 
   private Money netCashFlow;
   
@@ -69,7 +71,8 @@ public class BudgetModel
     this.expenseItems = new ArrayList<BudgetItem>();
 
     this.cashFlowSummaries = new SortedArrayList<AccountSummary>();
-    this.categorySummaries = new SortedArrayList<CategorySummary>();
+    this.incomeCategorySummaries = new SortedArrayList<CategorySummary>();
+    this.expenseCategorySummaries = new SortedArrayList<CategorySummary>();
 
     this.accountModel = accountModel;
     this.accountModel.addObserver(this);
@@ -384,8 +387,12 @@ public class BudgetModel
     return this.cashFlowSummaries;
   }
 
-  public SortedArrayList<CategorySummary> getCategorySummaries() {
-    return this.categorySummaries;
+  public SortedArrayList<CategorySummary> getIncomeCategorySummaries() {
+    return this.incomeCategorySummaries;
+  }
+  
+  public SortedArrayList<CategorySummary> getExpenseCategorySummaries() {
+    return this.expenseCategorySummaries;
   }
 
   private void updateDerivedData() {
@@ -439,10 +446,15 @@ public class BudgetModel
     
       return summaryTable;
   }
-
+  
   private void updateCategorySummaries() {
+    updateIncomeCategorySummaries();
+    updateExpenseCategorySummaries();
+  }
+  
+  private void updateIncomeCategorySummaries() {
     Hashtable<String, CategorySummary> summaryTable = new Hashtable<String, CategorySummary>();
-    this.categorySummaries = new SortedArrayList<CategorySummary>();
+    this.incomeCategorySummaries = new SortedArrayList<CategorySummary>();
 
     for (BudgetItem item : this.incomeItems) {
       if (!summaryTable.containsKey(item.getCategory().toString())) {
@@ -461,6 +473,17 @@ public class BudgetModel
 
       summary.getBudgettedAmount().setTotal(newTotal);
     }
+    
+    for (CategorySummary summary : summaryTable.values()) {
+      if (summary.getBudgettedAmount().getTotal().compareTo(BigDecimal.ZERO) != 0) {
+        this.incomeCategorySummaries.insertSorted(summary);
+      }
+    }
+  }
+  
+  private void updateExpenseCategorySummaries() {
+    Hashtable<String, CategorySummary> summaryTable = new Hashtable<String, CategorySummary>();
+    this.expenseCategorySummaries = new SortedArrayList<CategorySummary>();
 
     for (BudgetItem item : this.expenseItems) {
       if (!summaryTable.containsKey(item.getCategory().toString())) {
@@ -481,9 +504,12 @@ public class BudgetModel
     }
 
     for (CategorySummary summary : summaryTable.values()) {
-      this.categorySummaries.insertSorted(summary);
+      if (summary.getBudgettedAmount().getTotal().compareTo(BigDecimal.ZERO) != 0) {
+        this.expenseCategorySummaries.insertSorted(summary);
+      }
     }
   }
+
   
   private void updateNetCashFlow() {
     netCashFlow = MoneyFactory.createAmount(0);

@@ -83,7 +83,7 @@ public class ManifestBridgeTest {
 
     JarFactory mockFactory = mock(JarFactory.class);
     when(
-        mockFactory.createFromPath(ManifestBridge.class.getProtectionDomain().getCodeSource().getLocation().getPath())
+        mockFactory.createFromPath(ManifestBridge.MANIFEST_PATH)
     ).thenReturn(mockJarFile);
 
     bridgeUnderTest.setJarFactory(mockFactory);

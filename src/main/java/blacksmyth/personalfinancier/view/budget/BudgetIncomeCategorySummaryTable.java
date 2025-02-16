@@ -28,15 +28,15 @@ import blacksmyth.personalfinancier.view.WidgetFactory;
 // TODO: Sorting from largest budgetted amount to smallest.
 
 @SuppressWarnings("serial")
-public class BudgetCategorySummaryTable extends JTable {
+public class BudgetIncomeCategorySummaryTable extends JTable {
 
   private static final int CELL_BUFFER = 15;
   
   private static final int ROW_LIMIT = 5;
   
-  public BudgetCategorySummaryTable(BudgetModel budgetModel) {
+  public BudgetIncomeCategorySummaryTable(BudgetModel budgetModel) {
     super(
-        new BudgetCategorySummaryTableModel(budgetModel)
+        new BudgetIncomeCategorySummaryTableModel(budgetModel)
     );
     
     setupColumns();
@@ -61,25 +61,25 @@ public class BudgetCategorySummaryTable extends JTable {
     this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
     setupBudgettedCol();
     
-    getColFromEnum(CATEGORY_SUMMARY_COLUMNS.Category).setCellRenderer(
+    getColFromEnum(INCOME_CATEGORY_SUMMARY_COLUMNS.Income).setCellRenderer(
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
   }
   
   private void setupBudgettedCol() {
     Utilities.lockColumnWidth(
-        getColFromEnum(CATEGORY_SUMMARY_COLUMNS.Budgeted),
+        getColFromEnum(INCOME_CATEGORY_SUMMARY_COLUMNS.Budgeted),
         Utilities.getTextWidth(
             WidgetFactory.DECIMAL_FORMAT_PATTERN
         ) + CELL_BUFFER
     );
 
-    getColFromEnum(CATEGORY_SUMMARY_COLUMNS.Budgeted).setCellRenderer(
+    getColFromEnum(INCOME_CATEGORY_SUMMARY_COLUMNS.Budgeted).setCellRenderer(
         WidgetFactory.createAmountCellRenderer()    
     );
   }
 
-  private TableColumn getColFromEnum(CATEGORY_SUMMARY_COLUMNS thisEnum) {
+  private TableColumn getColFromEnum(INCOME_CATEGORY_SUMMARY_COLUMNS thisEnum) {
     return this.getColumnModel().getColumn(thisEnum.ordinal());
   }
   
@@ -94,7 +94,7 @@ public class BudgetCategorySummaryTable extends JTable {
         column
     );
     
-    if (this.getColFromEnum(CATEGORY_SUMMARY_COLUMNS.Budgeted).getModelIndex() == column) {
+    if (this.getColFromEnum(INCOME_CATEGORY_SUMMARY_COLUMNS.Budgeted).getModelIndex() == column) {
       BigDecimal value = (BigDecimal) this.getModel().getValueAt(
           this.convertRowIndexToModel(row), 
           column

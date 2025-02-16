@@ -23,7 +23,7 @@ public class ManifestBridge {
   private static final Logger LOG = LogManager.getLogger(ManifestBridge.class);
 
   private static ManifestBridge only_instance;
-  private static final String MANIFEST_PATH = ManifestBridge.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+  static final String MANIFEST_PATH = ManifestBridge.class.getProtectionDomain().getCodeSource().getLocation().getPath();
   
   private JarFactory jarFactory = new JarFactory();
 

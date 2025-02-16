@@ -30,9 +30,9 @@ final public class CategoryPieChart extends AbstractBudgetPieChart {
     double total = 0;
     double incomeTotal = 0;
 
-    for (CategorySummary category : getModel().getCategorySummaries()) {
+    for (CategorySummary summary : getModel().getIncomeCategorySummaries()) {
 
-      double summaryFigure = category.getBudgettedAmount().getTotal().doubleValue();
+      double summaryFigure = summary.getBudgettedAmount().getTotal().doubleValue();
 
       double absSummaryFigure = Math.abs(summaryFigure);
 
@@ -40,9 +40,15 @@ final public class CategoryPieChart extends AbstractBudgetPieChart {
       if (summaryFigure > 0) {
         incomeTotal = incomeTotal + summaryFigure;
       }
+
+      double percentageOfIncome = (absSummaryFigure / incomeTotal) * 100;
+
+      categoryData.add(absSummaryFigure, // negative values in PiePlot render as no slice
+          summaryFigure >= 0 ? false : true,
+          summary.getBudgetCategory() + ", " + WidgetFactory.DECIMAL_FORMAT.format(percentageOfIncome) + "%");
     }
 
-    for (CategorySummary summary : getModel().getCategorySummaries()) {
+    for (CategorySummary summary : getModel().getExpenseCategorySummaries()) {
 
       double summaryFigure = summary.getBudgettedAmount().getTotal().doubleValue();
 

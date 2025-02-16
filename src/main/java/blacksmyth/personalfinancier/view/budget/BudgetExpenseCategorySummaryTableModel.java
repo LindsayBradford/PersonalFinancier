@@ -17,14 +17,15 @@ import blacksmyth.personalfinancier.model.Money;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.model.budget.CategorySummary;
 
-enum CATEGORY_SUMMARY_COLUMNS {
-  Category, Budgeted
+enum EXPENSE_CATEGORY_SUMMARY_COLUMNS {
+  Expense, Budgeted
 }
 
-@SuppressWarnings("serial")
-public class BudgetCategorySummaryTableModel extends AbstractBudgetTableModel<CATEGORY_SUMMARY_COLUMNS> {
 
-  public BudgetCategorySummaryTableModel(BudgetModel budgetModel) {
+@SuppressWarnings("serial")
+public class BudgetExpenseCategorySummaryTableModel extends AbstractBudgetTableModel<EXPENSE_CATEGORY_SUMMARY_COLUMNS> {
+
+  public BudgetExpenseCategorySummaryTableModel(BudgetModel budgetModel) {
     super();
     this.setBudgetModel(budgetModel);
   }
@@ -32,7 +33,7 @@ public class BudgetCategorySummaryTableModel extends AbstractBudgetTableModel<CA
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public Class getColumnClass(int colNum) {
     switch (this.getColumnEnumValueAt(colNum)) {
-      case Category:
+      case Expense:
         return String.class;
       case Budgeted: 
         return Money.class;
@@ -41,14 +42,14 @@ public class BudgetCategorySummaryTableModel extends AbstractBudgetTableModel<CA
   }
 
   public int getRowCount() {
-    return getBudgetModel().getCategorySummaries().size();
+    return getBudgetModel().getExpenseCategorySummaries().size();
   }
 
   public Object getValueAt(int rowNum, int colNum) {
-    CategorySummary summary = getBudgetModel().getCategorySummaries().get(rowNum);
+    CategorySummary summary = getBudgetModel().getExpenseCategorySummaries().get(rowNum);
     
     switch (this.getColumnEnumValueAt(colNum)) {
-    case Category:
+    case Expense:
       return summary.getBudgetCategory().toString();
     case Budgeted: 
       return summary.getBudgettedAmountAtFrequency(CashFlowFrequency.Fortnightly);

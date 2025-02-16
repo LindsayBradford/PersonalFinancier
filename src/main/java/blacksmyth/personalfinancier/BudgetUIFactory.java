@@ -51,7 +51,8 @@ import blacksmyth.personalfinancier.view.PersonalFinancierView;
 import blacksmyth.personalfinancier.view.ViewPreferences;
 import blacksmyth.personalfinancier.view.WidgetFactory;
 import blacksmyth.personalfinancier.view.budget.BudgetCashFlowSummaryTable;
-import blacksmyth.personalfinancier.view.budget.BudgetCategorySummaryTable;
+import blacksmyth.personalfinancier.view.budget.BudgetExpenseCategorySummaryTable;
+import blacksmyth.personalfinancier.view.budget.BudgetIncomeCategorySummaryTable;
 import blacksmyth.personalfinancier.view.budget.CashFlowPieChart;
 import blacksmyth.personalfinancier.view.budget.CategoryPieChart;
 import blacksmyth.personalfinancier.view.budget.ExpenseItemTable;
@@ -743,7 +744,7 @@ class BudgetUIFactory {
     bindGraphTableComponents(
         panel, 
         createCategoryPieChart(), 
-        createCategorySummaryTable()
+        createCategorySummaryTables()
     );
 
     return panel;
@@ -757,11 +758,26 @@ class BudgetUIFactory {
         )
     );
   }
+  
+  private static JComponent createCategorySummaryTables() {
+    JPanel panel = new JPanel(new GridLayout(1, 2));
+   
+    panel.add(createIncomeCategorySummaryTable());
+    panel.add(createExpenseCategorySummaryTable());
+    
+    return panel;
+  }
 
-  private static JComponent createCategorySummaryTable() {
-    BudgetCategorySummaryTable table = new BudgetCategorySummaryTable(budgetModel);
+  private static JComponent createIncomeCategorySummaryTable() {
+    BudgetIncomeCategorySummaryTable table = new BudgetIncomeCategorySummaryTable(budgetModel);
     return new JScrollPane(table);
   }
+  
+  private static JComponent createExpenseCategorySummaryTable() {
+    BudgetExpenseCategorySummaryTable table = new BudgetExpenseCategorySummaryTable(budgetModel);
+    return new JScrollPane(table);
+  }
+
 
   @SuppressWarnings("serial")
   private static JComponent createAccountSummaryTable() {
