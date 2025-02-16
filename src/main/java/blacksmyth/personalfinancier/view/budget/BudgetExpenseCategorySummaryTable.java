@@ -49,7 +49,7 @@ public class BudgetExpenseCategorySummaryTable extends JTable {
             this.getRowHeight() * ROW_LIMIT
         )
     );
-    this.setAutoCreateRowSorter(true);
+    this.setAutoCreateRowSorter(false);
   }
 
   public void tableChanged(TableModelEvent e) {
