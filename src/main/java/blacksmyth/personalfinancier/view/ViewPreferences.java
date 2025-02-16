@@ -63,7 +63,7 @@ public class ViewPreferences extends BasePreferences {
     this.setChangeAndNotifyObservers();
   }
 
-  private static final int DEFAULT_ODD_ROW_COLOR = Color.DARK_GRAY.darker().darker().darker().darker().getRGB();
+  private static final int DEFAULT_ODD_ROW_COLOR = Color.DARK_GRAY.darker().darker().darker().getRGB();
   private static final String ODD_ROW_COLOR_KEY = "OddRowColor";
   
   public Color getPreferredOddRowColor() {

@@ -10,12 +10,15 @@
 
 package blacksmyth.general.swing;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,6 +46,9 @@ import blacksmyth.general.swing.FontIconProvider.FontIcon;
  *
  */
 public final class Utilities {
+
+  private static final Color POSITIVE_CASH_COLOUR = Color.GREEN;
+  private static final Color NEGATIVE_CASH_COLOUR = Color.RED.brighter().brighter().brighter();
 
   /**
    * Locks the width of <tt>column</tt> to the <tt>width</tt> specified.
@@ -223,4 +229,20 @@ public final class Utilities {
     );
   }
   
+  public static boolean rowIsLastInTable(int row, JTable table) {
+    return (row == table.getRowCount() - 1);
+  }
+  
+  public static void renderCellBasedOnValue(Component cellRenderer, BigDecimal value) {
+    if (value.compareTo(BigDecimal.ZERO) == -1) {
+      cellRenderer.setForeground(NEGATIVE_CASH_COLOUR);
+    }
+    if (value.compareTo(BigDecimal.ZERO) == 1) {
+      cellRenderer.setForeground(POSITIVE_CASH_COLOUR);
+    }
+  }
+  
+  public static BigDecimal getTableBigDecimalAt(JTable table, int row, int column) {
+    return  (BigDecimal) table.getModel().getValueAt(row, column);
+  }
 }

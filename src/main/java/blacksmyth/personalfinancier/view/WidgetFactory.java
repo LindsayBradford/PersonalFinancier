@@ -13,6 +13,7 @@ package blacksmyth.personalfinancier.view;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
@@ -23,6 +24,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.InputVerifier;
@@ -30,6 +32,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -333,6 +336,15 @@ public final class WidgetFactory {
     border.setTitleColor(color);
 
     return border;
+  }
+  
+  public static JPanel wrapComponentInTopLineBorder(Component component) {
+    JPanel borderPanel = new JPanel(new GridLayout());
+    
+    borderPanel.setBorder(BorderFactory.createMatteBorder(2,0,0,0,Color.WHITE));
+    borderPanel.add(component);
+
+    return borderPanel;
   }
 
   public static JTabbedPane createGraphTablePane(JComponent graphComponent, JComponent tableComponent) {

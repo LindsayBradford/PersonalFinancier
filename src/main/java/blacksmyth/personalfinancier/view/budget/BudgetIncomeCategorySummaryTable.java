@@ -10,16 +10,11 @@
 
 package blacksmyth.personalfinancier.view.budget;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.math.BigDecimal;
 
-import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.TableModelEvent;
@@ -29,8 +24,6 @@ import javax.swing.table.TableColumn;
 import blacksmyth.general.swing.Utilities;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.view.WidgetFactory;
-
-// TODO: Sorting from largest budgetted amount to smallest.
 
 @SuppressWarnings("serial")
 public class BudgetIncomeCategorySummaryTable extends JTable {
@@ -104,41 +97,27 @@ public class BudgetIncomeCategorySummaryTable extends JTable {
     }
     
     if (this.getColFromEnum(INCOME_CATEGORY_SUMMARY_COLUMNS.Amount).getModelIndex() == column) {
-      BigDecimal value = (BigDecimal) this.getModel().getValueAt(
-          this.convertRowIndexToModel(row), 
-          column
+      Utilities.renderCellBasedOnValue(
+          cellRenderer, 
+          Utilities.getTableBigDecimalAt(this, row, column)
       );
-      if (value.compareTo(BigDecimal.ZERO) == -1) {
-        cellRenderer.setForeground(Color.RED.darker());
-      }
-      if (value.compareTo(BigDecimal.ZERO) == 1) {
-        cellRenderer.setForeground(Color.GREEN);
-      }
     }
     
-    if (this.getColFromEnum(INCOME_CATEGORY_SUMMARY_COLUMNS.IncomeCategory).getModelIndex() == column &&
-        row == this.getRowCount() - 1) {
-      ((JLabel) cellRenderer).setHorizontalAlignment(DefaultListCellRenderer.RIGHT);
+    if (Utilities.rowIsLastInTable(row, this)) {
+      if (this.getColFromEnum(INCOME_CATEGORY_SUMMARY_COLUMNS.IncomeCategory).getModelIndex() == column) {
+        ((JLabel) cellRenderer).setHorizontalAlignment(DefaultListCellRenderer.RIGHT);
 
-      BigDecimal value = (BigDecimal) this.getModel().getValueAt(row, column+1);
-      if (value.compareTo(BigDecimal.ZERO) == -1) {
-        cellRenderer.setForeground(Color.RED.darker());
+        Utilities.renderCellBasedOnValue(
+            cellRenderer, 
+            Utilities.getTableBigDecimalAt(this, row, column + 1)
+        );
       }
-      if (value.compareTo(BigDecimal.ZERO) == 1) {
-        cellRenderer.setForeground(Color.GREEN);
-      }
+      return WidgetFactory.wrapComponentInTopLineBorder(cellRenderer);
     }
 
-    if (row == this.getRowCount() - 1) {
-      JPanel borderPanel = new JPanel(new GridLayout());
-      borderPanel.setBorder(BorderFactory.createMatteBorder(2,0,0,0,Color.WHITE));
-      borderPanel.add(cellRenderer);
-
-      return borderPanel;
-    }
-    
     return cellRenderer;
   }
+  
   
   public BudgetCashFlowSummaryTableModel getTableModel() {
     return (BudgetCashFlowSummaryTableModel) getModel();
