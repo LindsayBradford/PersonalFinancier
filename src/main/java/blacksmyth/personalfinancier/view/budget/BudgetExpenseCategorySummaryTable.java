@@ -13,10 +13,13 @@ package blacksmyth.personalfinancier.view.budget;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.math.BigDecimal;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.TableModelEvent;
@@ -125,8 +128,16 @@ public class BudgetExpenseCategorySummaryTable extends JTable {
         cellRenderer.setForeground(Color.GREEN);
       }
     }
+    
+    if (row == this.getRowCount() - 1) {
+      JPanel borderPanel = new JPanel(new GridLayout());
+      borderPanel.setBorder(BorderFactory.createMatteBorder(2,0,0,0,Color.WHITE));
+      borderPanel.add(cellRenderer);
 
-     return cellRenderer;
+      return borderPanel;
+    }
+
+    return cellRenderer;
   }
   
   public BudgetCashFlowSummaryTableModel getTableModel() {
