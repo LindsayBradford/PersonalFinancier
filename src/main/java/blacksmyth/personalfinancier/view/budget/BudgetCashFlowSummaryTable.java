@@ -72,7 +72,7 @@ public class BudgetCashFlowSummaryTable extends JTable {
         ) + CELL_BUFFER
     );
 
-    getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.Detail).setCellRenderer(
+    getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.AccountDetail).setCellRenderer(
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
   }
@@ -108,16 +108,25 @@ public class BudgetCashFlowSummaryTable extends JTable {
     if (this.getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.CashFlow).getModelIndex() == column) {
       BigDecimal value = (BigDecimal) this.getModel().getValueAt(row, column);
       if (value.compareTo(BigDecimal.ZERO) == -1) {
-        cellRenderer.setForeground(Color.RED);
+        cellRenderer.setForeground(Color.RED.darker());
       }
       if (value.compareTo(BigDecimal.ZERO) == 1) {
         cellRenderer.setForeground(Color.GREEN);
       }
     }
     
-    if (this.getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.Detail).getModelIndex() == column &&
+    if (this.getColFromEnum(ACCOUNT_SUMMARY_COLUMNS.AccountDetail).getModelIndex() == column &&
         row == this.getRowCount() - 1) {
       ((JLabel) cellRenderer).setHorizontalAlignment(DefaultListCellRenderer.RIGHT);
+
+      BigDecimal value = (BigDecimal) this.getModel().getValueAt(row, column+1);
+      if (value.compareTo(BigDecimal.ZERO) == -1) {
+        cellRenderer.setForeground(Color.RED.darker());
+      }
+      if (value.compareTo(BigDecimal.ZERO) == 1) {
+        cellRenderer.setForeground(Color.GREEN);
+      }
+
     }
     return cellRenderer;
   }

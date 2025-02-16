@@ -30,7 +30,7 @@ public class SortedArrayList<T> extends ArrayList<T> {
   public void insertSorted(T newValue) {
     add(0, newValue);
     Comparable<T> cmp = (Comparable<T>) newValue;
-    for (int i = 0; i < size() - 1 && cmp.compareTo(get(i + 1)) < 0; i++) {
+    for (int i = 0; i < size() - 1 && cmp.compareTo(get(i + 1)) > 0; i++) {
       T tmp = get(i);
       set(i, get(i + 1));
       set(i + 1, tmp);

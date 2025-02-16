@@ -18,7 +18,7 @@ import blacksmyth.personalfinancier.model.budget.BudgetModel;
 import blacksmyth.personalfinancier.model.budget.CategorySummary;
 
 enum EXPENSE_CATEGORY_SUMMARY_COLUMNS {
-  Expense, Budgeted
+  ExpenseCategory, Amount
 }
 
 
@@ -29,33 +29,57 @@ public class BudgetExpenseCategorySummaryTableModel extends AbstractBudgetTableM
     super();
     this.setBudgetModel(budgetModel);
   }
+  
+  public boolean isCellEditable(int rowNum, int colNum) {
+    return false;
+ }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public Class getColumnClass(int colNum) {
     switch (this.getColumnEnumValueAt(colNum)) {
-      case Expense:
+      case ExpenseCategory:
         return String.class;
-      case Budgeted: 
+      case Amount: 
         return Money.class;
     }
     return Object.class;
   }
 
   public int getRowCount() {
-    return getBudgetModel().getExpenseCategorySummaries().size();
+    int income = getBudgetModel().getIncomeCategorySummaries().size();
+    int expenses = getBudgetModel().getExpenseCategorySummaries().size();
+    
+    int balancedRowCount = Math.max(income, expenses) + 1;
+    
+    return balancedRowCount;
   }
 
   public Object getValueAt(int rowNum, int colNum) {
-    CategorySummary summary = getBudgetModel().getExpenseCategorySummaries().get(rowNum);
-    
-    switch (this.getColumnEnumValueAt(colNum)) {
-    case Expense:
-      return summary.getBudgetCategory().toString();
-    case Budgeted: 
-      return summary.getBudgettedAmountAtFrequency(CashFlowFrequency.Fortnightly);
-    default:
-         return null;
+    if (rowNum == this.getRowCount() - 1) {
+      switch (this.getColumnEnumValueAt(colNum)) {
+      case ExpenseCategory:
+        return "Total Expense:";
+      case Amount: 
+        return getBudgetModel().getTotalExpense().getTotal();
+      default:
+           return null;
+      }
     }
+    
+    if (rowNum < getBudgetModel().getExpenseCategorySummaries().size()) {
+      CategorySummary summary = getBudgetModel().getExpenseCategorySummaries().get(rowNum);
+      
+      switch (this.getColumnEnumValueAt(colNum)) {
+      case ExpenseCategory:
+        return summary.getBudgetCategory().toString();
+      case Amount: 
+        return summary.getBudgettedAmountAtFrequency(CashFlowFrequency.Fortnightly);
+      default:
+           return null;
+      }
+    }
+    
+    return null;
   }
   
   @Override

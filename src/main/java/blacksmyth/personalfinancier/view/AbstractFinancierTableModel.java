@@ -12,6 +12,8 @@ package blacksmyth.personalfinancier.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -30,6 +32,10 @@ import blacksmyth.general.ReflectionUtilities;
 @SuppressWarnings("serial")
 public abstract class AbstractFinancierTableModel<T extends Enum<T>> extends AbstractTableModel implements PropertyChangeListener {
 
+  // Below, an educated-guess at possible sensitive numbers such as account, bsb and credit card numbers.
+  // any sequence of digits, space or hyphens book-ended by a digit.
+  private static Pattern pattern = Pattern.compile("[a-z].*([A-Z])"); 
+  
   /**
    * Derives the Class of the columns enumeration supplied as the Generic type at
    * subclass definition time.
@@ -61,7 +67,20 @@ public abstract class AbstractFinancierTableModel<T extends Enum<T>> extends Abs
    */
   @Override
   public String getColumnName(int colNum) {
-    return getColEnumClass().getEnumConstants()[colNum].toString();
+    return deCamelCase(
+        getColEnumClass().getEnumConstants()[colNum].toString()
+    );
+  }
+  
+  private String deCamelCase(String camelCaseString) {
+    Matcher m = pattern.matcher(camelCaseString);
+    while(m.find()) {
+      String guts = m.group(1);
+      String maskedGuts = guts.replaceAll(guts, " " + guts);
+      camelCaseString = camelCaseString.replaceFirst(guts,maskedGuts);
+    }
+    return camelCaseString;
+    
   }
 
   /**

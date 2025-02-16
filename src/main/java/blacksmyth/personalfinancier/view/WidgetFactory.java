@@ -55,7 +55,8 @@ import blacksmyth.personalfinancier.model.ModelPreferences;
  */
 public final class WidgetFactory {
 
-  public static final String ACCOUNT_BUFFER = "                    ";
+   // TODO: derive off account list instead of hard-coding
+  public static final String ACCOUNT_BUFFER = "                      ";
 
   public static final String PERCENT_FORMAT_PATTERN = "###,##0.00 %";
   public static final DecimalFormat PERCENT_FORMAT = new DecimalFormat(PERCENT_FORMAT_PATTERN);

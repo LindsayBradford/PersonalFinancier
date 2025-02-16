@@ -15,6 +15,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.math.BigDecimal;
 
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.TableModelEvent;
@@ -61,20 +63,20 @@ public class BudgetExpenseCategorySummaryTable extends JTable {
     this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
     setupBudgettedCol();
     
-    getColFromEnum(EXPENSE_CATEGORY_SUMMARY_COLUMNS.Expense).setCellRenderer(
+    getColFromEnum(EXPENSE_CATEGORY_SUMMARY_COLUMNS.ExpenseCategory).setCellRenderer(
         WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
     );
   }
   
   private void setupBudgettedCol() {
     Utilities.lockColumnWidth(
-        getColFromEnum(EXPENSE_CATEGORY_SUMMARY_COLUMNS.Budgeted),
+        getColFromEnum(EXPENSE_CATEGORY_SUMMARY_COLUMNS.Amount),
         Utilities.getTextWidth(
             WidgetFactory.DECIMAL_FORMAT_PATTERN
         ) + CELL_BUFFER
     );
 
-    getColFromEnum(EXPENSE_CATEGORY_SUMMARY_COLUMNS.Budgeted).setCellRenderer(
+    getColFromEnum(EXPENSE_CATEGORY_SUMMARY_COLUMNS.Amount).setCellRenderer(
         WidgetFactory.createAmountCellRenderer()    
     );
   }
@@ -94,18 +96,36 @@ public class BudgetExpenseCategorySummaryTable extends JTable {
         column
     );
     
-    if (this.getColFromEnum(EXPENSE_CATEGORY_SUMMARY_COLUMNS.Budgeted).getModelIndex() == column) {
+    if (this.getModel().getValueAt(row, column) == null) {
+      return cellRenderer;
+    }
+    
+    if (this.getColFromEnum(EXPENSE_CATEGORY_SUMMARY_COLUMNS.Amount).getModelIndex() == column) {
       BigDecimal value = (BigDecimal) this.getModel().getValueAt(
           this.convertRowIndexToModel(row), 
           column
       );
       if (value.compareTo(BigDecimal.ZERO) == -1) {
-        cellRenderer.setForeground(Color.RED);
+        cellRenderer.setForeground(Color.RED.darker());
       }
       if (value.compareTo(BigDecimal.ZERO) == 1) {
         cellRenderer.setForeground(Color.GREEN);
       }
     }
+    
+    if (this.getColFromEnum(EXPENSE_CATEGORY_SUMMARY_COLUMNS.ExpenseCategory).getModelIndex() == column &&
+        row == this.getRowCount() - 1) {
+      ((JLabel) cellRenderer).setHorizontalAlignment(DefaultListCellRenderer.RIGHT);
+      
+      BigDecimal value = (BigDecimal) this.getModel().getValueAt(row, column+1);
+      if (value.compareTo(BigDecimal.ZERO) == -1) {
+        cellRenderer.setForeground(Color.RED.darker());
+      }
+      if (value.compareTo(BigDecimal.ZERO) == 1) {
+        cellRenderer.setForeground(Color.GREEN);
+      }
+    }
+
      return cellRenderer;
   }
   

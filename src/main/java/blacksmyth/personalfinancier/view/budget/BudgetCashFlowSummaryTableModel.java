@@ -22,7 +22,7 @@ import blacksmyth.personalfinancier.model.budget.AccountSummary;
 import blacksmyth.personalfinancier.model.budget.BudgetModel;
 
 enum ACCOUNT_SUMMARY_COLUMNS {
-  Account, Detail, CashFlow
+  Account, AccountDetail, CashFlow
 }
 
 @SuppressWarnings("serial")
@@ -40,7 +40,7 @@ public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<AC
     switch (this.getColumnEnumValueAt(colNum)) {
     case Account:
       return String.class;
-    case Detail:
+    case AccountDetail:
       return String.class;
     case CashFlow:
       return Money.class;
@@ -49,9 +49,13 @@ public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<AC
   }
 
   public boolean isCellEditable(int rowNum, int colNum) {
+    if (rowNum == this.getRowCount() - 1) {
+      return false;
+    }
+    
     switch (this.getColumnEnumValueAt(colNum)) {
     case Account:
-    case Detail:
+    case AccountDetail:
       return true;
     default:
       return false;
@@ -64,7 +68,7 @@ public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<AC
       getBudgetModel().getUndoManager().addEdit(ChangeAccountNicknameCommand.doCmd(getAccountModel(),
           getAccountModel().getAccountIndex(getSummaryAtRow(rowNum).getAccountNickname()), (String) value));
       break;
-    case Detail:
+    case AccountDetail:
       getBudgetModel().getUndoManager().addEdit(ChangeAccountDetailCommand.doCmd(getAccountModel(),
           getAccountModel().getAccountIndex(getSummaryAtRow(rowNum).getAccountNickname()), (String) value));
       break;
@@ -87,7 +91,7 @@ public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<AC
       switch (this.getColumnEnumValueAt(colNum)) {
       case Account:
         return null;
-      case Detail:
+      case AccountDetail:
         return "Net Cash Flow: ";
       case CashFlow:
         return getBudgetModel().getNetCashFlow().getTotal();
@@ -101,7 +105,7 @@ public class BudgetCashFlowSummaryTableModel extends AbstractBudgetTableModel<AC
     switch (this.getColumnEnumValueAt(colNum)) {
     case Account:
       return summary.getAccountNickname();
-    case Detail:
+    case AccountDetail:
       return summary.getAccountDetail();
     case CashFlow:
       return summary.getBudgettedAmountAtFrequency(CashFlowFrequency.Fortnightly);

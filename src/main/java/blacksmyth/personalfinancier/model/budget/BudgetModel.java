@@ -53,7 +53,11 @@ public class BudgetModel
   private SortedArrayList<CategorySummary> incomeCategorySummaries;
   private SortedArrayList<CategorySummary> expenseCategorySummaries;
 
-  private Money netCashFlow;
+  private Money netCashFlow;  
+  
+  private Money totalIncome;
+  private Money totalExpense;
+  
   
   private PropertyChangeSupport support;
   
@@ -398,7 +402,11 @@ public class BudgetModel
   private void updateDerivedData() {
     updateCashFlowSummaries();
     updateCategorySummaries();
+    
     updateNetCashFlow();
+    
+    updateTotalIncome();
+    updateTotalExpense();
   }
 
   private void updateCashFlowSummaries() {
@@ -518,6 +526,40 @@ public class BudgetModel
         .forEach(
             summary -> netCashFlow.setTotal(
                           netCashFlow.getTotal().add(
+                              summary.getBudgettedAmount().getTotal()
+                           )
+                        )
+        );
+  }
+
+  public Money getTotalIncome() {
+    return totalIncome;
+  }
+  
+  private void updateTotalIncome() {
+    totalIncome = MoneyFactory.createAmount(0);
+
+    incomeCategorySummaries.stream()
+        .forEach(
+            summary -> totalIncome.setTotal(
+                          totalIncome.getTotal().add(
+                              summary.getBudgettedAmount().getTotal()
+                           )
+                        )
+        );
+  }
+
+  public Money getTotalExpense() {
+    return totalExpense;
+  }
+  
+  public void updateTotalExpense() {
+    totalExpense = MoneyFactory.createAmount(0);
+
+    expenseCategorySummaries.stream()
+        .forEach(
+            summary -> totalExpense.setTotal(
+                          totalExpense.getTotal().add(
                               summary.getBudgettedAmount().getTotal()
                            )
                         )
