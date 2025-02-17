@@ -47,8 +47,8 @@ import blacksmyth.general.swing.FontIconProvider.FontIcon;
  */
 public final class Utilities {
 
-  private static final Color POSITIVE_CASH_COLOUR = Color.GREEN;
-  private static final Color NEGATIVE_CASH_COLOUR = Color.RED.brighter().brighter().brighter();
+  public static final Color POSITIVE_CASH_COLOUR = Color.GREEN;
+  public static final Color NEGATIVE_CASH_COLOUR = Color.RED;
 
   /**
    * Locks the width of <tt>column</tt> to the <tt>width</tt> specified.

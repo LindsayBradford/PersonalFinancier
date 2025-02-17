@@ -54,7 +54,7 @@ import blacksmyth.personalfinancier.view.budget.BudgetCashFlowSummaryTable;
 import blacksmyth.personalfinancier.view.budget.BudgetExpenseCategorySummaryTable;
 import blacksmyth.personalfinancier.view.budget.BudgetIncomeCategorySummaryTable;
 import blacksmyth.personalfinancier.view.budget.CashFlowPieChart;
-import blacksmyth.personalfinancier.view.budget.CategoryPieChart;
+import blacksmyth.personalfinancier.view.budget.CategoryDonutChart;
 import blacksmyth.personalfinancier.view.budget.ExpenseItemTable;
 import blacksmyth.personalfinancier.view.budget.IncomeItemTable;
 
@@ -743,7 +743,7 @@ class BudgetUIFactory {
 
     bindGraphTableComponents(
         panel, 
-        createCategoryPieChart(), 
+        createCategoryDonutChart(), 
         createCategorySummaryTables()
     );
 
@@ -802,8 +802,8 @@ class BudgetUIFactory {
     return new JScrollPane(table);
   }
 
-  private static JComponent createCategoryPieChart() {
-    return new CategoryPieChart(budgetModel);
+  private static JComponent createCategoryDonutChart() {
+    return new CategoryDonutChart(budgetModel);
   }
 }
 
