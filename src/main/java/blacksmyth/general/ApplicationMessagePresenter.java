@@ -17,11 +17,20 @@ import blacksmyth.personalfinancier.control.IApplicationMessagePresenter;
 
 public class ApplicationMessagePresenter  
             implements IApplicationMessagePresenter {
-  
-  public ApplicationMessagePresenter() {
+
+  private static ApplicationMessagePresenter instance = null;
+
+  protected ApplicationMessagePresenter() {
     support = new PropertyChangeSupport(this);
   }
-
+  
+  public static ApplicationMessagePresenter getInstance() {
+     if(instance == null) {
+        instance = new ApplicationMessagePresenter();
+     }
+     return instance;
+  }
+  
   private PropertyChangeSupport support;
   
   public void addObserver(PropertyChangeListener o) {

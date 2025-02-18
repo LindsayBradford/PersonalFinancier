@@ -23,7 +23,7 @@ project.ext {
 
 application {
   mainClass.set(project.group + '.' + project.title)
-}
+} 
 
 List testLibs = [
   'org.junit.vintage:junit-vintage-engine:5.11.4',

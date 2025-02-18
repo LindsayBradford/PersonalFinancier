@@ -10,71 +10,29 @@
 
 package blacksmyth.personalfinancier.control.inflation.command;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.undo.UndoManager;
-import javax.swing.undo.UndoableEdit;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import blacksmyth.personalfinancier.control.AbstractUndoManager;
 
 @SuppressWarnings("serial")
-public class InflationUndoManager extends UndoManager {
-
-  /**
-   * The BudgetUndoManager is observable indirectly by relying on all PropertyChangeListener
-   * behaviour, delegated to <tt>support</tt>
-   */
-  private PropertyChangeSupport observableDelegate;
+public class InflationUndoManager extends AbstractUndoManager {
   
   private static Logger LOG = LogManager.getLogger(InflationUndoManager.class);
-
+  
   public InflationUndoManager() {
     super();
-    this.observableDelegate = new PropertyChangeSupport(this);
   }
 
-  public void addObserver(PropertyChangeListener o) {
-    this.observableDelegate.addPropertyChangeListener(o);
-    // Below: a quick and nasty way to sync observer state with current model state.
-    fireUndoableEvent();
-  }
-
-  public void undo() {
-    LOG.info(this.getUndoPresentationName());
-    super.undo();
-    fireUndoableEvent();
-  }
-
-  public void redo() {
-    LOG.info(this.getRedoPresentationName());
-    super.redo();
-    fireUndoableEvent();
-  }
-
-  public boolean addEdit(UndoableEdit e) {
-    LOG.info(e.getPresentationName());
-    boolean result = super.addEdit(e);
-    fireUndoableEvent();
-    return result;
-  }
-
-  public void discardAllEdits() {
-    LOG.info("Discarding all edits");
-    super.discardAllEdits();
-    fireUndoableEvent();
-  }
-
-  public void undoableEditHappened(UndoableEditEvent e) {
-    super.undoableEditHappened(e);
-    fireUndoableEvent();
-  }
-  
-  private void fireUndoableEvent() {
+  @Override
+  protected void fireUndoableEvent() {
     this.observableDelegate.firePropertyChange("Undoable Inflation Change",null,null);
+  }
+
+  @Override
+  protected void sendMessage(String commandMessage) {
+    LOG.info(commandMessage);
+    super.sendMessage(commandMessage);
   }
 
 }

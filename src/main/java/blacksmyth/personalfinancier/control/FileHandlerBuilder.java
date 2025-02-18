@@ -37,7 +37,7 @@ import blacksmyth.personalfinancier.view.PersonalFinancierView;
 
 public final class FileHandlerBuilder {
   
-  private static final ApplicationMessagePresenter MSG_PRESENTER = new ApplicationMessagePresenter();
+  private static final ApplicationMessagePresenter MSG_PRESENTER = ApplicationMessagePresenter.getInstance();
   
   public static IFileHandler<BudgetFileContent> buildBudgetHandler(
       PersonalFinancierView parentFrame,

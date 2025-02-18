@@ -80,6 +80,6 @@ public class ChangeInflationValueCommand extends AbstractInflationCommand {
 
   @Override
   public String getRedoPresentationName() {
-    return String.format("Iitem [%s] amount changed to from [%s] to [%s]", dateAsString(), this.preCommandValue, this.postCommandValue);
+    return String.format("Item [%s] amount changed to from [%s] to [%s]", dateAsString(), this.preCommandValue, this.postCommandValue);
   }
 }
