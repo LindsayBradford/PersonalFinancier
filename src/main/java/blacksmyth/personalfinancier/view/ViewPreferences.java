@@ -130,7 +130,7 @@ public class ViewPreferences extends BasePreferences {
   public Color getPreferredSelectedCellColor() {
     return new Color(
         ViewUserPrefs.getInt(
-            UNEDITABLE_CELL_COLOR_KEY, 
+            SELECTED_CELL_COLOR_KEY, 
             DEFAULT_SELECTED_CELL_COLOR
         )
     );
@@ -143,6 +143,49 @@ public class ViewPreferences extends BasePreferences {
     );
     this.setChangeAndNotifyObservers();
   }
+  
+
+  private static final int DEFAULT_POSITIVE_CASHFLOW_COLOR = Color.GREEN.getRGB();
+  private static final String POSITIVE_CASHFLOW_COLOR_KEY = "PositiveCashflowColor";
+  
+  public Color getPreferredPositiveCashFlowColor() {
+    return new Color(
+        ViewUserPrefs.getInt(
+            POSITIVE_CASHFLOW_COLOR_KEY, 
+            DEFAULT_POSITIVE_CASHFLOW_COLOR
+        )
+    );
+  }
+
+  public void setPreferredPositiveCashFlowColor(Color color) {
+    ViewUserPrefs.putInt(
+        POSITIVE_CASHFLOW_COLOR_KEY,
+        color.getRGB()
+    );
+    this.setChangeAndNotifyObservers();
+  }
+
+  
+  private static final int DEFAULT_NEGATIVE_CASHFLOW_COLOR = Color.RED.getRGB();
+  private static final String NEGATIVE_CASHFLOW_COLOR_KEY = "NegativeCashflowColor";
+  
+  public Color getPreferredNegativeCashFlowColor() {
+    return new Color(
+        ViewUserPrefs.getInt(
+            NEGATIVE_CASHFLOW_COLOR_KEY, 
+            DEFAULT_NEGATIVE_CASHFLOW_COLOR
+        )
+    );
+  }
+
+  public void setPreferredNegativeCashFlowColor(Color color) {
+    ViewUserPrefs.putInt(
+        NEGATIVE_CASHFLOW_COLOR_KEY,
+        color.getRGB()
+    );
+    this.setChangeAndNotifyObservers();
+  }
+
   
   private static final int DEFAULT_WINDOW_BOUNDS_X      = Toolkit.getDefaultToolkit().getScreenSize().width/8;
   private static final int DEFAULT_WINDOW_BOUNDS_Y      = Toolkit.getDefaultToolkit().getScreenSize().height/8;

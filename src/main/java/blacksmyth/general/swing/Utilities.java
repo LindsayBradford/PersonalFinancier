@@ -10,7 +10,6 @@
 
 package blacksmyth.general.swing;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
@@ -37,6 +36,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumn;
 
 import blacksmyth.general.swing.FontIconProvider.FontIcon;
+import blacksmyth.personalfinancier.view.ViewPreferences;
 
 /**
  * A library of generally reusabile utility functions for Swing. Being a
@@ -46,9 +46,6 @@ import blacksmyth.general.swing.FontIconProvider.FontIcon;
  *
  */
 public final class Utilities {
-
-  public static final Color POSITIVE_CASH_COLOUR = Color.GREEN;
-  public static final Color NEGATIVE_CASH_COLOUR = Color.RED;
 
   /**
    * Locks the width of <tt>column</tt> to the <tt>width</tt> specified.
@@ -235,10 +232,14 @@ public final class Utilities {
   
   public static void renderCellBasedOnValue(Component cellRenderer, BigDecimal value) {
     if (value.compareTo(BigDecimal.ZERO) == -1) {
-      cellRenderer.setForeground(NEGATIVE_CASH_COLOUR);
+      cellRenderer.setForeground(
+          ViewPreferences.getInstance().getPreferredNegativeCashFlowColor()
+      );
     }
     if (value.compareTo(BigDecimal.ZERO) == 1) {
-      cellRenderer.setForeground(POSITIVE_CASH_COLOUR);
+      cellRenderer.setForeground(
+          ViewPreferences.getInstance().getPreferredPositiveCashFlowColor()
+      );
     }
   }
   

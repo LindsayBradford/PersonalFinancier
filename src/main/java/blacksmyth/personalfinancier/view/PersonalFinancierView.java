@@ -188,7 +188,7 @@ public class PersonalFinancierView implements IPersonalFinancierView {
             "<html><body>" + "This application depends on unmodified, embedded binary distributions of the following libraries:"
                 + "<ul>" + "<li> JTattoo 1.6.13 for a radically different Swing Look & Feel"
                 + "<li> FontAwesome 4.7.0 for icon-friendly font glyphs"
-                + "<li> GRAL 0.11 and XChart 3.8.8 for charting"
+                + "<li> XChart 3.8.8 for charting"
                 + "<li> Log4j 2.24.3 for logging"
                 + "<li> Json-io 4.32.0 for JSon serialisation"  
                 + "</ul>"
