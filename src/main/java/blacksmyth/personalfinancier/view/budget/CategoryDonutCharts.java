@@ -14,6 +14,7 @@ import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.PieSeries.PieSeriesRenderStyle;
 import org.knowm.xchart.style.PieStyler;
 import org.knowm.xchart.style.Styler;
+import org.knowm.xchart.style.Styler.LegendPosition;
 import org.knowm.xchart.style.PieStyler.ClockwiseDirectionType;
 import org.knowm.xchart.style.PieStyler.LabelType;
 
@@ -41,7 +42,7 @@ public class CategoryDonutCharts extends JPanel implements IBudgetObserver  {
   private BudgetModel model;
 
   public CategoryDonutCharts(BudgetModel model) {
-    super(new GridLayout(1,2));
+    super(new GridLayout(0,2));
 
     this.setBackground(Color.BLACK);
 
@@ -70,7 +71,9 @@ public class CategoryDonutCharts extends JPanel implements IBudgetObserver  {
   
   private void applyDesiredStyle(PieStyler styler, DonutData data) {
     styler.setDefaultSeriesRenderStyle(PieSeriesRenderStyle.Donut);
-    styler.setLegendVisible(false);
+    styler.setLegendVisible(true);
+    styler.setLegendPosition(LegendPosition.OutsideE);
+    styler.setLegendBackgroundColor(Color.BLACK);
     styler.setChartPadding(5);
 
 //  styler.setSliceBorderWidth(5);  // Bugged @ 3.8.8, phantom borders appear.
@@ -88,10 +91,10 @@ public class CategoryDonutCharts extends JPanel implements IBudgetObserver  {
         deriveSeriesColors(data)
     );
     
-    styler.setLabelType(LabelType.NameAndPercentage);
+    styler.setLabelType(LabelType.Percentage);
     styler.setLabelsVisible(true);
     styler.setForceAllLabelsVisible(true);
-    styler.setLabelsDistance(1.2);
+    styler.setLabelsDistance(1.15);
     styler.setLabelsFontColor(Color.WHITE);
     styler.setLabelsFontColorAutomaticEnabled(false);
     styler.setLabelsFont(getFont().deriveFont(Font.BOLD));
@@ -115,9 +118,9 @@ public class CategoryDonutCharts extends JPanel implements IBudgetObserver  {
     Color current = data.BaseColor;
 
     Color[] colors = new Color[data.Slices.size()];
-    for(int counter = colors.length - 1; counter >= 0; counter--) {
+    for(int counter = 0; counter < colors.length; counter++) {
       colors[counter] = current;
-      current = current.darker().darker().darker();
+      current = current.darker().darker();
     }
 
     return colors;

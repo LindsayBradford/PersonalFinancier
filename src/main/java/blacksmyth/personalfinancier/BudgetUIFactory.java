@@ -93,8 +93,11 @@ class BudgetUIFactory {
 
     createSharedBudgetTableActions();
 
-    BudgetComponent newComponent = new BudgetComponent(JSplitPane.VERTICAL_SPLIT, createBudgetItemPanel(view),
-        createBudgetSummaryPanel());
+    BudgetComponent newComponent = new BudgetComponent(
+        JSplitPane.VERTICAL_SPLIT, 
+        createBudgetItemPanel(view),
+        createBudgetSummaryPanel()
+    );
 
     newComponent.putClientProperty("AppMessage", "Manage your personal budget in this tab.");
 
@@ -812,5 +815,6 @@ final class BudgetComponent extends JSplitPane implements IPersonalFinancierComp
 
   public BudgetComponent(int verticalSplit, JComponent budgetItemPanel, JComponent budgetSummaryPanel) {
     super(verticalSplit, budgetItemPanel, budgetSummaryPanel);
+    this.setOneTouchExpandable(true);
   }
 }

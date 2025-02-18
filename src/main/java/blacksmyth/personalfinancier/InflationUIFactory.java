@@ -316,6 +316,7 @@ class InflationUIFactory {
         createInflationConversionPanel(), 
         createInflationGraphPanel()
     );
+    splitPane.setOneTouchExpandable(true);
     
     return splitPane;
   }
@@ -573,6 +574,7 @@ final class InflationComponent extends JSplitPane implements IPersonalFinancierC
 
   public InflationComponent(int verticalSplit, JComponent inflationItemPanel, JComponent inflationSummaryPanel) {
     super(verticalSplit, inflationItemPanel, inflationSummaryPanel);
+    this.setOneTouchExpandable(true);
   }
 }
 

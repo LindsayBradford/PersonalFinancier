@@ -98,20 +98,13 @@ public class CashFlowDonutChart extends JPanel implements IBudgetObserver  {
         deriveSeriesColors(data)
     );
     
-    styler.setLabelType(LabelType.NameAndPercentage);
+    styler.setLabelType(LabelType.NameAndValue);
     styler.setLabelsVisible(true);
     styler.setForceAllLabelsVisible(true);
     styler.setLabelsDistance(1.2);
     styler.setLabelsFontColor(Color.WHITE);
     styler.setLabelsFontColorAutomaticEnabled(false);
     styler.setLabelsFont(getFont().deriveFont(Font.BOLD));
-    
-    styler.setToolTipsEnabled(true);
-    styler.setToolTipBackgroundColor(getBackground());
-    styler.setToolTipBorderColor(Color.GRAY);
-    styler.setToolTipHighlightColor(
-        ViewPreferences.getInstance().getPreferredEditableCellColor()
-    );
     
     styler.setClockwiseDirectionType(ClockwiseDirectionType.CLOCKWISE);
     styler.setStartAngleInDegrees(90);
