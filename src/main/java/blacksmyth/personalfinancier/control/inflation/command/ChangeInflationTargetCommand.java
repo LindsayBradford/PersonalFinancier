@@ -15,18 +15,18 @@ import javax.swing.undo.CannotUndoException;
 
 import blacksmyth.personalfinancier.model.inflation.InflationModel;
 
-public class ChangeInflationValueCommand extends AbstractInflationCommand {
+public class ChangeInflationTargetCommand extends AbstractInflationCommand {
   
   private Double preCommandValue;
   private Double postCommandValue;
   
-  public static ChangeInflationValueCommand doCmd(InflationModel model, int inflationEntryIndex, 
+  public static ChangeInflationTargetCommand doCmd(InflationModel model, int inflationEntryIndex, 
                                                   Double postCommandValue) {
     
-    ChangeInflationValueCommand command = new ChangeInflationValueCommand(
+    ChangeInflationTargetCommand command = new ChangeInflationTargetCommand(
         model, 
         inflationEntryIndex, 
-        model.getInflationList().get(inflationEntryIndex).getCPIValue(),
+        model.getInflationList().get(inflationEntryIndex).getTarget(),
         postCommandValue
     );
     
@@ -35,7 +35,7 @@ public class ChangeInflationValueCommand extends AbstractInflationCommand {
     return command;
   }
   
-  protected ChangeInflationValueCommand(InflationModel model, int inflationEntryIndex, 
+  protected ChangeInflationTargetCommand(InflationModel model, int inflationEntryIndex, 
                                       Double preCommandValue, Double postCommandValue) {
 
     super(model, inflationEntryIndex);
@@ -54,7 +54,7 @@ public class ChangeInflationValueCommand extends AbstractInflationCommand {
 
   @Override
   public void redo() throws CannotRedoException {
-    model.setInflationEntryValue(
+    model.setInflationEntryTarget(
         inflationEntryIndex, 
         postCommandValue
     );
@@ -62,7 +62,7 @@ public class ChangeInflationValueCommand extends AbstractInflationCommand {
 
   @Override
   public void undo() throws CannotUndoException {
-    model.setInflationEntryValue(
+    model.setInflationEntryTarget(
         inflationEntryIndex, 
         preCommandValue
     );
@@ -75,11 +75,11 @@ public class ChangeInflationValueCommand extends AbstractInflationCommand {
 
   @Override
   public String getUndoPresentationName() {
-    return String.format("Inflation item [%s] amount changed from [%s] to [%s]", dateAsString(), this.postCommandValue, this.preCommandValue);
+    return String.format("Inflation item [%s] target changed from [%s] to [%s]", dateAsString(), this.postCommandValue, this.preCommandValue);
   }
 
   @Override
   public String getRedoPresentationName() {
-    return String.format("Item [%s] amount changed to from [%s] to [%s]", dateAsString(), this.preCommandValue, this.postCommandValue);
+    return String.format("Item [%s] target changed to from [%s] to [%s]", dateAsString(), this.preCommandValue, this.postCommandValue);
   }
 }

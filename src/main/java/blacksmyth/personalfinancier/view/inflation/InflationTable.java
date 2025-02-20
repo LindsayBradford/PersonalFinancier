@@ -53,6 +53,7 @@ public class InflationTable extends JTable {
     
     setupDateCol();
     setupCPICol();
+    setupCPITargetCol();
   }
   
   private void setupDateCol() {
@@ -94,6 +95,27 @@ public class InflationTable extends JTable {
         InflationWidgetFactory.createCPIValueCellEditor()    
     );
   }
+  
+  private void setupCPITargetCol() {
+    getColFromEnum(COLUMNS.Target).setCellRenderer(
+        WidgetFactory.createTableCellRenderer(JTextField.CENTER)    
+    );
+
+    Utilities.lockColumnWidth(
+        getColFromEnum(COLUMNS.Target),
+        Utilities.getTextWidth(
+            WidgetFactory.DECIMAL_FORMAT_PATTERN
+        ) + CELL_BUFFER
+    );
+
+    getColFromEnum(COLUMNS.Target).setCellRenderer(
+        InflationWidgetFactory.createCPIValueCellRenderer()    
+    );
+    getColFromEnum(COLUMNS.Target).setCellEditor(
+        InflationWidgetFactory.createCPIValueCellEditor()    
+    );
+  }
+
   
   public void tableChanged(TableModelEvent e) {
     this.setVisible(false);

@@ -18,12 +18,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,8 +38,6 @@ import javax.swing.KeyStroke;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
@@ -368,7 +364,6 @@ class InflationUIFactory {
 
 @SuppressWarnings("serial")
 class InflationChartPanel extends JPanel implements InfllationObserver {
-  private static Logger LOG = LogManager.getLogger(InflationChartPanel.class);
 
   private InflationModel model;
   
@@ -409,7 +404,7 @@ class InflationChartPanel extends JPanel implements InfllationObserver {
 
   private void forceUpdate() {
     displayChart(
-      createChart(createTitleText(), createChartData())
+      createChart(createTitleText(), createActualData(), createTargetData())
     );
   }
   
@@ -417,7 +412,7 @@ class InflationChartPanel extends JPanel implements InfllationObserver {
     return "Inflation Over Time";
   };
 
-  private XYChartData createChartData() {
+  private XYChartData createActualData() {
     XYChartData chartData = new XYChartData();
 
     for (InflationEntry entry : model.getInflationList()) {
@@ -433,94 +428,53 @@ class InflationChartPanel extends JPanel implements InfllationObserver {
     return chartData;
   }
   
+  private XYChartData createTargetData() {
+    XYChartData chartData = new XYChartData();
+
+    for (InflationEntry entry : model.getInflationList()) {
+      if (entry.getTarget() == null) {
+        continue;  // ensure no gaps in chart data so it actually draws a line.
+      }
+      
+      chartData.xData.add(
+          toLegacyDate(entry.getDate())
+      );
+
+      chartData.yData.add(
+          entry.getTarget()
+      );
+    }
+    
+    return chartData;
+  }
+
+  
   private Date toLegacyDate(LocalDate localDate) {
     ZoneId localZone = ZoneId.systemDefault();
     Instant localDateAsInstant = localDate.atStartOfDay().atZone(localZone).toInstant();
     return Date.from(localDateAsInstant);
   }
   
-  private XYChartData createTargetChartData(XYChartData actualData) {
-    
-    // Sets Inflation targets by first sampling the initial 1996 RBA CPI figure, and
-    // applying a 2.5% increase per year, ignoring the actual fluctuations per year.
-    
-    // This is a simplification of what the RBA actually does, but suits my purposes well enough.
-    
-    Date targetCurrentDate = toLegacyDate("31/12/1995");  // RBA officially starts targeting inflation in 1996. 
-    double currentTargetCPI = deriveInitialTargetCPI(actualData, targetCurrentDate);
-    
-    XYChartData targetData = new XYChartData();
 
-    Date targetFinalDate = progressLegacyDateOneYear(actualData.xData.getLast());
-    while (targetCurrentDate.before(targetFinalDate)) {
-
-      targetData.xData.add(targetCurrentDate);
-      targetData.yData.add(currentTargetCPI);
-      
-      currentTargetCPI =  deriveNewTargetCPIFrom(currentTargetCPI);
-      targetCurrentDate = progressLegacyDateOneYear(targetCurrentDate);
-    }
-
-    return targetData;
-  }
   
-  private double deriveNewTargetCPIFrom(double currentTargetCPI) {
-    return (double) Math.round(currentTargetCPI * 10.25) / 10;   // return 2.5% of current (midway in 2-3% range)
-  }
-  
-  private Date progressLegacyDateOneYear(Date date) {
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTime(date);
-    calendar.add(Calendar.YEAR,  1);
-    return calendar.getTime();
-  }
 
-  private double deriveInitialTargetCPI(XYChartData actualData, Date targetStartDate) {
-    double initialTargetCPI = 0;
-    
-    for (int index = 0; index < actualData.xData.size(); index++) {
-      if (actualData.xData.get(index).before(targetStartDate)) {
-        continue;
-      } else {
-        initialTargetCPI = deriveNewTargetCPIFrom(actualData.yData.get(index));
-        break;
-      }
-    }
-    return initialTargetCPI;
-  }
-  
-  private Date toLegacyDate(String dateAsString) {
-    Date legacyDate = nowAsLegacyDate();
-    try {
-      legacyDate = new SimpleDateFormat(WidgetFactory.DATE_FORMAT_PATTERN).parse(dateAsString);
-    } catch (ParseException e) {
-      LOG.error("Failed parsing date string [{}] with format [{}]. Using today.",dateAsString, WidgetFactory.DATE_FORMAT_PATTERN);
-    }
-    return legacyDate;
-  }
-  
-  private Date nowAsLegacyDate() {
-    return Date.from(Instant.now());
-  }
-
-  private XYChart createChart(String title, XYChartData data) {
+  private XYChart createChart(String title, XYChartData actualData, XYChartData targetData) {
     XYChart chart =
         new XYChartBuilder()
-            .title(title + deriveDateRangeString(data))
+            .title(title + deriveDateRangeString(actualData))
             .yAxisTitle("Consumer Price Index")
             .build();
     
     applyDesiredStyle(chart.getStyler());
     
-    addTargetChartData(data, chart);
-    addActualChartData(data, chart);
+    addTargetChartData(targetData, chart);
+    addActualChartData(actualData, chart);
     
     return chart;
   }
 
   private void addTargetChartData(XYChartData data, XYChart chart) {
-    XYChartData targetData = createTargetChartData(data);
-    XYSeries targetCpiSeries = chart.addSeries("Target", targetData.xData, targetData.yData);
+    XYSeries targetCpiSeries = chart.addSeries("Target", data.xData, data.yData);
     
     targetCpiSeries.setLineColor(Color.BLUE);
     targetCpiSeries.setLineWidth(2);

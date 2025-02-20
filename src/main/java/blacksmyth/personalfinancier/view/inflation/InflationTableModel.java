@@ -19,6 +19,7 @@ import javax.swing.undo.CompoundEdit;
 import blacksmyth.personalfinancier.control.inflation.command.AddInflationEntryCommand;
 import blacksmyth.personalfinancier.control.inflation.command.ChangeInflationDateCommand;
 import blacksmyth.personalfinancier.control.inflation.command.ChangeInflationNotesCommand;
+import blacksmyth.personalfinancier.control.inflation.command.ChangeInflationTargetCommand;
 import blacksmyth.personalfinancier.control.inflation.command.ChangeInflationValueCommand;
 import blacksmyth.personalfinancier.control.inflation.command.RemoveInflationEntryCommand;
 import blacksmyth.personalfinancier.model.inflation.InflationEntry;
@@ -36,7 +37,7 @@ import blacksmyth.personalfinancier.view.AbstractFinancierTableModel;
  */
 
 enum COLUMNS {
-  Date, CPI, Notes
+  Date, CPI, Target, Notes
 }
 
 @SuppressWarnings("serial")
@@ -79,7 +80,7 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
     switch (this.getColumnEnumValueAt(colNum)) {
     case Date:
       return LocalDate.class;
-    case CPI:
+    case CPI, Target:
       return Double.class;
     case Notes:
       return String.class;
@@ -102,7 +103,9 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
     case Date:
       return entry.getDate();
     case CPI:
-      return Double.valueOf(entry.getCPIValue());
+      return entry.getCPIValue();
+    case Target:
+      return entry.getTarget();
     case Notes:
       return entry.getNotes();
     default:
@@ -121,8 +124,13 @@ class InflationTableModel extends AbstractFinancierTableModel<COLUMNS> {
       break;
     case CPI:
       inflationModel.getUndoManager()
-          .addEdit(ChangeInflationValueCommand.doCmd(inflationModel, rowNum, Double.parseDouble((String) value)));
+          .addEdit(ChangeInflationValueCommand.doCmd(inflationModel, rowNum, Double.valueOf((String) value)));
       break;
+    case Target:
+      inflationModel.getUndoManager()
+          .addEdit(ChangeInflationTargetCommand.doCmd(inflationModel, rowNum, Double.valueOf((String) value)));
+      break;
+
     case Notes:
       inflationModel.getUndoManager()
           .addEdit(ChangeInflationNotesCommand.doCmd(inflationModel, rowNum, (String) value));

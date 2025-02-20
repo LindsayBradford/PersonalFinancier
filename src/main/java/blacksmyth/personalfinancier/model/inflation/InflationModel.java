@@ -15,6 +15,7 @@ import java.beans.PropertyChangeSupport;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ListIterator;
 
 import blacksmyth.general.ReflectionUtilities;
 import blacksmyth.general.SortedArrayList;
@@ -100,7 +101,7 @@ public class InflationModel
       return 0;
     }
 
-    double cpiFigure = inflationList.last().getCPIValue();
+    Double cpiFigure = inflationList.last().getCPIValue();
 
     for (int i = inflationList.size() - 1; i >= 0; i--) {
       LocalDate applicableFromDate = inflationList.get(i).getDate();
@@ -111,7 +112,7 @@ public class InflationModel
       }
     }
 
-    return cpiFigure;
+    return cpiFigure.doubleValue();
   }
 
   @Override
@@ -166,8 +167,24 @@ public class InflationModel
     if (inflationList.size() == 0) {
       return TODAY;
     }
+    
+    return findLastDateWithCpiValueDefined();
+  }
+  
+  private LocalDate findLastDateWithCpiValueDefined() {
+    LocalDate lastDate = null;
+    ListIterator<InflationEntry> li = inflationList.listIterator(inflationList.size());
 
-    return inflationList.last().getDate();
+    while(li.hasPrevious()) {
+      InflationEntry prevEntry = li.previous();
+      lastDate = prevEntry.getDate();
+      Double lastValue = prevEntry.getCPIValue();
+      
+      if (lastValue != null) {
+        break;
+      }
+    }
+    return lastDate;
   }
 
   public InflationEntry addEntry() {
@@ -202,10 +219,17 @@ public class InflationModel
     this.changeAndNotifyObservers();
   }
 
-  public void setInflationEntryValue(int index, double value) {
+  public void setInflationEntryValue(int index, Double value) {
     assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
     assert (index >= 0 && index < inflationList.size());
     inflationList.get(index).setCPIValue(value);
+    this.changeAndNotifyObservers();
+  }
+  
+  public void setInflationEntryTarget(int index, Double value) {
+    assert ReflectionUtilities.callerImplements(IInflationController.class) : CONTROLLER_ASSERT_MSG;
+    assert (index >= 0 && index < inflationList.size());
+    inflationList.get(index).setTarget(value);
     this.changeAndNotifyObservers();
   }
 

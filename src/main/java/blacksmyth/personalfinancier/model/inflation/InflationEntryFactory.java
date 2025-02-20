@@ -41,7 +41,8 @@ public class InflationEntryFactory {
   public static InflationEntry createEntry(LocalDate date, double value, String notes) {
     return  new InflationEntry(
         date,
-        value,
+        Double.valueOf(value),
+        Double.valueOf(0),
         notes
     );
   }

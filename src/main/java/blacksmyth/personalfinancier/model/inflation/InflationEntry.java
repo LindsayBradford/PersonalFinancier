@@ -15,12 +15,14 @@ import java.time.LocalDate;
 public class InflationEntry {
   
   private LocalDate Date;
-  private double CPIValue;
+  private Double CPIValue;
+  private Double Target;
   private String Notes;
   
-  public InflationEntry(LocalDate date, double value, String notes) {
+  public InflationEntry(LocalDate date, Double value, Double target, String notes) {
     this.Date = date;
     this.CPIValue = value;
+    this.Target = target;
     this.Notes = notes;
   }
 
@@ -32,14 +34,22 @@ public class InflationEntry {
     this.Date = date;
   }
 
-  public double getCPIValue() {
+  public Double getCPIValue() {
     return CPIValue;
   }
   
-  public void setCPIValue(double figure) {
+  public void setCPIValue(Double figure) {
     this.CPIValue = figure;
   }
 
+  public Double getTarget() {
+    return Target;
+  }
+  
+  public void setTarget(Double figure) {
+    this.Target = figure;
+  }
+  
   public String getNotes() {
     return Notes;
   }
