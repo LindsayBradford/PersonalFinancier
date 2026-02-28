@@ -11,3 +11,4 @@ javadocs/*
 /bin/
 /build/
 /logs
+.metadata

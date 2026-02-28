@@ -7,8 +7,8 @@ defaultTasks 'distribute'
 
 // Start Project configuration
 java {
-  sourceCompatibility = JavaVersion.VERSION_23
-  targetCompatibility = JavaVersion.VERSION_23
+  sourceCompatibility = JavaVersion.VERSION_25
+  targetCompatibility = JavaVersion.VERSION_25
 }
 
 project.group = 'blacksmyth.personalfinancier'
@@ -28,7 +28,7 @@ application {
 List testLibs = [
   'org.junit.vintage:junit-vintage-engine:5.11.4',
   'org.hamcrest:hamcrest:3.0',
-  'org.mockito:mockito-core:5.15.2'
+  'org.mockito:mockito-core:5.22.0'
 ]
 
 List libsToMerge = [
@@ -62,6 +62,7 @@ dependencies {
   annotationProcessor annotatingLibsToMerge 
   implementation libsToMerge, annotatingLibsToMerge, libsToShip
   testImplementation testLibs
+  testRuntimeOnly testLibs
 }
 
 jar {
