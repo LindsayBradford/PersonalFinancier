@@ -12,7 +12,7 @@ java {
 }
 
 project.group = 'blacksmyth.personalfinancier'
-project.version = '0.5'
+project.version = '0.6'
 
 project.ext {
   title = 'PersonalFinancier'
@@ -26,16 +26,16 @@ application {
 } 
 
 List testLibs = [
-  'org.junit.vintage:junit-vintage-engine:5.11.4',
+  'org.junit.vintage:junit-vintage-engine:5.14.2',
   'org.hamcrest:hamcrest:3.0',
   'org.mockito:mockito-core:5.22.0'
 ]
 
 List libsToMerge = [
-  'commons-codec:commons-codec:1.17.2', 
+  'commons-codec:commons-codec:1.21.0', 
   'com.jtattoo:JTattoo:1.6.13', 
   'com.cedarsoftware:json-io:4.32.0', 
-  'org.apache.logging.log4j:log4j-api:2.24.3',
+  'org.apache.logging.log4j:log4j-api:2.25.3',
   'org.knowm.xchart:xchart:3.8.8'
 ]
 
@@ -44,7 +44,7 @@ List annotatingLibsToMerge = [
 ]
 
 List libsToShip = [ 
-  'org.bouncycastle:bcprov-jdk18on:1.80' 
+  'org.bouncycastle:bcprov-jdk18on:1.83' 
 ]
 
 repositories {
